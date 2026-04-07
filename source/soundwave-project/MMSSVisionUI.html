@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Prismatic Sonification Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-dark: #0a0908;
+            --metal: #1f1b19;
+            --primary: #00ffcc;
+            --accent: #ff0055;
+            --glow: rgba(0, 255, 204, 0.6);
+            --knob-ind: #e0e0e0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg-dark);
+            color: #fff;
+            overflow: hidden;
+            font-family: 'Segoe UI', 'Roboto Mono', monospace;
+            user-select: none;
+            touch-action: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Hardware Chassis styling */
+        #app-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+            background: radial-gradient(circle at 50% 50%, #1a1816 0%, #050505 100%);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Screen Bezel */
+        .screen-bezel {
+            background: #050505;
+            border: 2px solid #333;
+            border-radius: 12px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,1), 0 10px 30px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: row;
+            height: 60vh;
+            margin-bottom: 20px;
+        }
+
+        /* Canvases */
+        canvas {
+            display: block;
+        }
+
+        #grid-canvas {
+            flex: 2;
+            cursor: crosshair;
+            border-right: 2px solid #222;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 255, 204, 0.03) 2px,
+                rgba(0, 255, 204, 0.03) 4px
+            );
+        }
+
+        #scope-canvas {
+            flex: 1;
+            background: #020202;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            flex: 1;
+            background: linear-gradient(180deg, #2a2624 0%, #1a1716 50%, #0f0d0c 100%);
+            border: 2px solid #000;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.05), 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        /* Interactive Knobs */
+        .knob-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100px;
+        }
+
+        .control-interactive {
+            cursor: grab;
+            width: 84px;
+            height: 84px;
+            transform-box: fill-box;
+            transform-origin: center;
+            transition: filter 0.1s;
+        }
+        .control-interactive:active { cursor: grabbing; }
+        .control-interactive:hover { filter: drop-shadow(0 0 8px var(--primary)); }
+
+        .knob-label {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #888;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        /* SVG Knob Elements */
+        .knob-ring-bg { fill: none; stroke: #111; stroke-width: 6; }
+        .knob-ring-val { fill: none; stroke: var(--primary); stroke-width: 6; stroke-linecap: round; filter: drop-shadow(0 0 4px var(--primary)); transition: stroke 0.2s; }
+
+        /* Overlay */
+        #overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(5, 5, 5, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            transition: opacity 0.5s ease-out;
+            text-align: center;
+        }
+
+        h1 {
+            font-weight: 300;
+            letter-spacing: 0.4em;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            text-shadow: 0 0 20px var(--glow);
+            font-size: 2.5rem;
+        }
+
+        .btn-primary {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 1rem 3rem;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px var(--glow), inset 0 0 10px rgba(0,0,0,0.5);
+            text-transform: uppercase;
+            border-radius: 4px;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 40px var(--primary);
+        }
+
+        .btn-secondary {
+            background: #111;
+            border: 1px solid #333;
+            color: #aaa;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-secondary:hover {
+            background: #222;
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        /* Scanline effect */
+        .scanline-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0.6;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .status-led {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #333;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+            transition: all 0.1s;
+        }
+        .status-led.active {
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary), inset 0 2px 4px rgba(255,255,255,0.5);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        
+        <div class="toolbar">
+            <div class="flex items-center gap-4">
+                <div id="tempo-led" class="status-led"></div>
+                <h2 class="text-xl tracking-widest text-gray-400 font-light">SONIFICATION <span class="text-[#00ffcc]">MATRIX</span></h2>
+            </div>
+            <div class="flex gap-4">
+                <button class="btn-secondary" id="btn-play">Pause</button>
+                <button class="btn-secondary" id="btn-clear">Clear Grid</button>
+                <button class="btn-secondary" id="btn-random">Randomize</button>
+            </div>
+        </div>
+
+        <div class="screen-bezel">
+            <canvas id="grid-canvas"></canvas>
+            <canvas id="scope-canvas"></canvas>
+            <div class="scanline-overlay"></div>
+        </div>
+
+        <div class="control-panel" id="controls-layer">
+            
+            <!-- SVG Definitions for Knobs -->
+            <svg width="0" height="0" style="position:absolute;">
+                <defs>
+                    <radialGradient id="knob-grad">
+                        <stop offset="60%" stop-color="#1a1a1a"/>
+                        <stop offset="100%" stop-color="#0a0a0a"/>
+                    </radialGradient>
+                    <g id="knob-asset">
+                        <circle cx="42" cy="42" r="32" fill="url(#knob-grad)" stroke="#222" stroke-width="2"/>
+                        <rect x="39" y="14" width="6" height="14" fill="var(--knob-ind)" rx="2"/>
+                        <circle cx="42" cy="42" r="26" fill="none" stroke="#000" stroke-width="1" opacity="0.6"/>
+                    </g>
+                </defs>
+            </svg>
+
+            <!-- Knobs -->
+            <div class="knob-container">
+                <svg class="control-interactive" data-param="shape" data-min="0" data-max="2" data-val="0">
+                    <circle cx="42" cy="42" r="38" class="knob-ring-bg"/>
+                    <path class="knob-ring-val" d="M15,73 A38,38 0 1,1 69,73" stroke-dasharray="180" stroke-dashoffset="180"/>
+                    <use href="#knob-asset"/>
+                </svg>
+                <div class="knob-label">WAVE</div>
+            </div>
+
+            <div class="knob-container">
+                <svg class="control-interactive" data-param="cutoff" data-min="100" data-max="10000" data-val="2000" data-log="true">
+                    <circle cx="42" cy="42" r="38" class="knob-ring-bg"/>
+                    <path class="knob-ring-val" d="M15,73 A38,38 0 1,1 69,73" stroke-dasharray="180" stroke-dashoffset="90"/>
+                    <use href="#knob-asset"/>
+                </svg>
+                <div class="knob-label">CUTOFF</div>
+            </div>
+
+            <div class="knob-container">
+                <svg class="control-interactive" data-param="res" data-min="0" data-max="20" data-val="5">
+                    <circle cx="42" cy="42" r="38" class="knob-ring-bg"/>
+                    <path class="knob-ring-val" d="M15,73 A38,38 0 1,1 69,73" stroke-dasharray="180" stroke-dashoffset="135"/>
+                    <use href="#knob-asset"/>
+                </svg>
+                <div class="knob-label">RESONANCE</div>
+            </div>
+
+            <div class="knob-container">
+                <svg class="control-interactive" data-param="decay" data-min="0.05" data-max="2" data-val="0.5">
+                    <circle cx="42" cy="42" r="38" class="knob-ring-bg"/>
+                    <path class="knob-ring-val" d="M15,73 A38,38 0 1,1 69,73" stroke-dasharray="180" stroke-dashoffset="135"/>
+                    <use href="#knob-asset"/>
+                </svg>
+                <div class="knob-label">DECAY</div>
+            </div>
+
+            <div class="knob-container">
+                <svg class="control-interactive" data-param="delay" data-min="0" data-max="1" data-val="0.4">
+                    <circle cx="42" cy="42" r="38" class="knob-ring-bg"/>
+                    <path class="knob-ring-val" d="M15,73 A38,38 0 1,1 69,73" stroke-dasharray="180" stroke-dashoffset="108"/>
+                    <use href="#knob-asset"/>
+                </svg>
+                <div class="knob-label">ECHO MIX</div>
+            </div>
+
+            <div class="knob-container">
+                <svg class="control-interactive" data-param="speed" data-min="50" data-max="400" data-val="150">
+                    <circle cx="42" cy="42" r="38" class="knob-ring-bg"/>
+                    <path class="knob-ring-val" d="M15,73 A38,38 0 1,1 69,73" stroke-dasharray="180" stroke-dashoffset="120"/>
+                    <use href="#knob-asset"/>
+                </svg>
+                <div class="knob-label">SPEED</div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="overlay">
+        <h1>PRISMATIC CORE</h1>
+        <p class="text-gray-400 mb-8 max-w-xl text-lg">
+            Draw on the matrix to sonify pixels. The playhead scans left to right. Higher blocks = higher pitch. Colors represent harmonic shifts.
+        </p>
+        <button class="btn-primary" id="init-btn">INITIALIZE SYSTEM</button>
+        <p style="margin-top:30px; color: #666; font-size: 0.8rem; letter-spacing: 1px;">
+            WARNING: AUDIO-VISUAL OUTPUT • USE HEADPHONES
+        </p>
+    </div>
+
+    <script>
+        /**
+         * PRISMATIC SONIFICATION ENGINE
+         * Merging MSS Synth Architecture + Image/Grid Sonification + Drawscope
+         */
+
+        // --- Configuration ---
+        const GRID_COLS = 32;
+        const GRID_ROWS = 16;
+        const PENTATONIC_SCALE = [261.63, 293.66, 329.63, 392.00, 440.00]; // C4, D4, E4, G4, A4
+        
+        // Generate full scale across rows (bottom to top)
+        const scale = [];
+        for (let i = 0; i < GRID_ROWS; i++) {
+            const octave = Math.floor(i / 5);
+            const note = PENTATONIC_SCALE[i % 5];
+            scale.push(note * Math.pow(2, octave - 1)); // Start lower
+        }
+        scale.reverse(); // Index 0 is top (highest pitch)
+
+        // --- State ---
+        const State = {
+            grid: Array(GRID_COLS).fill(0).map(() => Array(GRID_ROWS).fill(0)),
+            playhead: 0,
+            isPlaying: true,
+            isDrawing: false,
+            drawMode: 1, // 1 for draw, 0 for erase
+            
+            // Audio Context & Nodes
+            ctx: null,
+            master: null,
+            filter: null,
+            delay: null,
+            delayFeedback: null,
+            analyser: null,
+            
+            // Parameters mapped to UI
+            params: {
+                shape: 0,     // 0=Sine, 1=Saw, 2=Square
+                cutoff: 2000,
+                res: 5,
+                decay: 0.5,
+                delay: 0.4,
+                speed: 150    // BPM roughly
+            },
+
+            // Visuals
+            gridCanvas: null,
+            gridCtx: null,
+            scopeCanvas: null,
+            scopeCtx: null,
+            analyserBuffer: null,
+            
+            // Timing
+            nextNoteTime: 0,
+            lookahead: 25.0, // ms
+            scheduleAheadTime: 0.1 // s
+        };
+
+        // --- Audio Engine ---
+        const initAudio = () => {
+            const AC = window.AudioContext || window.webkitAudioContext;
+            State.ctx = new AC();
+            const ctx = State.ctx;
+
+            // Master & Analyser
+            State.master = ctx.createGain();
+            State.master.gain.value = 0.6;
+            
+            State.analyser = ctx.createAnalyser();
+            State.analyser.fftSize = 2048;
+            State.analyserBuffer = new Uint8Array(State.analyser.frequencyBinCount);
+
+            // Global Filter
+            State.filter = ctx.createBiquadFilter();
+            State.filter.type = 'lowpass';
+            
+            // Delay Effect
+            State.delay = ctx.createDelay();
+            State.delay.delayTime.value = 0.33; // ~dotted 8th
+            State.delayFeedback = ctx.createGain();
+            State.delayMix = ctx.createGain();
+            
+            // Routing
+            State.filter.connect(State.master);
+            
+            // Delay Loop
+            State.filter.connect(State.delay);
+            State.delay.connect(State.delayFeedback);
+            State.delayFeedback.connect(State.delay);
+            State.delay.connect(State.delayMix);
+            State.delayMix.connect(State.master);
+            
+            State.master.connect(State.analyser);
+            State.analyser.connect(ctx.destination);
+
+            updateAudioParams();
+        };
+
+        const updateAudioParams = () => {
+            if (!State.ctx) return;
+            const p = State.params;
+            const t = State.ctx.currentTime;
+            
+            State.filter.frequency.setTargetAtTime(p.cutoff, t, 0.1);
+            State.filter.Q.setTargetAtTime(p.res, t, 0.1);
+            
+            State.delayFeedback.gain.setTargetAtTime(0.4, t, 0.1);
+            State.delayMix.gain.setTargetAtTime(p.delay, t, 0.1);
+
+            // Update UI Colors based on Cutoff/Res
+            const hue = (p.cutoff / 10000) * 360;
+            document.documentElement.style.setProperty('--primary', `hsl(${hue}, 100%, 60%)`);
+            document.documentElement.style.setProperty('--glow', `hsla(${hue}, 100%, 60%, 0.6)`);
+        };
+
+        const getWaveShape = () => {
+            const s = State.params.shape;
+            if (s < 0.5) return 'sine';
+            if (s < 1.5) return 'sawtooth';
+            return 'square';
+        };
+
+        const triggerVoice = (row, time) => {
+            const ctx = State.ctx;
+            const freq = scale[row];
+            
+            const osc = ctx.createOscillator();
+            const vca = ctx.createGain();
+            
+            osc.type = getWaveShape();
+            osc.frequency.value = freq;
+            
+            // Envelope
+            vca.gain.setValueAtTime(0, time);
+            vca.gain.linearRampToValueAtTime(0.3, time + 0.02); // Attack
+            vca.gain.exponentialRampToValueAtTime(0.001, time + State.params.decay); // Decay
+            
+            osc.connect(vca);
+            vca.connect(State.filter);
+            
+            osc.start(time);
+            osc.stop(time + State.params.decay + 0.1);
+        };
+
+        // --- Sequencer ---
+        const nextNote = () => {
+            const secondsPerBeat = 60.0 / State.params.speed;
+            State.nextNoteTime += secondsPerBeat * 0.25; // 16th notes
+            State.playhead = (State.playhead + 1) % GRID_COLS;
+        };
+
+        const scheduleNotes = () => {
+            if (!State.isPlaying) return;
+            
+            while (State.nextNoteTime < State.ctx.currentTime + State.scheduleAheadTime) {
+                // Check grid column
+                const col = State.playhead;
+                let hit = false;
+                
+                for (let row = 0; row < GRID_ROWS; row++) {
+                    if (State.grid[col][row]) {
+                        triggerVoice(row, State.nextNoteTime);
+                        hit = true;
+                    }
+                }
+                
+                // Visual LED sync
+                if (hit || col % 4 === 0) {
+                    setTimeout(() => {
+                        const led = document.getElementById('tempo-led');
+                        led.classList.add('active');
+                        setTimeout(() => led.classList.remove('active'), 50);
+                    }, (State.nextNoteTime - State.ctx.currentTime) * 1000);
+                }
+                
+                nextNote();
+            }
+            
+            State.timerID = setTimeout(scheduleNotes, State.lookahead);
+        };
+
+        // --- Visuals: Grid ---
+        const drawGrid = () => {
+            const canvas = State.gridCanvas;
+            const ctx = State.gridCtx;
+            const w = canvas.width;
+            const h = canvas.height;
+            
+            ctx.clearRect(0, 0, w, h);
+            
+            const cellW = w / GRID_COLS;
+            const cellH = h / GRID_ROWS;
+            
+            // Draw Cells
+            for (let c = 0; c < GRID_COLS; c++) {
+                for (let r = 0; r < GRID_ROWS; r++) {
+                    if (State.grid[c][r]) {
+                        const hue = (r / GRID_ROWS) * 360;
+                        ctx.fillStyle = `hsl(${hue}, 80%, 60%)`;
+                        ctx.shadowBlur = 10;
+                        ctx.shadowColor = `hsl(${hue}, 100%, 50%)`;
+                        
+                        // Shrink slightly for gap
+                        ctx.fillRect(c * cellW + 1, r * cellH + 1, cellW - 2, cellH - 2);
+                        ctx.shadowBlur = 0;
+                    }
+                }
+            }
+            
+            // Draw Playhead
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.fillRect(State.playhead * cellW, 0, cellW, h);
+            
+            // Draw Playhead Line
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(State.playhead * cellW + cellW/2, 0);
+            ctx.lineTo(State.playhead * cellW + cellW/2, h);
+            ctx.stroke();
+            
+            requestAnimationFrame(drawGrid);
+        };
+
+        // --- Visuals: Oscilloscope (Drawscope) ---
+        const drawScope = () => {
+            if (!State.ctx) return;
+            
+            const canvas = State.scopeCanvas;
+            const ctx = State.scopeCtx;
+            const w = canvas.width;
+            const h = canvas.height;
+            const data = State.analyserBuffer;
+            
+            State.analyser.getByteTimeDomainData(data);
+            
+            // Fade out for trail effect
+            ctx.fillStyle = 'rgba(2, 2, 2, 0.2)';
+            ctx.fillRect(0, 0, w, h);
+            
+            ctx.lineWidth = 2;
+            const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+            ctx.strokeStyle = primaryColor;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = primaryColor;
+            
+            ctx.beginPath();
+            const sliceW = w / data.length;
+            let x = 0;
+            
+            for (let i = 0; i < data.length; i++) {
+                const v = data[i] / 128.0;
+                const y = v * h / 2;
+                
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+                
+                x += sliceW;
+            }
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+            
+            requestAnimationFrame(drawScope);
+        };
+
+        // --- Interaction ---
+        const handleGridInteraction = (e) => {
+            const rect = State.gridCanvas.getBoundingClientRect();
+            
+            // Handle both touch and mouse
+            let clientX, clientY;
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
+            
+            const c = Math.floor((x / rect.width) * GRID_COLS);
+            const r = Math.floor((y / rect.height) * GRID_ROWS);
+            
+            if (c >= 0 && c < GRID_COLS && r >= 0 && r < GRID_ROWS) {
+                if (e.type === 'mousedown' || e.type === 'touchstart') {
+                    State.isDrawing = true;
+                    State.drawMode = State.grid[c][r] ? 0 : 1;
+                    State.grid[c][r] = State.drawMode;
+                } else if ((e.type === 'mousemove' || e.type === 'touchmove') && State.isDrawing) {
+                    State.grid[c][r] = State.drawMode;
+                }
+            }
+        };
+
+        const initInteraction = () => {
+            // Grid Drawing
+            const gc = State.gridCanvas;
+            gc.addEventListener('mousedown', handleGridInteraction);
+            gc.addEventListener('mousemove', handleGridInteraction);
+            window.addEventListener('mouseup', () => State.isDrawing = false);
+            
+            gc.addEventListener('touchstart', (e) => { e.preventDefault(); handleGridInteraction(e); }, {passive: false});
+            gc.addEventListener('touchmove', (e) => { e.preventDefault(); handleGridInteraction(e); }, {passive: false});
+            window.addEventListener('touchend', () => State.isDrawing = false);
+
+            // Knobs
+            document.querySelectorAll('.control-interactive').forEach(el => {
+                const param = el.dataset.param;
+                const min = parseFloat(el.dataset.min);
+                const max = parseFloat(el.dataset.max);
+                const isLog = el.dataset.log === 'true';
+                let currentVal = parseFloat(el.dataset.val);
+                
+                State.params[param] = currentVal;
+
+                const updateVisual = () => {
+                    let pct;
+                    if (isLog) {
+                        pct = (Math.log(currentVal) - Math.log(min)) / (Math.log(max) - Math.log(min));
+                    } else {
+                        pct = (currentVal - min) / (max - min);
+                    }
+                    const deg = pct * 270 - 135;
+                    const dashOffset = 180 * (1 - pct);
+                    
+                    el.querySelector('use').style.transform = `rotate(${deg}deg)`;
+                    const ring = el.querySelector('.knob-ring-val');
+                    if (ring) ring.style.strokeDashoffset = dashOffset;
+                };
+                updateVisual();
+
+                let startY, startVal;
+
+                const onMove = (e) => {
+                    const y = e.touches ? e.touches[0].clientY : e.clientY;
+                    const delta = (startY - y) * 0.005;
+                    
+                    let pct;
+                    if (isLog) {
+                        const startPct = (Math.log(startVal) - Math.log(min)) / (Math.log(max) - Math.log(min));
+                        pct = Math.min(Math.max(startPct + delta, 0), 1);
+                        currentVal = min * Math.pow(max/min, pct);
+                    } else {
+                        const startPct = (startVal - min) / (max - min);
+                        pct = Math.min(Math.max(startPct + delta, 0), 1);
+                        currentVal = min + pct * (max - min);
+                    }
+
+                    State.params[param] = currentVal;
+                    updateVisual();
+                    updateAudioParams();
+                };
+
+                const onStart = (e) => {
+                    e.preventDefault();
+                    startY = e.touches ? e.touches[0].clientY : e.clientY;
+                    startVal = State.params[param];
+                    window.addEventListener('mousemove', onMove);
+                    window.addEventListener('touchmove', onMove, {passive: false});
+                    window.addEventListener('mouseup', onEnd);
+                    window.addEventListener('touchend', onEnd);
+                };
+
+                const onEnd = () => {
+                    window.removeEventListener('mousemove', onMove);
+                    window.removeEventListener('touchmove', onMove);
+                    window.removeEventListener('mouseup', onEnd);
+                    window.removeEventListener('touchend', onEnd);
+                };
+
+                el.addEventListener('mousedown', onStart);
+                el.addEventListener('touchstart', onStart, {passive: false});
+            });
+
+            // Buttons
+            const btnPlay = document.getElementById('btn-play');
+            btnPlay.addEventListener('click', () => {
+                State.isPlaying = !State.isPlaying;
+                btnPlay.textContent = State.isPlaying ? 'Pause' : 'Play';
+                if (State.isPlaying) {
+                    State.nextNoteTime = State.ctx.currentTime + 0.1;
+                    scheduleNotes();
+                } else {
+                    clearTimeout(State.timerID);
+                }
+            });
+
+            document.getElementById('btn-clear').addEventListener('click', () => {
+                State.grid = Array(GRID_COLS).fill(0).map(() => Array(GRID_ROWS).fill(0));
+            });
+
+            document.getElementById('btn-random').addEventListener('click', () => {
+                for(let c=0; c<GRID_COLS; c++) {
+                    for(let r=0; r<GRID_ROWS; r++) {
+                        State.grid[c][r] = Math.random() > 0.85 ? 1 : 0;
+                    }
+                }
+            });
+        };
+
+        const generateDefaultPattern = () => {
+            // Draw a sine wave pattern
+            for (let c = 0; c < GRID_COLS; c++) {
+                const r = Math.floor((Math.sin(c * 0.4) * 0.5 + 0.5) * (GRID_ROWS - 1));
+                State.grid[c][r] = 1;
+                // Add some harmony
+                if (c % 4 === 0) {
+                    State.grid[c][Math.min(r + 4, GRID_ROWS - 1)] = 1;
+                }
+            }
+        };
+
+        const resizeCanvases = () => {
+            const gc = document.getElementById('grid-canvas');
+            const sc = document.getElementById('scope-canvas');
+            
+            gc.width = gc.clientWidth;
+            gc.height = gc.clientHeight;
+            
+            sc.width = sc.clientWidth;
+            sc.height = sc.clientHeight;
+        };
+
+        // --- Bootstrap ---
+        document.getElementById('init-btn').addEventListener('click', () => {
+            const overlay = document.getElementById('overlay');
+            overlay.style.opacity = 0;
+            setTimeout(() => overlay.remove(), 500);
+            
+            State.gridCanvas = document.getElementById('grid-canvas');
+            State.gridCtx = State.gridCanvas.getContext('2d');
+            
+            State.scopeCanvas = document.getElementById('scope-canvas');
+            State.scopeCtx = State.scopeCanvas.getContext('2d');
+            
+            resizeCanvases();
+            window.addEventListener('resize', resizeCanvases);
+            
+            generateDefaultPattern();
+            initAudio();
+            initInteraction();
+            
+            State.nextNoteTime = State.ctx.currentTime + 0.1;
+            scheduleNotes();
+            drawGrid();
+            drawScope();
+        });
+
+    </script>
+</body>
+</html>

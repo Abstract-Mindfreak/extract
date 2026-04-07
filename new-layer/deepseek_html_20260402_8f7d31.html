@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>MMSS Vision UI Stack | Bio‑adaptive Typography & UI</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #eef2f8;
+      font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+      padding: 2rem 1.5rem;
+      color: #1a2c3e;
+    }
+
+    .mmss-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* header */
+    .module-header {
+      margin-bottom: 2rem;
+    }
+    .module-header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #1A3E50, #2A7F6E);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.01em;
+    }
+    .module-badge {
+      display: inline-block;
+      background: #1e2f3c;
+      color: #bfe2e6;
+      padding: 0.2rem 0.8rem;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-family: monospace;
+      margin-top: 0.5rem;
+    }
+
+    /* main grid */
+    .dashboard-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.8rem;
+    }
+    .control-panel {
+      flex: 1.2;
+      min-width: 280px;
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.05);
+      padding: 1.5rem;
+    }
+    .metrics-panel {
+      flex: 1.8;
+      min-width: 320px;
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.05);
+      padding: 1.5rem;
+    }
+    .demo-preview {
+      margin-top: 2rem;
+      background: rgba(255,255,245,0.9);
+      backdrop-filter: blur(2px);
+      border-radius: 32px;
+      padding: 1.8rem;
+      border: 1px solid #d4e2ec;
+    }
+
+    /* form controls */
+    .control-group {
+      margin-bottom: 1.4rem;
+    }
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: #1f4a5e;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    select, input[type="range"] {
+      width: 100%;
+      padding: 0.6rem 0.9rem;
+      border-radius: 20px;
+      border: 1px solid #cbdde6;
+      background: white;
+      font-size: 0.9rem;
+      transition: 0.2s;
+    }
+    select:focus, input:focus {
+      border-color: #2a7f6e;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(42,127,110,0.2);
+    }
+    .range-value {
+      display: inline-block;
+      margin-left: 0.6rem;
+      background: #eef3fa;
+      padding: 0.2rem 0.7rem;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .quality-card {
+      background: #f8fafd;
+      border-radius: 20px;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-left: 4px solid #2a7f6e;
+    }
+    .progress-bar {
+      background: #e0e9f0;
+      border-radius: 12px;
+      height: 8px;
+      overflow: hidden;
+      margin: 0.5rem 0;
+    }
+    .progress-fill {
+      background: #2a7f6e;
+      width: 0%;
+      height: 100%;
+      border-radius: 12px;
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+      gap: 0.8rem;
+      margin: 1rem 0;
+    }
+    .stat-item {
+      background: #f5f9fe;
+      padding: 0.8rem;
+      border-radius: 20px;
+    }
+    .stat-label-sm {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #4f6f8f;
+    }
+    .stat-value-lg {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0c2e3b;
+      line-height: 1.2;
+    }
+    button {
+      background: #2a7f6e;
+      border: none;
+      color: white;
+      font-weight: 600;
+      border-radius: 60px;
+      padding: 0.6rem 1.4rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: 0.1s linear;
+    }
+    button:active {
+      transform: scale(0.97);
+    }
+    .demo-text {
+      background: #fffcf0;
+      padding: 1rem;
+      border-radius: 24px;
+    }
+    .demo-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    code {
+      background: #1e2a36;
+      color: #b6e2f0;
+      padding: 0.2rem 0.4rem;
+      border-radius: 12px;
+      font-size: 0.7rem;
+    }
+    hr {
+      margin: 1.2rem 0;
+      border: none;
+      height: 1px;
+      background: #d4e2ec;
+    }
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.7rem;
+      color: #5c7f94;
+    }
+  </style>
+</head>
+<body>
+<div class="mmss-container">
+  <div class="module-header">
+    <h1>🧬 MMSS · UNIFIED_ARCHITECTURAL_BLOCK_V2</h1>
+    <div class="module-badge">MMSS_VISION_UI_STACK_v0.1_STABILIZED | retina‑anchored | WCAG 2.2 ready</div>
+  </div>
+
+  <div class="dashboard-grid">
+    <!-- LEFT: CONTROL PANEL (STATE_SPACE + U_controls) -->
+    <div class="control-panel">
+      <h3>🎮 STATE_SPACE & U_controls</h3>
+      <div class="control-group">
+        <label>👁️ Vision profile (X_state)</label>
+        <select id="visionProfileSelect"></select>
+      </div>
+      <div class="control-group">
+        <label>📱 Device profile</label>
+        <select id="deviceSelect"></select>
+      </div>
+      <div class="control-group">
+        <label>📄 UI context</label>
+        <select id="uiContextSelect"></select>
+      </div>
+      <div class="control-group">
+        <label>✍️ Task type</label>
+        <select id="taskSelect"></select>
+      </div>
+      <div class="control-group">
+        <label>💡 Lighting (environment)</label>
+        <select id="lightingSelect"></select>
+      </div>
+      <div class="control-group">
+        <label>🎨 Contrast</label>
+        <select id="contrastSelect"></select>
+      </div>
+      <div class="control-group">
+        <label>😌 Comfort shift <span id="comfortValueDisplay" class="range-value">0.00</span></label>
+        <input type="range" id="comfortSlider" min="-2" max="2" step="0.05" value="0">
+      </div>
+      <div class="quality-card">
+        <div>🌀 Comfort loop simulation (zoom‑aware)</div>
+        <div style="font-size:0.7rem; margin-top:6px;">
+          <span>Browser zoom: </span><span id="browserZoomLabel">100%</span>
+          <span style="margin-left:1rem;">🖱️ Adaptive suggestion: </span><span id="comfortSuggestion">neutral</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: METRICS & QUALITY (Y_outputs + Γ) -->
+    <div class="metrics-panel">
+      <h3>📐 Y_outputs · bio‑optical metrics</h3>
+      <div class="stat-grid" id="metricsGrid"></div>
+
+      <div class="quality-card">
+        <div><strong>Γ_ergonomics</strong> (ISO 9241‑303 range: 16–22 arcmin)</div>
+        <div class="progress-bar"><div class="progress-fill" id="ergoFill" style="width:0%"></div></div>
+        <div><strong>Γ_wcag_alignment</strong> (text resize + touch target)</div>
+        <div class="progress-bar"><div class="progress-fill" id="wcagFill" style="width:0%"></div></div>
+        <div style="font-size:0.7rem; margin-top:8px;" id="qualityDetails"></div>
+      </div>
+
+      <hr>
+      <div><code>🌐 CSS variables (root)</code></div>
+      <pre id="cssVarsPreview" style="background:#1e2a36; padding:0.8rem; border-radius:16px; font-size:0.7rem; overflow-x:auto; color:#b6e2f0; margin-top:8px;"></pre>
+    </div>
+  </div>
+
+  <!-- DEMO PREVIEW: dynamic typography + UI -->
+  <div class="demo-preview">
+    <h2>📖 Live demo · typography & tap targets</h2>
+    <div class="demo-text" id="demoTextBlock">
+      <p><strong>Body text:</strong> Based on effective visual angle and physical distance. This paragraph follows the computed font-size, line-height and contrasts. WCAG 1.4.4 (resize text) is fully supported.</p>
+      <p><small>Small note (0.85× relative): readability scales with vision profile.</small></p>
+      <p style="font-size:1.25rem"><strong>Large text example (1.25×):</strong> for subheadings or emphasis.</p>
+    </div>
+    <div class="demo-buttons">
+      <button id="primaryBtn">⚡ Primary action (tap target)</button>
+      <button id="secondaryBtn" style="background:#5b6f8c;">📱 Secondary button</button>
+    </div>
+    <div style="font-size:0.75rem; background:#ecf3f0; padding:0.5rem 1rem; border-radius: 28px;">
+      🔍 Tap target physical size: <span id="tapTargetPhysicalPreview">--</span> mm / <span id="tapTargetPxPreview">--</span> px — meets WCAG 2.2 (minimum 7mm, recommended 9mm)
+    </div>
+  </div>
+  <footer>MMSS UNIFIED BLOCK v2 · bio‑physical lens model · real‑time CSS variables · Γ ergonomics & WCAG alignment</footer>
+</div>
+
+<script>
+  // ============================================================
+  // 1. JSON STACKS (MMSS_VISION_STACK_v0.1 + MMSS_UI_PROTOCOL_v0.1)
+  // ============================================================
+  const MMSS_VISION_STACK = {
+    "MMSS_VISION_STACK_v0_1": {
+      "metadata": { "version": "0.1", "description": "Bio-physical vision + device + typography engine", "unit_system": "SI_mm_deg" },
+      "BIO_VISION_CORE": {
+        "profiles": {
+          "vision_normal_25_45": { "acuity_snellen": "6/6", "acuity_logMAR": 0.0, "base_body_angle_deg": 0.30, "allowed_angle_range_deg": [0.26, 0.40], "k_acuity": 1.0 },
+          "vision_low_vision": { "acuity_snellen": "6/18", "acuity_logMAR": 0.5, "base_body_angle_deg": 0.45, "allowed_angle_range_deg": [0.40, 0.70], "k_acuity": 1.5 }
+        },
+        "task_modifiers": {
+          "dense_reading": { "k_task": 1.0 },
+          "ui_controls": { "k_task": 0.9 },
+          "headings": { "k_task": 1.4 },
+          "code_editor": { "k_task": 1.1 }
+        },
+        "environment_modifiers": {
+          "lighting": { "indoor_normal": { "k_lighting": 1.0 }, "indoor_low": { "k_lighting": 1.15 }, "outdoor_bright": { "k_lighting": 0.95 } },
+          "contrast": { "high": { "k_contrast": 1.0 }, "medium": { "k_contrast": 1.1 }, "low": { "k_contrast": 1.25 } }
+        },
+        "retina": { "eye_depth_v_mm": 17.0 }
+      },
+      "DEVICE_PHYSICAL_LAYER": {
+        "device_profiles": {
+          "desktop_24_fhd": { "class": "desktop", "ppi": 92, "distance_nominal_cm": 60, "distance_range_cm": [40,80] },
+          "laptop_14_fhd": { "class": "laptop", "ppi": 110, "distance_nominal_cm": 50, "distance_range_cm": [35,70] },
+          "phone_6_1080": { "class": "phone", "ppi": 400, "distance_nominal_cm": 30, "distance_range_cm": [20,45] }
+        }
+      },
+      "VISION_METRIC_ENGINE": {
+        "defaults": { "vision_profile_id": "vision_normal_25_45", "device_profile_id": "laptop_14_fhd", "task_type": "dense_reading", "lighting": "indoor_normal", "contrast": "high" },
+        "ui_contexts": {
+          "article_view": { "base_target_angle_deg": 0.30, "line_height_factor": 1.5 },
+          "dashboard": { "base_target_angle_deg": 0.28, "line_height_factor": 1.4 },
+          "code_editor": { "base_target_angle_deg": 0.32, "line_height_factor": 1.45 },
+          "mobile_nav": { "base_target_angle_deg": 0.35, "line_height_factor": 1.4 }
+        },
+        "tap_targets": { "base_physical_mm": 9.0, "min_physical_mm": 7.0, "max_physical_mm": 12.0 },
+        "runtime_formulae": {}
+      }
+    }
+  };
+
+  const MMSS_UI_PROTOCOL = {
+    "MMSS_UI_PROTOCOL_v0_1": {
+      "tokens": {
+        "text": { "body": { "fu": 1.0 }, "small": { "fu": 0.85 }, "large": { "fu": 1.25 }, "h1": { "fu": 2.2 }, "h2": { "fu": 1.8 } },
+        "ui": { "tap_target": { "ui_unit": 1.0 } }
+      },
+      "css_export": { "variables": { "root": ["--mmss-fu-px","--mmss-body-font-px","--mmss-line-height","--mmss-tap-target-mm"] } }
+    }
+  };
+
+  // ============================================================
+  // 2. MMSSVisionAdapter (core engine)
+  // ============================================================
+  class MMSSVisionAdapter {
+    constructor(visionStack, uiProtocol) {
+      this.vision = visionStack;
+      this.ui = uiProtocol;
+    }
+
+    compute(context) {
+      const defaults = this.vision.VISION_METRIC_ENGINE.defaults;
+      const visionProfile = this.vision.BIO_VISION_CORE.profiles[context.visionProfileId || defaults.vision_profile_id];
+      const deviceProfile = this.vision.DEVICE_PHYSICAL_LAYER.device_profiles[context.deviceProfileId || defaults.device_profile_id];
+      const uiContext = this.vision.VISION_METRIC_ENGINE.ui_contexts[context.uiContextId || "article_view"];
+      const taskMod = this.vision.BIO_VISION_CORE.task_modifiers[context.taskType || defaults.task_type];
+      const lightingMod = this.vision.BIO_VISION_CORE.environment_modifiers.lighting[context.lighting || defaults.lighting];
+      const contrastMod = this.vision.BIO_VISION_CORE.environment_modifiers.contrast[context.contrast || defaults.contrast];
+      
+      if (!visionProfile || !deviceProfile || !uiContext || !taskMod || !lightingMod || !contrastMod) throw new Error("Invalid MMSS context");
+
+      const baseAngle = uiContext.base_target_angle_deg;
+      const kAcuity = visionProfile.k_acuity;
+      const kTask = taskMod.k_task;
+      const kLighting = lightingMod.k_lighting;
+      const kContrast = contrastMod.k_contrast;
+      let kDistance = deviceProfile.distance_nominal_cm / 50;
+      kDistance = Math.min(Math.max(kDistance, 0.9), 1.1);
+      const comfort = context.comfortShift ?? 0;
+      const kComfort = 1 + comfort * 0.08;
+
+      const effectiveAngleDeg = baseAngle * kAcuity * kTask * kLighting * kContrast * kDistance * kComfort;
+      const distanceMm = deviceProfile.distance_nominal_cm * 10;
+      const bodyPhysicalHeightMm = distanceMm * Math.tan(effectiveAngleDeg * Math.PI / 180);
+      const mmPerPx = 25.4 / deviceProfile.ppi;
+      const pxPerMm = 1 / mmPerPx;
+      const bodyFontPx = bodyPhysicalHeightMm * pxPerMm;
+      const lineHeightPx = bodyFontPx * uiContext.line_height_factor;
+
+      let tapTargetMm = this.vision.VISION_METRIC_ENGINE.tap_targets.base_physical_mm * kComfort;
+      tapTargetMm = Math.min(Math.max(tapTargetMm, this.vision.VISION_METRIC_ENGINE.tap_targets.min_physical_mm), this.vision.VISION_METRIC_ENGINE.tap_targets.max_physical_mm);
+      const tapTargetPx = tapTargetMm * pxPerMm;
+      const fuToPx = bodyFontPx / this.ui.tokens.text.body.fu;
+
+      return {
+        effectiveAngleDeg,
+        bodyPhysicalHeightMm,
+        bodyFontPx,
+        lineHeightPx,
+        tapTargetMm,
+        tapTargetPx,
+        fuToPx,
+        pxPerMm,
+        devicePpi: deviceProfile.ppi,
+        distanceCm: deviceProfile.distance_nominal_cm,
+        lineHeightFactor: uiContext.line_height_factor
+      };
+    }
+
+    applyToDOM(result) {
+      const root = document.documentElement;
+      root.style.setProperty('--mmss-fu-px', `${result.fuToPx}px`);
+      root.style.setProperty('--mmss-body-font-px', `${result.bodyFontPx}px`);
+      root.style.setProperty('--mmss-line-height', `${result.lineHeightPx / result.bodyFontPx}`);
+      root.style.setProperty('--mmss-tap-target-mm', `${result.tapTargetMm}`);
+      root.style.setProperty('--mmss-tap-target-px', `${result.tapTargetPx}px`);
+    }
+  }
+
+  // ============================================================
+  // 3. GLOBAL STATE & UI bindings
+  // ============================================================
+  const visionData = MMSS_VISION_STACK.MMSS_VISION_STACK_v0_1;
+  const uiData = MMSS_UI_PROTOCOL.MMSS_UI_PROTOCOL_v0_1;
+  const adapter = new MMSSVisionAdapter(visionData, uiData);
+
+  // DOM elements
+  const visionSelect = document.getElementById('visionProfileSelect');
+  const deviceSelect = document.getElementById('deviceSelect');
+  const uiContextSelect = document.getElementById('uiContextSelect');
+  const taskSelect = document.getElementById('taskSelect');
+  const lightingSelect = document.getElementById('lightingSelect');
+  const contrastSelect = document.getElementById('contrastSelect');
+  const comfortSlider = document.getElementById('comfortSlider');
+  const comfortValueDisplay = document.getElementById('comfortValueDisplay');
+  const metricsGrid = document.getElementById('metricsGrid');
+  const cssVarsPreview = document.getElementById('cssVarsPreview');
+  const ergoFill = document.getElementById('ergoFill');
+  const wcagFill = document.getElementById('wcagFill');
+  const qualityDetails = document.getElementById('qualityDetails');
+  const tapTargetPhysicalPreview = document.getElementById('tapTargetPhysicalPreview');
+  const tapTargetPxPreview = document.getElementById('tapTargetPxPreview');
+  const browserZoomLabel = document.getElementById('browserZoomLabel');
+  const comfortSuggestionSpan = document.getElementById('comfortSuggestion');
+
+  // helpers: populate dropdowns
+  function populateSelect(selectEl, obj, defaultKey, labelMap = {}) {
+    selectEl.innerHTML = '';
+    for (const [key, val] of Object.entries(obj)) {
+      const opt = document.createElement('option');
+      opt.value = key;
+      let label = labelMap[key] || key.replace(/_/g,' ');
+      if (key.includes('vision_normal')) label = '👁️ Normal vision (6/6)';
+      if (key.includes('vision_low')) label = '👓 Low vision (6/18)';
+      if (key.includes('desktop')) label = `🖥️ Desktop 24" (${val.ppi} ppi, ${val.distance_nominal_cm}cm)`;
+      if (key.includes('laptop')) label = `💻 Laptop 14" (${val.ppi} ppi, ${val.distance_nominal_cm}cm)`;
+      if (key.includes('phone')) label = `📱 Phone 6" (${val.ppi} ppi, ${val.distance_nominal_cm}cm)`;
+      if (key.includes('article_view')) label = '📰 Article / reading';
+      if (key.includes('dashboard')) label = '📊 Dashboard';
+      if (key.includes('code_editor')) label = '⌨️ Code editor';
+      if (key.includes('mobile_nav')) label = '📱 Mobile navigation';
+      if (key.includes('dense_reading')) label = '📖 Dense reading';
+      if (key.includes('ui_controls')) label = '🖱️ UI controls';
+      if (key.includes('headings')) label = '🔤 Headings';
+      if (key.includes('indoor_normal')) label = '💡 Indoor normal';
+      if (key.includes('indoor_low')) label = '🕯️ Low light';
+      if (key.includes('outdoor_bright')) label = '☀️ Outdoor bright';
+      if (key.includes('high')) label = '✅ High contrast';
+      if (key.includes('medium')) label = '🌓 Medium contrast';
+      if (key.includes('low')) label = '🌫️ Low contrast';
+      opt.textContent = label;
+      selectEl.appendChild(opt);
+    }
+    if (defaultKey && obj[defaultKey]) selectEl.value = defaultKey;
+  }
+
+  populateSelect(visionSelect, visionData.BIO_VISION_CORE.profiles, visionData.VISION_METRIC_ENGINE.defaults.vision_profile_id);
+  populateSelect(deviceSelect, visionData.DEVICE_PHYSICAL_LAYER.device_profiles, visionData.VISION_METRIC_ENGINE.defaults.device_profile_id);
+  populateSelect(uiContextSelect, visionData.VISION_METRIC_ENGINE.ui_contexts, "article_view");
+  populateSelect(taskSelect, visionData.BIO_VISION_CORE.task_modifiers, visionData.VISION_METRIC_ENGINE.defaults.task_type);
+  populateSelect(lightingSelect, visionData.BIO_VISION_CORE.environment_modifiers.lighting, visionData.VISION_METRIC_ENGINE.defaults.lighting);
+  populateSelect(contrastSelect, visionData.BIO_VISION_CORE.environment_modifiers.contrast, visionData.VISION_METRIC_ENGINE.defaults.contrast);
+
+  // compute Γ metrics based on arcminutes (effectiveAngleDeg → arcmin)
+  function computeGamma(effectiveAngleDeg, tapTargetMm) {
+    const arcmin = effectiveAngleDeg * 60;
+    // ISO 9241‑303: optimal character height 16–22 arcmin, normalized ergo = 1 if within 19±3
+    let ergo = 1.0;
+    if (arcmin < 12) ergo = arcmin / 12;
+    else if (arcmin < 16) ergo = 0.6 + (arcmin - 12) * 0.1;
+    else if (arcmin <= 22) ergo = 1.0;
+    else if (arcmin <= 30) ergo = 1.0 - (arcmin - 22) * 0.05;
+    else ergo = 0.5;
+    ergo = Math.min(1, Math.max(0.3, ergo));
+    
+    // WCAG: text scaling capability + tap target (min 7mm). 1 if tap >= 9mm && angle >=18 arcmin
+    let wcag = 0.7;
+    if (tapTargetMm >= 7) wcag += 0.15;
+    if (tapTargetMm >= 9) wcag += 0.1;
+    if (arcmin >= 18) wcag += 0.05;
+    wcag = Math.min(1, wcag);
+    return { ergo, wcag, arcmin };
+  }
+
+  // comfort loop simulation (browser zoom detection)
+  function detectZoomLevel() {
+    let zoom = Math.round((window.outerWidth / window.innerWidth) * 100);
+    if (isNaN(zoom) || zoom < 50) zoom = 100;
+    return zoom;
+  }
+
+  function updateComfortSuggestion(zoom, currentComfort) {
+    let suggestion = 0;
+    if (zoom > 115) suggestion = 0.5;
+    else if (zoom > 105) suggestion = 0.2;
+    else if (zoom < 85) suggestion = -0.3;
+    else suggestion = 0;
+    const targetComfort = Math.min(2, Math.max(-2, suggestion));
+    if (Math.abs(targetComfort - currentComfort) > 0.1 && targetComfort !== 0) {
+      comfortSuggestionSpan.innerText = `suggest ${targetComfort > 0 ? '+' : ''}${targetComfort.toFixed(1)}`;
+    } else {
+      comfortSuggestionSpan.innerText = 'neutral';
+    }
+  }
+
+  function refreshAll() {
+    const context = {
+      visionProfileId: visionSelect.value,
+      deviceProfileId: deviceSelect.value,
+      uiContextId: uiContextSelect.value,
+      taskType: taskSelect.value,
+      lighting: lightingSelect.value,
+      contrast: contrastSelect.value,
+      comfortShift: parseFloat(comfortSlider.value)
+    };
+    const result = adapter.compute(context);
+    adapter.applyToDOM(result);
+    const zoom = detectZoomLevel();
+    browserZoomLabel.innerText = `${zoom}%`;
+    updateComfortSuggestion(zoom, context.comfortShift);
+    
+    // update Y_outputs grid
+    metricsGrid.innerHTML = `
+      <div class="stat-item"><div class="stat-label-sm">Effective angle</div><div class="stat-value-lg">${result.effectiveAngleDeg.toFixed(3)}°</div></div>
+      <div class="stat-item"><div class="stat-label-sm">Char physical height</div><div class="stat-value-lg">${result.bodyPhysicalHeightMm.toFixed(2)} mm</div></div>
+      <div class="stat-item"><div class="stat-label-sm">Body font size</div><div class="stat-value-lg">${Math.round(result.bodyFontPx)} px</div></div>
+      <div class="stat-item"><div class="stat-label-sm">Line height (factor)</div><div class="stat-value-lg">${result.lineHeightFactor.toFixed(2)}</div></div>
+      <div class="stat-item"><div class="stat-label-sm">Tap target (mm/px)</div><div class="stat-value-lg">${result.tapTargetMm.toFixed(1)} mm / ${Math.round(result.tapTargetPx)} px</div></div>
+      <div class="stat-item"><div class="stat-label-sm">Device PPI / distance</div><div class="stat-value-lg">${result.devicePpi} ppi / ${result.distanceCm} cm</div></div>
+    `;
+    tapTargetPhysicalPreview.innerText = result.tapTargetMm.toFixed(1);
+    tapTargetPxPreview.innerText = Math.round(result.tapTargetPx);
+    
+    const { ergo, wcag, arcmin } = computeGamma(result.effectiveAngleDeg, result.tapTargetMm);
+    ergoFill.style.width = `${ergo * 100}%`;
+    wcagFill.style.width = `${wcag * 100}%`;
+    qualityDetails.innerHTML = `Arcmin: ${arcmin.toFixed(1)}' (ISO optimal 16–22') &nbsp;|&nbsp; Touch size ${result.tapTargetMm.toFixed(1)}mm (WCAG ≥7mm)`;
+    
+    // update CSS variables preview
+    const root = document.documentElement;
+    cssVarsPreview.innerText = `--mmss-fu-px: ${root.style.getPropertyValue('--mmss-fu-px') || result.fuToPx.toFixed(1)}px;
+--mmss-body-font-px: ${root.style.getPropertyValue('--mmss-body-font-px') || result.bodyFontPx.toFixed(1)}px;
+--mmss-line-height: ${root.style.getPropertyValue('--mmss-line-height') || (result.lineHeightPx / result.bodyFontPx).toFixed(2)};
+--mmss-tap-target-px: ${root.style.getPropertyValue('--mmss-tap-target-px') || Math.round(result.tapTargetPx)}px;
+--mmss-tap-target-mm: ${root.style.getPropertyValue('--mmss-tap-target-mm') || result.tapTargetMm.toFixed(1)};`;
+  }
+
+  // event listeners
+  visionSelect.addEventListener('change', refreshAll);
+  deviceSelect.addEventListener('change', refreshAll);
+  uiContextSelect.addEventListener('change', refreshAll);
+  taskSelect.addEventListener('change', refreshAll);
+  lightingSelect.addEventListener('change', refreshAll);
+  contrastSelect.addEventListener('change', refreshAll);
+  comfortSlider.addEventListener('input', (e) => {
+    comfortValueDisplay.innerText = parseFloat(e.target.value).toFixed(2);
+    refreshAll();
+  });
+  window.addEventListener('resize', () => refreshAll());
+  
+  // apply dynamic styling to demo elements via CSS variables already set; ensure tap target uses var
+  const styleInject = document.createElement('style');
+  styleInject.textContent = `
+    body {
+      font-size: var(--mmss-body-font-px, 16px);
+      line-height: var(--mmss-line-height, 1.5);
+    }
+    button {
+      min-height: var(--mmss-tap-target-px, 44px);
+      min-width: var(--mmss-tap-target-px, 44px);
+      font-size: calc(var(--mmss-body-font-px) * 0.9);
+    }
+    .demo-text small {
+      font-size: 0.85rem;
+    }
+    .demo-text p strong {
+      font-weight: 600;
+    }
+  `;
+  document.head.appendChild(styleInject);
+  
+  refreshAll();
+</script>
+</body>
+</html>

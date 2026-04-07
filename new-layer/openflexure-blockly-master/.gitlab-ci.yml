@@ -1,0 +1,12 @@
+image: alpine:latest
+
+pages:
+  stage: deploy
+  script:
+  - mkdir public
+  - cp -a BlocklyExtension/static/. public/ 
+  artifacts:
+    paths:
+    - public
+  only:
+  - master

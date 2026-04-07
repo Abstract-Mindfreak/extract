@@ -1,0 +1,225 @@
+@property --grid-gap {
+  syntax: "<length>";
+  initial-value: 12px;
+  inherits: true;
+}
+
+body {
+    
+    --grid-hue: 220; /* color of background/lines */
+    --grid-gap: 12px; /* size of the minor squares (line gaps) */
+    --grid-opacity: 0.35; /* opacity of crosses */
+    
+    --grid-border: 16px;
+    
+    --grid-light: hsl(var(--grid-hue), 50%, 92%);
+    --grid-dark: hsl(var(--grid-hue), 20%, 18%);
+    --grid-bg: light-dark( var(--grid-light), var(--grid-dark) );
+    
+    --grid-minor: light-dark( hsl(var(--grid-hue) 60% 20% / calc(var(--grid-opacity) * 0.125)), hsl(var(--grid-hue) 60% 80% / calc(var(--grid-opacity) * 0.125)) );
+    --grid-major: light-dark( hsl(var(--grid-hue) 60% 20% / calc(var(--grid-opacity) * 0.35)), hsl(var(--grid-hue) 60% 80% / calc(var(--grid-opacity) * 0.35)) );
+    --grid-cross: light-dark( hsl(var(--grid-hue) 60% 20% / var(--grid-opacity)), hsl(var(--grid-hue) 60% 80% / var(--grid-opacity)) );
+    
+    --paper-lines-y: linear-gradient(var(--grid-minor) 0px 1px,transparent 1px var(--grid-gap));
+    --paper-lines-x: linear-gradient(to right, var(--grid-minor) 0px 1px,transparent 1px var(--grid-gap));
+    --paper-lines-y-major: linear-gradient(var(--grid-major) 0px 1px,transparent 1px calc(var(--grid-gap) * 5));
+    --paper-lines-x-major: linear-gradient(to right, var(--grid-major) 0px 1px,transparent 1px calc(var(--grid-gap) * 5));
+    --paper-cross-y: linear-gradient(var(--grid-cross) 0px 1px,transparent 1px calc(var(--grid-gap) * 5));
+    --paper-cross-x: linear-gradient(to right, var(--grid-cross) 0px 1px,transparent 1px calc(var(--grid-gap) * 5));
+    --paper-cross-mask: radial-gradient(circle at center, transparent calc(var(--grid-gap)/2), var(--grid-bg) calc(var(--grid-gap)/2) 100%);
+    
+    --paper-gradient: 
+        var(--paper-lines-y), 
+        var(--paper-lines-x),
+        var(--paper-lines-y-major), 
+        var(--paper-lines-x-major), 
+        var(--paper-cross-mask),
+        var(--paper-cross-y), 
+        var(--paper-cross-x);
+    
+    background-size:
+        var(--grid-gap) var(--grid-gap), 
+        var(--grid-gap) var(--grid-gap), 
+        calc(var(--grid-gap) * 5) calc(var(--grid-gap) * 5),
+        calc(var(--grid-gap) * 5) calc(var(--grid-gap) * 5),
+        calc(var(--grid-gap) * 5) calc(var(--grid-gap) * 5),
+        calc(var(--grid-gap) * 5) calc(var(--grid-gap) * 5),
+        calc(var(--grid-gap) * 5) calc(var(--grid-gap) * 5);
+    
+    background-repeat: 
+        repeat, 
+        repeat, 
+        repeat, 
+        repeat, 
+        repeat,
+        repeat, 
+        repeat;
+    
+    background-position: 
+        var(--grid-border) var(--grid-border),
+        var(--grid-border) var(--grid-border),
+        var(--grid-border) var(--grid-border),
+        var(--grid-border) var(--grid-border),
+        calc(var(--grid-border) - var(--grid-gap) * 2.5) calc(var(--grid-border) - var(--grid-gap) * 2.5),
+        var(--grid-border) var(--grid-border),
+        var(--grid-border) var(--grid-border);
+    
+    background-color: var(--grid-bg);
+    background-image: var(--paper-gradient);
+    
+    box-shadow: inset 0 0 0 var(--grid-border) var(--grid-bg), inset 0 0 0 calc( var(--grid-border) + 1px) var(--grid-cross), inset 0 0 0 calc( var(--grid-border) + 1px) var(--bg2);
+    padding: var(--grid-border);
+    
+    min-width: 100svw;
+    min-height: 100svh;
+    
+    transition: --grid-gap 0.2s ease-in-out;
+}
+
+
+
+
+
+
+
+/** extra stuff for demo **/
+
+:root {
+    
+    color-scheme: light dark;
+    
+    --bg-light: hsl(220, 16%, 94%);
+    --bg-light2: hsl(212, 50%, 92%);
+    --bg-dark: hsl(222, 16%, 16%);
+    --bg-dark2: hsl(222, 20%, 18%);
+    --fg-light: hsl(212 22% 26%);
+    --fg-dark: hsl(222, 39%, 95%);
+    --link-light: hsl(222, 95%, 60%);
+    --link-dark: hsl(222, 95%, 70%);
+    --link-light-hover: hsl(150, 90%, 50%);
+    --link-dark-hover: hsl(150, 95%, 70%);
+    --input-bg-light: hsl(from var(--bg-light) h 15% 100%);
+    --input-bg-dark: hsl(from var(--bg-dark) h 15% 10%);
+    --input-border-light: hsl(from var(--bg-light) h 15% 85%);
+    --input-border-dark: hsl(from var(--bg-light) h 15% 35%);
+    --labels-light: hsl(from var(--fg-light) h 20% 55%);
+    --labels-dark: hsl(from var(--fg-dark) h 20% 55%);
+    
+    /* color-scheme */
+    --bg: light-dark( var(--bg-light), var(--bg-dark) );
+    --bg2: light-dark( var(--bg-light2), var(--bg-dark2) );
+    --fg: light-dark( var(--fg-light), var(--fg-dark) ) ;
+    --link: light-dark( var(--link-light), var(--link-dark) );
+    --linkh: light-dark( var(--link-light-hover), var(--link-dark-hover) );
+    --labels: light-dark( var(--labels-light), var(--labels-dark) );  /* form labels */
+    --b: light-dark( var(--input-bg-light), var(--input-bg-dark) ); /* form element backgrounds */
+    --bor: light-dark( var(--input-border-light), var(--input-border-dark) ); /* form element shadows */
+    --tint: light-dark( hsl(160, 85%, 60%), hsl(260, 85%, 60%) );
+    --tint2: light-dark( hsl(200, 85%, 60%), hsl(300, 85%, 60%) );
+    
+    /* ease */
+    --cubic: cubic-bezier(0.66, 0, 0.34, 1);
+    --cubic-in: cubic-bezier(0.32, 0, 0.67, 0);
+    --cubic-out: cubic-bezier(0.33, 1, 0.68, 1);
+    --spring: linear(0, 0.008 1.1%, 0.034 2.3%, 0.134 4.9%, 0.264 7.3%, 0.683 14.3%, 0.797 16.5%, 0.89 18.6%, 0.967 20.7%, 1.027 22.8%, 1.073 25%, 1.104 27.3%, 1.123 30.6%, 1.119 34.3%, 1.018 49.5%, 0.988 58.6%, 0.985 65.2%, 1 84.5%, 1);
+    
+}
+
+html, #app {
+    display: grid;
+    min-height: 100%;
+    place-content: center;
+}
+
+#app {
+    min-height: 90svh;
+    width: min(calc(100vw - 2em),60em);
+    margin: auto;
+    padding: 1em;
+/*     grid-template-rows:
+        auto min-content auto; */
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    -webkit-padding-after: 2em;
+            padding-block-end: 2em;
+}
+
+h1 {
+    line-height: 1;
+}
+
+h1 small {
+    font-weight: 300;
+    font-style: italic;
+    opacity: 0.7;
+    -webkit-margin-start: 0.5em;
+            margin-inline-start: 0.5em;
+}
+
+.field {
+    
+    display: flex;
+    margin: 0;
+    position: relative;
+    
+    @media (max-width: 600px) {
+        flex-direction: column;
+        gap: 2em;
+    }
+    
+    .range {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+        input {
+            -webkit-margin-start: 0;
+                    margin-inline-start: 0;
+        }
+    }
+}
+
+.range {
+    flex: 1 1 33%;
+    margin-block: 0;
+}
+
+.field:has(progress) label {
+    font-family: 'M PLUS 1 Code', monospace;
+    font-size: min(1em, var(--size));
+    height: 100%;
+    padding: 0.25em max(1.5em, var(--size));
+    position: absolute;
+    margin: 0;
+    align-content: center;
+    justify-self: center;
+    text-shadow: 0 1px 0 oklch(1 0 0 / 0.5);
+    opacity: 0.66;
+    transition: none;
+}
+
+.field:has(.group.style) {
+    overflow-x: auto;
+    padding-bottom: 10px;
+    -webkit-mask: linear-gradient(to left, transparent, black 30px calc(100% - 30px), transparent);
+            mask: linear-gradient(to left, transparent, black 30px calc(100% - 30px), transparent);
+    padding-inline: 30px;
+    scrollbar-width: thin;
+}
+
+.group.style {
+    margin: auto;
+}
+
+p {
+    margin: 0;
+    max-width: 80ch;
+    text-wrap: balance;
+}
+
+p, label {
+    text-shadow: var(--grid-bg) 0 1px 2px, var(--grid-bg) 0 2px 3px, var(--grid-bg) 0 2px 5px, var(--grid-bg) 0 2px 10px;
+}

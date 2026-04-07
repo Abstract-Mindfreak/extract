@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>MMSS Vision Adapter – биологически адаптивная типографика</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #f5f7fc;
+      padding: 2rem 1.5rem;
+      color: #1a2c3e;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .sub {
+      color: #4a627a;
+      margin-bottom: 2rem;
+      border-left: 3px solid #2a7f6e;
+      padding-left: 1rem;
+    }
+
+    /* два столбца */
+    .dashboard {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .controls-panel {
+      flex: 1.2;
+      min-width: 280px;
+      background: white;
+      border-radius: 28px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      padding: 1.5rem;
+    }
+
+    .results-panel {
+      flex: 2;
+      min-width: 320px;
+      background: white;
+      border-radius: 28px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      padding: 1.5rem;
+    }
+
+    .demo-panel {
+      margin-top: 2rem;
+      background: #ffffffdd;
+      backdrop-filter: blur(2px);
+      border-radius: 28px;
+      padding: 1.8rem;
+      border: 1px solid #e2edf2;
+    }
+
+    .control-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: #1f3a4b;
+      font-size: 0.9rem;
+    }
+
+    select, input[type="range"] {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      border-radius: 14px;
+      border: 1px solid #cbdde6;
+      background: white;
+      font-size: 0.95rem;
+      transition: 0.2s;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: #2a7f6e;
+      box-shadow: 0 0 0 2px rgba(42,127,110,0.2);
+    }
+
+    .range-value {
+      display: inline-block;
+      margin-left: 0.8rem;
+      font-weight: 500;
+      background: #eef2f9;
+      padding: 0.2rem 0.6rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .stat-card {
+      background: #f8fafd;
+      border-radius: 20px;
+      padding: 1rem;
+      border-left: 4px solid #2a7f6e;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #4f6f8f;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0a2b38;
+      word-break: break-word;
+    }
+
+    .demo-text {
+      background: #fefcf3;
+      padding: 1.2rem;
+      border-radius: 24px;
+      margin: 1rem 0;
+    }
+
+    .demo-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 1.5rem 0 1rem;
+    }
+
+    button {
+      background: #2a7f6e;
+      border: none;
+      color: white;
+      font-weight: 600;
+      border-radius: 60px;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    button:hover {
+      background: #1e5f52;
+      transform: scale(0.98);
+    }
+
+    .code-badge {
+      font-family: 'SF Mono', monospace;
+      background: #1e2a36;
+      color: #cbdde6;
+      padding: 0.2rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.7rem;
+    }
+
+    hr {
+      margin: 1.2rem 0;
+      border: none;
+      height: 1px;
+      background: #e2edf2;
+    }
+
+    footer {
+      font-size: 0.75rem;
+      text-align: center;
+      margin-top: 2.5rem;
+      color: #5f7f9a;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>👁️ MMSS · vision‑driven typography</h1>
+  <div class="sub">биологическая оптика → CSS-переменные (WCAG‑ready)</div>
+
+  <div class="dashboard">
+    <!-- левая панель управления -->
+    <div class="controls-panel">
+      <h3 style="margin-bottom: 1rem;">⚙️ Параметры среды</h3>
+
+      <div class="control-group">
+        <label>👤 Профиль зрения</label>
+        <select id="visionProfile"></select>
+      </div>
+
+      <div class="control-group">
+        <label>📱 Устройство (PPI / дистанция)</label>
+        <select id="deviceProfile"></select>
+      </div>
+
+      <div class="control-group">
+        <label>📄 UI контекст</label>
+        <select id="uiContext"></select>
+      </div>
+
+      <div class="control-group">
+        <label>✍️ Тип задачи</label>
+        <select id="taskType"></select>
+      </div>
+
+      <div class="control-group">
+        <label>💡 Освещение</label>
+        <select id="lighting"></select>
+      </div>
+
+      <div class="control-group">
+        <label>🎨 Контраст</label>
+        <select id="contrast"></select>
+      </div>
+
+      <div class="control-group">
+        <label>😌 Comfort shift <span id="comfortValueDisplay" class="range-value">0</span></label>
+        <input type="range" id="comfortShift" min="-2" max="2" step="0.05" value="0">
+      </div>
+
+      <div class="control-group">
+        <div class="code-badge">🔁 CSS переменные обновляются в реальном времени</div>
+      </div>
+    </div>
+
+    <!-- правая панель – результаты -->
+    <div class="results-panel">
+      <h3>📐 Расчётные метрики (runtime)</h3>
+      <div class="stats-grid" id="statsContainer">
+        <!-- динамически заполняется JS -->
+      </div>
+
+      <hr>
+      <div>
+        <div class="code-badge" style="margin-bottom: 0.5rem;">🌐 Активные CSS‑переменные</div>
+        <pre id="cssVarsPreview" style="background:#1e2a36; padding:0.8rem; border-radius:16px; font-size:0.75rem; overflow-x:auto; color:#a9d6e5;">--mmss-fu-px: ...</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- демо-блок, который зависит от CSS-переменных -->
+  <div class="demo-panel">
+    <h2>📖 Живая типографика (адаптивна под ваши параметры)</h2>
+    <div class="demo-text">
+      <p style="margin-bottom: 0.75rem;"><strong>Основной текст (body):</strong> Согласно принципу тонкой линзы, оптимальный размер шрифта рассчитывается из биологического угла зрения, дистанции до экрана и остроты зрения. Изменяйте параметры слева — текст и кнопки пересчитаются в реальном времени.</p>
+      <p><small>Small текст (0.85× базового):</small> мелкие детали тоже масштабируются пропорционально.</p>
+      <p><span style="font-weight: 500;">Large текст (1.25×):</span> акценты и подзаголовки.</p>
+    </div>
+
+    <div class="demo-buttons">
+      <button id="demoBtn" class="tap-demo">⚡ Первичная кнопка (tap target ≥ 7mm)</button>
+      <button id="demoBtnSmall" style="background:#5c6f87;">📱 Вторичная кнопка</button>
+    </div>
+    <div style="font-size: 0.8rem; background:#ecf3f8; border-radius: 20px; padding: 0.6rem 1rem;">
+      💡 Tap‑target min‑size = <span id="tapTargetPreview">--</span> px, что обеспечивает физический размер ≥<span id="tapTargetMmPreview"></span> мм (WCAG 2.2 рекомендация)
+    </div>
+  </div>
+  <footer>
+    MMSS vision engine • биофизическая модель + CSS-переменные • совместимость с WCAG 2.2 (SC 2.5.8)
+  </footer>
+</div>
+
+<script>
+  // ========== 1. Встраиваем JSON стеки (из условия) ==========
+  const MMSS_VISION_STACK = {
+    "MMSS_VISION_STACK_v0_1": {
+      "metadata": { "version": "0.1", "description": "Bio-physical vision + device + typography engine", "unit_system": "SI_mm_deg" },
+      "BIO_VISION_CORE": {
+        "profiles": {
+          "vision_normal_25_45": { "acuity_snellen": "6/6", "acuity_logMAR": 0.0, "base_body_angle_deg": 0.30, "allowed_angle_range_deg": [0.26, 0.40], "k_acuity": 1.0 },
+          "vision_low_vision": { "acuity_snellen": "6/18", "acuity_logMAR": 0.5, "base_body_angle_deg": 0.45, "allowed_angle_range_deg": [0.40, 0.70], "k_acuity": 1.5 }
+        },
+        "task_modifiers": {
+          "dense_reading": { "k_task": 1.0 },
+          "ui_controls": { "k_task": 0.9 },
+          "headings": { "k_task": 1.4 },
+          "code_editor": { "k_task": 1.1 }
+        },
+        "environment_modifiers": {
+          "lighting": { "indoor_normal": { "k_lighting": 1.0 }, "indoor_low": { "k_lighting": 1.15 }, "outdoor_bright": { "k_lighting": 0.95 } },
+          "contrast": { "high": { "k_contrast": 1.0 }, "medium": { "k_contrast": 1.1 }, "low": { "k_contrast": 1.25 } }
+        },
+        "retina": { "eye_depth_v_mm": 17.0 }
+      },
+      "DEVICE_PHYSICAL_LAYER": {
+        "device_profiles": {
+          "desktop_24_fhd": { "class": "desktop", "ppi": 92, "distance_nominal_cm": 60, "distance_range_cm": [40, 80] },
+          "laptop_14_fhd": { "class": "laptop", "ppi": 110, "distance_nominal_cm": 50, "distance_range_cm": [35, 70] },
+          "phone_6_1080": { "class": "phone", "ppi": 400, "distance_nominal_cm": 30, "distance_range_cm": [20, 45] }
+        },
+        "formulas": { "mm_per_px": "25.4 / ppi", "px_from_mm": "mm / mm_per_px", "body_physical_height_mm": "distance_mm * tan(angle_deg * PI/180)" }
+      },
+      "VISION_METRIC_ENGINE": {
+        "defaults": { "vision_profile_id": "vision_normal_25_45", "device_profile_id": "laptop_14_fhd", "task_type": "dense_reading", "lighting": "indoor_normal", "contrast": "high" },
+        "ui_contexts": {
+          "article_view": { "base_target_angle_deg": 0.30, "line_height_factor": 1.5 },
+          "dashboard": { "base_target_angle_deg": 0.28, "line_height_factor": 1.4 },
+          "code_editor": { "base_target_angle_deg": 0.32, "line_height_factor": 1.45 },
+          "mobile_nav": { "base_target_angle_deg": 0.35, "line_height_factor": 1.4 }
+        },
+        "tap_targets": { "base_physical_mm": 9.0, "min_physical_mm": 7.0, "max_physical_mm": 12.0 },
+        "runtime_formulae": {
+          "effective_angle_deg": "base_angle_deg * k_acuity * k_task * k_lighting * k_contrast * k_distance",
+          "k_distance": "clamp(distance_nominal_cm / 50, 0.9, 1.1)",
+          "body_font_size_px": "px_from_mm(body_physical_height_mm)",
+          "line_height_px": "body_font_size_px * line_height_factor"
+        }
+      }
+    }
+  };
+
+  const MMSS_UI_PROTOCOL = {
+    "MMSS_UI_PROTOCOL_v0_1": {
+      "metadata": { "version": "0.1", "description": "Abstract MMSS typography + UI tokens" },
+      "tokens": {
+        "text": { "body": { "fu": 1.0 }, "small": { "fu": 0.85 }, "large": { "fu": 1.25 }, "h1": { "fu": 2.2 }, "h2": { "fu": 1.8 } },
+        "line_height": { "body": { "lh": 1.5 }, "dense": { "lh": 1.35 }, "loose": { "lh": 1.7 } },
+        "ui": { "tap_target": { "ui_unit": 1.0 }, "chip": { "ui_unit": 0.7 }, "button_primary": { "ui_unit": 1.0 } }
+      },
+      "runtime_mapping": { "fu_to_px": { "description": "Computed by VISION_METRIC_ENGINE for current context", "example_value_px": 18 }, "ui_to_mm": { "description": "Physical tap target size in mm", "example_value_mm": 9 } },
+      "css_export": { "variables": { "root": ["--mmss-fu-px", "--mmss-body-font-px", "--mmss-line-height", "--mmss-tap-target-mm"] }, "examples": {} }
+    }
+  };
+
+  // ========== 2. Класс MMSSVisionAdapter (чистый JS) ==========
+  class MMSSVisionAdapter {
+    constructor(visionStack, uiProtocol) {
+      this.vision = visionStack;
+      this.ui = uiProtocol;
+    }
+
+    compute(context) {
+      const vDefaults = this.vision.VISION_METRIC_ENGINE.defaults;
+      const visionProfileId = context.visionProfileId || vDefaults.vision_profile_id;
+      const deviceProfileId = context.deviceProfileId || vDefaults.device_profile_id;
+      const uiContextId = context.uiContextId || "article_view";
+      const taskType = context.taskType || vDefaults.task_type;
+      const lighting = context.lighting || vDefaults.lighting;
+      const contrast = context.contrast || vDefaults.contrast;
+      const comfortShift = context.comfortShift !== undefined ? context.comfortShift : 0;
+
+      const visionProfile = this.vision.BIO_VISION_CORE.profiles[visionProfileId];
+      const deviceProfile = this.vision.DEVICE_PHYSICAL_LAYER.device_profiles[deviceProfileId];
+      const uiContext = this.vision.VISION_METRIC_ENGINE.ui_contexts[uiContextId];
+      const taskMod = this.vision.BIO_VISION_CORE.task_modifiers[taskType];
+      const lightingMod = this.vision.BIO_VISION_CORE.environment_modifiers.lighting[lighting];
+      const contrastMod = this.vision.BIO_VISION_CORE.environment_modifiers.contrast[contrast];
+
+      if (!visionProfile || !deviceProfile || !uiContext || !taskMod || !lightingMod || !contrastMod) {
+        throw new Error("Invalid MMSS context parameters");
+      }
+
+      // метрики
+      const baseAngle = uiContext.base_target_angle_deg;
+      const kAcuity = visionProfile.k_acuity;
+      const kTask = taskMod.k_task;
+      const kLighting = lightingMod.k_lighting;
+      const kContrast = contrastMod.k_contrast;
+
+      let kDistance = deviceProfile.distance_nominal_cm / 50;
+      kDistance = Math.min(Math.max(kDistance, 0.9), 1.1);
+
+      const comfortFactor = 1 + comfortShift * 0.08; // ±16%
+      const effectiveAngleDeg = baseAngle * kAcuity * kTask * kLighting * kContrast * kDistance * comfortFactor;
+
+      const distanceMm = deviceProfile.distance_nominal_cm * 10;
+      const angleRad = effectiveAngleDeg * Math.PI / 180;
+      const bodyPhysicalHeightMm = distanceMm * Math.tan(angleRad);
+
+      const mmPerPx = 25.4 / deviceProfile.ppi;
+      const pxPerMm = 1 / mmPerPx;
+      const bodyFontPx = bodyPhysicalHeightMm * pxPerMm;
+
+      const lineHeightPx = bodyFontPx * uiContext.line_height_factor;
+
+      // tap target
+      const tapBaseMm = this.vision.VISION_METRIC_ENGINE.tap_targets.base_physical_mm;
+      let tapTargetMm = tapBaseMm * comfortFactor;
+      tapTargetMm = Math.min(Math.max(tapTargetMm, this.vision.VISION_METRIC_ENGINE.tap_targets.min_physical_mm), this.vision.VISION_METRIC_ENGINE.tap_targets.max_physical_mm);
+      const tapTargetPx = tapTargetMm * pxPerMm;
+
+      // fuToPx – базовый модуль (body имеет fu = 1.0)
+      const fuToPx = bodyFontPx / this.ui.tokens.text.body.fu;
+
+      return {
+        effectiveAngleDeg,
+        bodyPhysicalHeightMm,
+        bodyFontPx,
+        lineHeightPx,
+        tapTargetMm,
+        tapTargetPx,
+        fuToPx,
+        pxPerMm,
+        mmPerPx,
+        devicePpi: deviceProfile.ppi,
+        distanceCm: deviceProfile.distance_nominal_cm
+      };
+    }
+
+    applyToDOM(result) {
+      const root = document.documentElement;
+      root.style.setProperty('--mmss-fu-px', `${result.fuToPx}px`);
+      root.style.setProperty('--mmss-body-font-px', `${result.bodyFontPx}px`);
+      root.style.setProperty('--mmss-line-height', `${result.lineHeightPx / result.bodyFontPx}`);
+      root.style.setProperty('--mmss-tap-target-mm', `${result.tapTargetMm}`);
+      root.style.setProperty('--mmss-tap-target-px', `${result.tapTargetPx}px`);
+    }
+  }
+
+  // ========== 3. Инициализация и связь с DOM ==========
+  const visionData = MMSS_VISION_STACK.MMSS_VISION_STACK_v0_1;
+  const uiData = MMSS_UI_PROTOCOL.MMSS_UI_PROTOCOL_v0_1;
+  const adapter = new MMSSVisionAdapter(visionData, uiData);
+
+  // элементы управления
+  const visionSelect = document.getElementById('visionProfile');
+  const deviceSelect = document.getElementById('deviceProfile');
+  const uiContextSelect = document.getElementById('uiContext');
+  const taskSelect = document.getElementById('taskType');
+  const lightingSelect = document.getElementById('lighting');
+  const contrastSelect = document.getElementById('contrast');
+  const comfortSlider = document.getElementById('comfortShift');
+  const comfortSpan = document.getElementById('comfortValueDisplay');
+  const statsContainer = document.getElementById('statsContainer');
+  const cssVarsPreview = document.getElementById('cssVarsPreview');
+  const tapTargetPreviewSpan = document.getElementById('tapTargetPreview');
+  const tapTargetMmPreviewSpan = document.getElementById('tapTargetMmPreview');
+
+  // Заполнение выпадающих списков
+  function populateSelect(selectEl, optionsMap, defaultKey) {
+    selectEl.innerHTML = '';
+    for (const [key, val] of Object.entries(optionsMap)) {
+      const opt = document.createElement('option');
+      opt.value = key;
+      let label = key;
+      if (key.includes('vision_normal')) label = '👁️ Нормальное зрение (6/6)';
+      if (key.includes('vision_low')) label = '👓 Пониженное зрение (6/18)';
+      if (key.includes('desktop')) label = `🖥️ Десктоп 24" (${val.ppi} PPI, ${val.distance_nominal_cm}см)`;
+      if (key.includes('laptop')) label = `💻 Ноутбук 14" (${val.ppi} PPI, ${val.distance_nominal_cm}см)`;
+      if (key.includes('phone')) label = `📱 Смартфон 6" (${val.ppi} PPI, ${val.distance_nominal_cm}см)`;
+      if (key.includes('article')) label = '📰 Статья / ридинг';
+      if (key.includes('dashboard')) label = '📊 Дашборд';
+      if (key.includes('code_editor')) label = '⌨️ Редактор кода';
+      if (key.includes('mobile_nav')) label = '📱 Мобильная навигация';
+      if (key.includes('dense_reading')) label = '📖 Плотное чтение';
+      if (key.includes('ui_controls')) label = '🖱️ UI элементы';
+      if (key.includes('headings')) label = '🔤 Заголовки';
+      if (key.includes('indoor_normal')) label = '💡 Нормальное освещение';
+      if (key.includes('indoor_low')) label = '🕯️ Слабое освещение';
+      if (key.includes('outdoor_bright')) label = '☀️ Яркий outdoor';
+      if (key.includes('high')) label = '✅ Высокий контраст';
+      if (key.includes('medium')) label = '🌓 Средний контраст';
+      if (key.includes('low')) label = '🌫️ Низкий контраст';
+      opt.textContent = label || key;
+      selectEl.appendChild(opt);
+    }
+    if (defaultKey && optionsMap[defaultKey]) selectEl.value = defaultKey;
+  }
+
+  populateSelect(visionSelect, visionData.BIO_VISION_CORE.profiles, visionData.VISION_METRIC_ENGINE.defaults.vision_profile_id);
+  populateSelect(deviceSelect, visionData.DEVICE_PHYSICAL_LAYER.device_profiles, visionData.VISION_METRIC_ENGINE.defaults.device_profile_id);
+  populateSelect(uiContextSelect, visionData.VISION_METRIC_ENGINE.ui_contexts, "article_view");
+  populateSelect(taskSelect, visionData.BIO_VISION_CORE.task_modifiers, visionData.VISION_METRIC_ENGINE.defaults.task_type);
+  populateSelect(lightingSelect, visionData.BIO_VISION_CORE.environment_modifiers.lighting, visionData.VISION_METRIC_ENGINE.defaults.lighting);
+  populateSelect(contrastSelect, visionData.BIO_VISION_CORE.environment_modifiers.contrast, visionData.VISION_METRIC_ENGINE.defaults.contrast);
+
+  // отображение метрик
+  function updateAll() {
+    const context = {
+      visionProfileId: visionSelect.value,
+      deviceProfileId: deviceSelect.value,
+      uiContextId: uiContextSelect.value,
+      taskType: taskSelect.value,
+      lighting: lightingSelect.value,
+      contrast: contrastSelect.value,
+      comfortShift: parseFloat(comfortSlider.value)
+    };
+    try {
+      const result = adapter.compute(context);
+      adapter.applyToDOM(result);
+
+      // Обновляем статистику
+      statsContainer.innerHTML = `
+        <div class="stat-card"><div class="stat-label">🎯 Эффективный угол</div><div class="stat-value">${result.effectiveAngleDeg.toFixed(3)}°</div></div>
+        <div class="stat-card"><div class="stat-label">📏 Физич. высота буквы</div><div class="stat-value">${result.bodyPhysicalHeightMm.toFixed(2)} мм</div></div>
+        <div class="stat-card"><div class="stat-label">🔤 Размер body (px)</div><div class="stat-value">${Math.round(result.bodyFontPx)} px</div></div>
+        <div class="stat-card"><div class="stat-label">📐 Интерлиньяж (factor)</div><div class="stat-value">${(result.lineHeightPx / result.bodyFontPx).toFixed(2)}</div></div>
+        <div class="stat-card"><div class="stat-label">👆 Tap target (mm/px)</div><div class="stat-value">${result.tapTargetMm.toFixed(1)} mm / ${Math.round(result.tapTargetPx)} px</div></div>
+        <div class="stat-card"><div class="stat-label">🖥️ PPI / дистанция</div><div class="stat-value">${result.devicePpi} ppi / ${result.distanceCm} см</div></div>
+      `;
+      tapTargetPreviewSpan.innerText = Math.round(result.tapTargetPx);
+      tapTargetMmPreviewSpan.innerText = result.tapTargetMm.toFixed(1);
+
+      // preview css vars
+      const rootStyles = getComputedStyle(document.documentElement);
+      cssVarsPreview.innerText = `--mmss-fu-px: ${rootStyles.getPropertyValue('--mmss-fu-px').trim() || result.fuToPx.toFixed(1)}px;
+--mmss-body-font-px: ${rootStyles.getPropertyValue('--mmss-body-font-px').trim() || result.bodyFontPx.toFixed(1)}px;
+--mmss-line-height: ${rootStyles.getPropertyValue('--mmss-line-height').trim() || (result.lineHeightPx / result.bodyFontPx).toFixed(2)};
+--mmss-tap-target-px: ${rootStyles.getPropertyValue('--mmss-tap-target-px').trim() || Math.round(result.tapTargetPx)}px;
+--mmss-tap-target-mm: ${rootStyles.getPropertyValue('--mmss-tap-target-mm').trim() || result.tapTargetMm.toFixed(1)};`;
+    } catch (e) {
+      console.error(e);
+      statsContainer.innerHTML = `<div class="stat-card">Ошибка расчёта: проверьте параметры</div>`;
+    }
+  }
+
+  function onInputChange() {
+    comfortSpan.innerText = parseFloat(comfortSlider.value).toFixed(2);
+    updateAll();
+  }
+
+  visionSelect.addEventListener('change', updateAll);
+  deviceSelect.addEventListener('change', updateAll);
+  uiContextSelect.addEventListener('change', updateAll);
+  taskSelect.addEventListener('change', updateAll);
+  lightingSelect.addEventListener('change', updateAll);
+  contrastSelect.addEventListener('change', updateAll);
+  comfortSlider.addEventListener('input', onInputChange);
+
+  // Применяем глобальные CSS переменные и привязываем стили демо-элементов к root-переменным
+  function initGlobalStyles() {
+    // стили, которые используют переменные — они будут обновляться автоматически через applyToDOM
+    const style = document.createElement('style');
+    style.textContent = `
+      html {
+        font-size: var(--mmss-body-font-px, 16px);
+      }
+      body {
+        font-size: 1rem;
+        line-height: var(--mmss-line-height, 1.5);
+      }
+      h2 {
+        font-size: 1.8rem;
+        margin-bottom: 0.75rem;
+      }
+      .demo-text small {
+        font-size: 0.85rem;
+      }
+      .demo-text span[style*="font-weight: 500"] {
+        font-size: 1.25rem;
+      }
+      button {
+        min-height: var(--mmss-tap-target-px, 44px);
+        min-width: var(--mmss-tap-target-px, 44px);
+        padding: 0.5rem 1rem;
+      }
+      .demo-buttons button {
+        font-size: calc(var(--mmss-body-font-px) * 0.9);
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  initGlobalStyles();
+  updateAll(); // первоначальный расчёт и применение
+</script>
+</body>
+</html>

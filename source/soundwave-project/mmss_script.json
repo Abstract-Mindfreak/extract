@@ -1,0 +1,240 @@
+{
+  "mmss_script": {
+    "meta": {
+      "title": "PrismaticCore // Next-Level MMSS",
+      "version": "1.0",
+      "target_app": "PRISMATIC CORE",
+      "goal": "Переход на следующий уровень восприятия: от ручного твика параметров к полуавтоматическому мета-режиму, который сам собирает, варьирует и эволюционирует призматические состояния на основе контекста пользователя." [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/47217359/d3ad3b67-a043-43f4-a7d0-fc56c11977a8/PrismaticCore.html?AWSAccessKeyId=ASIA2F3EMEYE4E67TO5F&Signature=vs9QUallOI%2Fm40VXQsiXBJ%2BCU%2Bs%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEKv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQC9TELaZyHi1VfrWejJr15aisQZ697WxeTItU2luXo0CgIhAJjkdEVMz8mgL8CiRu4x0ZwalCG1jj91fz7%2B8GMKawqIKvMECHMQARoMNjk5NzUzMzA5NzA1IgzLY1aysGNSYCrSN0kq0ARwRj0OIkv5%2BQpFqypqKZpe9SAuTavXK33NA9aSPaMIbQazmNx6MrgMUAY%2FRzLxQIy2FCCLZQuNEWXua4%2FXQ%2BoCYhEyX89xA6yd7FnoQ66KZT%2F%2FBToyDxEbQ0OhWTJW3NDnM1hV7MvpfIvJ2ElsAEl9TNBevCewJJpM3KErMuhTyNDA4K47zcECNdO7mZYMd%2BpMWjWUzjrod0EcnMYvEJKF%2FmPk2uN0uOwLroV0b2qRTLkrjw9OWWnWMyU02aTrSdVSM50hjLWdIMVjzz0fwiMee%2BR0MfWDEyxnMKUiUg23tYggxv1KudSn4WyhW5tDG5kcY5v551u9kv4rlfkSZrp195clekBwOWzgfhyrWn%2F1XZWhzSakMgmUXHvA79FW2er6yL8BrrZrAJKKa03rKfSccBqzxfOXyU5HoPbf7p%2FDLG4yBzfEgkeEGgzKTnZzLrfNX2yhLYrbln91d%2Bn9RPfPSvr%2B73Tacf3dF%2FjIuDFMCke9IySzceW3yaj0KTgYcqxGWQX6NDkK4%2BGNq4XhY8JDaUW1lwteaaJ7dDPojgTMKNszonhq%2F%2FuJLf%2Bw0FRZZFOyiZSN8x8OBOoRnWVk58JJXKB74KXJQV7lRAItZmrtOzj0dXw9t4MdYgtFB7J9Gk2PDlEUwphs1ETZobD1PxeHCsp6cJg9Q3a93kgO4bpiZVGCcPRa1kGq%2F8FrNwm5qptBAV%2B0JGIygqLv8Z%2Be55kY%2FZ0ZPbOPvGkM6Pa4s%2B8ivQFBBuEZ%2BGJCNivEzg7ufenq3VpEF87SInqJSlVuKe%2BCMLLfus4GOpcB4ROXXmTixMsyI%2BswcQzkgIqaKk%2FMz2vT99wmnCfqW6PywX0cJKI9ksVZXpF%2F2zyCqKsakF%2F7WW6MB5Px9IjF9hDfWG08jF1xCmJXuhWpEiBpVVEMDCEIJ%2BlaYVzyX%2FSUmDHPpm0PGjAcXKaeF%2BRt8Kl4gNl9SAP4C4wJiUoqA6VdrXXedDOob%2BRQFNI76oG6mnVqZtarpw%3D%3D&Expires=1775155356)
+    },
+    "levels": [
+      {
+        "id": "L0",
+        "name": "BASELINE_CAPTURE",
+        "description": "Фиксация текущего состояния PrismaticCore как нулевой точки для последующей мета-эволюции.", [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/47217359/d3ad3b67-a043-43f4-a7d0-fc56c11977a8/PrismaticCore.html?AWSAccessKeyId=ASIA2F3EMEYE4E67TO5F&Signature=vs9QUallOI%2Fm40VXQsiXBJ%2BCU%2Bs%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEKv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQC9TELaZyHi1VfrWejJr15aisQZ697WxeTItU2luXo0CgIhAJjkdEVMz8mgL8CiRu4x0ZwalCG1jj91fz7%2B8GMKawqIKvMECHMQARoMNjk5NzUzMzA5NzA1IgzLY1aysGNSYCrSN0kq0ARwRj0OIkv5%2BQpFqypqKZpe9SAuTavXK33NA9aSPaMIbQazmNx6MrgMUAY%2FRzLxQIy2FCCLZQuNEWXua4%2FXQ%2BoCYhEyX89xA6yd7FnoQ66KZT%2F%2FBToyDxEbQ0OhWTJW3NDnM1hV7MvpfIvJ2ElsAEl9TNBevCewJJpM3KErMuhTyNDA4K47zcECNdO7mZYMd%2BpMWjWUzjrod0EcnMYvEJKF%2FmPk2uN0uOwLroV0b2qRTLkrjw9OWWnWMyU02aTrSdVSM50hjLWdIMVjzz0fwiMee%2BR0MfWDEyxnMKUiUg23tYggxv1KudSn4WyhW5tDG5kcY5v551u9kv4rlfkSZrp195clekBwOWzgfhyrWn%2F1XZWhzSakMgmUXHvA79FW2er6yL8BrrZrAJKKa03rKfSccBqzxfOXyU5HoPbf7p%2FDLG4yBzfEgkeEGgzKTnZzLrfNX2yhLYrbln91d%2Bn9RPfPSvr%2B73Tacf3dF%2FjIuDFMCke9IySzceW3yaj0KTgYcqxGWQX6NDkK4%2BGNq4XhY8JDaUW1lwteaaJ7dDPojgTMKNszonhq%2F%2FuJLf%2Bw0FRZZFOyiZSN8x8OBOoRnWVk58JJXKB74KXJQV7lRAItZmrtOzj0dXw9t4MdYgtFB7J9Gk2PDlEUwphs1ETZobD1PxeHCsp6cJg9Q3a93kgO4bpiZVGCcPRa1kGq%2F8FrNwm5qptBAV%2B0JGIygqLv8Z%2Be55kY%2FZ0ZPbOPvGkM6Pa4s%2B8ivQFBBuEZ%2BGJCNivEzg7ufenq3VpEF87SInqJSlVuKe%2BCMLLfus4GOpcB4ROXXmTixMsyI%2BswcQzkgIqaKk%2FMz2vT99wmnCfqW6PywX0cJKI9ksVZXpF%2F2zyCqKsakF%2F7WW6MB5Px9IjF9hDfWG08jF1xCmJXuhWpEiBpVVEMDCEIJ%2BlaYVzyX%2FSUmDHPpm0PGjAcXKaeF%2BRt8Kl4gNl9SAP4C4wJiUoqA6VdrXXedDOob%2BRQFNI76oG6mnVqZtarpw%3D%3D&Expires=1775155356)
+        "triggers": [
+          "on_app_open",
+          "on_user_hold_3s(PRISMATIC_CORE_logo)"
+        ],
+        "actions": [
+          "snapshot_state(PRISM, MORPH, DETUNE, CUTOFF, RES, COLOR_AMT, DECAY)",
+          "store_state(as='baseline_state')",
+          "tag_state('baseline_state', ['user_default','safe'])"
+        ],
+        "ui_feedback": [
+          "flash_label('PRISMATIC CORE', mode='subtle_pulse')",
+          "overlay_text('BASELINE CAPTURED', duration=1200)"
+        ]
+      },
+      {
+        "id": "L1",
+        "name": "PRISMATIC_SCENES",
+        "description": "Система сцен: сгруппированные пресеты параметров, которые можно быстро перебирать и плавно морфить между ними.", [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/47217359/d3ad3b67-a043-43f4-a7d0-fc56c11977a8/PrismaticCore.html?AWSAccessKeyId=ASIA2F3EMEYE4E67TO5F&Signature=vs9QUallOI%2Fm40VXQsiXBJ%2BCU%2Bs%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEKv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQC9TELaZyHi1VfrWejJr15aisQZ697WxeTItU2luXo0CgIhAJjkdEVMz8mgL8CiRu4x0ZwalCG1jj91fz7%2B8GMKawqIKvMECHMQARoMNjk5NzUzMzA5NzA1IgzLY1aysGNSYCrSN0kq0ARwRj0OIkv5%2BQpFqypqKZpe9SAuTavXK33NA9aSPaMIbQazmNx6MrgMUAY%2FRzLxQIy2FCCLZQuNEWXua4%2FXQ%2BoCYhEyX89xA6yd7FnoQ66KZT%2F%2FBToyDxEbQ0OhWTJW3NDnM1hV7MvpfIvJ2ElsAEl9TNBevCewJJpM3KErMuhTyNDA4K47zcECNdO7mZYMd%2BpMWjWUzjrod0EcnMYvEJKF%2FmPk2uN0uOwLroV0b2qRTLkrjw9OWWnWMyU02aTrSdVSM50hjLWdIMVjzz0fwiMee%2BR0MfWDEyxnMKUiUg23tYggxv1KudSn4WyhW5tDG5kcY5v551u9kv4rlfkSZrp195clekBwOWzgfhyrWn%2F1XZWhzSakMgmUXHvA79FW2er6yL8BrrZrAJKKa03rKfSccBqzxfOXyU5HoPbf7p%2FDLG4yBzfEgkeEGgzKTnZzLrfNX2yhLYrbln91d%2Bn9RPfPSvr%2B73Tacf3dF%2FjIuDFMCke9IySzceW3yaj0KTgYcqxGWQX6NDkK4%2BGNq4XhY8JDaUW1lwteaaJ7dDPojgTMKNszonhq%2F%2FuJLf%2Bw0FRZZFOyiZSN8x8OBOoRnWVk58JJXKB74KXJQV7lRAItZmrtOzj0dXw9t4MdYgtFB7J9Gk2PDlEUwphs1ETZobD1PxeHCsp6cJg9Q3a93kgO4bpiZVGCcPRa1kGq%2F8FrNwm5qptBAV%2B0JGIygqLv8Z%2Be55kY%2FZ0ZPbOPvGkM6Pa4s%2B8ivQFBBuEZ%2BGJCNivEzg7ufenq3VpEF87SInqJSlVuKe%2BCMLLfus4GOpcB4ROXXmTixMsyI%2BswcQzkgIqaKk%2FMz2vT99wmnCfqW6PywX0cJKI9ksVZXpF%2F2zyCqKsakF%2F7WW6MB5Px9IjF9hDfWG08jF1xCmJXuhWpEiBpVVEMDCEIJ%2BlaYVzyX%2FSUmDHPpm0PGjAcXKaeF%2BRt8Kl4gNl9SAP4C4wJiUoqA6VdrXXedDOob%2BRQFNI76oG6mnVqZtarpw%3D%3D&Expires=1775155356)
+        "triggers": [
+          "on_key('1') => load_scene('AURORA_GATE')",
+          "on_key('2') => load_scene('GLASS_ORBIT')",
+          "on_key('3') => load_scene('NOISE_TIDE')",
+          "on_key('0') => load_state('baseline_state')"
+        ],
+        "definitions": {
+          "scene:AURORA_GATE": {
+            "PRISM": "0.7-0.9",
+            "MORPH": "0.3-0.5",
+            "DETUNE": "0.15-0.25",
+            "CUTOFF": "0.6-0.8",
+            "RES": "0.4-0.6",
+            "COLOR_AMT": "0.7-1.0",
+            "DECAY": "0.4-0.6"
+          },
+          "scene:GLASS_ORBIT": {
+            "PRISM": "0.2-0.4",
+            "MORPH": "0.1-0.3",
+            "DETUNE": "0.02-0.08",
+            "CUTOFF": "0.4-0.6",
+            "RES": "0.2-0.4",
+            "COLOR_AMT": "0.3-0.5",
+            "DECAY": "0.6-0.9"
+          },
+          "scene:NOISE_TIDE": {
+            "PRISM": "0.8-1.0",
+            "MORPH": "0.7-1.0",
+            "DETUNE": "0.25-0.4",
+            "CUTOFF": "0.2-0.4",
+            "RES": "0.6-0.9",
+            "COLOR_AMT": "0.8-1.0",
+            "DECAY": "0.2-0.4"
+          }
+        },
+        "interpolation": {
+          "mode": "time_based",
+          "default_duration_ms": 3000,
+          "curve": "ease_in_out_cubic"
+        },
+        "ui_feedback": [
+          "bottom_banner('SCENE: {scene_name}', opacity=0.8, fade_out=2000)"
+        ]
+      },
+      {
+        "id": "L2",
+        "name": "IMAGE_DRIVEN_METAMOD",
+        "description": "Мета-режим, где входное изображение не просто соніфицируется, а меняет «правила игры» для параметров синта.", [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/47217359/d3ad3b67-a043-43f4-a7d0-fc56c11977a8/PrismaticCore.html?AWSAccessKeyId=ASIA2F3EMEYE4E67TO5F&Signature=vs9QUallOI%2Fm40VXQsiXBJ%2BCU%2Bs%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEKv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQC9TELaZyHi1VfrWejJr15aisQZ697WxeTItU2luXo0CgIhAJjkdEVMz8mgL8CiRu4x0ZwalCG1jj91fz7%2B8GMKawqIKvMECHMQARoMNjk5NzUzMzA5NzA1IgzLY1aysGNSYCrSN0kq0ARwRj0OIkv5%2BQpFqypqKZpe9SAuTavXK33NA9aSPaMIbQazmNx6MrgMUAY%2FRzLxQIy2FCCLZQuNEWXua4%2FXQ%2BoCYhEyX89xA6yd7FnoQ66KZT%2F%2FBToyDxEbQ0OhWTJW3NDnM1hV7MvpfIvJ2ElsAEl9TNBevCewJJpM3KErMuhTyNDA4K47zcECNdO7mZYMd%2BpMWjWUzjrod0EcnMYvEJKF%2FmPk2uN0uOwLroV0b2qRTLkrjw9OWWnWMyU02aTrSdVSM50hjLWdIMVjzz0fwiMee%2BR0MfWDEyxnMKUiUg23tYggxv1KudSn4WyhW5tDG5kcY5v551u9kv4rlfkSZrp195clekBwOWzgfhyrWn%2F1XZWhzSakMgmUXHvA79FW2er6yL8BrrZrAJKKa03rKfSccBqzxfOXyU5HoPbf7p%2FDLG4yBzfEgkeEGgzKTnZzLrfNX2yhLYrbln91d%2Bn9RPfPSvr%2B73Tacf3dF%2FjIuDFMCke9IySzceW3yaj0KTgYcqxGWQX6NDkK4%2BGNq4XhY8JDaUW1lwteaaJ7dDPojgTMKNszonhq%2F%2FuJLf%2Bw0FRZZFOyiZSN8x8OBOoRnWVk58JJXKB74KXJQV7lRAItZmrtOzj0dXw9t4MdYgtFB7J9Gk2PDlEUwphs1ETZobD1PxeHCsp6cJg9Q3a93kgO4bpiZVGCcPRa1kGq%2F8FrNwm5qptBAV%2B0JGIygqLv8Z%2Be55kY%2FZ0ZPbOPvGkM6Pa4s%2B8ivQFBBuEZ%2BGJCNivEzg7ufenq3VpEF87SInqJSlVuKe%2BCMLLfus4GOpcB4ROXXmTixMsyI%2BswcQzkgIqaKk%2FMz2vT99wmnCfqW6PywX0cJKI9ksVZXpF%2F2zyCqKsakF%2F7WW6MB5Px9IjF9hDfWG08jF1xCmJXuhWpEiBpVVEMDCEIJ%2BlaYVzyX%2FSUmDHPpm0PGjAcXKaeF%2BRt8Kl4gNl9SAP4C4wJiUoqA6VdrXXedDOob%2BRQFNI76oG6mnVqZtarpw%3D%3D&Expires=1775155356)
+        "triggers": [
+          "on_image_drop(area='PRISMATIC_CORE_WINDOW')",
+          "on_cmd('METAMOD_ON')"
+        ],
+        "image_analysis": {
+          "extract": [
+            "dominant_palette(5)",
+            "brightness_distribution",
+            "edge_density",
+            "symmetry_score"
+          ]
+        },
+        "mapping_rules": {
+          "palette->COLOR_AMT": "COLOR_AMT = norm(saturation_mean)",
+          "brightness->DECAY": "DECAY = invert(norm(brightness_mean))",
+          "edge_density->DETUNE": "DETUNE = norm(edge_density)",
+          "symmetry->MORPH": "MORPH = invert(norm(symmetry_score))"
+        },
+        "meta_effects": {
+          "if_image_is_high_contrast": {
+            "CUTOFF": "push_to(0.75, inertia=0.2)",
+            "RES": "push_to(0.8, inertia=0.3)"
+          },
+          "if_image_is_low_contrast": {
+            "CUTOFF": "pull_to(0.35, inertia=0.2)",
+            "RES": "pull_to(0.3, inertia=0.3)"
+          }
+        },
+        "ui_feedback": [
+          "overlay_text('METAMOD: IMAGE BOUND', duration=1600)",
+          "corner_preview(image, size=96)"
+        ]
+      },
+      {
+        "id": "L3",
+        "name": "SONIC_COLLISION_ORBITS",
+        "description": "Орбиты столкновений: несколько «ядер» состояний, между которыми система непрерывно кружит, создавая ощущение живого инструмента.", [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/47217359/d3ad3b67-a043-43f4-a7d0-fc56c11977a8/PrismaticCore.html?AWSAccessKeyId=ASIA2F3EMEYE4E67TO5F&Signature=vs9QUallOI%2Fm40VXQsiXBJ%2BCU%2Bs%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEKv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQC9TELaZyHi1VfrWejJr15aisQZ697WxeTItU2luXo0CgIhAJjkdEVMz8mgL8CiRu4x0ZwalCG1jj91fz7%2B8GMKawqIKvMECHMQARoMNjk5NzUzMzA5NzA1IgzLY1aysGNSYCrSN0kq0ARwRj0OIkv5%2BQpFqypqKZpe9SAuTavXK33NA9aSPaMIbQazmNx6MrgMUAY%2FRzLxQIy2FCCLZQuNEWXua4%2FXQ%2BoCYhEyX89xA6yd7FnoQ66KZT%2F%2FBToyDxEbQ0OhWTJW3NDnM1hV7MvpfIvJ2ElsAEl9TNBevCewJJpM3KErMuhTyNDA4K47zcECNdO7mZYMd%2BpMWjWUzjrod0EcnMYvEJKF%2FmPk2uN0uOwLroV0b2qRTLkrjw9OWWnWMyU02aTrSdVSM50hjLWdIMVjzz0fwiMee%2BR0MfWDEyxnMKUiUg23tYggxv1KudSn4WyhW5tDG5kcY5v551u9kv4rlfkSZrp195clekBwOWzgfhyrWn%2F1XZWhzSakMgmUXHvA79FW2er6yL8BrrZrAJKKa03rKfSccBqzxfOXyU5HoPbf7p%2FDLG4yBzfEgkeEGgzKTnZzLrfNX2yhLYrbln91d%2Bn9RPfPSvr%2B73Tacf3dF%2FjIuDFMCke9IySzceW3yaj0KTgYcqxGWQX6NDkK4%2BGNq4XhY8JDaUW1lwteaaJ7dDPojgTMKNszonhq%2F%2FuJLf%2Bw0FRZZFOyiZSN8x8OBOoRnWVk58JJXKB74KXJQV7lRAItZmrtOzj0dXw9t4MdYgtFB7J9Gk2PDlEUwphs1ETZobD1PxeHCsp6cJg9Q3a93kgO4bpiZVGCcPRa1kGq%2F8FrNwm5qptBAV%2B0JGIygqLv8Z%2Be55kY%2FZ0ZPbOPvGkM6Pa4s%2B8ivQFBBuEZ%2BGJCNivEzg7ufenq3VpEF87SInqJSlVuKe%2BCMLLfus4GOpcB4ROXXmTixMsyI%2BswcQzkgIqaKk%2FMz2vT99wmnCfqW6PywX0cJKI9ksVZXpF%2F2zyCqKsakF%2F7WW6MB5Px9IjF9hDfWG08jF1xCmJXuhWpEiBpVVEMDCEIJ%2BlaYVzyX%2FSUmDHPpm0PGjAcXKaeF%2BRt8Kl4gNl9SAP4C4wJiUoqA6VdrXXedDOob%2BRQFNI76oG6mnVqZtarpw%3D%3D&Expires=1775155356)
+        "triggers": [
+          "on_cmd('ORBIT_START')",
+          "on_midi_cc(channel=1, cc=1) => set_orbit_speed(norm_value)"
+        ],
+        "core_states": [
+          "baseline_state",
+          "scene:AURORA_GATE",
+          "scene:GLASS_ORBIT",
+          "scene:NOISE_TIDE"
+        ],
+        "orbit": {
+          "topology": "loop",
+          "speed_range": "0.1-2.0",
+          "jitter": "0.0-0.25",
+          "collision_intensity": "0.0-1.0"
+        },
+        "behavior": [
+          "auto_interpolate_between(core_states, speed=orbit_speed, jitter=jitter)",
+          "at_collision_point: short_random_spike([PRISM, DETUNE, RES], depth=collision_intensity)"
+        ],
+        "ui_feedback": [
+          "circular_orbit_visual(core_states, active_state_highlight=true)",
+          "center_pulse(on_collision=true)"
+        ]
+      },
+      {
+        "id": "L4",
+        "name": "LLM_GUIDED_MACROS",
+        "description": "Связка с LLM/скриптами: пользователь формулирует намерение, MMSS транслирует его в серию изменений параметров и переходов уровней.", 
+        "triggers": [
+          "on_text_prompt(input='natural_language')",
+          "on_webhook('/mmss/intention')"
+        ],
+        "intention_schema": {
+          "fields": [
+            "emotional_vector (calm/aggressive/serene/tense)",
+            "density (sparse/dense)",
+            "motion (static/drifting/orbital)",
+            "color_bias (warm/cold/prismatic)",
+            "time_horizon_ms"
+          ]
+        },
+        "llm_mapping": {
+          "calm": {
+            "DETUNE": "low(0.0-0.08)",
+            "RES": "mid(0.3-0.5)",
+            "DECAY": "long(0.7-0.9)"
+          },
+          "aggressive": {
+            "DETUNE": "high(0.25-0.4)",
+            "RES": "high(0.7-1.0)",
+            "DECAY": "short(0.2-0.4)"
+          },
+          "prismatic": {
+            "PRISM": "high(0.7-1.0)",
+            "COLOR_AMT": "max(0.9-1.0)"
+          }
+        },
+        "macro_examples": [
+          {
+            "prompt": "сделай переход от стеклянной тишины к шумовой буре за 4 минуты",
+            "resolved": [
+              "load_scene('GLASS_ORBIT')",
+              "schedule_transition(to='scene:NOISE_TIDE', duration_ms=240000, curve='exponential')",
+              "gradually_increase(DETUNE, from='scene:GLASS_ORBIT', to='scene:NOISE_TIDE')"
+            ]
+          },
+          {
+            "prompt": "микродвижение вокруг базового состояния, как дыхание",
+            "resolved": [
+              "load_state('baseline_state')",
+              "start_micro_orbit(center='baseline_state', radius=0.05, period_ms=8000)"
+            ]
+          }
+        ],
+        "ui_feedback": [
+          "top_banner('INTENTION: {short_summary}', fade_out=3000)"
+        ]
+      }
+    ],
+    "transitions": {
+      "rules": [
+        {
+          "from": "L0",
+          "to": "L1",
+          "when": "user_uses_2_plus_scenes OR session_time>300000"
+        },
+        {
+          "from": "L1",
+          "to": "L2",
+          "when": "first_image_dropped"
+        },
+        {
+          "from": "L2",
+          "to": "L3",
+          "when": "user_enables_orbit OR auto_if_session_time>900000"
+        },
+        {
+          "from": "L3",
+          "to": "L4",
+          "when": "text_intention_received"
+        }
+      ],
+      "auto_save": [
+        "on_level_up => save_current_state(as='checkpoint_L{level}')"
+      ]
+    },
+    "implementation_notes": {
+      "audio_engine_layer": [
+        "экспонировать параметры PRISM, MORPH, DETUNE, CUTOFF, RES, COLOR_AMT, DECAY во внешнее API MMSS.",
+        "поддержать плавную интерполяцию параметров с разными кривыми."
+      ],
+      "ui_layer": [
+        "реализовать невизуально навязчивую индикацию уровней (тонкая цветовая рамка окна / короткий текстовый оверлей).",
+        "добавить hotkeys / MIDI-CC маппинг для сцен и орбит."
+      ],
+      "llm_layer": [
+        "описать intention_schema в system-промпте.",
+        "заставить модель возвращать только JSON с целевыми диапазонами параметров и сценами.",
+        "скриптом MMSS парсить JSON и дергать переходы уровней и сцен."
+      ]
+    }
+  }
+}

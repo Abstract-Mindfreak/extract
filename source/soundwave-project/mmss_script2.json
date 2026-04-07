@@ -1,0 +1,373 @@
+{
+  "mmss_script": {
+    "meta": {
+      "title": "PrismaticCore + VisionUI // Unified Next-Level MMSS",
+      "version": "2.0",
+      "modules": [
+        "PRISMATIC_CORE_ENGINE",
+        "VISION_UI_LAYER"
+      ],
+      "goal": "Единая мета-система, где аудио-призматическое ядро и визуальный/vision UI живут в одной иерархии уровней, синхронно эволюционируя в ответ на контекст, жесты и намерения пользователя." [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/47217359/e3850d80-9066-4f3e-87d1-4c9183eb8abc/MMSSVisionUI.html?AWSAccessKeyId=ASIA2F3EMEYESDOQLIMN&Signature=fzeAVjkZCg%2FLlz%2BiLSHjMzNu98s%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEKv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIEziwj4m%2BZ%2BtnMljX0UkQMX6T8sGMYypronsIQCcEJlMAiEAtOtPvd2smnzUwdMXls81pOCV5FtU7Mg6lyCZg32ECK8q8wQIcxABGgw2OTk3NTMzMDk3MDUiDG%2BdKbts1oVBUqsIFCrQBEdviZAF3En068ggZdQGVXkBQCLuhsTaTlQ1hDt2JerJ%2BLGCxBLQmTK5FcQ0kBQ7QztPPNm7CrX%2FXJ4XnQdGtMTus%2B8gKRSTSvnJAqm8pH06NGJQsLbB8Gppc9Zoo7wpbIfqgALtrM2cAx9J%2BluaRwQIHY2%2BNEQNv4Ffj8784SQEBEWiFf14uAGVCJIez3Kxy%2BP8CaNSnoEWaEWBPiBAMSlBDalW9zYOtdQn15KcpJCHRRNhgr48hqVBQw%2BX7L0h9i%2BA1NMAd20tomXLW7MI8cOT37951GD3zgQmqz5DZ4vmhtRutdCs5fvCTsb9wrzsG45aqoShZU%2BLdjOhyY2kn2wbyHwn8r8CJALGQmA3e1h48kt6d0FfCFWqJ2KiR0TmP9ecv1wIm0G8eonSGkh0wdutLDyp2N7PdRZBAZju2f16JPUwR%2FNtFPv3yNef6KuUqiLU7HtdfhQcDI2yJFPmcB3I2cP6Eb2R8BMw4mXAeDV%2BmrFj50%2B3l%2BNzrjoYbslffagFiGuG2ey7Amu%2Bh0n6RBDK08wt%2FLa4NSJcDF9YJA1NLHw8gpW25aCkmUSlpscWH4VLAuIQ3CNOENKifiBaFEOho1ufeIBoPwOJss13h0S2%2FeThaqRZpOiQdNwNYWzAZMOLJIYeEXEiIXlYHMnH%2BHqXdC%2BVltd7nrevKveoe1iKtLQW7J4dT%2FQvL2w0ChcWyQ2tC%2F7ZSG%2BDUdzdh0vqbNBcYUd9Ts6M3dB8wzP8XCYti%2FOi3wR28huaKD7QMU2WXe8vuR7LK7BOMdE7FKre%2BScw8d%2B6zgY6mAFSRqihSZeSxhCaPT8%2FiOXn4ReUnm8qqpjLhe4NKetrRPA5EhCzpAWVlezR8T99Kau7KlgZptLyx57gaB5ol%2B%2FHTETPQIZqJXXiL%2FUiYOU%2Flzc42xJHE5S1dZV3G1rnS67TUxCggmWLU0LQRQx8dtbb0ZqoqJLg%2BbKSDcUbQFDcWHaNUpjmqhXSuhk1LmQWIoXSs%2FsQ6xlp5g%3D%3D&Expires=1775155564)
+    },
+    "namespaces": {
+      "audio": {
+        "params": [
+          "PRISM",
+          "MORPH",
+          "DETUNE",
+          "CUTOFF",
+          "RES",
+          "COLOR_AMT",
+          "DECAY"
+        ]
+      },
+      "vision_ui": {
+        "params": [
+          "UI_THEME",
+          "UI_DEPTH",
+          "UI_GLOW",
+          "UI_NOISE",
+          "UI_FOCUS_MODE",
+          "UI_OVERLAY_DENSITY"
+        ]
+      }
+    },
+    "levels": [
+      {
+        "id": "L0",
+        "name": "BASELINE_HARMONY",
+        "scope": [
+          "audio",
+          "vision_ui"
+        ],
+        "description": "Синхронная фиксация базового аудио-состояния PrismaticCore и базового состояния Vision UI, чтобы получить «нулевой слепок» всей системы.", [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/47217359/d3ad3b67-a043-43f4-a7d0-fc56c11977a8/PrismaticCore.html)
+        "triggers": [
+          "on_app_open",
+          "on_user_hold_3s(PRISMATIC_CORE_logo)",
+          "on_cmd('CAPTURE_BASELINE')"
+        ],
+        "actions": [
+          "snapshot_state(audio_params) -> store_state('baseline_audio')",
+          "snapshot_state(vision_ui_params) -> store_state('baseline_ui')",
+          "group_state('baseline', ['baseline_audio','baseline_ui'])"
+        ],
+        "ui_feedback": [
+          "vision_ui.flash_frame(color='#ffffff', alpha=0.08, duration_ms=500)",
+          "overlay_text('BASELINE HARMONY CAPTURED', duration=1200)"
+        ]
+      },
+      {
+        "id": "L1",
+        "name": "SCENES_X_LAYERS",
+        "scope": [
+          "audio",
+          "vision_ui"
+        ],
+        "description": "Связанные сцены: каждая аудио-сцена PrismaticCore имеет свою визуальную сцену VisionUI, образуя цельные аудиовизуальные состояния.", [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/47217359/e3850d80-9066-4f3e-87d1-4c9183eb8abc/MMSSVisionUI.html?AWSAccessKeyId=ASIA2F3EMEYESDOQLIMN&Signature=fzeAVjkZCg%2FLlz%2BiLSHjMzNu98s%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEKv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIEziwj4m%2BZ%2BtnMljX0UkQMX6T8sGMYypronsIQCcEJlMAiEAtOtPvd2smnzUwdMXls81pOCV5FtU7Mg6lyCZg32ECK8q8wQIcxABGgw2OTk3NTMzMDk3MDUiDG%2BdKbts1oVBUqsIFCrQBEdviZAF3En068ggZdQGVXkBQCLuhsTaTlQ1hDt2JerJ%2BLGCxBLQmTK5FcQ0kBQ7QztPPNm7CrX%2FXJ4XnQdGtMTus%2B8gKRSTSvnJAqm8pH06NGJQsLbB8Gppc9Zoo7wpbIfqgALtrM2cAx9J%2BluaRwQIHY2%2BNEQNv4Ffj8784SQEBEWiFf14uAGVCJIez3Kxy%2BP8CaNSnoEWaEWBPiBAMSlBDalW9zYOtdQn15KcpJCHRRNhgr48hqVBQw%2BX7L0h9i%2BA1NMAd20tomXLW7MI8cOT37951GD3zgQmqz5DZ4vmhtRutdCs5fvCTsb9wrzsG45aqoShZU%2BLdjOhyY2kn2wbyHwn8r8CJALGQmA3e1h48kt6d0FfCFWqJ2KiR0TmP9ecv1wIm0G8eonSGkh0wdutLDyp2N7PdRZBAZju2f16JPUwR%2FNtFPv3yNef6KuUqiLU7HtdfhQcDI2yJFPmcB3I2cP6Eb2R8BMw4mXAeDV%2BmrFj50%2B3l%2BNzrjoYbslffagFiGuG2ey7Amu%2Bh0n6RBDK08wt%2FLa4NSJcDF9YJA1NLHw8gpW25aCkmUSlpscWH4VLAuIQ3CNOENKifiBaFEOho1ufeIBoPwOJss13h0S2%2FeThaqRZpOiQdNwNYWzAZMOLJIYeEXEiIXlYHMnH%2BHqXdC%2BVltd7nrevKveoe1iKtLQW7J4dT%2FQvL2w0ChcWyQ2tC%2F7ZSG%2BDUdzdh0vqbNBcYUd9Ts6M3dB8wzP8XCYti%2FOi3wR28huaKD7QMU2WXe8vuR7LK7BOMdE7FKre%2BScw8d%2B6zgY6mAFSRqihSZeSxhCaPT8%2FiOXn4ReUnm8qqpjLhe4NKetrRPA5EhCzpAWVlezR8T99Kau7KlgZptLyx57gaB5ol%2B%2FHTETPQIZqJXXiL%2FUiYOU%2Flzc42xJHE5S1dZV3G1rnS67TUxCggmWLU0LQRQx8dtbb0ZqoqJLg%2BbKSDcUbQFDcWHaNUpjmqhXSuhk1LmQWIoXSs%2FsQ6xlp5g%3D%3D&Expires=1775155564)
+        "definitions": {
+          "scene:AURORA_GATE": {
+            "audio": {
+              "PRISM": "0.7-0.9",
+              "MORPH": "0.3-0.5",
+              "DETUNE": "0.15-0.25",
+              "CUTOFF": "0.6-0.8",
+              "RES": "0.4-0.6",
+              "COLOR_AMT": "0.7-1.0",
+              "DECAY": "0.4-0.6"
+            },
+            "vision_ui": {
+              "UI_THEME": "AURORA",
+              "UI_DEPTH": "0.6-0.9",
+              "UI_GLOW": "0.7-1.0",
+              "UI_NOISE": "0.2-0.4",
+              "UI_FOCUS_MODE": "SOFT_CENTRIC",
+              "UI_OVERLAY_DENSITY": "0.3-0.5"
+            }
+          },
+          "scene:GLASS_ORBIT": {
+            "audio": {
+              "PRISM": "0.2-0.4",
+              "MORPH": "0.1-0.3",
+              "DETUNE": "0.02-0.08",
+              "CUTOFF": "0.4-0.6",
+              "RES": "0.2-0.4",
+              "COLOR_AMT": "0.3-0.5",
+              "DECAY": "0.6-0.9"
+            },
+            "vision_ui": {
+              "UI_THEME": "GLASS",
+              "UI_DEPTH": "0.2-0.5",
+              "UI_GLOW": "0.3-0.6",
+              "UI_NOISE": "0.05-0.15",
+              "UI_FOCUS_MODE": "MINIMAL_HUD",
+              "UI_OVERLAY_DENSITY": "0.1-0.3"
+            }
+          },
+          "scene:NOISE_TIDE": {
+            "audio": {
+              "PRISM": "0.8-1.0",
+              "MORPH": "0.7-1.0",
+              "DETUNE": "0.25-0.4",
+              "CUTOFF": "0.2-0.4",
+              "RES": "0.6-0.9",
+              "COLOR_AMT": "0.8-1.0",
+              "DECAY": "0.2-0.4"
+            },
+            "vision_ui": {
+              "UI_THEME": "TIDE",
+              "UI_DEPTH": "0.7-1.0",
+              "UI_GLOW": "0.5-0.9",
+              "UI_NOISE": "0.5-0.9",
+              "UI_FOCUS_MODE": "FLOW_FIELD",
+              "UI_OVERLAY_DENSITY": "0.5-0.9"
+            }
+          }
+        },
+        "triggers": [
+          "on_key('1') => load_scene('AURORA_GATE')",
+          "on_key('2') => load_scene('GLASS_ORBIT')",
+          "on_key('3') => load_scene('NOISE_TIDE')",
+          "on_key('0') => load_group_state('baseline')"
+        ],
+        "actions_on_scene_load": [
+          "interpolate(audio_params, target=scene.audio, duration_ms=3000, curve='ease_in_out_cubic')",
+          "interpolate(vision_ui_params, target=scene.vision_ui, duration_ms=3000, curve='ease_in_out_cubic')"
+        ],
+        "ui_feedback": [
+          "bottom_banner('SCENE: {scene_name}', opacity=0.8, fade_out=2000)",
+          "vision_ui.scene_icon_pulse(scene_name, duration_ms=1200)"
+        ]
+      },
+      {
+        "id": "L2",
+        "name": "VISION_REACTIVE_METAMOD",
+        "scope": [
+          "audio",
+          "vision_ui"
+        ],
+        "description": "Мета-мод, где визуальный вход (картинка, камера, vision-поток) модифицирует одновременно параметры синта и визуального интерфейса.", [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/47217359/d3ad3b67-a043-43f4-a7d0-fc56c11977a8/PrismaticCore.html)
+        "triggers": [
+          "on_image_drop(area='PRISMATIC_CORE_WINDOW')",
+          "on_camera_feed_active()",
+          "on_cmd('VISION_METAMOD_ON')"
+        ],
+        "vision_analysis": {
+          "extract": [
+            "dominant_palette(5)",
+            "brightness_distribution",
+            "edge_density",
+            "motion_flow",
+            "face_or_object_saliency"
+          ]
+        },
+        "mapping_rules_audio": {
+          "palette->COLOR_AMT": "COLOR_AMT = norm(saturation_mean)",
+          "brightness->DECAY": "DECAY = invert(norm(brightness_mean))",
+          "edge_density->DETUNE": "DETUNE = norm(edge_density)",
+          "motion_flow->MORPH": "MORPH = norm(global_motion_magnitude)"
+        },
+        "mapping_rules_ui": {
+          "palette->UI_THEME": "pick_theme_by_hue_cluster()",
+          "brightness->UI_DEPTH": "UI_DEPTH = norm(brightness_contrast)",
+          "edge_density->UI_NOISE": "UI_NOISE = norm(edge_density)",
+          "motion_flow->UI_FOCUS_MODE": "switch(SOFT_CENTRIC <-> FLOW_FIELD)",
+          "saliency->UI_OVERLAY_DENSITY": "UI_OVERLAY_DENSITY = norm(saliency_spread)"
+        },
+        "meta_conditions": {
+          "if_high_contrast": {
+            "audio": {
+              "CUTOFF": "push_to(0.75, inertia=0.2)",
+              "RES": "push_to(0.8, inertia=0.3)"
+            },
+            "vision_ui": {
+              "UI_GLOW": "push_to(0.9, inertia=0.3)",
+              "UI_DEPTH": "push_to(0.8, inertia=0.2)"
+            }
+          },
+          "if_low_contrast": {
+            "audio": {
+              "CUTOFF": "pull_to(0.35, inertia=0.2)",
+              "RES": "pull_to(0.3, inertia=0.3)"
+            },
+            "vision_ui": {
+              "UI_GLOW": "pull_to(0.3, inertia=0.2)",
+              "UI_NOISE": "push_to(0.6, inertia=0.3)"
+            }
+          }
+        },
+        "ui_feedback": [
+          "overlay_text('VISION METAMOD: BOUND', duration=1600)",
+          "corner_preview(vision_source, size=96)"
+        ]
+      },
+      {
+        "id": "L3",
+        "name": "ORBITAL_DUO",
+        "scope": [
+          "audio",
+          "vision_ui"
+        ],
+        "description": "Орбиты столкновений, в которых траектория влияет и на аудио-состояния, и на визуальные слои UI, создавая ощущение единого живого инструмента.", [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/47217359/e3850d80-9066-4f3e-87d1-4c9183eb8abc/MMSSVisionUI.html?AWSAccessKeyId=ASIA2F3EMEYESDOQLIMN&Signature=fzeAVjkZCg%2FLlz%2BiLSHjMzNu98s%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEKv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIEziwj4m%2BZ%2BtnMljX0UkQMX6T8sGMYypronsIQCcEJlMAiEAtOtPvd2smnzUwdMXls81pOCV5FtU7Mg6lyCZg32ECK8q8wQIcxABGgw2OTk3NTMzMDk3MDUiDG%2BdKbts1oVBUqsIFCrQBEdviZAF3En068ggZdQGVXkBQCLuhsTaTlQ1hDt2JerJ%2BLGCxBLQmTK5FcQ0kBQ7QztPPNm7CrX%2FXJ4XnQdGtMTus%2B8gKRSTSvnJAqm8pH06NGJQsLbB8Gppc9Zoo7wpbIfqgALtrM2cAx9J%2BluaRwQIHY2%2BNEQNv4Ffj8784SQEBEWiFf14uAGVCJIez3Kxy%2BP8CaNSnoEWaEWBPiBAMSlBDalW9zYOtdQn15KcpJCHRRNhgr48hqVBQw%2BX7L0h9i%2BA1NMAd20tomXLW7MI8cOT37951GD3zgQmqz5DZ4vmhtRutdCs5fvCTsb9wrzsG45aqoShZU%2BLdjOhyY2kn2wbyHwn8r8CJALGQmA3e1h48kt6d0FfCFWqJ2KiR0TmP9ecv1wIm0G8eonSGkh0wdutLDyp2N7PdRZBAZju2f16JPUwR%2FNtFPv3yNef6KuUqiLU7HtdfhQcDI2yJFPmcB3I2cP6Eb2R8BMw4mXAeDV%2BmrFj50%2B3l%2BNzrjoYbslffagFiGuG2ey7Amu%2Bh0n6RBDK08wt%2FLa4NSJcDF9YJA1NLHw8gpW25aCkmUSlpscWH4VLAuIQ3CNOENKifiBaFEOho1ufeIBoPwOJss13h0S2%2FeThaqRZpOiQdNwNYWzAZMOLJIYeEXEiIXlYHMnH%2BHqXdC%2BVltd7nrevKveoe1iKtLQW7J4dT%2FQvL2w0ChcWyQ2tC%2F7ZSG%2BDUdzdh0vqbNBcYUd9Ts6M3dB8wzP8XCYti%2FOi3wR28huaKD7QMU2WXe8vuR7LK7BOMdE7FKre%2BScw8d%2B6zgY6mAFSRqihSZeSxhCaPT8%2FiOXn4ReUnm8qqpjLhe4NKetrRPA5EhCzpAWVlezR8T99Kau7KlgZptLyx57gaB5ol%2B%2FHTETPQIZqJXXiL%2FUiYOU%2Flzc42xJHE5S1dZV3G1rnS67TUxCggmWLU0LQRQx8dtbb0ZqoqJLg%2BbKSDcUbQFDcWHaNUpjmqhXSuhk1LmQWIoXSs%2FsQ6xlp5g%3D%3D&Expires=1775155564)
+        "core_states": [
+          "baseline",
+          "scene:AURORA_GATE",
+          "scene:GLASS_ORBIT",
+          "scene:NOISE_TIDE"
+        ],
+        "triggers": [
+          "on_cmd('ORBIT_START')",
+          "on_midi_cc(channel=1, cc=1) => set_orbit_speed(norm_value)",
+          "on_midi_cc(channel=1, cc=2) => set_visual_orbit_weight(norm_value)"
+        ],
+        "orbit": {
+          "topology": "loop",
+          "speed_range": "0.1-2.0",
+          "jitter": "0.0-0.25",
+          "collision_intensity": "0.0-1.0",
+          "visual_weight": "0.0-1.0"
+        },
+        "behavior": [
+          "auto_interpolate_between(core_states.audio, speed=orbit_speed, jitter=jitter)",
+          "auto_interpolate_between(core_states.vision_ui, speed=orbit_speed * visual_weight, jitter=jitter)",
+          "at_collision_point: short_random_spike(audio=[PRISM, DETUNE, RES], ui=[UI_GLOW, UI_NOISE], depth=collision_intensity)"
+        ],
+        "ui_feedback": [
+          "circular_orbit_visual(core_states, active_state_highlight=true)",
+          "vision_ui.orbit_ring_overlay(intensity=collision_intensity)"
+        ]
+      },
+      {
+        "id": "L4",
+        "name": "LLM_INTENT_FABRIC",
+        "scope": [
+          "audio",
+          "vision_ui"
+        ],
+        "description": "Уровень, где намерения пользователя в естественном языке трансформируются в согласованные сценарии изменения аудио и VisionUI через MMSS + LLM.", [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/47217359/d3ad3b67-a043-43f4-a7d0-fc56c11977a8/PrismaticCore.html)
+        "triggers": [
+          "on_text_prompt(input='natural_language')",
+          "on_webhook('/mmss/intention')"
+        ],
+        "intention_schema": {
+          "fields": [
+            "emotional_vector (calm/aggressive/serene/tense)",
+            "density (sparse/dense)",
+            "motion (static/drifting/orbital)",
+            "color_bias (warm/cold/prismatic/monochrome)",
+            "ui_clarity (minimal/hud/rich)",
+            "time_horizon_ms"
+          ]
+        },
+        "llm_mapping_audio": {
+          "calm": {
+            "DETUNE": "0.0-0.08",
+            "RES": "0.3-0.5",
+            "DECAY": "0.7-0.9"
+          },
+          "aggressive": {
+            "DETUNE": "0.25-0.4",
+            "RES": "0.7-1.0",
+            "DECAY": "0.2-0.4"
+          },
+          "prismatic": {
+            "PRISM": "0.7-1.0",
+            "COLOR_AMT": "0.9-1.0"
+          }
+        },
+        "llm_mapping_ui": {
+          "minimal": {
+            "UI_OVERLAY_DENSITY": "0.1-0.3",
+            "UI_NOISE": "0.05-0.2",
+            "UI_FOCUS_MODE": "MINIMAL_HUD"
+          },
+          "hud": {
+            "UI_OVERLAY_DENSITY": "0.4-0.7",
+            "UI_DEPTH": "0.4-0.7"
+          },
+          "rich": {
+            "UI_OVERLAY_DENSITY": "0.7-1.0",
+            "UI_DEPTH": "0.7-1.0",
+            "UI_GLOW": "0.6-1.0"
+          },
+          "warm": {
+            "UI_THEME": "WARM_SPECTRUM"
+          },
+          "cold": {
+            "UI_THEME": "COLD_SPECTRUM"
+          },
+          "monochrome": {
+            "UI_THEME": "MONO",
+            "COLOR_AMT": "0.1-0.3"
+          }
+        },
+        "macro_examples": [
+          {
+            "prompt": "медленный переход от тихой стеклянной лаборатории к шумному, переливающемуся шторму на 6 минут",
+            "resolved": [
+              "load_scene('GLASS_ORBIT')",
+              "set_ui_clarity('minimal')",
+              "schedule_transition(to='scene:NOISE_TIDE', duration_ms=360000, curve='exponential')",
+              "schedule_ui_evolution(to_clarity='rich', to_theme='AURORA', sync_with_audio=true)"
+            ]
+          },
+          {
+            "prompt": "создай дыхание интерфейса вокруг базового состояния, почти незаметное",
+            "resolved": [
+              "load_group_state('baseline')",
+              "start_micro_orbit(center='baseline', radius_audio=0.05, radius_ui=0.03, period_ms=8000)"
+            ]
+          }
+        ],
+        "ui_feedback": [
+          "top_banner('INTENTION: {short_summary}', fade_out=3000)",
+          "vision_ui.intent_trace_overlay(duration_ms=time_horizon_ms)"
+        ]
+      }
+    ],
+    "transitions": {
+      "rules": [
+        {
+          "from": "L0",
+          "to": "L1",
+          "when": "user_uses_2_plus_scenes OR session_time>300000"
+        },
+        {
+          "from": "L1",
+          "to": "L2",
+          "when": "vision_source_bound"
+        },
+        {
+          "from": "L2",
+          "to": "L3",
+          "when": "orbit_enabled OR auto_if_session_time>900000"
+        },
+        {
+          "from": "L3",
+          "to": "L4",
+          "when": "text_intention_received"
+        }
+      ],
+      "auto_save": [
+        "on_level_up => save_group_state(as='checkpoint_L{level}')"
+      ]
+    },
+    "implementation_notes": {
+      "audio_engine_layer": [
+        "экспонировать параметры PRISM, MORPH, DETUNE, CUTOFF, RES, COLOR_AMT, DECAY во внешнее MMSS API и поддержать интерполяцию.", [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/47217359/d3ad3b67-a043-43f4-a7d0-fc56c11977a8/PrismaticCore.html)
+        "поддержать раздельные кривые и тайминги для орбит и сцены."
+      ],
+      "vision_ui_layer": [
+        "ввести абстрактные параметры UI_THEME, UI_DEPTH, UI_GLOW, UI_NOISE, UI_FOCUS_MODE, UI_OVERLAY_DENSITY как управляемые MMSS-слайдеры.", [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/47217359/e3850d80-9066-4f3e-87d1-4c9183eb8abc/MMSSVisionUI.html?AWSAccessKeyId=ASIA2F3EMEYESDOQLIMN&Signature=fzeAVjkZCg%2FLlz%2BiLSHjMzNu98s%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEKv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIEziwj4m%2BZ%2BtnMljX0UkQMX6T8sGMYypronsIQCcEJlMAiEAtOtPvd2smnzUwdMXls81pOCV5FtU7Mg6lyCZg32ECK8q8wQIcxABGgw2OTk3NTMzMDk3MDUiDG%2BdKbts1oVBUqsIFCrQBEdviZAF3En068ggZdQGVXkBQCLuhsTaTlQ1hDt2JerJ%2BLGCxBLQmTK5FcQ0kBQ7QztPPNm7CrX%2FXJ4XnQdGtMTus%2B8gKRSTSvnJAqm8pH06NGJQsLbB8Gppc9Zoo7wpbIfqgALtrM2cAx9J%2BluaRwQIHY2%2BNEQNv4Ffj8784SQEBEWiFf14uAGVCJIez3Kxy%2BP8CaNSnoEWaEWBPiBAMSlBDalW9zYOtdQn15KcpJCHRRNhgr48hqVBQw%2BX7L0h9i%2BA1NMAd20tomXLW7MI8cOT37951GD3zgQmqz5DZ4vmhtRutdCs5fvCTsb9wrzsG45aqoShZU%2BLdjOhyY2kn2wbyHwn8r8CJALGQmA3e1h48kt6d0FfCFWqJ2KiR0TmP9ecv1wIm0G8eonSGkh0wdutLDyp2N7PdRZBAZju2f16JPUwR%2FNtFPv3yNef6KuUqiLU7HtdfhQcDI2yJFPmcB3I2cP6Eb2R8BMw4mXAeDV%2BmrFj50%2B3l%2BNzrjoYbslffagFiGuG2ey7Amu%2Bh0n6RBDK08wt%2FLa4NSJcDF9YJA1NLHw8gpW25aCkmUSlpscWH4VLAuIQ3CNOENKifiBaFEOho1ufeIBoPwOJss13h0S2%2FeThaqRZpOiQdNwNYWzAZMOLJIYeEXEiIXlYHMnH%2BHqXdC%2BVltd7nrevKveoe1iKtLQW7J4dT%2FQvL2w0ChcWyQ2tC%2F7ZSG%2BDUdzdh0vqbNBcYUd9Ts6M3dB8wzP8XCYti%2FOi3wR28huaKD7QMU2WXe8vuR7LK7BOMdE7FKre%2BScw8d%2B6zgY6mAFSRqihSZeSxhCaPT8%2FiOXn4ReUnm8qqpjLhe4NKetrRPA5EhCzpAWVlezR8T99Kau7KlgZptLyx57gaB5ol%2B%2FHTETPQIZqJXXiL%2FUiYOU%2Flzc42xJHE5S1dZV3G1rnS67TUxCggmWLU0LQRQx8dtbb0ZqoqJLg%2BbKSDcUbQFDcWHaNUpjmqhXSuhk1LmQWIoXSs%2FsQ6xlp5g%3D%3D&Expires=1775155564)
+        "обеспечить плавный переход между визуальными сценами, синхронизированный с аудио-орбитами."
+      ],
+      "llm_layer": [
+        "описать intention_schema в system-промпте и заставить модель возвращать JSON с audio+ui целевыми диапазонами.",
+        "MMSS-скрипт парсит JSON, выбирает сцены, уровни и запускает переходы."
+      ],
+      "integration": [
+        "Next-Level MMSS = единый диспетчер уровней, работающий поверх модулей PrismaticCore и VisionUI, с общим стором состояний и общими ID сцен.",
+        "все внешние команды (hotkeys, midi, webhook, текст) идут в единый MMSS, который уже маршрутизирует audio/vision_ui."
+      ]
+    }
+  }
+}

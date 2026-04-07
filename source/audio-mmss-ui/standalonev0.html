@@ -1,0 +1,2001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MSS: PRISMATIC SYNTHESIS ENGINE</title>
+    <style>
+        :root {
+            --hue: 200;
+            --sat: 90%;
+            --lit: 50%;
+            --glow: hsla(var(--hue), var(--sat), var(--lit), 0.6);
+            --primary: hsl(var(--hue), var(--sat), var(--lit));
+            --accent: hsl(calc(var(--hue) + 180), 80%, 60%);
+            --bg-dark: #0a0908;
+            --metal: #1f1b19;
+            --knob-body: #181818;
+            --knob-ind: #e0e0e0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg-dark);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Segoe UI', 'Roboto Mono', monospace;
+            user-select: none;
+            touch-action: none;
+        }
+
+        #synth-container {
+            position: relative;
+            height: 98vh;
+            width: auto;
+            aspect-ratio: 723.08 / 1195.18;
+            filter: drop-shadow(0 0 30px rgba(0,0,0,0.8));
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Interactive Elements */
+        .control-interactive {
+            cursor: grab;
+            transform-box: fill-box;
+            transform-origin: center;
+            transition: filter 0.1s;
+        }
+        .control-interactive:active { cursor: grabbing; }
+        .control-interactive:hover { filter: drop-shadow(0 0 4px var(--primary)); }
+
+        /* Dynamic Colors */
+        .color-sync-fill { fill: var(--primary); transition: fill 0.1s linear; }
+        .color-sync-stroke { stroke: var(--primary); transition: stroke 0.1s linear; }
+        .accent-sync-fill { fill: var(--accent); transition: fill 0.1s linear; }
+
+        /* Screen Elements */
+        #oscilloscope {
+            mix-blend-mode: screen;
+            pointer-events: none;
+        }
+        
+        #xy-touch-zone {
+            fill: transparent;
+            cursor: crosshair;
+        }
+
+        .led-active {
+            filter: drop-shadow(0 0 8px var(--primary));
+            fill: var(--primary) !important;
+        }
+
+        /* Overlay */
+        #overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 9, 8, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+            transition: opacity 0.6s ease-out;
+            text-align: center;
+        }
+
+        #overlay h1 {
+            font-weight: 100;
+            letter-spacing: 0.5em;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            text-shadow: 0 0 20px var(--glow);
+        }
+
+        #overlay button {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 1rem 3rem;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px var(--glow), inset 0 0 10px rgba(0,0,0,0.5);
+            text-transform: uppercase;
+        }
+
+        #overlay button:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 40px var(--primary);
+        }
+
+        .scanline {
+            fill: url(#scanline-grad);
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        /* Knob Rings */
+        .knob-ring-bg { fill: none; stroke: #333; stroke-width: 4; }
+        .knob-ring-val { fill: none; stroke: var(--primary); stroke-width: 4; stroke-linecap: round; filter: drop-shadow(0 0 2px var(--primary)); }
+
+        #app-shell {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            padding: 18px;
+            box-sizing: border-box;
+            background:
+                radial-gradient(circle at top left, rgba(0, 170, 255, 0.12), transparent 24%),
+                radial-gradient(circle at bottom right, rgba(255, 82, 82, 0.12), transparent 22%),
+                linear-gradient(180deg, rgba(8, 8, 12, 0.92), rgba(10, 9, 8, 1));
+        }
+
+        #collision-canvas {
+            position: absolute;
+            top: 7.2%;
+            left: 8.5%;
+            width: 83%;
+            height: 42.5%;
+            border-radius: 6px;
+            pointer-events: none;
+            z-index: 8;
+            opacity: 0.82;
+            mix-blend-mode: screen;
+        }
+
+        #control-dock {
+            width: min(420px, 34vw);
+            height: min(96vh, 1120px);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding: 18px;
+            border: 1px solid rgba(98, 196, 255, 0.18);
+            border-radius: 24px;
+            background:
+                linear-gradient(180deg, rgba(14, 18, 27, 0.92), rgba(7, 11, 18, 0.92)),
+                radial-gradient(circle at top, rgba(31, 118, 255, 0.08), transparent 35%);
+            box-shadow: 0 24px 90px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            overflow: auto;
+            backdrop-filter: blur(18px);
+        }
+
+        .dock-header h2 {
+            margin: 0;
+            font-weight: 200;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            color: #e6f6ff;
+        }
+
+        .dock-header p,
+        .dock-meta,
+        .panel-subtitle,
+        .range-row small,
+        #diag-results {
+            color: rgba(210, 225, 245, 0.65);
+        }
+
+        .dock-eyebrow {
+            display: inline-flex;
+            padding: 0.3rem 0.6rem;
+            border: 1px solid rgba(98, 196, 255, 0.22);
+            border-radius: 999px;
+            font-size: 0.68rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: #92dcff;
+            margin-bottom: 0.85rem;
+        }
+
+        .dock-actions,
+        .toggle-strip,
+        .readout-grid,
+        .canvas-stack,
+        .range-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        .dock-actions {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .dock-btn,
+        .dock-file {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 46px;
+            padding: 0.8rem 1rem;
+            border: 1px solid rgba(96, 170, 255, 0.22);
+            border-radius: 16px;
+            background: rgba(13, 19, 29, 0.88);
+            color: #dcefff;
+            font-size: 0.78rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: none;
+        }
+
+        .dock-btn:hover,
+        .dock-file:hover,
+        .dock-btn.active {
+            background: rgba(43, 109, 208, 0.22);
+            color: #ffffff;
+            border-color: rgba(98, 196, 255, 0.45);
+            box-shadow: 0 0 28px rgba(68, 178, 255, 0.15);
+        }
+
+        .dock-file input {
+            display: none;
+        }
+
+        .dock-panel {
+            padding: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
+            background: rgba(5, 9, 15, 0.78);
+        }
+
+        .panel-title {
+            font-size: 0.78rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #f4fbff;
+            margin-bottom: 0.4rem;
+        }
+
+        .panel-subtitle {
+            font-size: 0.72rem;
+            line-height: 1.5;
+            margin-bottom: 0.9rem;
+        }
+
+        .toggle-strip {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .mini-select {
+            width: 100%;
+            min-height: 40px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(9, 13, 20, 0.95);
+            color: #e5f4ff;
+            padding: 0 0.75rem;
+            font-family: inherit;
+        }
+
+        .mini-toggle {
+            min-height: 40px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(9, 13, 20, 0.95);
+            color: #d5e7ff;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-size: 0.68rem;
+        }
+
+        .mini-toggle.active {
+            background: rgba(80, 170, 255, 0.18);
+            border-color: rgba(98, 196, 255, 0.45);
+            color: #ffffff;
+        }
+
+        .readout-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .readout-card {
+            padding: 0.75rem;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .readout-card span {
+            display: block;
+            font-size: 0.62rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(204, 217, 234, 0.52);
+            margin-bottom: 0.42rem;
+        }
+
+        .readout-card strong {
+            display: block;
+            font-size: 0.95rem;
+            color: #f8fbff;
+        }
+
+        .canvas-card {
+            padding: 12px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(2, 6, 12, 0.82);
+        }
+
+        .canvas-card header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.68rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(214, 231, 255, 0.72);
+        }
+
+        .canvas-card canvas {
+            width: 100%;
+            display: block;
+            border-radius: 14px;
+            background: #02050a;
+        }
+
+        #image-map-canvas {
+            height: 210px;
+        }
+
+        #xy-pad-canvas {
+            height: 210px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .canvas-hints {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 0.75rem;
+        }
+
+        .canvas-hints div {
+            padding: 0.55rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
+            font-size: 0.62rem;
+            color: rgba(207, 223, 245, 0.7);
+        }
+
+        .range-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .range-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .range-row label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.6rem;
+            font-size: 0.66rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #e7f5ff;
+        }
+
+        .range-row output {
+            color: rgba(144, 207, 255, 0.9);
+            font-size: 0.72rem;
+            letter-spacing: normal;
+            text-transform: none;
+        }
+
+        .range-row input[type="range"] {
+            width: 100%;
+            accent-color: #53c9ff;
+        }
+
+        #diag-results {
+            display: none;
+            gap: 0.45rem;
+            font-size: 0.74rem;
+            line-height: 1.5;
+            margin-top: 0.9rem;
+        }
+
+        #diag-results.active {
+            display: grid;
+        }
+
+        .diag-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.55rem 0.7rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .diag-pass { color: #7df2ae; }
+        .diag-fail { color: #ff8f8f; }
+
+        .dock-footer {
+            font-size: 0.7rem;
+            line-height: 1.6;
+            color: rgba(195, 211, 228, 0.62);
+        }
+
+        @media (max-width: 1280px) {
+            body {
+                align-items: flex-start;
+                overflow: auto;
+            }
+
+            #app-shell {
+                min-height: 100vh;
+                flex-direction: column;
+            }
+
+            #control-dock {
+                width: min(860px, 100%);
+                height: auto;
+            }
+
+            #synth-container {
+                height: auto;
+                width: min(92vw, 640px);
+            }
+        }
+
+        @media (max-width: 720px) {
+            #app-shell {
+                padding: 12px;
+                gap: 12px;
+            }
+
+            #control-dock,
+            .dock-actions,
+            .toggle-strip,
+            .readout-grid,
+            .range-grid,
+            .canvas-hints {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div id="app-shell">
+    <div id="synth-container">
+        <!-- Canvas for high-performance waveform rendering -->
+        <canvas id="collision-canvas"></canvas>
+        <canvas id="screen-canvas" style="position: absolute; top: 7.2%; left: 8.5%; width: 83%; height: 42.5%; border-radius: 6px; pointer-events: none; z-index: 10;"></canvas>
+
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 723.08 1195.18" id="main-interface">
+            <defs>
+                <linearGradient id="metal-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#2a2624;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#1a1716;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#0f0d0c;stop-opacity:1" />
+                </linearGradient>
+                <radialGradient id="knob-grad">
+                    <stop offset="80%" stop-color="#111"/>
+                    <stop offset="100%" stop-color="#333"/>
+                </radialGradient>
+                <pattern id="scanline-grad" x="0" y="0" width="100%" height="4" patternUnits="userSpaceOnUse">
+                    <rect y="0" width="100%" height="2" fill="black" opacity="0.5"/>
+                </pattern>
+                <filter id="glow-fx">
+                    <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                
+                <!-- Reusable Knob Geometry -->
+                <g id="knob-asset">
+                    <circle cx="0" cy="0" r="32" fill="url(#knob-grad)" stroke="#222" stroke-width="2"/>
+                    <!-- Indicator tick -->
+                    <rect x="-3" y="-28" width="6" height="12" fill="var(--knob-ind)" rx="1"/>
+                    <!-- Texture rings -->
+                    <circle cx="0" cy="0" r="28" fill="none" stroke="#000" stroke-width="1" opacity="0.5"/>
+                    <circle cx="0" cy="0" r="20" fill="none" stroke="#000" stroke-width="1" opacity="0.5"/>
+                </g>
+            </defs>
+
+            <!-- BACKGROUND CHASSIS (Optimized from input) -->
+            <g id="chassis">
+                <rect x="54.8" width="668.2" height="1187.2" fill="#1f1b19"/>
+                <rect x="54.8" width="212.4" height="1188" fill="#1a1816"/>
+                <!-- Speaker Grill -->
+                <path d="M594,619.7q0,281,0,562c0,7-2.5,12-5.7,12H7c-8.8-1.4-6.1-3.1-6.1-4.7Q.2,901,.4,611c0-1.6-2.7-3.3,6.1-4.7H588C591,607,594,612,594,619Z" fill="#141210"/>
+                <path d="M594,13.2q0,294,0,588c0,7-2.5,13-5.7,13L7,614c-8.8-1.5-6.1-3.2-6.1-5Q.2,307,.4,5c0-1.6-2.7-3.4,6.1-5A3.1,3.1,0,0,1,7,0L588,0C591,0,594,5.9,594,13.2Z" fill="#141210"/>
+                
+                <!-- Main Screen Bezel -->
+                <rect x="61.3" y="85" width="655.2" height="508.8" rx="6.8" fill="#050505" stroke="#333" stroke-width="2"/>
+                
+                <!-- Control Panels -->
+                <rect x="129" y="632" width="460" height="324" rx="11" fill="url(#metal-grad)" stroke="#000" stroke-width="2"/>
+                <rect x="69" y="823" width="158" height="357" rx="11" fill="url(#metal-grad)" stroke="#000" stroke-width="2"/>
+                
+                <!-- Decorative Bars -->
+                <rect x="178" y="850" width="377" height="31" fill="#111"/>
+                <rect x="344" y="889" width="116" height="6" class="color-sync-fill"/>
+            </g>
+
+            <!-- SCREEN INTERACTION AREA -->
+            <rect id="xy-touch-zone" x="61.3" y="85" width="655.2" height="508.8" rx="6.8"/>
+            <rect x="61.3" y="85" width="655.2" height="508.8" class="scanline" rx="6.8"/>
+
+            <!-- CONTROLS LAYER -->
+            <!-- We will programmatically place knobs to ensure they fit the grid -->
+            <g id="controls-layer">
+                <!-- Top Panel Knobs (Oscillators) -->
+                <!-- Knob 1: Prism (Color) -->
+                <g class="control-interactive" id="knob-prism" transform="translate(200, 710)" data-param="prism" data-min="0" data-max="360" data-val="200">
+                    <circle r="42" class="knob-ring-bg"/>
+                    <path class="knob-ring-val color-sync-stroke" d="M0,-42 A42,42 0 1,1 -0.1,-42" stroke-dasharray="264" stroke-dashoffset="100"/>
+                    <use href="#knob-asset"/>
+                    <text y="55" fill="#888" text-anchor="middle" font-size="14" font-family="monospace">PRISM</text>
+                </g>
+
+                <!-- Knob 2: Osc 1 Shape/Morph -->
+                <g class="control-interactive" id="knob-shape" transform="translate(360, 710)" data-param="shape" data-min="0" data-max="1" data-val="0">
+                    <circle r="42" class="knob-ring-bg"/>
+                    <path class="knob-ring-val" d="M0,-42 A42,42 0 1,1 -0.1,-42" stroke-dasharray="264" stroke-dashoffset="264"/>
+                    <use href="#knob-asset"/>
+                    <text y="55" fill="#888" text-anchor="middle" font-size="14" font-family="monospace">MORPH</text>
+                </g>
+
+                <!-- Knob 3: Osc 2 Detune -->
+                <g class="control-interactive" id="knob-detune" transform="translate(520, 710)" data-param="detune" data-min="0" data-max="2400" data-val="10">
+                    <circle r="42" class="knob-ring-bg"/>
+                    <path class="knob-ring-val" d="M0,-42 A42,42 0 1,1 -0.1,-42" stroke-dasharray="264" stroke-dashoffset="264"/>
+                    <use href="#knob-asset"/>
+                    <text y="55" fill="#888" text-anchor="middle" font-size="14" font-family="monospace">DETUNE</text>
+                </g>
+
+                <!-- Bottom Panel Knobs (Filter & Env) -->
+                <!-- Knob 4: Cutoff -->
+                <g class="control-interactive" id="knob-cutoff" transform="translate(140, 1000)" data-param="cutoff" data-min="20" data-max="10000" data-val="2000" data-log="true">
+                    <circle r="42" class="knob-ring-bg"/>
+                    <path class="knob-ring-val" d="M0,-42 A42,42 0 1,1 -0.1,-42" stroke-dasharray="264" stroke-dashoffset="100"/>
+                    <use href="#knob-asset"/>
+                    <text y="55" fill="#888" text-anchor="middle" font-size="14" font-family="monospace">CUTOFF</text>
+                </g>
+
+                <!-- Knob 5: Resonance -->
+                <g class="control-interactive" id="knob-res" transform="translate(280, 1000)" data-param="res" data-min="0" data-max="20" data-val="5">
+                    <circle r="42" class="knob-ring-bg"/>
+                    <path class="knob-ring-val" d="M0,-42 A42,42 0 1,1 -0.1,-42" stroke-dasharray="264" stroke-dashoffset="200"/>
+                    <use href="#knob-asset"/>
+                    <text y="55" fill="#888" text-anchor="middle" font-size="14" font-family="monospace">RES</text>
+                </g>
+
+                <!-- Knob 6: Color Mix -->
+                <g class="control-interactive" id="knob-mix" transform="translate(420, 1000)" data-param="mix" data-min="0" data-max="1" data-val="0.5">
+                    <circle r="42" class="knob-ring-bg"/>
+                    <path class="knob-ring-val color-sync-stroke" d="M0,-42 A42,42 0 1,1 -0.1,-42" stroke-dasharray="264" stroke-dashoffset="132"/>
+                    <use href="#knob-asset"/>
+                    <text y="55" fill="#888" text-anchor="middle" font-size="14" font-family="monospace">COLOR AMT</text>
+                </g>
+
+                <!-- Knob 7: Release -->
+                <g class="control-interactive" id="knob-rel" transform="translate(560, 1000)" data-param="release" data-min="0.1" data-max="5" data-val="1">
+                    <circle r="42" class="knob-ring-bg"/>
+                    <path class="knob-ring-val" d="M0,-42 A42,42 0 1,1 -0.1,-42" stroke-dasharray="264" stroke-dashoffset="200"/>
+                    <use href="#knob-asset"/>
+                    <text y="55" fill="#888" text-anchor="middle" font-size="14" font-family="monospace">DECAY</text>
+                </g>
+            </g>
+
+            <!-- LEDs -->
+            <circle id="led-gate" cx="50" cy="700" r="8" fill="#333" stroke="#111"/>
+            <circle id="led-lfo" cx="50" cy="730" r="8" fill="#333" stroke="#111"/>
+
+        </svg>
+
+        <div id="overlay">
+            <h1>PRISMATIC CORE</h1>
+            <button id="init-btn">INITIALIZE SYSTEM</button>
+            <p style="margin-top:20px; color: #888; font-size: 0.9rem;">
+                PRISMATIC SYNTH + IMAGE SONIFICATION + SONIC COLLISION<br>
+                USE HEADPHONES
+            </p>
+        </div>
+    </div>
+    <aside id="control-dock">
+        <div class="dock-header">
+            <div class="dock-eyebrow">Audio Field Lab</div>
+            <h2>Hybrid Control Dock</h2>
+            <p>Standalone experiment merging the prismatic synth core, image block sonification, and opposing-force collision control.</p>
+        </div>
+
+        <div class="dock-actions">
+            <button class="dock-btn" id="seq-toggle">Play Sequence</button>
+            <label class="dock-file">Upload Image<input id="image-upload" type="file" accept="image/*"></label>
+            <button class="dock-btn" id="auto-tune-btn">Auto Tune</button>
+            <button class="dock-btn" id="diag-toggle">Diagnostics</button>
+        </div>
+
+        <div class="dock-panel">
+            <div class="panel-title">Mode Matrix</div>
+            <div class="panel-subtitle">Use the synth face for direct touch, the image map for stepped sonification, and the collision layer for opposing frequency flow.</div>
+            <div class="toggle-strip">
+                <select class="mini-select" id="scan-mode">
+                    <option value="image">Image</option>
+                    <option value="xy">XY</option>
+                    <option value="hybrid" selected>Hybrid</option>
+                </select>
+                <select class="mini-select" id="scale-mode">
+                    <option value="Pentatonic" selected>Pentatonic</option>
+                    <option value="Major">Major</option>
+                    <option value="Minor">Minor</option>
+                    <option value="Blues">Blues</option>
+                    <option value="Chromatic">Chromatic</option>
+                    <option value="Whole Tone">Whole Tone</option>
+                </select>
+                <button class="mini-toggle" id="xy-hold-toggle">Hold Off</button>
+            </div>
+        </div>
+
+        <div class="dock-panel">
+            <div class="panel-title">Collision Readouts</div>
+            <div class="readout-grid">
+                <div class="readout-card"><span>Left Force</span><strong id="freq-left-readout">110 Hz</strong></div>
+                <div class="readout-card"><span>Beat</span><strong id="beat-readout">0.0 Hz</strong></div>
+                <div class="readout-card"><span>Right Force</span><strong id="freq-right-readout">440 Hz</strong></div>
+            </div>
+        </div>
+
+        <div class="canvas-stack">
+            <div class="canvas-card">
+                <header><span>MMSS Image Map</span><span id="image-meta">No image loaded</span></header>
+                <canvas id="image-map-canvas"></canvas>
+            </div>
+            <div class="canvas-card">
+                <header><span>XY Audio Pad</span><span id="xy-readout">X 0.50 · Y 0.50</span></header>
+                <canvas id="xy-pad-canvas"></canvas>
+                <div class="canvas-hints">
+                    <div>Pitch follows Y-axis</div>
+                    <div>FM depth follows X-axis</div>
+                    <div>Touch or hold gates the synth</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dock-panel">
+            <div class="panel-title">Transport + Engine</div>
+            <div class="range-grid">
+                <div class="range-row">
+                    <label>Volume <output data-readout-for="vol"></output></label>
+                    <input data-range-param="vol" type="range" min="0" max="1" step="0.01" value="0.8">
+                </div>
+                <div class="range-row">
+                    <label>BPM <output data-readout-for="bpm"></output></label>
+                    <input data-range-param="bpm" type="range" min="40" max="240" step="1" value="110">
+                </div>
+                <div class="range-row">
+                    <label>Speed <output data-readout-for="speed"></output></label>
+                    <input data-range-param="speed" type="range" min="0.25" max="8" step="0.25" value="2">
+                </div>
+                <div class="range-row">
+                    <label>Note Length <output data-readout-for="noteMult"></output></label>
+                    <input data-range-param="noteMult" type="range" min="0.2" max="2" step="0.05" value="0.7">
+                </div>
+                <div class="range-row">
+                    <label>Base Note <output data-readout-for="baseNote"></output></label>
+                    <input data-range-param="baseNote" type="range" min="55" max="880" step="1" value="110">
+                </div>
+                <div class="range-row">
+                    <label>Collision Mix <output data-readout-for="collisionMix"></output></label>
+                    <input data-range-param="collisionMix" type="range" min="0" max="1" step="0.01" value="0.35">
+                </div>
+            </div>
+        </div>
+
+        <div class="dock-panel">
+            <div class="panel-title">Prismatic Voice</div>
+            <div class="range-grid">
+                <div class="range-row">
+                    <label>Prism <output data-readout-for="prism"></output></label>
+                    <input data-range-param="prism" type="range" min="0" max="360" step="1" value="200">
+                </div>
+                <div class="range-row">
+                    <label>Morph <output data-readout-for="shape"></output></label>
+                    <input data-range-param="shape" type="range" min="0" max="1" step="0.01" value="0">
+                </div>
+                <div class="range-row">
+                    <label>Detune <output data-readout-for="detune"></output></label>
+                    <input data-range-param="detune" type="range" min="0" max="2400" step="1" value="10">
+                </div>
+                <div class="range-row">
+                    <label>Cutoff <output data-readout-for="cutoff"></output></label>
+                    <input data-range-param="cutoff" type="range" min="20" max="10000" step="10" value="2000">
+                </div>
+                <div class="range-row">
+                    <label>Resonance <output data-readout-for="res"></output></label>
+                    <input data-range-param="res" type="range" min="0" max="20" step="0.1" value="5">
+                </div>
+                <div class="range-row">
+                    <label>Color Amount <output data-readout-for="mix"></output></label>
+                    <input data-range-param="mix" type="range" min="0" max="1" step="0.01" value="0.5">
+                </div>
+                <div class="range-row">
+                    <label>Decay <output data-readout-for="release"></output></label>
+                    <input data-range-param="release" type="range" min="0.1" max="5" step="0.05" value="1">
+                </div>
+                <div class="range-row">
+                    <label>Block Width <output data-readout-for="blockW"></output></label>
+                    <input data-range-param="blockW" type="range" min="1" max="32" step="1" value="16">
+                </div>
+                <div class="range-row">
+                    <label>Block Height <output data-readout-for="blockH"></output></label>
+                    <input data-range-param="blockH" type="range" min="1" max="32" step="1" value="16">
+                </div>
+            </div>
+            <div id="diag-results"></div>
+        </div>
+
+        <div class="dock-footer">
+            Hybrid controller: direct touch on the synth screen, image-step sequencing from uploaded artwork, and opposing-force collision frequencies layered into the visual field.
+        </div>
+    </aside>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        /**
+         * MSS: Prismatic Synthesis Engine
+         * 
+         * Architecture:
+         * - Osc 1: Morphing Carrier (Tri -> Saw -> Square)
+         * - Osc 2: Sub/Harmonic Detuner
+         * - Osc 3: "Color" Modulator (Freq derived from Hue)
+         * - Filter: Dual SVF with Hue-dependent routing
+         * - Effects: Stereo Delay + Drive
+         */
+
+        const AudioState = {
+            ctx: null,
+            active: false,
+            width: 0, height: 0,
+            
+            // Nodes
+            master: null,
+            limiter: null,
+            analyser: null,
+            osc1: null,
+            osc2: null,
+            oscColor: null,
+            filter: null,
+            gainEnv: null,
+            delayL: null,
+            delayR: null,
+            shaper: null,
+            lfo: null,
+            
+            // Parameters
+            params: {
+                prism: 200,   // Hue (0-360)
+                shape: 0,     // 0=Tri, 0.5=Saw, 1=Square
+                detune: 10,   // Cents
+                cutoff: 2000, // Hz
+                res: 5,       // Q
+                mix: 0.5,     // Color Osc Mix / Drive
+                release: 1,   // Seconds
+                vol: 0.8,
+                bpm: 110,
+                speed: 2,
+                noteMult: 0.7,
+                baseNote: 110,
+                blockW: 16,
+                blockH: 16,
+                collisionMix: 0.35,
+                scanMode: 'hybrid',
+                scaleName: 'Pentatonic',
+                xyHold: false
+            },
+
+            // Interaction
+            touch: { x: 0.5, y: 0.5, active: false, source: null },
+            
+            // Visuals
+            analyserBuffer: null,
+            canvasCtx: null,
+            collisionCtx: null
+        };
+
+        const AppState = {
+            initialized: false,
+            playing: false,
+            stepTimer: null,
+            rafId: null
+        };
+
+        const ImageState = {
+            data: null,
+            width: 0,
+            height: 0,
+            blocks: [],
+            cols: 0,
+            rows: 0,
+            step: 0,
+            lastUrl: null
+        };
+
+        const CollisionState = {
+            pointer: { x: 0.5, y: 0.5 },
+            leftHz: 110,
+            rightHz: 440,
+            beatHz: 0,
+            particlesLeft: [],
+            particlesRight: [],
+            sparks: [],
+            nodes: null
+        };
+
+        const Scales = {
+            'Major': [0, 2, 4, 5, 7, 9, 11, 12],
+            'Minor': [0, 2, 3, 5, 7, 8, 10, 12],
+            'Pentatonic': [0, 2, 4, 7, 9, 12],
+            'Blues': [0, 3, 5, 6, 7, 10, 12],
+            'Chromatic': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            'Whole Tone': [0, 2, 4, 6, 8, 10, 12]
+        };
+
+        const RangeInputs = {};
+        document.querySelectorAll('[data-range-param]').forEach((input) => {
+            RangeInputs[input.dataset.rangeParam] = input;
+        });
+
+        const KnobControllers = {};
+
+        // --- Utility ---
+        const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
+        const map = (v, iMin, iMax, oMin, oMax) => oMin + (oMax - oMin) * ((v - iMin) / (iMax - iMin));
+        const roundTo = (v, step) => Math.round(v / step) * step;
+        const midiToFreq = (m) => 440 * Math.pow(2, (m - 69) / 12);
+        const freqToMidi = (f) => 69 + 12 * Math.log2(f / 440);
+
+        const rgbToHsv = (r, g, b) => {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            const d = max - min;
+            let h = 0;
+            if (d !== 0) {
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h *= 60;
+            }
+            return { h, s: max === 0 ? 0 : d / max, v: max * 255 };
+        };
+
+        const rgbToHsl = (r, g, b) => {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            const l = (max + min) / 2;
+            const d = max - min;
+            let h = 0;
+            let s = 0;
+            if (d !== 0) {
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h *= 60;
+            }
+            return { h, s, l: l * 100 };
+        };
+
+        const formatReadout = (param, value) => {
+            switch (param) {
+                case 'vol': return Math.round(value * 100) + '%';
+                case 'bpm': return Math.round(value);
+                case 'speed': return 'x' + value.toFixed(2);
+                case 'noteMult': return 'x' + value.toFixed(2);
+                case 'baseNote': return Math.round(value) + ' Hz';
+                case 'collisionMix': return Math.round(value * 100) + '%';
+                case 'prism': return Math.round(value) + '°';
+                case 'shape': return value.toFixed(2);
+                case 'detune': return Math.round(value) + ' ct';
+                case 'cutoff': return Math.round(value) + ' Hz';
+                case 'res': return value.toFixed(1);
+                case 'mix': return Math.round(value * 100) + '%';
+                case 'release': return value.toFixed(2) + ' s';
+                case 'blockW':
+                case 'blockH':
+                    return Math.round(value) + ' px';
+                default:
+                    return String(value);
+            }
+        };
+
+        const syncHue = () => {
+            document.documentElement.style.setProperty('--hue', AudioState.params.prism);
+        };
+
+        const syncReadouts = () => {
+            Object.keys(RangeInputs).forEach((param) => {
+                const output = document.querySelector('[data-readout-for="' + param + '"]');
+                if (output) output.textContent = formatReadout(param, AudioState.params[param]);
+            });
+            document.getElementById('xy-readout').textContent = 'X ' + AudioState.touch.x.toFixed(2) + ' · Y ' + AudioState.touch.y.toFixed(2);
+            document.getElementById('freq-left-readout').textContent = Math.round(CollisionState.leftHz) + ' Hz';
+            document.getElementById('freq-right-readout').textContent = Math.round(CollisionState.rightHz) + ' Hz';
+            document.getElementById('beat-readout').textContent = CollisionState.beatHz.toFixed(1) + ' Hz';
+            document.getElementById('xy-hold-toggle').textContent = AudioState.params.xyHold ? 'Hold On' : 'Hold Off';
+            document.getElementById('xy-hold-toggle').classList.toggle('active', AudioState.params.xyHold);
+            document.getElementById('seq-toggle').textContent = AppState.playing ? 'Stop Sequence' : 'Play Sequence';
+            document.getElementById('seq-toggle').classList.toggle('active', AppState.playing);
+            document.getElementById('image-meta').textContent = ImageState.data ? ImageState.width + '×' + ImageState.height + ' · ' + ImageState.blocks.length + ' blocks' : 'No image loaded';
+        };
+        
+        // Custom WaveShaper Curve for "Prism" saturation
+        const makeSaturationCurve = (k) => {
+            const n_samples = 44100;
+            const curve = new Float32Array(n_samples);
+            const deg = Math.PI / 180;
+            for (let i = 0; i < n_samples; ++i) {
+                let x = i * 2 / n_samples - 1;
+                curve[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x));
+            }
+            return curve;
+        };
+
+        const resizeCanvas = (canvas) => {
+            if (!canvas) return null;
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+            canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+            const ctx = canvas.getContext('2d');
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            return ctx;
+        };
+
+        const resizeCanvases = () => {
+            AudioState.canvasCtx = resizeCanvas(document.getElementById('screen-canvas'));
+            AudioState.collisionCtx = resizeCanvas(document.getElementById('collision-canvas'));
+            resizeCanvas(document.getElementById('image-map-canvas'));
+            resizeCanvas(document.getElementById('xy-pad-canvas'));
+        };
+
+        const buildBlocks = () => {
+            const data = ImageState.data;
+            ImageState.blocks = [];
+            ImageState.cols = 0;
+            ImageState.rows = 0;
+            if (!data || !ImageState.width || !ImageState.height) return;
+
+            const bw = Math.max(1, Math.floor(AudioState.params.blockW));
+            const bh = Math.max(1, Math.floor(AudioState.params.blockH));
+            const cols = Math.max(1, Math.floor(ImageState.width / bw));
+            const rows = Math.max(1, Math.floor(ImageState.height / bh));
+            const scale = Scales[AudioState.params.scaleName] || Scales.Pentatonic;
+
+            ImageState.cols = cols;
+            ImageState.rows = rows;
+
+            for (let ry = 0; ry < rows; ry++) {
+                for (let rx = 0; rx < cols; rx++) {
+                    const x0 = rx * bw;
+                    const y0 = ry * bh;
+                    const x1 = Math.min(x0 + bw, ImageState.width);
+                    const y1 = Math.min(y0 + bh, ImageState.height);
+                    let rSum = 0;
+                    let gSum = 0;
+                    let bSum = 0;
+                    let count = 0;
+
+                    for (let y = y0; y < y1; y++) {
+                        for (let x = x0; x < x1; x++) {
+                            const idx = (y * ImageState.width + x) * 4;
+                            rSum += data[idx];
+                            gSum += data[idx + 1];
+                            bSum += data[idx + 2];
+                            count++;
+                        }
+                    }
+
+                    const r = rSum / count;
+                    const g = gSum / count;
+                    const b = bSum / count;
+                    const hsv = rgbToHsv(r, g, b);
+                    const hsl = rgbToHsl(r, g, b);
+                    const degree = Math.floor(Math.sqrt(hsv.h / 360) * Math.max(1, scale.length - 1));
+                    const oct = Math.floor((hsl.l / 100) * 3) - 1;
+                    const velocity = clamp(0.24 + (hsl.l / 100) * 0.76, 0.08, 1);
+                    ImageState.blocks.push({ degree, oct, velocity, lightness: hsl.l, hue: hsv.h });
+                }
+            }
+            syncReadouts();
+        };
+
+        const initCollisionParticles = () => {
+            CollisionState.particlesLeft = [];
+            CollisionState.particlesRight = [];
+            CollisionState.sparks = [];
+            for (let i = 0; i < 90; i++) {
+                CollisionState.particlesLeft.push({
+                    x: Math.random() * 0.42,
+                    y: Math.random(),
+                    vx: 0.6 + Math.random() * 2.2,
+                    vy: (Math.random() - 0.5) * 1.1,
+                    r: 0.6 + Math.random() * 2,
+                    life: 0.4 + Math.random() * 0.6
+                });
+                CollisionState.particlesRight.push({
+                    x: 0.58 + Math.random() * 0.42,
+                    y: Math.random(),
+                    vx: -(0.6 + Math.random() * 2.2),
+                    vy: (Math.random() - 0.5) * 1.1,
+                    r: 0.6 + Math.random() * 2,
+                    life: 0.4 + Math.random() * 0.6
+                });
+            }
+        };
+
+        const updateCollisionMetrics = () => {
+            const x = CollisionState.pointer.x;
+            const y = CollisionState.pointer.y;
+            CollisionState.leftHz = 60 + (1 - x) * 180 + (1 - y) * 140;
+            CollisionState.rightHz = 220 + x * 620 + (1 - y) * 200;
+            CollisionState.beatHz = Math.abs(CollisionState.rightHz - CollisionState.leftHz);
+            syncReadouts();
+        };
+
+        const initCollisionAudio = (ctx) => {
+            const leftOsc = ctx.createOscillator();
+            const rightOsc = ctx.createOscillator();
+            const beatA = ctx.createOscillator();
+            const beatB = ctx.createOscillator();
+            const subOsc = ctx.createOscillator();
+            const leftGain = ctx.createGain();
+            const rightGain = ctx.createGain();
+            const beatGainA = ctx.createGain();
+            const beatGainB = ctx.createGain();
+            const subGain = ctx.createGain();
+            const leftPan = ctx.createStereoPanner();
+            const rightPan = ctx.createStereoPanner();
+            const beatPanA = ctx.createStereoPanner();
+            const beatPanB = ctx.createStereoPanner();
+            const leftFilter = ctx.createBiquadFilter();
+            const rightFilter = ctx.createBiquadFilter();
+
+            leftOsc.type = 'triangle';
+            rightOsc.type = 'sine';
+            beatA.type = 'sine';
+            beatB.type = 'sine';
+            subOsc.type = 'sine';
+            leftPan.pan.value = -0.55;
+            rightPan.pan.value = 0.55;
+            beatPanA.pan.value = -1;
+            beatPanB.pan.value = 1;
+            leftFilter.type = 'lowpass';
+            rightFilter.type = 'lowpass';
+
+            leftGain.gain.value = 0;
+            rightGain.gain.value = 0;
+            beatGainA.gain.value = 0;
+            beatGainB.gain.value = 0;
+            subGain.gain.value = 0;
+
+            leftOsc.connect(leftGain).connect(leftPan).connect(leftFilter).connect(AudioState.master);
+            rightOsc.connect(rightGain).connect(rightPan).connect(rightFilter).connect(AudioState.master);
+            beatA.connect(beatGainA).connect(beatPanA).connect(AudioState.master);
+            beatB.connect(beatGainB).connect(beatPanB).connect(AudioState.master);
+            subOsc.connect(subGain).connect(AudioState.master);
+
+            leftOsc.start();
+            rightOsc.start();
+            beatA.start();
+            beatB.start();
+            subOsc.start();
+
+            CollisionState.nodes = { leftOsc, rightOsc, beatA, beatB, subOsc, leftGain, rightGain, beatGainA, beatGainB, subGain, leftFilter, rightFilter };
+        };
+
+        const updateCollisionAudio = () => {
+            updateCollisionMetrics();
+            if (!CollisionState.nodes || !AudioState.ctx) return;
+            const t = AudioState.ctx.currentTime + 0.03;
+            const mix = AudioState.params.collisionMix;
+            const center = 1 - Math.abs(CollisionState.pointer.x - 0.5) * 2;
+            CollisionState.nodes.leftOsc.frequency.setTargetAtTime(CollisionState.leftHz, t, 0.1);
+            CollisionState.nodes.rightOsc.frequency.setTargetAtTime(CollisionState.rightHz, t, 0.1);
+            CollisionState.nodes.beatA.frequency.setTargetAtTime((CollisionState.leftHz + CollisionState.rightHz) / 2, t, 0.1);
+            CollisionState.nodes.beatB.frequency.setTargetAtTime((CollisionState.leftHz + CollisionState.rightHz) / 2 + clamp(CollisionState.beatHz * 0.12, 0.1, 42), t, 0.1);
+            CollisionState.nodes.subOsc.frequency.setTargetAtTime(CollisionState.leftHz / 2, t, 0.2);
+            CollisionState.nodes.leftGain.gain.setTargetAtTime(0.045 + mix * (1 - CollisionState.pointer.x) * 0.08, t, 0.12);
+            CollisionState.nodes.rightGain.gain.setTargetAtTime(0.035 + mix * CollisionState.pointer.x * 0.08, t, 0.12);
+            CollisionState.nodes.beatGainA.gain.setTargetAtTime(mix * center * 0.045, t, 0.1);
+            CollisionState.nodes.beatGainB.gain.setTargetAtTime(mix * center * 0.045, t, 0.1);
+            CollisionState.nodes.subGain.gain.setTargetAtTime(mix * 0.035 * (1 - CollisionState.pointer.x), t, 0.2);
+            CollisionState.nodes.leftFilter.frequency.setTargetAtTime(300 + (1 - CollisionState.pointer.x) * 700, t, 0.12);
+            CollisionState.nodes.rightFilter.frequency.setTargetAtTime(600 + CollisionState.pointer.x * 2200, t, 0.12);
+        };
+
+        const updateMasterVolumeSafe = () => {
+            if (!AudioState.master) return;
+            AudioState.master.gain.value = Math.pow(AudioState.params.vol, 2);
+        };
+
+        // --- Audio Engine ---
+        const initAudio = () => {
+            if (AudioState.ctx) return;
+            const AC = window.AudioContext || window.webkitAudioContext;
+            AudioState.ctx = new AC();
+            const ctx = AudioState.ctx;
+            const t = ctx.currentTime;
+
+            // Master Chain
+            AudioState.limiter = ctx.createDynamicsCompressor();
+            AudioState.master = ctx.createGain();
+            AudioState.analyser = ctx.createAnalyser();
+            AudioState.analyser.fftSize = 2048;
+            AudioState.analyserBuffer = new Uint8Array(AudioState.analyser.frequencyBinCount);
+
+            // Oscillators
+            AudioState.osc1 = ctx.createOscillator(); // Main
+            AudioState.osc1.type = 'sawtooth';
+            
+            AudioState.osc2 = ctx.createOscillator(); // Sub/Harmonic
+            AudioState.osc2.type = 'square';
+
+            AudioState.oscColor = ctx.createOscillator(); // Color Modulator
+            AudioState.oscColor.type = 'sine';
+
+            // Filter & Shaping
+            AudioState.filter = ctx.createBiquadFilter();
+            AudioState.filter.type = 'lowpass';
+            
+            AudioState.shaper = ctx.createWaveShaper();
+            AudioState.shaper.curve = makeSaturationCurve(10);
+
+            // Envelope
+            AudioState.gainEnv = ctx.createGain();
+            AudioState.gainEnv.gain.value = 0;
+
+            // Mixing
+            const osc1Gain = ctx.createGain();
+            const osc2Gain = ctx.createGain();
+            const colorGain = ctx.createGain();
+            
+            // Effects: Stereo Delay
+            AudioState.delayL = ctx.createDelay();
+            AudioState.delayR = ctx.createDelay();
+            const feedL = ctx.createGain();
+            const feedR = ctx.createGain();
+            const delayOut = ctx.createGain();
+            
+            AudioState.delayL.delayTime.value = 0.3;
+            AudioState.delayR.delayTime.value = 0.4;
+            feedL.gain.value = 0.4;
+            feedR.gain.value = 0.4;
+            delayOut.gain.value = 0.3;
+
+            // LFO
+            AudioState.lfo = ctx.createOscillator();
+            AudioState.lfo.frequency.value = 2; // Hz
+            const lfoGain = ctx.createGain();
+            lfoGain.gain.value = 500;
+            AudioState.lfo.connect(lfoGain);
+            lfoGain.connect(AudioState.filter.frequency);
+
+            // Routing Graph
+            // Osc 1 -> Mix
+            AudioState.osc1.connect(osc1Gain);
+            // Osc 2 -> Mix
+            AudioState.osc2.connect(osc2Gain);
+            // Color Osc -> FM -> Osc 1 Freq (Cross modulation)
+            AudioState.oscColor.connect(colorGain);
+            colorGain.connect(AudioState.osc1.frequency);
+
+            // Sum Oscillators
+            osc1Gain.connect(AudioState.filter);
+            osc2Gain.connect(AudioState.filter);
+            
+            // Filter -> Shaper -> VCA
+            AudioState.filter.connect(AudioState.shaper);
+            AudioState.shaper.connect(AudioState.gainEnv);
+
+            // VCA -> Master & Delay
+            AudioState.gainEnv.connect(AudioState.master);
+            AudioState.gainEnv.connect(AudioState.delayL);
+            AudioState.gainEnv.connect(AudioState.delayR);
+
+            // Delay Feedback Loop
+            AudioState.delayL.connect(feedL).connect(AudioState.delayL);
+            AudioState.delayR.connect(feedR).connect(AudioState.delayR);
+            AudioState.delayL.connect(delayOut);
+            AudioState.delayR.connect(delayOut);
+            delayOut.connect(AudioState.master);
+
+            AudioState.master.connect(AudioState.limiter);
+            AudioState.limiter.connect(AudioState.analyser);
+            AudioState.analyser.connect(ctx.destination);
+
+            // Start Oscillators
+            AudioState.osc1.start(t);
+            AudioState.osc2.start(t);
+            AudioState.oscColor.start(t);
+            AudioState.lfo.start(t);
+
+            // Store References
+            AudioState.nodes = {
+                osc1Gain, osc2Gain, colorGain, feedL, feedR
+            };
+
+            initCollisionAudio(ctx);
+            updateMasterVolumeSafe();
+            updateSynthParams();
+            document.getElementById('led-lfo').classList.add('led-active');
+        };
+
+        const updateSynthParams = () => {
+            if (!AudioState.ctx) return;
+            const p = AudioState.params;
+            const t = AudioState.ctx.currentTime + 0.05;
+
+            // 1. Pitch Logic (XY Pad Y-axis)
+            // Y: 0 (Top) -> High Pitch, 1 (Bottom) -> Low Pitch
+            // We invert this for UI logic usually, but let's map:
+            // Top of screen = High Frequency.
+            const baseFreq = AudioState.params.baseNote * Math.pow(2, (1 - AudioState.touch.y) * 2.8);
+            
+            // Quantize to scale? Optional. Let's stay continuous for "Theremin" feel.
+            AudioState.osc1.frequency.setTargetAtTime(baseFreq, t, 0.1);
+            AudioState.osc2.frequency.setTargetAtTime(baseFreq * 0.5, t, 0.1); // Sub octave
+            AudioState.osc2.detune.setTargetAtTime(p.detune, t, 0.1);
+
+            // 2. Color/Prism Logic
+            // Map Hue (0-360) to audio properties
+            // Hue 0 (Red): Aggressive, AM modulation
+            // Hue 120 (Green): Ring Mod / FM
+            // Hue 240 (Blue): Harmonic Additive
+            
+            const hueRatio = p.prism / 360;
+            const colorFreq = baseFreq * (2 + (hueRatio * 8)); // Harmonic series 2x to 10x
+            AudioState.oscColor.frequency.setTargetAtTime(colorFreq, t, 0.08);
+            
+            // Color Mix controls FM depth
+            AudioState.nodes.colorGain.gain.setTargetAtTime(p.mix * 1800 * AudioState.touch.x, t, 0.08);
+
+            // 3. Filter
+            AudioState.filter.frequency.setTargetAtTime(p.cutoff, t, 0.08);
+            AudioState.filter.Q.setTargetAtTime(p.res, t, 0.08);
+            AudioState.delayL.delayTime.setTargetAtTime(0.14 + p.mix * 0.32, t, 0.08);
+            AudioState.delayR.delayTime.setTargetAtTime(0.18 + p.mix * 0.4, t, 0.08);
+
+            // 4. Waveform Morph (Simulated by mixing or just switching for simplicity in WebAudio basic)
+            // Here we just switch for efficiency, but could mix if we had multiple osc nodes.
+            if(p.shape < 0.33) AudioState.osc1.type = 'triangle';
+            else if(p.shape < 0.66) AudioState.osc1.type = 'sawtooth';
+            else AudioState.osc1.type = 'square';
+
+            // 5. Visual Sync
+            syncHue();
+            updateCollisionAudio();
+        };
+
+        const triggerGate = (active) => {
+            if (!AudioState.ctx) return;
+            const t = AudioState.ctx.currentTime;
+            const vca = AudioState.gainEnv.gain;
+            const led = document.getElementById('led-gate');
+
+            if (active) {
+                // Attack
+                vca.cancelScheduledValues(t);
+                vca.setValueAtTime(vca.value, t);
+                vca.linearRampToValueAtTime(AudioState.params.vol, t + 0.05);
+                led.classList.add('led-active');
+            } else {
+                // Release
+                vca.cancelScheduledValues(t);
+                vca.setValueAtTime(vca.value, t);
+                vca.exponentialRampToValueAtTime(0.001, t + AudioState.params.release);
+                led.classList.remove('led-active');
+            }
+        };
+
+        // --- Visualizer Engine ---
+        const drawScope = () => {
+            if (!AudioState.active) return;
+            requestAnimationFrame(drawScope);
+
+            const canvas = document.getElementById('screen-canvas');
+            const ctx = AudioState.canvasCtx;
+            const w = canvas.width;
+            const h = canvas.height;
+            const data = AudioState.analyserBuffer;
+
+            AudioState.analyser.getByteTimeDomainData(data);
+
+            // Fade effect
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            ctx.fillRect(0, 0, w, h);
+
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = `hsl(${AudioState.params.prism}, 100%, 60%)`;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = `hsl(${AudioState.params.prism}, 100%, 50%)`;
+            
+            ctx.beginPath();
+            const sliceW = w / data.length;
+            let x = 0;
+
+            for (let i = 0; i < data.length; i++) {
+                const v = data[i] / 128.0; // 0..2
+                const y = (v * h / 2); // Center is h/2
+
+                // Add some XY visual feedback distortion
+                const jitter = (Math.random() - 0.5) * (AudioState.params.mix * 5);
+                
+                if (i === 0) ctx.moveTo(x, y + jitter);
+                else ctx.lineTo(x, y + jitter);
+                x += sliceW;
+            }
+            ctx.stroke();
+
+            // Draw XY Cursor
+            if (AudioState.touch.active) {
+                const cx = AudioState.touch.x * w;
+                const cy = AudioState.touch.y * h;
+                
+                ctx.beginPath();
+                ctx.arc(cx, cy, 10, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${AudioState.params.prism + 180}, 100%, 80%, 0.8)`;
+                ctx.fill();
+                
+                // Crosshairs
+                ctx.beginPath();
+                ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+                ctx.lineWidth = 1;
+                ctx.moveTo(cx, 0); ctx.lineTo(cx, h);
+                ctx.moveTo(0, cy); ctx.lineTo(w, cy);
+                ctx.stroke();
+            }
+
+            drawCollisionField();
+            drawImageMap();
+            drawXYPad();
+        };
+
+        const drawImageMap = () => {
+            const canvas = document.getElementById('image-map-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvas.width / dpr;
+            const h = canvas.height / dpr;
+            ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = 'rgba(2, 7, 16, 0.98)';
+            ctx.fillRect(0, 0, w, h);
+
+            if (ImageState.data && ImageState.width && ImageState.height) {
+                const off = document.createElement('canvas');
+                off.width = ImageState.width;
+                off.height = ImageState.height;
+                const octx = off.getContext('2d');
+                octx.putImageData(new ImageData(new Uint8ClampedArray(ImageState.data), ImageState.width, ImageState.height), 0, 0);
+                const scale = Math.min(w / ImageState.width, h / ImageState.height);
+                const dw = ImageState.width * scale;
+                const dh = ImageState.height * scale;
+                const dx = (w - dw) / 2;
+                const dy = (h - dh) / 2;
+                ctx.imageSmoothingEnabled = false;
+                ctx.drawImage(off, dx, dy, dw, dh);
+
+                const cols = Math.max(1, ImageState.cols || 1);
+                const rows = Math.max(1, ImageState.rows || 1);
+                const idx = ImageState.step % Math.max(1, ImageState.blocks.length || 1);
+                const rx = idx % cols;
+                const ry = Math.floor(idx / cols);
+                const cw = dw / cols;
+                const ch = dh / rows;
+                ctx.strokeStyle = 'hsla(' + AudioState.params.prism + ', 100%, 62%, 0.95)';
+                ctx.lineWidth = Math.max(2, Math.min(cw, ch) * 0.08);
+                ctx.strokeRect(dx + rx * cw, dy + ry * ch, cw, ch);
+            } else {
+                ctx.strokeStyle = 'rgba(164, 188, 214, 0.24)';
+                for (let x = 0; x <= w; x += w / 8) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, h);
+                    ctx.stroke();
+                }
+                for (let y = 0; y <= h; y += h / 6) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(w, y);
+                    ctx.stroke();
+                }
+                ctx.fillStyle = 'rgba(210, 224, 245, 0.6)';
+                ctx.font = Math.max(12, w * 0.028) + 'px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('UPLOAD IMAGE FOR BLOCK SCAN', w / 2, h / 2);
+            }
+        };
+
+        const drawXYPad = () => {
+            const canvas = document.getElementById('xy-pad-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvas.width / dpr;
+            const h = canvas.height / dpr;
+            const x = AudioState.touch.x;
+            const y = AudioState.touch.y;
+            const active = AudioState.touch.active || AudioState.params.xyHold;
+            const hue = AudioState.params.prism;
+
+            const grad = ctx.createLinearGradient(0, 0, w, h);
+            grad.addColorStop(0, 'hsla(' + hue + ', 80%, 20%, 1)');
+            grad.addColorStop(1, 'hsla(' + ((hue + 180) % 360) + ', 80%, 8%, 1)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, w, h);
+
+            ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+            for (let gx = 0; gx < w; gx += w / 8) {
+                ctx.beginPath();
+                ctx.moveTo(gx, 0);
+                ctx.lineTo(gx, h);
+                ctx.stroke();
+            }
+            for (let gy = 0; gy < h; gy += h / 6) {
+                ctx.beginPath();
+                ctx.moveTo(0, gy);
+                ctx.lineTo(w, gy);
+                ctx.stroke();
+            }
+
+            const cx = x * w;
+            const cy = y * h;
+            ctx.strokeStyle = active ? 'hsla(' + ((hue + 180) % 360) + ',100%,80%,0.95)' : 'rgba(255,255,255,0.4)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(cx, 0);
+            ctx.lineTo(cx, h);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(0, cy);
+            ctx.lineTo(w, cy);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(cx, cy, Math.max(10, Math.min(w, h) * 0.04), 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.fillStyle = 'hsla(' + ((hue + 180) % 360) + ',100%,80%,0.18)';
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(255,255,255,0.75)';
+            ctx.font = Math.max(12, w * 0.024) + 'px monospace';
+            ctx.textAlign = 'left';
+            ctx.fillText('X ' + x.toFixed(2) + '  Y ' + y.toFixed(2), 16, 24);
+        };
+
+        const drawCollisionField = () => {
+            const canvas = document.getElementById('collision-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvas.width / dpr;
+            const h = canvas.height / dpr;
+            const centerX = CollisionState.pointer.x * w;
+            const centerY = CollisionState.pointer.y * h;
+            ctx.fillStyle = 'rgba(1, 4, 9, 0.18)';
+            ctx.fillRect(0, 0, w, h);
+
+            const leftGrad = ctx.createLinearGradient(0, 0, centerX, 0);
+            leftGrad.addColorStop(0, 'rgba(255, 106, 74, 0.28)');
+            leftGrad.addColorStop(1, 'rgba(255, 106, 74, 0)');
+            ctx.fillStyle = leftGrad;
+            ctx.fillRect(0, 0, centerX, h);
+
+            const rightGrad = ctx.createLinearGradient(centerX, 0, w, 0);
+            rightGrad.addColorStop(0, 'rgba(74, 158, 255, 0)');
+            rightGrad.addColorStop(1, 'rgba(74, 158, 255, 0.24)');
+            ctx.fillStyle = rightGrad;
+            ctx.fillRect(centerX, 0, w - centerX, h);
+
+            [
+                { list: CollisionState.particlesLeft, side: 'left', hue: 18 },
+                { list: CollisionState.particlesRight, side: 'right', hue: 208 }
+            ].forEach((group) => {
+                group.list.forEach((particle) => {
+                    particle.x += particle.vx * 0.0015;
+                    particle.y += particle.vy * 0.0015;
+                    particle.life -= 0.0025;
+                    if ((group.side === 'left' && particle.x * w > centerX) || (group.side === 'right' && particle.x * w < centerX) || particle.life <= 0 || particle.y < -0.1 || particle.y > 1.1) {
+                        particle.x = group.side === 'left' ? -0.02 : 1.02;
+                        particle.y = Math.random();
+                        particle.vx = (0.6 + Math.random() * 2.2) * (group.side === 'left' ? 1 : -1);
+                        particle.vy = (Math.random() - 0.5) * 1.1;
+                        particle.life = 0.4 + Math.random() * 0.6;
+                    }
+                    ctx.beginPath();
+                    ctx.fillStyle = 'hsla(' + group.hue + ', 100%, ' + (60 + Math.random() * 12) + '%, ' + (0.2 + particle.life * 0.55) + ')';
+                    ctx.arc(particle.x * w, particle.y * h, particle.r, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            });
+
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255,255,255,0.22)';
+            ctx.lineWidth = 1;
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, h);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 16 + clamp(CollisionState.beatHz * 0.12, 0, 20), 0, Math.PI * 2);
+            ctx.strokeStyle = 'hsla(' + ((AudioState.params.prism + 180) % 360) + ', 100%, 80%, 0.58)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        };
+
+        const setParam = (param, value, source) => {
+            if (RangeInputs[param]) {
+                const min = parseFloat(RangeInputs[param].min);
+                const max = parseFloat(RangeInputs[param].max);
+                value = clamp(parseFloat(value), min, max);
+                if (source !== 'range') RangeInputs[param].value = value;
+            }
+
+            AudioState.params[param] = value;
+            if (KnobControllers[param] && source !== 'knob') {
+                KnobControllers[param].setVisual(value);
+            }
+
+            if (param === 'vol') updateMasterVolumeSafe();
+            if (param === 'blockW' || param === 'blockH') buildBlocks();
+            if (AudioState.ctx && param !== 'vol') updateSynthParams();
+            if (AppState.playing && (param === 'bpm' || param === 'speed')) {
+                clearInterval(AppState.stepTimer);
+                AppState.stepTimer = null;
+                startSequence();
+            }
+            syncReadouts();
+            drawImageMap();
+            drawXYPad();
+        };
+
+        const processImage = (img) => {
+            const maxW = 256;
+            const maxH = 256;
+            const scale = Math.min(maxW / img.width, maxH / img.height, 1);
+            const w = Math.max(1, Math.floor(img.width * scale));
+            const h = Math.max(1, Math.floor(img.height * scale));
+            const off = document.createElement('canvas');
+            off.width = w;
+            off.height = h;
+            const ctx = off.getContext('2d', { willReadFrequently: true });
+            ctx.imageSmoothingEnabled = true;
+            ctx.drawImage(img, 0, 0, w, h);
+            const imgData = ctx.getImageData(0, 0, w, h);
+            ImageState.data = imgData.data;
+            ImageState.width = w;
+            ImageState.height = h;
+            ImageState.step = 0;
+            buildBlocks();
+            drawImageMap();
+        };
+
+        const handleImageUpload = (event) => {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            if (ImageState.lastUrl) {
+                try { URL.revokeObjectURL(ImageState.lastUrl); } catch (error) {}
+            }
+            const url = URL.createObjectURL(file);
+            ImageState.lastUrl = url;
+            const img = new Image();
+            img.onload = () => {
+                processImage(img);
+                try { URL.revokeObjectURL(url); } catch (error) {}
+                ImageState.lastUrl = null;
+                syncReadouts();
+            };
+            img.src = url;
+        };
+
+        const analyzeImageQuick = () => {
+            const data = ImageState.data;
+            if (!data || !ImageState.width || !ImageState.height) return null;
+            const stride = Math.max(1, Math.floor((ImageState.width * ImageState.height) / 8000));
+            let lSum = 0;
+            let sSum = 0;
+            let count = 0;
+            for (let i = 0; i < data.length; i += 4 * stride) {
+                const hsv = rgbToHsv(data[i], data[i + 1], data[i + 2]);
+                const hsl = rgbToHsl(data[i], data[i + 1], data[i + 2]);
+                lSum += hsl.l;
+                sSum += hsv.s;
+                count++;
+            }
+            return { lightness: lSum / count, saturation: sSum / count, blocks: ImageState.blocks.length };
+        };
+
+        const applyAutoTune = () => {
+            const meta = analyzeImageQuick();
+            if (!meta) return;
+            setParam('prism', Math.round(180 + meta.saturation * 160), 'system');
+            setParam('cutoff', roundTo(800 + meta.lightness * 28, 10), 'system');
+            setParam('mix', roundTo(clamp(0.2 + meta.saturation * 0.7, 0, 1), 0.01), 'system');
+            setParam('speed', roundTo(clamp(0.75 + meta.saturation * 3.5, 0.25, 8), 0.25), 'system');
+            setParam('blockW', meta.blocks > 200 ? 10 : 18, 'system');
+            setParam('blockH', meta.blocks > 200 ? 10 : 18, 'system');
+            buildBlocks();
+            drawImageMap();
+        };
+
+        const scheduleVoice = (freq, velocity, lightness01, hue) => {
+            if (!AudioState.ctx || !AudioState.master) return;
+            const ctx = AudioState.ctx;
+            const p = AudioState.params;
+            const now = ctx.currentTime;
+            const beatDur = 60 / p.bpm;
+            const stepDur = Math.max(0.04, beatDur / clamp(p.speed, 0.25, 8));
+            const dur = clamp(stepDur * p.noteMult * (0.6 + velocity), 0.05, 1.8);
+            const filter = ctx.createBiquadFilter();
+            const env = ctx.createGain();
+            const osc = ctx.createOscillator();
+            const osc5 = ctx.createOscillator();
+            const osc8 = ctx.createOscillator();
+            const vibrato = ctx.createOscillator();
+            const vibGain = ctx.createGain();
+            const mixMain = ctx.createGain();
+            const mix5 = ctx.createGain();
+            const mix8 = ctx.createGain();
+
+            filter.type = 'lowpass';
+            filter.Q.value = p.res;
+            filter.frequency.setValueAtTime(clamp(p.cutoff * (0.55 + lightness01 * 0.9), 80, 16000), now);
+            env.gain.setValueAtTime(0.0001, now);
+            env.gain.linearRampToValueAtTime(clamp(velocity * 0.16, 0.03, 0.2), now + 0.01);
+            env.gain.setTargetAtTime(0.08, now + 0.04, 0.09);
+            env.gain.setTargetAtTime(0.0001, now + dur * 0.7, Math.max(0.05, p.release * 0.18));
+
+            osc.type = AudioState.osc1 ? AudioState.osc1.type : 'sawtooth';
+            osc5.type = osc.type;
+            osc8.type = osc.type;
+            osc.frequency.setValueAtTime(freq, now);
+            osc5.frequency.setValueAtTime(freq * 1.5, now);
+            osc8.frequency.setValueAtTime(freq * 2, now);
+            vibrato.frequency.setValueAtTime(1 + p.speed * 0.5, now);
+            vibGain.gain.setValueAtTime(freq * (Math.pow(2, (4 + hue / 120) / 1200) - 1), now);
+            mixMain.gain.value = 1;
+            mix5.gain.value = clamp(0.12 + p.mix * 0.3, 0, 0.55);
+            mix8.gain.value = clamp(0.08 + (1 - lightness01) * 0.25, 0, 0.4);
+
+            vibrato.connect(vibGain).connect(osc.frequency);
+            osc.connect(mixMain).connect(filter);
+            osc5.connect(mix5).connect(filter);
+            osc8.connect(mix8).connect(filter);
+            filter.connect(env).connect(AudioState.master);
+
+            osc.start(now); osc.stop(now + dur + 0.05);
+            osc5.start(now); osc5.stop(now + dur + 0.05);
+            osc8.start(now); osc8.stop(now + dur + 0.05);
+            vibrato.start(now); vibrato.stop(now + dur + 0.05);
+        };
+
+        const playStep = () => {
+            const p = AudioState.params;
+            const scale = Scales[p.scaleName] || Scales.Pentatonic;
+            let degree = 0;
+            let oct = 0;
+            let velocity = 0.6;
+            let lightness = 50;
+            let hue = p.prism;
+
+            if ((p.scanMode === 'image' || p.scanMode === 'hybrid') && ImageState.blocks.length > 0) {
+                const idx = ImageState.step % ImageState.blocks.length;
+                const block = ImageState.blocks[idx];
+                degree = block.degree;
+                oct = block.oct;
+                velocity = block.velocity;
+                lightness = block.lightness;
+                hue = block.hue;
+            } else {
+                degree = Math.floor(AudioState.touch.x * Math.max(1, scale.length - 1));
+                oct = Math.floor((1 - AudioState.touch.y) * 3) - 1;
+                velocity = clamp(0.3 + (1 - AudioState.touch.y) * 0.7, 0.1, 1);
+                lightness = (1 - AudioState.touch.y) * 100;
+            }
+
+            if (p.scanMode === 'hybrid') {
+                degree = Math.floor((degree + AudioState.touch.x * Math.max(1, scale.length - 1)) / 2);
+                velocity = clamp((velocity + (0.35 + AudioState.touch.x * 0.65)) / 2, 0.08, 1);
+                lightness = (lightness + (1 - AudioState.touch.y) * 100) / 2;
+                hue = (hue + p.prism) / 2;
+            }
+
+            const baseMidi = freqToMidi(p.baseNote * (0.8 + AudioState.touch.x * 0.8));
+            const interval = scale[degree % scale.length] + 12 * oct;
+            const freq = midiToFreq(baseMidi + interval);
+            scheduleVoice(freq, velocity, lightness / 100, hue);
+            ImageState.step = (ImageState.step + 1) % Math.max(1, ImageState.blocks.length || 64);
+            drawImageMap();
+        };
+
+        const startSequence = () => {
+            initAudio();
+            if (!AudioState.ctx) return;
+            if (AudioState.ctx.state === 'suspended') AudioState.ctx.resume();
+            if (AppState.stepTimer) clearInterval(AppState.stepTimer);
+            const beatMs = 60000 / AudioState.params.bpm;
+            const stepMs = Math.max(18, beatMs / clamp(AudioState.params.speed, 0.25, 8));
+            AppState.stepTimer = window.setInterval(playStep, stepMs);
+            AppState.playing = true;
+            syncReadouts();
+        };
+
+        const stopSequence = () => {
+            if (AppState.stepTimer) clearInterval(AppState.stepTimer);
+            AppState.stepTimer = null;
+            AppState.playing = false;
+            syncReadouts();
+        };
+
+        // --- Interaction Setup ---
+        const initInteraction = () => {
+            // Knobs
+            document.querySelectorAll('.control-interactive').forEach(el => {
+                const param = el.dataset.param;
+                const min = parseFloat(el.dataset.min);
+                const max = parseFloat(el.dataset.max);
+                const isLog = el.dataset.log === 'true';
+                let currentVal = parseFloat(el.dataset.val);
+                
+                // Update internal state
+                AudioState.params[param] = currentVal;
+
+                // Visual update function
+                const updateVisual = () => {
+                    // Map value to rotation (-135 to 135 deg)
+                    let pct;
+                    if (isLog) {
+                        pct = (Math.log(currentVal) - Math.log(min)) / (Math.log(max) - Math.log(min));
+                    } else {
+                        pct = (currentVal - min) / (max - min);
+                    }
+                    const deg = pct * 270 - 135;
+                    const dashOffset = 264 * (1 - pct);
+                    
+                    el.querySelector('use').style.transform = `rotate(${deg}deg)`;
+                    const ring = el.querySelector('.knob-ring-val');
+                    if (ring) ring.style.strokeDashoffset = dashOffset;
+                };
+                KnobControllers[param] = {
+                    setVisual(value) {
+                        currentVal = value;
+                        updateVisual();
+                    }
+                };
+                updateVisual();
+
+                let startY;
+                let startVal;
+
+                const onMove = (e) => {
+                    const y = e.touches ? e.touches[0].clientY : e.clientY;
+                    const delta = (startY - y) * 0.005;
+                    
+                    let pct;
+                    if (isLog) {
+                        const startPct = (Math.log(startVal) - Math.log(min)) / (Math.log(max) - Math.log(min));
+                        pct = clamp(startPct + delta, 0, 1);
+                        currentVal = min * Math.pow(max/min, pct);
+                    } else {
+                        const startPct = (startVal - min) / (max - min);
+                        pct = clamp(startPct + delta, 0, 1);
+                        currentVal = min + pct * (max - min);
+                    }
+
+                    setParam(param, currentVal, 'knob');
+                };
+
+                const onStart = (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    startY = e.touches ? e.touches[0].clientY : e.clientY;
+                    startVal = AudioState.params[param];
+                    window.addEventListener('mousemove', onMove);
+                    window.addEventListener('touchmove', onMove);
+                    window.addEventListener('mouseup', onEnd);
+                    window.addEventListener('touchend', onEnd);
+                };
+
+                const onEnd = () => {
+                    window.removeEventListener('mousemove', onMove);
+                    window.removeEventListener('touchmove', onMove);
+                    window.removeEventListener('mouseup', onEnd);
+                    window.removeEventListener('touchend', onEnd);
+                };
+
+                el.addEventListener('mousedown', onStart);
+                el.addEventListener('touchstart', onStart);
+            });
+
+            // Touch Screen (XY Pad)
+            const zone = document.getElementById('xy-touch-zone');
+            
+            const handleXY = (x, y, start) => {
+                const rect = zone.getBoundingClientRect();
+                const rx = (x - rect.left) / rect.width;
+                const ry = (y - rect.top) / rect.height;
+                
+                AudioState.touch.x = clamp(rx, 0, 1);
+                AudioState.touch.y = clamp(ry, 0, 1);
+                CollisionState.pointer.x = AudioState.touch.x;
+                CollisionState.pointer.y = AudioState.touch.y;
+                AudioState.touch.active = true;
+                AudioState.touch.source = 'synth';
+                
+                if (start) {
+                    if (AudioState.ctx && AudioState.ctx.state === 'suspended') AudioState.ctx.resume();
+                    triggerGate(true);
+                }
+                updateSynthParams();
+                drawXYPad();
+            };
+
+            const endXY = () => {
+                if (AudioState.params.xyHold) return;
+                AudioState.touch.active = false;
+                AudioState.touch.source = null;
+                triggerGate(false);
+                drawXYPad();
+            };
+
+            zone.addEventListener('mousedown', e => handleXY(e.clientX, e.clientY, true));
+            window.addEventListener('mousemove', e => { if (AudioState.touch.active && AudioState.touch.source === 'synth') handleXY(e.clientX, e.clientY, false) });
+            window.addEventListener('mouseup', endXY);
+
+            zone.addEventListener('touchstart', e => handleXY(e.touches[0].clientX, e.touches[0].clientY, true));
+            window.addEventListener('touchmove', e => { 
+                if (AudioState.touch.active && AudioState.touch.source === 'synth') {
+                    e.preventDefault(); // Prevent scroll
+                    handleXY(e.touches[0].clientX, e.touches[0].clientY, false);
+                }
+            }, {passive: false});
+            window.addEventListener('touchend', endXY);
+
+            const xyCanvas = document.getElementById('xy-pad-canvas');
+            const handleCanvasXY = (clientX, clientY, start) => {
+                const rect = xyCanvas.getBoundingClientRect();
+                AudioState.touch.source = 'pad';
+                handleXY(rect.left + clamp((clientX - rect.left) / rect.width, 0, 1) * rect.width, rect.top + clamp((clientY - rect.top) / rect.height, 0, 1) * rect.height, start);
+                AudioState.touch.source = 'pad';
+            };
+
+            xyCanvas.addEventListener('mousedown', e => handleCanvasXY(e.clientX, e.clientY, true));
+            xyCanvas.addEventListener('mousemove', e => { if ((AudioState.touch.active && AudioState.touch.source === 'pad') || AudioState.params.xyHold) handleCanvasXY(e.clientX, e.clientY, false); });
+            xyCanvas.addEventListener('touchstart', e => handleCanvasXY(e.touches[0].clientX, e.touches[0].clientY, true), { passive: false });
+            xyCanvas.addEventListener('touchmove', e => {
+                if ((AudioState.touch.active && AudioState.touch.source === 'pad') || AudioState.params.xyHold) {
+                    e.preventDefault();
+                    handleCanvasXY(e.touches[0].clientX, e.touches[0].clientY, false);
+                }
+            }, { passive: false });
+        };
+
+        const bindDockUI = () => {
+            Object.keys(RangeInputs).forEach((param) => {
+                RangeInputs[param].addEventListener('input', (event) => {
+                    setParam(param, event.target.value, 'range');
+                });
+            });
+
+            document.getElementById('scan-mode').addEventListener('change', (event) => {
+                AudioState.params.scanMode = event.target.value;
+                syncReadouts();
+            });
+
+            document.getElementById('scale-mode').addEventListener('change', (event) => {
+                AudioState.params.scaleName = event.target.value;
+                buildBlocks();
+                drawImageMap();
+            });
+
+            document.getElementById('xy-hold-toggle').addEventListener('click', () => {
+                AudioState.params.xyHold = !AudioState.params.xyHold;
+                if (!AudioState.params.xyHold && !AudioState.touch.active) {
+                    triggerGate(false);
+                }
+                syncReadouts();
+                drawXYPad();
+            });
+
+            document.getElementById('seq-toggle').addEventListener('click', () => {
+                if (!AppState.initialized) {
+                    document.getElementById('init-btn').click();
+                }
+                if (AppState.playing) stopSequence();
+                else startSequence();
+            });
+
+            document.getElementById('auto-tune-btn').addEventListener('click', applyAutoTune);
+            document.getElementById('image-upload').addEventListener('change', handleImageUpload);
+            document.getElementById('diag-toggle').addEventListener('click', () => {
+                const diag = document.getElementById('diag-results');
+                const rows = [
+                    { name: 'AudioContext available', pass: !!(window.AudioContext || window.webkitAudioContext) },
+                    { name: 'midiToFreq(69)=440', pass: Math.abs(midiToFreq(69) - 440) < 1e-6 },
+                    { name: 'freqToMidi(440)=69', pass: Math.abs(freqToMidi(440) - 69) < 1e-6 },
+                    { name: 'Blocks available', pass: ImageState.blocks.length >= 0, info: String(ImageState.blocks.length) },
+                    { name: 'Collision field ready', pass: CollisionState.particlesLeft.length > 0 && CollisionState.particlesRight.length > 0 },
+                    { name: 'Synth initialized', pass: !!AudioState.ctx }
+                ];
+                diag.innerHTML = rows.map((row) => '<div class="diag-row"><span>' + row.name + (row.info ? ' · ' + row.info : '') + '</span><strong class="' + (row.pass ? 'diag-pass' : 'diag-fail') + '">' + (row.pass ? 'PASS' : 'FAIL') + '</strong></div>').join('');
+                diag.classList.toggle('active');
+            });
+
+            window.addEventListener('resize', () => {
+                resizeCanvases();
+                drawImageMap();
+                drawXYPad();
+                drawCollisionField();
+            });
+        };
+
+        // --- Initialization ---
+        bindDockUI();
+        initCollisionParticles();
+        resizeCanvases();
+        syncHue();
+        syncReadouts();
+        drawImageMap();
+        drawXYPad();
+        drawCollisionField();
+
+        document.getElementById('init-btn').addEventListener('click', () => {
+            if (AppState.initialized) return;
+            const overlay = document.getElementById('overlay');
+            overlay.style.opacity = 0;
+            setTimeout(() => overlay.remove(), 600);
+            
+            // Canvas Setup
+            resizeCanvases();
+
+            initAudio();
+            initInteraction();
+            AudioState.active = true;
+            AppState.initialized = true;
+            drawScope();
+        });
+
+        });
+    </script>
+</body>
+</html>

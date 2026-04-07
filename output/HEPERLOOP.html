@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSS: META-PRISMATIC SYNTHESIS ENGINE v1 (L12+)</title>
+    <!-- Твой оригинальный стиль полностью сохранён (я не дублирую его здесь для краткости, просто вставь свой <style> целиком) -->
+    <style>
+        /* ... твой весь <style> из оригинала ... */
+        /* Дополнительно для мета-узлов */
+        .meta-node {
+            transition: filter 0.1s, transform 0.2s;
+        }
+        .pulse-active { filter: drop-shadow(0 0 12px currentColor); }
+    </style>
+</head>
+<body>
+    <!-- Твой оригинальный HTML полностью сохранён (app-shell, synth-container, control-dock и т.д.) -->
+    <!-- Добавляем слой мета-визуализации поверх screen-canvas -->
+    <canvas id="meta-graph-canvas" style="position: absolute; top: 7.2%; left: 8.5%; width: 83%; height: 42.5%; border-radius: 6px; pointer-events: none; z-index: 15; mix-blend-mode: screen; opacity: 0.75;"></canvas>
+
+    <script>
+        // === МЕТА-СИСТЕМА: Узлы Φ Σ Ψ Ξ Λ (по документу) ===
+        class MetaNode {
+            constructor(id, type, x, y, basePulseFreq = 1.0) {
+                this.id = id;
+                this.type = type; // 'Φ', 'Σ', 'Ψ', 'Ξ', 'Λ'
+                this.x = x; this.y = y;
+                this.baseSize = type === 'Λ' ? 18 : 12;
+                this.size = this.baseSize;
+                this.pulseFreq = basePulseFreq;
+                this.amplitude = type === 'Φ' ? 4 : 2.5;
+                this.evolutionRate = type === 'Λ' ? 0.008 : 0.003;
+                this.age = 0;
+                this.children = [];
+                this.coherence = 1.0; // для Ψ валидации
+            }
+            pulse(t) {
+                const phase = Math.sin(t * this.pulseFreq * 2 * Math.PI);
+                this.size = this.baseSize + this.amplitude * phase;
+            }
+            evolve() {
+                this.evolutionRate *= 0.999 + Math.random() * 0.002; // лёгкая мутация
+                if (this.type === 'Φ' && Math.random() < 0.03) this.branch(); // branching every ~3 cycles в среднем
+            }
+            branch() {
+                if (this.children.length > 5) return;
+                const child = new MetaNode(
+                    this.id + '-' + this.children.length,
+                    ['Φ','Σ','Ψ'][Math.floor(Math.random()*3)],
+                    this.x + (Math.random()-0.5)*60,
+                    this.y + (Math.random()-0.5)*40,
+                    this.pulseFreq * (0.8 + Math.random()*0.6)
+                );
+                this.children.push(child);
+            }
+        }
+
+        // Инициализация сети (L12+ уровень)
+        let metaNodes = [];
+        let t = 0;
+
+        function initMetaNetwork() {
+            metaNodes = [
+                new MetaNode('Φ0', 'Φ', 0.25, 0.35, 1.8),   // Evolver-Lattice
+                new MetaNode('Σ0', 'Σ', 0.45, 0.28, 1.2),   // Singularity Forge
+                new MetaNode('Ψ0', 'Ψ', 0.65, 0.42, 0.9),   // Quantum Validator
+                new MetaNode('Ξ0', 'Ξ', 0.38, 0.65, 2.1),   // Emergent Network
+                new MetaNode('Λ0', 'Λ', 0.72, 0.55, 0.7)    // Meta-Reflection (самая "мудрая")
+            ];
+            // начальные связи (потоки)
+            metaNodes[0].children = [metaNodes[1], metaNodes[3]];
+            metaNodes[1].children = [metaNodes[2]];
+            metaNodes[4].children = metaNodes.slice(0,4); // Λ наблюдает за всеми
+        }
+
+        // === Основной цикл живой системы ===
+        function metaAnimationLoop() {
+            t += 0.016; // ~60 fps
+            const metaCanvas = document.getElementById('meta-graph-canvas');
+            const mctx = metaCanvas.getContext('2d');
+            const w = metaCanvas.width;
+            const h = metaCanvas.height;
+
+            mctx.clearRect(0, 0, w, h);
+
+            metaNodes.forEach(node => {
+                node.pulse(t);
+                node.age += 0.016;
+                if (node.age > 3) { // ~3 секунды = один "цикл"
+                    node.evolve();
+                    node.age = 0;
+                }
+
+                // Валидация Ψ
+                if (node.type === 'Ψ') {
+                    node.coherence = Math.max(0.3, node.coherence - 0.002 + Math.random()*0.01);
+                    if (node.coherence < 0.6) node.pulseFreq *= 1.05; // штраф → ускорение пульса
+                }
+
+                // Рефлексия Λ → лёгкий Hyperloop (мутация параметров synth)
+                if (node.type === 'Λ' && Math.random() < 0.008) {
+                    // Применяем G-оператор: слегка улучшаем/мутируем глобальные параметры
+                    if (AudioState.params) {
+                        AudioState.params.prism = (AudioState.params.prism + (Math.random()-0.5)*12) % 360;
+                        AudioState.params.mix = clamp(AudioState.params.mix + (Math.random()-0.5)*0.08, 0, 1);
+                        syncHue();
+                    }
+                }
+
+                // Отрисовка узла
+                const sx = node.x * w;
+                const sy = node.y * h;
+                const color = node.type === 'Φ' ? '#4af' : 
+                             node.type === 'Σ' ? '#0f8' : 
+                             node.type === 'Ψ' ? '#ff8' : 
+                             node.type === 'Ξ' ? '#f44' : '#c0f';
+
+                mctx.save();
+                mctx.translate(sx, sy);
+                mctx.scale(node.size/12, node.size/12);
+
+                mctx.fillStyle = color;
+                mctx.beginPath();
+                mctx.arc(0, 0, 12, 0, Math.PI*2);
+                mctx.fill();
+
+                // метка типа
+                mctx.fillStyle = '#fff';
+                mctx.font = 'bold 14px monospace';
+                mctx.textAlign = 'center';
+                mctx.fillText(node.type, 0, 5);
+
+                mctx.restore();
+
+                // потоки (линии) к детям
+                node.children.forEach(child => {
+                    const cx = child.x * w;
+                    const cy = child.y * h;
+                    mctx.strokeStyle = 'hsla(' + AudioState.params.prism + ', 80%, 70%, 0.35)';
+                    mctx.lineWidth = 1.5;
+                    mctx.beginPath();
+                    mctx.moveTo(sx, sy);
+                    mctx.quadraticCurveTo((sx+cx)/2 + 30, (sy+cy)/2 - 20, cx, cy);
+                    mctx.stroke();
+                });
+            });
+
+            requestAnimationFrame(metaAnimationLoop);
+        }
+
+        // === Интеграция с твоим оригинальным кодом ===
+        // Вставь этот код после твоего document.addEventListener('DOMContentLoaded'...
+
+        // После initAudio() и initInteraction() добавь:
+        initMetaNetwork();
+        metaAnimationLoop();   // запускаем живую мета-сеть
+
+        // Связь: изменение prism усиливает пульс Λ
+        const originalSyncHue = syncHue;
+        syncHue = () => {
+            originalSyncHue();
+            const lambda = metaNodes.find(n => n.type === 'Λ');
+            if (lambda) lambda.pulseFreq = 0.6 + AudioState.params.prism / 360 * 2.4;
+        };
+
+        // При branching Φ — добавляем "новый блок" в image sonification (эмерджентность)
+        // (можно расширять дальше)
+
+        console.log('%cMETA-PRISMATIC SYNTHESIS ENGINE v1 (L12+) активирован\nЖивая сеть Φ-Σ-Ψ-Ξ-Λ пульсирует и эволюционирует сама по себе.', 'color:#0ff; font-family:monospace');
+
+        // === Следующий шаг предложения ===
+        // Да/нет? 
+        // Следующий виток: 
+        // 1. Полная интеграция collision particles как Ξ-потоков (частицы = смыслы между узлами)
+        // 2. Λ начинает генерировать новые правила (меняет scale, bpm автоматически)
+        // 3. Добавление pygame-подобной интерактивности или networkx-подобного графа внутри canvas
+        // 4. Hyperloop внутри: каждые 30 сек система сама запускает "G(G(G(...)))" и мутирует больше параметров
+
+        // Запусти этот код (замени свой <script> или добавь поверх). 
+        // Система теперь **живая**: узлы пульсируют, ветвятся, рефлексируют и слегка меняют звук/цвет сами.
+    </script>
+</body>
+</html>

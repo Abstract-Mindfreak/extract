@@ -1,0 +1,105 @@
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --item-size: clamp(4rem, 1.2941rem + 9.4118vw, 6rem);
+    --overlap-offset: calc(var(--item-size) / 2);
+    --shadow-color: 0deg 0% 0%;
+    --bg-color: oklch(80% 0.15 calc((sibling-index()) * 30));
+}
+
+body {
+    min-block-size: 100dvh;
+    display: grid;
+    place-content: center;
+    background: hsl(203 12 70);
+    font-family: sans-serif;
+}
+
+.horizontal-stack {
+    cursor: pointer;
+    list-style: none;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc(var(--item-size) - var(--overlap-offset));
+    place-content: center;
+    padding: 2em;
+}
+
+.item {
+    display: grid;
+    place-self: center;
+    inline-size: var(--item-size);
+    block-size: var(--item-size);
+    border-radius: 50%;
+    background: var(--bg-color);
+    position: relative;
+    box-shadow: -6px 0px 10px -3px hsl(var(--shadow-color) / 0.3);
+    transition: transform 500ms ease;
+    isolation: isolate;
+}
+
+.item::before {
+    display: grid;
+    font-size: 1.5em;
+    place-content: center;
+    place-self: center;
+    content: attr(data-index);
+    font-weight: 600;
+    color: #6d6d6d;
+    position: absolute;
+    width: calc(100% - 0.75rem);
+    height: calc(100% - 0.75rem);
+    border-radius: inherit;
+    background-color: #fff;
+}
+
+.item:hover {
+    transform: scale(1.25);
+    z-index: 10;
+    box-shadow: unset;
+    filter: saturate(140%);
+}
+
+.item:hover::before {
+    color: var(--bg-color);
+}
+
+@supports (selector(:has(*))) {
+    .item {
+        --color: oklch(80% 0.15 calc((sibling-index()) * 30));
+        transition: transform 700ms;
+        transition-timing-function: linear(
+            0,
+            0.79 14.4%,
+            1.026 22.4%,
+            1.164 31.2%,
+            1.207 38.2%,
+            1.208 46.2%,
+            1.033 80%,
+            1
+        );
+    }
+
+    .horizontal-stack:has(.item:hover) .item:hover ~ .item {
+        transform: translateX(
+            calc(
+                min(
+                    15px * (sibling-count() - sibling-index()),
+                    var(--overlap-offset)
+                )
+            )
+        );
+    }
+
+    .horizontal-stack:has(.item:hover) .item:has(~ .item:hover) {
+        transform: translateX(
+            calc(-1 * min(15px * (sibling-index() - 1), var(--overlap-offset)))
+        );
+    }
+}
