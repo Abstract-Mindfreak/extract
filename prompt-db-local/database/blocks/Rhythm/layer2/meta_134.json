@@ -1,0 +1,37 @@
+{
+  "id": "meta_134",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_134",
+    "params": {}
+  },
+  "synergy": {
+    "links": [
+      "34",
+      "70"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "spiral_vector_panning": {
+      "formula": "Pan(t) = R(t) * [cos(ωt), sin(ωt)]",
+      "radius_r": "Decreasing (Closing spiral) or Increasing (Opening spiral)",
+      "ω_rotation": "Frequency tied to BPM (e.g., 1 full rotation per 4 bars)",
+      "target": [
+        "Percussive-Glitch (Block 70)",
+        "Vocal-Chops (Block 34)"
+      ],
+      "result": "The sensation of 'Vortex-Suction' or 'Centrifugal-Explosion'."
+    }
+  }
+}

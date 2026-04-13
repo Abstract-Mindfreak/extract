@@ -1,0 +1,65 @@
+{
+  "id": "cross_16f8",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_16f8",
+    "params": {
+      "purity_coefficient": 1,
+      "rule_hz": 250.0,
+      "rule_ms": 30.0,
+      "rule_db": 6.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_281",
+      "meta_173"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "harmonic_bias": "Perfect 5ths and Octaves (Pure G#)",
+      "purity_coefficient": 1,
+      "reverb": "None (Anechoic chamber effect)"
+    },
+    "parent_b": {
+      "stereo_field_spec_v4": {
+        "mid_channel_focus": {
+          "elements": [
+            "Kick (Sub)",
+            "Snare (Fundamental)",
+            "Lead-Main (Mono-compatible)",
+            "Sub-Bass"
+          ],
+          "rule": "100% Mono-summed below 150Hz. Absolute phase coherence."
+        },
+        "side_channel_spread": {
+          "elements": [
+            "Ambient-Shield (Pads)",
+            "Reverb-Trails",
+            "Hi-hats (Jitter-panning)",
+            "Fractal-Noise"
+          ],
+          "rule": "Apply Haas-Effect (15-30ms) for ultra-width. Subtract -6dB at 250Hz in Sides to remove mud."
+        },
+        "m_s_balance": "Mid: 65%, Side: 35% (The Golden Ratio balance for 'Big' sound)."
+      }
+    }
+  }
+}

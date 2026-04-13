@@ -1,0 +1,55 @@
+{
+  "id": "cross_a78f",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_a78f",
+    "params": {
+      "threshold_db": -0.5,
+      "ceiling_db": -0.3,
+      "release_ms": 120,
+      "mode_ms": 2.0,
+      "stage_1_leveling_ms": 300.0,
+      "stage_2_punch_ms": 50.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_293",
+      "meta_169"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "tool": "Limiter_Surgical",
+      "threshold_db": -0.5,
+      "ceiling_db": -0.3,
+      "release_ms": 120,
+      "mode": "Look-ahead (2ms), True_Peak_Enabled"
+    },
+    "parent_b": {
+      "dynamic_breathing_v2": {
+        "technique": "Two-stage Compression (Slow/Fast)",
+        "stage_1_leveling": "Slow attack (30ms), auto-release (300ms), 2:1 ratio (Smoothing)",
+        "stage_2_punch": "Fast attack (1ms), fast release (50ms), 4:1 ratio (Transient control)",
+        "parallel_bus": "Heavy compression (10:1 ratio) mixed at 20% dry/wet for 'density'",
+        "goal": "Loudness without flattening the transients. Peak-to-RMS ratio of 8."
+      }
+    }
+  }
+}

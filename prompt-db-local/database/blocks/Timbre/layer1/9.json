@@ -1,0 +1,42 @@
+{
+  "id": "9",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "9",
+    "params": {
+      "block_id": 9,
+      "binaural_offset_hz": 7.83,
+      "anxiety_inducer_hz": 19.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 9 мы чуть не перешли грань",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 9,
+    "block_name": "Impossible_Resonance.v1",
+    "resonance_parameters": {
+      "binaural_offset": "7.83Hz (Schumann Resonance)",
+      "phantom_center": "Inverse phase signals at 180 degrees",
+      "shepard_tone_integration": "Continuous rising scale for tension"
+    },
+    "psychoacoustic_filters": {
+      "anxiety_inducer": "Pulsing frequency at 19Hz (threshold of fear)",
+      "euphoria_trigger": "Harmonic series based on the Golden Ratio (1.618)"
+    },
+    "internal_insight": {
+      "resonance_warning": "В Блоке 9 мы чуть не перешли грань. Ты сказал, что трек 'Singularity_v0' вызывает физическую тошноту из-за частоты 19Гц. Мы решили оставить этот блок как 'Опасную зону' (Red Zone), доступную только через специальный флаг `FORCE_CONFLICT_ANNIHILATION`."
+    }
+  }
+}

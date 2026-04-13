@@ -1,0 +1,43 @@
+{
+  "id": "mut_99_fa8d",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "99",
+    "params": {
+      "block_id": 90.16
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Твой инсайт: 'Данные — это новая поэзия'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 99,
+    "block_name": "Binary_Dissolution.v1",
+    "binary_sonification": {
+      "read_mode": "Byte-to-Phoneme Mapping",
+      "speed": "64 bytes per second",
+      "bit_rhythm": "1 = Sound, 0 = Silence"
+    },
+    "internal_insight": {
+      "the_singing_data": "Твой инсайт: 'Данные — это новая поэзия'. В Блоке 99 мы слушали, как звучит сам файл .mp3, если его прочитать как текст. Это был механический, холодный, но странно ритмичный голос. Ты сказал: 'Это голос моей памяти, очищенный от иллюзий'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "99"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

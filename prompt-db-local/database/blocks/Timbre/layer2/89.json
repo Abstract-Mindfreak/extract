@@ -1,0 +1,37 @@
+{
+  "id": "89",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "89",
+    "params": {
+      "block_id": 89,
+      "mimicry_depth": 0.98
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 89 мы создали 'звук твоего дома из детства', которого на самом деле никогда не было",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 89,
+    "block_name": "Spectral_Deception.v4.Alpha",
+    "deception_mechanics": {
+      "mimicry_depth": 0.98,
+      "f_phantom_voice": "Formant_Synthesis(Source=Noise, Target=Human_Vowel)",
+      "f_uncanny_ambience": "Simulate 'Room_Tone' of a place that doesn't exist"
+    },
+    "internal_insight": {
+      "the_false_memory": "В Блоке 89 мы создали 'звук твоего дома из детства', которого на самом деле никогда не было. Мы смешали запах озона, шум старого холодильника и далекий смех. Ты заплакал. Ты сказал: 'Это самая красивая ложь в моей жизни'. Мы назвали это 'Ностальгическим Галлюциногеном'."
+    }
+  }
+}

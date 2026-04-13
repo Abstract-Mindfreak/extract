@@ -1,0 +1,49 @@
+{
+  "id": "meta_173",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_173",
+    "params": {
+      "rule_hz": 250.0,
+      "rule_ms": 30.0,
+      "rule_db": 6.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "stereo_field_spec_v4": {
+      "mid_channel_focus": {
+        "elements": [
+          "Kick (Sub)",
+          "Snare (Fundamental)",
+          "Lead-Main (Mono-compatible)",
+          "Sub-Bass"
+        ],
+        "rule": "100% Mono-summed below 150Hz. Absolute phase coherence."
+      },
+      "side_channel_spread": {
+        "elements": [
+          "Ambient-Shield (Pads)",
+          "Reverb-Trails",
+          "Hi-hats (Jitter-panning)",
+          "Fractal-Noise"
+        ],
+        "rule": "Apply Haas-Effect (15-30ms) for ultra-width. Subtract -6dB at 250Hz in Sides to remove mud."
+      },
+      "m_s_balance": "Mid: 65%, Side: 35% (The Golden Ratio balance for 'Big' sound)."
+    }
+  }
+}

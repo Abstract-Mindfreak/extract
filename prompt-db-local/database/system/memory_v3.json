@@ -1,0 +1,3005 @@
+{
+  "block_stats": {
+    "1": {
+      "usage_count": 22,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "45": {
+      "usage_count": 9,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "18": {
+      "usage_count": 5,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_205": {
+      "usage_count": 14,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_234": {
+      "usage_count": 12,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "58": {
+      "usage_count": 7,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "25": {
+      "usage_count": 6,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_236": {
+      "usage_count": 16,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "5": {
+      "usage_count": 4,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "30": {
+      "usage_count": 7,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "110": {
+      "usage_count": 18,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "101": {
+      "usage_count": 22,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "109": {
+      "usage_count": 6,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "103": {
+      "usage_count": 9,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "100": {
+      "usage_count": 12,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "35": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "34": {
+      "usage_count": 6,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "12": {
+      "usage_count": 21,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "107": {
+      "usage_count": 17,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "104": {
+      "usage_count": 4,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "11": {
+      "usage_count": 6,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "108": {
+      "usage_count": 3,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "111": {
+      "usage_count": 5,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "31": {
+      "usage_count": 8,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "28": {
+      "usage_count": 7,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "22": {
+      "usage_count": 3,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "20": {
+      "usage_count": 5,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "26": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "21": {
+      "usage_count": 7,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "3": {
+      "usage_count": 5,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "2": {
+      "usage_count": 16,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "16": {
+      "usage_count": 14,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "90": {
+      "usage_count": 3,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "108.7": {
+      "usage_count": 4,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "64": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_331": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "56": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_226": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_159": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_220": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_237": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "105": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "92": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_295": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "71": {
+      "usage_count": 3,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_325": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "108.6": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_243": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_133": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_283": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "46": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_152": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_266": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_227": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_270": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_308": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_187": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_185": {
+      "usage_count": 3,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "72": {
+      "usage_count": 3,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_191": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_157": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_141": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "13": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "88": {
+      "usage_count": 6,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_140": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_324": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_147": {
+      "usage_count": 4,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_197": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_206": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "42": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_333": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_179": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_146": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_298": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_142": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_162": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_327": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_276": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_241": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_317": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_232": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_201": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_311": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_216": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "62": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_253": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_210": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "52": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_250": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_310": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "76": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_208": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "53": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_193": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_271": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_126": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_188": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "75": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_279": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_127": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_302": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_304": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_287": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_258": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_297": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_218": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "70": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "115": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_282": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_306": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_221": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "91": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_130": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_278": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_319": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_194": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_320": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "43": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_171": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_200": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "87": {
+      "usage_count": 6,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_181": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "97": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_154": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "59": {
+      "usage_count": 4,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_290": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "78": {
+      "usage_count": 4,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_132": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_196": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_251": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "73": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_264": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_172": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "24": {
+      "usage_count": 4,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "33": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_225": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_275": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_299": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_164": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_125": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_273": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_285": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_174": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_124": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_134": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_150": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "67": {
+      "usage_count": 3,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_249": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_199": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "39": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "57": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "95": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_175": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_305": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_233": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "7": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_204": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "51": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_288": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_321": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "50": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_183": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_158": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "98": {
+      "usage_count": 4,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_322": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_177": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "38": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_326": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_211": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_313": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_272": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "81": {
+      "usage_count": 4,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_180": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_207": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_168": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "83": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_128": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_252": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_182": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_215": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "8": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_135": {
+      "usage_count": 5,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "106": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_138": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "66": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "9": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_230": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "94": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_244": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_294": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "44.6": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_246": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_219": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_240": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_122": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "86": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_155": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "65": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_214": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_145": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_163": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_184": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "6": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_137": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "15": {
+      "usage_count": 13,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_334": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "23": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_296": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_307": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_291": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_261": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "112": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_247": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_217": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_235": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_262": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_212": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_144": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "113": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "47": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_277": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_223": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_202": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_312": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "61": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_259": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_245": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_289": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_160": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "77": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_238": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "63": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "89": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "68": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_143": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_284": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_151": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_166": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_169": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "108.5": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_148": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_335": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_156": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "74": {
+      "usage_count": 5,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_203": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_255": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_274": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "27": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "60": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "55": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_329": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_330": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "80": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_213": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "84": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_332": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_231": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_123": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_195": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "10": {
+      "usage_count": 5,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "36": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_293": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "69": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_303": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_328": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_286": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "96": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "85": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_242": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_300": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_165": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "41": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "40": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_189": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_176": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_229": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_301": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_263": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_170": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "82": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_239": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "14": {
+      "usage_count": 4,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "17": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_228": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_139": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_268": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "44": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_153": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_280": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "48": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_186": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_315": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_256": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_224": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_222": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_192": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_292": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_265": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_336": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "99": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_323": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "4": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "49": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_198": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_316": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_136": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_260": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "37": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_309": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "29": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_209": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_248": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_281": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "32": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "79": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "44.5": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "93": {
+      "usage_count": 7,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_190": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_269": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_178": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "108.9": {
+      "usage_count": 4,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "114": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_318": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_267": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "102": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "19": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_131": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_161": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_257": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_173": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_314": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_167": {
+      "usage_count": 3,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_129": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_254": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "meta_149": {
+      "usage_count": 1,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    },
+    "54": {
+      "usage_count": 2,
+      "success_score": 0.5,
+      "penalty_score": 0.0,
+      "novelty_score": 0.5,
+      "lineage_score": 0.5
+    }
+  },
+  "intent_stats": {
+    "industrial texture": {
+      "1": 0.8999999999999999,
+      "45": 0.7999999999999999,
+      "18": 0.4,
+      "meta_205": 1.3,
+      "meta_234": 1.0999999999999999,
+      "58": 0.6,
+      "25": 0.4,
+      "meta_236": 1.5000000000000002,
+      "5": 0.30000000000000004,
+      "30": 0.2,
+      "110": 0.30000000000000004,
+      "101": 0.7999999999999999,
+      "109": 0.4,
+      "103": 0.7999999999999999,
+      "100": 0.9999999999999999,
+      "35": 0.1,
+      "34": 0.2,
+      "12": 0.4,
+      "107": 0.4,
+      "104": 0.30000000000000004,
+      "11": 0.4,
+      "108": 0.2,
+      "111": 0.4,
+      "31": 0.2,
+      "28": 0.30000000000000004,
+      "22": 0.2,
+      "20": 0.4,
+      "26": 0.1,
+      "21": 0.1,
+      "3": 0.1,
+      "2": 0.2,
+      "16": 0.2
+    },
+    "industrial": {
+      "90": 0.1,
+      "108.7": 0.1,
+      "64": 0.1,
+      "meta_331": 0.1,
+      "56": 0.1,
+      "meta_226": 0.1,
+      "meta_159": 0.1,
+      "meta_220": 0.1,
+      "meta_237": 0.1,
+      "105": 0.1,
+      "92": 0.1,
+      "meta_295": 0.1,
+      "71": 0.1,
+      "meta_325": 0.1,
+      "108.6": 0.1,
+      "meta_243": 0.1,
+      "meta_133": 0.1,
+      "meta_283": 0.1,
+      "46": 0.1,
+      "meta_152": 0.1,
+      "110": 0.1,
+      "meta_266": 0.1,
+      "meta_227": 0.1,
+      "meta_270": 0.1,
+      "meta_308": 0.1,
+      "meta_187": 0.1,
+      "meta_185": 0.1,
+      "72": 0.1,
+      "58": 0.1,
+      "meta_191": 0.1,
+      "meta_157": 0.1,
+      "31": 0.1,
+      "meta_141": 0.1,
+      "13": 0.1,
+      "88": 0.1,
+      "meta_140": 0.1,
+      "meta_324": 0.1,
+      "meta_147": 0.1,
+      "meta_197": 0.1,
+      "meta_206": 0.1,
+      "42": 0.1,
+      "meta_333": 0.1,
+      "meta_179": 0.1,
+      "100": 0.1,
+      "meta_146": 0.1,
+      "meta_298": 0.1,
+      "26": 0.1,
+      "meta_142": 0.1,
+      "meta_162": 0.1,
+      "meta_327": 0.1,
+      "meta_276": 0.1,
+      "meta_241": 0.1,
+      "meta_317": 0.1,
+      "meta_232": 0.1,
+      "meta_201": 0.1,
+      "meta_311": 0.1,
+      "meta_216": 0.1,
+      "62": 0.1,
+      "meta_253": 0.1,
+      "meta_210": 0.1,
+      "52": 0.1,
+      "meta_250": 0.1,
+      "meta_310": 0.1,
+      "76": 0.1,
+      "meta_208": 0.1,
+      "53": 0.1,
+      "30": 0.1,
+      "meta_193": 0.1,
+      "meta_271": 0.1,
+      "meta_126": 0.1,
+      "meta_188": 0.1,
+      "75": 0.1,
+      "meta_279": 0.1,
+      "meta_127": 0.1,
+      "meta_302": 0.1,
+      "meta_304": 0.1,
+      "meta_287": 0.1,
+      "meta_258": 0.1,
+      "meta_297": 0.1,
+      "meta_218": 0.1,
+      "2": 0.1,
+      "70": 0.1,
+      "115": 0.1,
+      "meta_282": 0.1,
+      "meta_306": 0.1,
+      "meta_221": 0.1,
+      "91": 0.1,
+      "meta_130": 0.1,
+      "meta_278": 0.1,
+      "meta_319": 0.1,
+      "meta_194": 0.1,
+      "meta_320": 0.1,
+      "43": 0.1,
+      "meta_171": 0.1,
+      "meta_200": 0.1,
+      "87": 0.1,
+      "meta_181": 0.1,
+      "97": 0.1,
+      "meta_154": 0.1,
+      "59": 0.1,
+      "meta_290": 0.1,
+      "78": 0.1,
+      "meta_132": 0.1,
+      "meta_196": 0.1,
+      "meta_251": 0.1,
+      "73": 0.1,
+      "meta_264": 0.1,
+      "meta_172": 0.1,
+      "24": 0.1,
+      "33": 0.1,
+      "meta_225": 0.1,
+      "meta_275": 0.1,
+      "meta_299": 0.1,
+      "meta_164": 0.1,
+      "meta_125": 0.1,
+      "meta_273": 0.1,
+      "meta_285": 0.1,
+      "meta_174": 0.1,
+      "meta_124": 0.1,
+      "meta_134": 0.1,
+      "meta_150": 0.1,
+      "67": 0.1,
+      "meta_249": 0.1,
+      "meta_199": 0.1,
+      "39": 0.1,
+      "57": 0.1,
+      "95": 0.1,
+      "meta_175": 0.1,
+      "meta_236": 0.1,
+      "3": 0.1,
+      "meta_305": 0.1,
+      "104": 0.1,
+      "meta_233": 0.1,
+      "7": 0.1,
+      "meta_204": 0.1,
+      "51": 0.1,
+      "meta_288": 0.1,
+      "meta_321": 0.1,
+      "50": 0.1,
+      "meta_183": 0.1,
+      "meta_158": 0.1,
+      "98": 0.1,
+      "108": 0.1,
+      "meta_322": 0.1,
+      "meta_177": 0.1,
+      "38": 0.1,
+      "meta_326": 0.1,
+      "meta_211": 0.1,
+      "meta_313": 0.1,
+      "12": 0.1,
+      "meta_272": 0.1,
+      "81": 0.1,
+      "meta_180": 0.1,
+      "meta_207": 0.1,
+      "meta_168": 0.1,
+      "83": 0.1,
+      "meta_128": 0.1,
+      "meta_252": 0.1,
+      "22": 0.1,
+      "meta_182": 0.1,
+      "meta_215": 0.1,
+      "8": 0.1,
+      "meta_135": 0.1,
+      "106": 0.1,
+      "meta_138": 0.1,
+      "66": 0.1,
+      "9": 0.1,
+      "meta_230": 0.1,
+      "94": 0.1,
+      "meta_244": 0.1,
+      "meta_294": 0.1,
+      "44.6": 0.1,
+      "meta_246": 0.1,
+      "meta_219": 0.1,
+      "meta_240": 0.1,
+      "meta_122": 0.1,
+      "35": 0.1,
+      "86": 0.1,
+      "meta_155": 0.1,
+      "65": 0.1,
+      "meta_214": 0.1,
+      "meta_145": 0.1,
+      "meta_163": 0.1,
+      "meta_184": 0.1,
+      "6": 0.1,
+      "meta_137": 0.1,
+      "15": 0.1,
+      "meta_334": 0.1,
+      "23": 0.1,
+      "meta_296": 0.1,
+      "meta_307": 0.1,
+      "meta_291": 0.1,
+      "meta_261": 0.1,
+      "112": 0.1,
+      "meta_247": 0.1,
+      "meta_217": 0.1,
+      "meta_235": 0.1,
+      "meta_262": 0.1,
+      "meta_212": 0.1,
+      "meta_144": 0.1,
+      "113": 0.1,
+      "47": 0.1,
+      "meta_277": 0.1,
+      "meta_223": 0.1,
+      "meta_202": 0.1,
+      "meta_312": 0.1,
+      "61": 0.1,
+      "meta_259": 0.1,
+      "meta_245": 0.1,
+      "meta_289": 0.1,
+      "meta_160": 0.1,
+      "77": 0.1,
+      "meta_238": 0.1,
+      "63": 0.1,
+      "89": 0.1,
+      "68": 0.1,
+      "meta_143": 0.1,
+      "meta_284": 0.1,
+      "45": 0.1,
+      "20": 0.1,
+      "meta_151": 0.1,
+      "meta_166": 0.1,
+      "18": 0.1,
+      "meta_169": 0.1,
+      "108.5": 0.1,
+      "meta_148": 0.1,
+      "meta_335": 0.1,
+      "meta_156": 0.1,
+      "74": 0.1,
+      "meta_203": 0.1,
+      "meta_255": 0.1,
+      "meta_274": 0.1,
+      "27": 0.1,
+      "60": 0.1,
+      "55": 0.1,
+      "meta_329": 0.1,
+      "meta_330": 0.1,
+      "80": 0.1,
+      "meta_213": 0.1,
+      "84": 0.1,
+      "meta_332": 0.1,
+      "meta_231": 0.1,
+      "101": 0.1,
+      "meta_234": 0.1,
+      "meta_123": 0.1,
+      "meta_195": 0.1,
+      "10": 0.1,
+      "36": 0.1,
+      "meta_293": 0.1,
+      "69": 0.1,
+      "meta_303": 0.1,
+      "meta_328": 0.1,
+      "11": 0.1,
+      "meta_286": 0.1,
+      "96": 0.1,
+      "85": 0.1,
+      "meta_242": 0.1,
+      "25": 0.1,
+      "meta_300": 0.1,
+      "meta_165": 0.1,
+      "21": 0.1,
+      "41": 0.1,
+      "40": 0.1,
+      "meta_189": 0.1,
+      "meta_176": 0.1,
+      "meta_229": 0.1,
+      "meta_301": 0.1,
+      "meta_263": 0.1,
+      "meta_170": 0.1,
+      "82": 0.1,
+      "meta_239": 0.1,
+      "14": 0.1,
+      "17": 0.1,
+      "meta_228": 0.1,
+      "meta_139": 0.1,
+      "1": 0.1,
+      "meta_268": 0.1,
+      "44": 0.1,
+      "meta_153": 0.1,
+      "meta_280": 0.1,
+      "48": 0.1,
+      "meta_186": 0.1,
+      "meta_315": 0.1,
+      "meta_256": 0.1,
+      "meta_224": 0.1,
+      "meta_222": 0.1,
+      "meta_192": 0.1,
+      "meta_292": 0.1,
+      "meta_265": 0.1,
+      "meta_336": 0.1,
+      "99": 0.1,
+      "meta_205": 0.1,
+      "16": 0.1,
+      "meta_323": 0.1,
+      "4": 0.1,
+      "49": 0.1,
+      "meta_198": 0.1,
+      "meta_316": 0.1,
+      "meta_136": 0.1,
+      "meta_260": 0.1,
+      "34": 0.1,
+      "37": 0.1,
+      "111": 0.1,
+      "meta_309": 0.1,
+      "29": 0.1,
+      "meta_209": 0.1,
+      "meta_248": 0.1,
+      "meta_281": 0.1,
+      "5": 0.1,
+      "107": 0.1,
+      "32": 0.1,
+      "79": 0.1,
+      "44.5": 0.1,
+      "28": 0.1,
+      "93": 0.1,
+      "meta_190": 0.1,
+      "meta_269": 0.1,
+      "109": 0.1,
+      "meta_178": 0.1,
+      "108.9": 0.1,
+      "114": 0.1,
+      "meta_318": 0.1,
+      "meta_267": 0.1,
+      "102": 0.1,
+      "19": 0.1,
+      "meta_131": 0.1,
+      "meta_161": 0.1,
+      "meta_257": 0.1,
+      "meta_173": 0.1,
+      "meta_314": 0.1,
+      "meta_167": 0.1,
+      "meta_129": 0.1,
+      "meta_254": 0.1,
+      "103": 0.1,
+      "meta_149": 0.1,
+      "54": 0.1
+    },
+    "": {
+      "87": 0.2,
+      "98": 0.2,
+      "15": 0.2,
+      "101": 0.30000000000000004,
+      "107": 0.30000000000000004,
+      "30": 0.2,
+      "16": 0.30000000000000004,
+      "2": 0.30000000000000004,
+      "1": 0.30000000000000004,
+      "72": 0.2,
+      "21": 0.2,
+      "12": 0.2,
+      "88": 0.1,
+      "meta_222": 0.1,
+      "meta_309": 0.1,
+      "67": 0.1,
+      "meta_272": 0.1,
+      "meta_125": 0.1,
+      "10": 0.1,
+      "meta_193": 0.1,
+      "meta_319": 0.1,
+      "100": 0.1,
+      "meta_220": 0.1,
+      "meta_316": 0.1,
+      "meta_244": 0.1,
+      "11": 0.1,
+      "90": 0.1,
+      "meta_321": 0.1,
+      "36": 0.1,
+      "meta_238": 0.1,
+      "meta_210": 0.1,
+      "meta_258": 0.1,
+      "66": 0.1,
+      "meta_151": 0.1,
+      "79": 0.1,
+      "78": 0.1,
+      "meta_179": 0.1,
+      "109": 0.1,
+      "meta_167": 0.1,
+      "meta_248": 0.1,
+      "14": 0.1,
+      "69": 0.1,
+      "meta_187": 0.1,
+      "meta_195": 0.1,
+      "meta_135": 0.1,
+      "34": 0.1,
+      "meta_297": 0.1,
+      "meta_315": 0.1,
+      "meta_230": 0.1,
+      "81": 0.1,
+      "60": 0.1,
+      "meta_221": 0.1,
+      "38": 0.1,
+      "meta_285": 0.1,
+      "meta_208": 0.1,
+      "3": 0.1,
+      "meta_331": 0.1,
+      "25": 0.1,
+      "meta_280": 0.1,
+      "meta_266": 0.1,
+      "meta_184": 0.1,
+      "110": 0.1,
+      "meta_141": 0.1,
+      "61": 0.1,
+      "meta_317": 0.1,
+      "meta_156": 0.1,
+      "54": 0.1,
+      "94": 0.1,
+      "108.5": 0.1,
+      "meta_312": 0.1,
+      "meta_200": 0.1,
+      "31": 0.1,
+      "71": 0.1,
+      "meta_263": 0.1,
+      "meta_281": 0.1,
+      "meta_170": 0.1,
+      "105": 0.1,
+      "32": 0.1,
+      "106": 0.1,
+      "48": 0.1,
+      "meta_235": 0.1,
+      "meta_320": 0.1,
+      "meta_305": 0.1,
+      "meta_237": 0.1,
+      "meta_194": 0.1,
+      "meta_254": 0.1,
+      "19": 0.1,
+      "meta_301": 0.1,
+      "28": 0.1,
+      "meta_333": 0.1,
+      "74": 0.1,
+      "meta_161": 0.1,
+      "93": 0.1,
+      "meta_199": 0.1,
+      "meta_147": 0.1,
+      "52": 0.1,
+      "meta_283": 0.1,
+      "39": 0.1,
+      "meta_229": 0.1,
+      "59": 0.1
+    },
+    "brutal": {
+      "31": 0.1,
+      "2": 0.1,
+      "101": 0.1,
+      "110": 0.1,
+      "12": 0.1
+    },
+    "logics": {
+      "1": 0.1,
+      "15": 0.1,
+      "16": 0.1,
+      "12": 0.1,
+      "110": 0.1
+    },
+    "industrial hypnotic techno": {
+      "meta_135": 0.1,
+      "90": 0.1,
+      "107": 0.1,
+      "12": 0.30000000000000004,
+      "110": 0.2,
+      "87": 0.1,
+      "15": 0.30000000000000004,
+      "meta_147": 0.1,
+      "1": 0.2,
+      "2": 0.30000000000000004,
+      "101": 0.2,
+      "93": 0.1,
+      "88": 0.2,
+      "21": 0.1,
+      "67": 0.1,
+      "34": 0.2,
+      "81": 0.1,
+      "3": 0.1,
+      "16": 0.1
+    },
+    "tribal": {
+      "27": 0.1,
+      "meta_138": 0.1,
+      "10": 0.1,
+      "24": 0.1,
+      "42": 0.1,
+      "113": 0.1,
+      "29": 0.1,
+      "108.7": 0.1,
+      "108.9": 0.1,
+      "meta_167": 0.1
+    },
+    "алгоритмичное техно": {
+      "107": 0.1,
+      "1": 0.1,
+      "110": 0.1,
+      "30": 0.1,
+      "2": 0.1,
+      "88": 0.1,
+      "59": 0.1,
+      "12": 0.1,
+      "101": 0.1,
+      "78": 0.1
+    },
+    "cyber-gothic industrial": {
+      "74": 0.1,
+      "meta_135": 0.1,
+      "88": 0.1,
+      "12": 0.2,
+      "28": 0.1,
+      "30": 0.1,
+      "1": 0.2,
+      "110": 0.2,
+      "87": 0.1,
+      "101": 0.2,
+      "21": 0.1,
+      "98": 0.1,
+      "31": 0.1,
+      "93": 0.1,
+      "16": 0.1,
+      "107": 0.1
+    },
+    "formula": {
+      "81": 0.1,
+      "110": 0.1,
+      "74": 0.1,
+      "107": 0.1,
+      "2": 0.1,
+      "101": 0.1,
+      "15": 0.1,
+      "16": 0.1,
+      "12": 0.1
+    },
+    "tribal metallic klang": {
+      "71": 0.1,
+      "meta_185": 0.1,
+      "6": 0.1,
+      "108.9": 0.1,
+      "14": 0.1,
+      "meta_130": 0.1,
+      "108.7": 0.1,
+      "10": 0.1,
+      "44.6": 0.1,
+      "24": 0.1
+    },
+    "tribal metallic klang orchestration opera": {
+      "87": 0.1,
+      "15": 0.1,
+      "101": 0.1,
+      "110": 0.1,
+      "2": 0.1,
+      "16": 0.1,
+      "1": 0.1,
+      "107": 0.1,
+      "12": 0.1,
+      "93": 0.1
+    },
+    "trap ritmics without trap-bass-drum": {
+      "108.9": 0.1,
+      "108.7": 0.1,
+      "53": 0.1,
+      "meta_173": 0.1,
+      "14": 0.1,
+      "24": 0.1,
+      "meta_122": 0.1,
+      "meta_185": 0.1,
+      "92": 0.1,
+      "meta_181": 0.1
+    },
+    "trap without trap-bass-drum": {
+      "16": 0.1,
+      "2": 0.1,
+      "59": 0.1,
+      "101": 0.1,
+      "28": 0.1,
+      "107": 0.1,
+      "15": 0.1,
+      "110": 0.1,
+      "3": 0.1,
+      "12": 0.1
+    },
+    "brain-washing-machine-dark-psy": {
+      "meta_327": 0.1,
+      "16": 0.1,
+      "10": 0.1,
+      "1": 0.1,
+      "12": 0.1,
+      "107": 0.1,
+      "2": 0.1,
+      "15": 0.1,
+      "110": 0.1,
+      "21": 0.1
+    },
+    "organic house": {
+      "meta_135": 0.1,
+      "107": 0.1,
+      "16": 0.1,
+      "78": 0.1,
+      "31": 0.1,
+      "2": 0.1,
+      "12": 0.1,
+      "15": 0.1,
+      "93": 0.1,
+      "110": 0.1
+    },
+    "mmss_ase_ideal_alignment": {
+      "1": 0.1,
+      "meta_147": 0.1,
+      "74": 0.1,
+      "93": 0.1,
+      "107": 0.1,
+      "101": 0.1,
+      "12": 0.1,
+      "31": 0.1,
+      "110": 0.1,
+      "15": 0.1
+    }
+  },
+  "generation_stats": {}
+}

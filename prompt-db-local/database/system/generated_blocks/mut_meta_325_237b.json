@@ -1,0 +1,39 @@
+{
+  "id": "mut_meta_325_237b",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_325",
+    "params": {
+      "room_size": 0.9,
+      "damping": 0.31,
+      "mix": 0.15
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "node": "Reverb",
+    "room_size": 0.85,
+    "damping": 0.3,
+    "mix": 0.15
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_325"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

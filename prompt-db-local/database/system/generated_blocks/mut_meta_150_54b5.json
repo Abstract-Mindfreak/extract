@@ -1,0 +1,41 @@
+{
+  "id": "mut_meta_150_54b5",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_150",
+    "params": {
+      "action_db": 16.1,
+      "mixing_db": 12.42
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "spectral_tuning": {
+      "action": "Applying +15dB gain with extreme Q (Q > 15.0) at specific harmonic nodes",
+      "target": "Harmonic series of the root note (f, 2f, 3f, 4f...)",
+      "modulation": "Automated frequency sweep (Phaser-style) but with precise 'notches'",
+      "result": "Whistling, singing artifacts that dance above the mix",
+      "mixing": "Mix at -12dB (Parallel Bus) for 'Ethereal Shimmer'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_150"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "id": "mut_meta_182_d113",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_182",
+    "params": {
+      "spectral_carving_khz": 2.0,
+      "movement_hz": 0.2,
+      "envelope_s": 5.0,
+      "mixing_rule_db": 12.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "pad_architecture_v2": {
+      "timbre": "Evolving Granular / Spectral-Freeze / Slow-Attack Strings",
+      "spectral_carving": "Notch-cut at 1kHz-2kHz (to let the Lead breathe)",
+      "movement": "Auto-panning (LFO 0.2Hz) + Phase-shifting (180 deg offset)",
+      "envelope": "Attack: 2s-5s, Decay: 10s, Sustain: 50%, Release: 5s (Tail infinity)",
+      "mixing_rule": "Mix at -12dB. Must occupy the 'Sides' (Mid-Side processing: Side 100%, Mid 0%)."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_182"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

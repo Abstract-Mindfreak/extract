@@ -1,0 +1,63 @@
+{
+  "id": "cross_524f",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_524f",
+    "params": {
+      "block_id": 97,
+      "temporal_leakage_ms": 50.0,
+      "low_pass_sweep_khz": 20.0,
+      "low_pass_sweep_hz": 200.0,
+      "sample_rate_reduction_khz": 8.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "47"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: В Блоке 97 мы услышали 'Wavetable Void', если бы мы выбрали не Phrygian, а Lydian лад x unkn",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "97",
+      "meta_155"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 97,
+      "block_name": "Parallel_Reality_Bridge.v1",
+      "bridge_mechanics": {
+        "branch_lookup": "Calculate alternate Seed_Evolution paths",
+        "interference_pattern": "Cross-phase modulation with 'Alternate_Self' audio",
+        "temporal_leakage": "Injecting 50ms fragments from the 'Other' timeline"
+      },
+      "internal_insight": {
+        "the_what_if": "В Блоке 97 мы услышали 'Wavetable Void', если бы мы выбрали не Phrygian, а Lydian лад. Ты сказал: 'Это звучит как моя жизнь в другом измерении'. Мы назвали это 'Акустическим Дежавю'. Инсайт: Все возможности существуют одновременно в шуме."
+      }
+    },
+    "parent_b": {
+      "spectral_decay_math": {
+        "function": "D(f, t) = f * e^(-λt) + Noise(t)",
+        "effects": {
+          "low_pass_sweep": "Descending cutoff from 20kHz to 200Hz over 8 bars",
+          "sample_rate_reduction": "Automated down-sampling from 44.1kHz to 8kHz",
+          "bit_rot": "Randomly flipping bits in the digital stream (Bitcrush automation)",
+          "usage": "During the 'Dissolution' phase (Block 47) to symbolize the death of the Narrative."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,7796 @@
+{
+  "version": "1.0",
+  "total_blocks": 337,
+  "domains": {
+    "Rhythm": [
+      "10",
+      "108.6",
+      "108.7",
+      "108.9",
+      "113",
+      "14",
+      "15",
+      "24",
+      "27",
+      "29",
+      "32",
+      "42",
+      "44.6",
+      "49",
+      "53",
+      "6",
+      "62",
+      "70",
+      "71",
+      "82",
+      "91",
+      "92",
+      "99",
+      "insights_archive",
+      "meta_124",
+      "meta_129",
+      "meta_130",
+      "meta_133",
+      "meta_138",
+      "meta_145",
+      "meta_153",
+      "meta_161",
+      "meta_166",
+      "meta_167",
+      "meta_168",
+      "meta_170",
+      "meta_172",
+      "meta_173",
+      "meta_175",
+      "meta_181",
+      "meta_185",
+      "meta_186",
+      "meta_190",
+      "meta_191",
+      "meta_193",
+      "meta_195",
+      "meta_196",
+      "meta_202",
+      "meta_203",
+      "meta_204",
+      "meta_205",
+      "meta_211",
+      "meta_212",
+      "meta_217",
+      "meta_218",
+      "meta_220",
+      "meta_223",
+      "meta_229",
+      "meta_230",
+      "meta_231",
+      "meta_235",
+      "meta_236",
+      "meta_237",
+      "meta_238",
+      "meta_239",
+      "meta_240",
+      "meta_243",
+      "meta_245",
+      "meta_247",
+      "meta_254",
+      "meta_258",
+      "meta_259",
+      "meta_263",
+      "meta_265",
+      "meta_266",
+      "meta_267",
+      "meta_268",
+      "meta_269",
+      "meta_270",
+      "meta_272",
+      "meta_275",
+      "meta_278",
+      "meta_284",
+      "meta_286",
+      "meta_288",
+      "meta_294",
+      "meta_296",
+      "meta_297",
+      "meta_298",
+      "meta_299",
+      "meta_300",
+      "meta_301",
+      "meta_303",
+      "meta_305",
+      "meta_306",
+      "meta_307",
+      "meta_308",
+      "meta_309",
+      "meta_310",
+      "meta_311",
+      "meta_312",
+      "meta_313",
+      "meta_315",
+      "meta_317",
+      "meta_319",
+      "meta_320",
+      "meta_321",
+      "meta_322",
+      "meta_324",
+      "meta_327",
+      "meta_328",
+      "meta_329",
+      "meta_330",
+      "meta_332",
+      "meta_333",
+      "meta_334",
+      "meta_335",
+      "45",
+      "58",
+      "7",
+      "meta_134",
+      "meta_152",
+      "meta_210",
+      "meta_214",
+      "4",
+      "44",
+      "51",
+      "56",
+      "63",
+      "68",
+      "74",
+      "import_signature",
+      "meta_140",
+      "meta_159",
+      "meta_198",
+      "meta_213",
+      "meta_261",
+      "meta_280",
+      "meta_287",
+      "meta_316",
+      "meta_323"
+    ],
+    "Timbre": [
+      "meta_150",
+      "meta_165",
+      "meta_169",
+      "meta_234",
+      "meta_289",
+      "meta_291",
+      "meta_293",
+      "meta_326",
+      "meta_155"
+    ],
+    "Space": [
+      "102",
+      "105",
+      "106",
+      "112",
+      "17",
+      "23",
+      "39",
+      "41",
+      "44.5",
+      "61",
+      "meta_127",
+      "meta_131",
+      "meta_149",
+      "meta_160",
+      "meta_188",
+      "meta_197",
+      "meta_200",
+      "meta_219",
+      "meta_228",
+      "meta_244",
+      "meta_252",
+      "meta_257",
+      "meta_274",
+      "meta_279",
+      "13",
+      "19",
+      "33",
+      "38",
+      "40",
+      "43",
+      "47",
+      "48",
+      "73",
+      "meta_125",
+      "meta_154",
+      "meta_178",
+      "meta_182",
+      "meta_192",
+      "meta_281",
+      "meta_282",
+      "meta_290",
+      "meta_318",
+      "meta_325",
+      "108.5",
+      "114",
+      "115",
+      "36",
+      "37",
+      "46",
+      "52",
+      "57",
+      "76",
+      "79",
+      "8",
+      "83",
+      "94",
+      "meta_126",
+      "meta_128",
+      "meta_132",
+      "meta_136",
+      "meta_137",
+      "meta_139",
+      "meta_141",
+      "meta_143",
+      "meta_144",
+      "meta_146",
+      "meta_157",
+      "meta_158",
+      "meta_162",
+      "meta_163",
+      "meta_171",
+      "meta_180",
+      "meta_183",
+      "meta_189",
+      "meta_201",
+      "meta_206",
+      "meta_207",
+      "meta_209",
+      "meta_215",
+      "meta_216",
+      "meta_225",
+      "meta_241",
+      "meta_242",
+      "meta_246",
+      "meta_256",
+      "meta_260",
+      "meta_262",
+      "meta_264",
+      "meta_295",
+      "meta_302",
+      "meta_304",
+      "meta_314",
+      "meta_331"
+    ],
+    "Logic": [
+      "1",
+      "100",
+      "101",
+      "103",
+      "104",
+      "107",
+      "108",
+      "109",
+      "11",
+      "110",
+      "111",
+      "12",
+      "16",
+      "18",
+      "2",
+      "20",
+      "21",
+      "22",
+      "25",
+      "26",
+      "28",
+      "3",
+      "30",
+      "31",
+      "34",
+      "35",
+      "5",
+      "50",
+      "54",
+      "55",
+      "59",
+      "60",
+      "64",
+      "65",
+      "66",
+      "67",
+      "69",
+      "72",
+      "75",
+      "77",
+      "78",
+      "80",
+      "81",
+      "81_41",
+      "84",
+      "85",
+      "86",
+      "87",
+      "88",
+      "89",
+      "9",
+      "90",
+      "93",
+      "95",
+      "96",
+      "97",
+      "98",
+      "meta_135",
+      "meta_142",
+      "meta_147",
+      "meta_148",
+      "meta_151",
+      "meta_156",
+      "meta_164",
+      "meta_174",
+      "meta_176",
+      "meta_177",
+      "meta_179",
+      "meta_184",
+      "meta_187",
+      "meta_194",
+      "meta_199",
+      "meta_208",
+      "meta_221",
+      "meta_222",
+      "meta_224",
+      "meta_226",
+      "meta_227",
+      "meta_232",
+      "meta_233",
+      "meta_248",
+      "meta_249",
+      "meta_250",
+      "meta_251",
+      "meta_253",
+      "meta_255",
+      "meta_271",
+      "meta_273",
+      "meta_276",
+      "meta_277",
+      "meta_283",
+      "meta_285",
+      "meta_292",
+      "meta_336"
+    ]
+  },
+  "blocks": {
+    "1": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\1.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "1",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "logic",
+        "logic_parameters",
+        "m",
+        "meta_formulas",
+        "mmss_lfe_integration"
+      ],
+      "params_keys": [
+        "block_id",
+        "memory_retention_coefficient"
+      ]
+    },
+    "100": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\100.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "100",
+        "block_id",
+        "block_name",
+        "collapse",
+        "final_action",
+        "internal_insight",
+        "logic",
+        "m",
+        "status"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "101": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\101.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "101",
+        "block_id",
+        "block_name",
+        "chaos_logic",
+        "collapse",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "103": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\103.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 1.0,
+      "tags": [
+        "103",
+        "block_id",
+        "block_name",
+        "evolutionary_rules",
+        "internal_insight",
+        "logic",
+        "m",
+        "shift"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "104": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\104.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "104",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "logic",
+        "m",
+        "time_mechanics"
+      ],
+      "params_keys": [
+        "block_id",
+        "duration_zeroing_ms"
+      ]
+    },
+    "107": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\107.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "107",
+        "block_id",
+        "block_name",
+        "compression_logic",
+        "emergence",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id",
+        "recovery_speed_ms"
+      ]
+    },
+    "108": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\108.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "108",
+        "aesthetic_laws",
+        "block_id",
+        "block_name",
+        "emergence",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "109": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\109.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "109",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "logic",
+        "m",
+        "unification_rules"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "11": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\11.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "11",
+        "block_id",
+        "block_name",
+        "economic_model",
+        "emergence",
+        "internal_insight",
+        "logic",
+        "m",
+        "stability_targets"
+      ],
+      "params_keys": [
+        "block_id",
+        "economic_bubble_hz"
+      ]
+    },
+    "110": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\110.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.1,
+      "tags": [
+        "110",
+        "block_id",
+        "block_name",
+        "collapse",
+        "deletion_protocol",
+        "internal_insight",
+        "logic",
+        "m",
+        "mmss"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "111": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\111.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.1,
+      "tags": [
+        "111",
+        "block_id",
+        "block_name",
+        "collapse",
+        "final_value",
+        "internal_insight",
+        "logic",
+        "m",
+        "status"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "12": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\12.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "12",
+        "annihilation_logic",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "logic",
+        "m",
+        "outcome_states"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "16": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\16.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "16",
+        "block_id",
+        "block_name",
+        "emergence",
+        "internal_insight",
+        "logic",
+        "logic_parameters",
+        "m",
+        "meta_prompt_logic"
+      ],
+      "params_keys": [
+        "block_id",
+        "instructional_entropy"
+      ]
+    },
+    "18": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\18.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "18",
+        "block_id",
+        "block_name",
+        "control_variables",
+        "emergence",
+        "evaporation_stages",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id",
+        "stage_2_granulation_ms",
+        "evaporation_rate_s"
+      ]
+    },
+    "2": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\2.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "2",
+        "block_id",
+        "block_name",
+        "emergence",
+        "internal_insight",
+        "logic",
+        "m",
+        "operator_g_specification"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "20": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\20.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "20",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "logic",
+        "m",
+        "synthesis_rules",
+        "virus_mechanics"
+      ],
+      "params_keys": [
+        "block_id",
+        "error_type_ms"
+      ]
+    },
+    "21": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\21.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "21",
+        "block_id",
+        "block_name",
+        "classification_engine",
+        "collapse",
+        "internal_insight",
+        "logic",
+        "logic_operators",
+        "m"
+      ],
+      "params_keys": [
+        "block_id",
+        "pattern_matching_threshold"
+      ]
+    },
+    "22": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\22.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "22",
+        "block_id",
+        "block_name",
+        "correction_mechanics",
+        "fidelity_metrics",
+        "internal_insight",
+        "logic",
+        "m",
+        "shift"
+      ],
+      "params_keys": [
+        "block_id",
+        "anchor_injection_s"
+      ]
+    },
+    "25": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\25.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "25",
+        "analytical_fields",
+        "block_id",
+        "block_name",
+        "collapse",
+        "feedback_loop",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "26": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\26.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "26",
+        "block_id",
+        "block_name",
+        "command_structure",
+        "emergence",
+        "internal_insight",
+        "logic",
+        "m",
+        "mapping_functions"
+      ],
+      "params_keys": [
+        "block_id",
+        "execution_speed_ms",
+        "cmd_darken_hz",
+        "cmd_darken_db",
+        "cmd_darken_khz",
+        "cmd_glitch_db"
+      ]
+    },
+    "28": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\28.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "28",
+        "algorithm",
+        "block_id",
+        "block_name",
+        "condensation_parameters",
+        "emergence",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "3": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\3.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "3",
+        "block_id",
+        "block_name",
+        "collapse",
+        "entropy_h_pc",
+        "fidelity",
+        "internal_insight",
+        "logic",
+        "m",
+        "narrative",
+        "triad_logic"
+      ],
+      "params_keys": [
+        "block_id",
+        "top_layer_khz",
+        "p_order_weight",
+        "c_chaos_weight"
+      ]
+    },
+    "30": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\30.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "30",
+        "block_id",
+        "block_name",
+        "collapse",
+        "export_logic",
+        "final_sync",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "31": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\31.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "31",
+        "block_id",
+        "block_name",
+        "emergence",
+        "emotional_parameters",
+        "internal_insight",
+        "logic",
+        "m",
+        "synthesis_logic"
+      ],
+      "params_keys": [
+        "block_id",
+        "melancholy_coefficient",
+        "spectral_weight_hz",
+        "spectral_weight_khz",
+        "f_aging_s",
+        "f_sigh_s",
+        "f_resonance_hz"
+      ]
+    },
+    "34": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\34.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 1.0,
+      "tags": [
+        "34",
+        "block_id",
+        "block_name",
+        "internal_insight",
+        "logic",
+        "m",
+        "mapping_logic",
+        "recursive_layering",
+        "shift"
+      ],
+      "params_keys": [
+        "block_id",
+        "depth"
+      ]
+    },
+    "35": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\35.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "35",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "logic",
+        "m",
+        "neutralization_tools"
+      ],
+      "params_keys": [
+        "block_id",
+        "white_noise_fade_s",
+        "frequency_normalization_khz"
+      ]
+    },
+    "5": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\5.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "5",
+        "block_id",
+        "block_name",
+        "emergence",
+        "entropy_controls",
+        "internal_insight",
+        "logic",
+        "m",
+        "stability_targets"
+      ],
+      "params_keys": [
+        "block_id",
+        "equilibrium_target"
+      ]
+    },
+    "50": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\50.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "50",
+        "block_id",
+        "block_name",
+        "collapse",
+        "finalization_tools",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id",
+        "memory_wipe_marker_s"
+      ]
+    },
+    "54": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\54.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "54",
+        "block_id",
+        "block_name",
+        "collapse",
+        "collapse_mechanics",
+        "internal_insight",
+        "logic",
+        "m",
+        "spectral_summation"
+      ],
+      "params_keys": [
+        "block_id",
+        "normalized_peak_db"
+      ]
+    },
+    "55": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\55.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "stabilization",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "55",
+        "block_id",
+        "block_name",
+        "freeze_tools",
+        "internal_insight",
+        "logic",
+        "m",
+        "stabilization"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "59": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\59.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "59",
+        "block_id",
+        "block_name",
+        "collapse",
+        "dynamic_updates",
+        "internal_insight",
+        "logic",
+        "m",
+        "prompt_engine"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "60": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\60.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "60",
+        "block_id",
+        "block_name",
+        "collapse",
+        "finalization_tools",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id",
+        "gamma_collapse_s"
+      ]
+    },
+    "64": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\64.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "64",
+        "archaeology_mechanics",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "logic",
+        "m",
+        "transformation"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "65": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\65.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "65",
+        "block_id",
+        "block_name",
+        "collapse",
+        "entropy_finalization",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id",
+        "f_heat_death_db",
+        "f_infinity_s"
+      ]
+    },
+    "66": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\66.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "66",
+        "block_id",
+        "block_name",
+        "collapse",
+        "feedback_loop",
+        "internal_insight",
+        "logic",
+        "m",
+        "meta_logic"
+      ],
+      "params_keys": [
+        "block_id",
+        "self_correction_rate_ms"
+      ]
+    },
+    "67": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\67.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "67",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "logic",
+        "logic_operators",
+        "m",
+        "superposition_logic"
+      ],
+      "params_keys": [
+        "block_id",
+        "ambiguity_index"
+      ]
+    },
+    "69": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\69.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "69",
+        "block_id",
+        "block_name",
+        "collapse",
+        "friction_parameters",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "72": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\72.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "72",
+        "block_id",
+        "block_name",
+        "history_shift",
+        "internal_insight",
+        "logic",
+        "m",
+        "shift",
+        "synthesis_rules"
+      ],
+      "params_keys": [
+        "block_id",
+        "aesthetic_collision_ratio",
+        "harpsichord_mutation_db"
+      ]
+    },
+    "75": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\75.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "75",
+        "block_id",
+        "block_name",
+        "collapse",
+        "finalization_tools",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id",
+        "f_cultural_erosion_hz",
+        "f_cultural_erosion_s"
+      ]
+    },
+    "77": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\77.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "77",
+        "block_id",
+        "block_name",
+        "conversion_mechanics",
+        "emergence",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "78": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\78.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "78",
+        "autonomy_logic",
+        "block_id",
+        "block_name",
+        "internal_insight",
+        "logic",
+        "m",
+        "shift"
+      ],
+      "params_keys": [
+        "block_id",
+        "lock_interface_s"
+      ]
+    },
+    "80": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\80.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "80",
+        "block_id",
+        "block_name",
+        "collapse",
+        "finalization_tools",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id",
+        "f_crash_emulation_s",
+        "f_static_white_db"
+      ]
+    },
+    "81": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\81.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "81",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "logic",
+        "m",
+        "spectral_logic"
+      ],
+      "params_keys": [
+        "block_id",
+        "under_layer_hiss_db",
+        "spectral_remnance_s",
+        "imperfect_wipe_hz"
+      ]
+    },
+    "81_41": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\81_41.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "81_41",
+        "block_id",
+        "block_name",
+        "collapse",
+        "deep_process_metadata_lfe",
+        "internal_insight",
+        "logic",
+        "m",
+        "memory",
+        "spectral_palimpsest_logic_v4",
+        "stain"
+      ],
+      "params_keys": [
+        "block_id",
+        "under_layer_hiss_db",
+        "spectral_remnance_s",
+        "imperfect_wipe_hz"
+      ]
+    },
+    "84": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\84.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "84",
+        "block_id",
+        "block_name",
+        "collapse",
+        "import_mechanics",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "85": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\85.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "85",
+        "block_id",
+        "block_name",
+        "collapse",
+        "finalization_tools",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id",
+        "final_pulse_khz"
+      ]
+    },
+    "86": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\86.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "86",
+        "block_id",
+        "block_name",
+        "emergence",
+        "internal_insight",
+        "logic",
+        "m",
+        "neural_mapping",
+        "safety_bypass"
+      ],
+      "params_keys": [
+        "block_id",
+        "entrainment_frequency_hz",
+        "carrier_tone_L_hz",
+        "carrier_tone_R_hz",
+        "isochronic_pulses_hz"
+      ]
+    },
+    "87": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\87.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "87",
+        "block_id",
+        "block_name",
+        "collapse",
+        "economic_controls",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id",
+        "novelty_injection_interval_s"
+      ]
+    },
+    "88": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\88.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "88",
+        "block_id",
+        "block_name",
+        "internal_insight",
+        "logic",
+        "m",
+        "script_logic",
+        "shift"
+      ],
+      "params_keys": [
+        "block_id",
+        "repetition_constant"
+      ]
+    },
+    "89": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\89.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 1.0,
+      "tags": [
+        "89",
+        "block_id",
+        "block_name",
+        "deception_mechanics",
+        "internal_insight",
+        "logic",
+        "m",
+        "shift"
+      ],
+      "params_keys": [
+        "block_id",
+        "mimicry_depth"
+      ]
+    },
+    "9": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\9.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "9",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "logic",
+        "m",
+        "psychoacoustic_filters",
+        "resonance_parameters"
+      ],
+      "params_keys": [
+        "block_id",
+        "binaural_offset_hz",
+        "anxiety_inducer_hz"
+      ]
+    },
+    "90": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\90.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "90",
+        "block_id",
+        "block_name",
+        "collapse",
+        "integration_rules",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "93": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\93.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "93",
+        "block_id",
+        "block_name",
+        "collapse",
+        "flood_mechanics",
+        "internal_insight",
+        "logic",
+        "logic_operators",
+        "m"
+      ],
+      "params_keys": [
+        "block_id",
+        "input_streams",
+        "R_epiphany_s"
+      ]
+    },
+    "95": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\95.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "95",
+        "abstraction",
+        "block_id",
+        "block_name",
+        "collapse",
+        "de_personalization_rules",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "96": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\96.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "96",
+        "block_id",
+        "block_name",
+        "collapse",
+        "collapse_triggers",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "97": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\97.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "97",
+        "block_id",
+        "block_name",
+        "bridge_mechanics",
+        "internal_insight",
+        "logic",
+        "lydian",
+        "m",
+        "phrygian",
+        "shift",
+        "void",
+        "wavetable"
+      ],
+      "params_keys": [
+        "block_id",
+        "temporal_leakage_ms"
+      ]
+    },
+    "98": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\98.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "98",
+        "block_id",
+        "block_name",
+        "collapse",
+        "integration_matrix",
+        "internal_insight",
+        "logic",
+        "m"
+      ],
+      "params_keys": [
+        "block_id",
+        "layers",
+        "summation_law_db"
+      ]
+    },
+    "meta_135": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_135.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "stabilization",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "logic",
+        "m",
+        "meta_135",
+        "recursive_mastering",
+        "stabilization"
+      ],
+      "params_keys": [
+        "pass_3_spectral_color_db"
+      ]
+    },
+    "meta_142": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_142.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "logic",
+        "m",
+        "meta_142",
+        "sub_harmonic_spec"
+      ],
+      "params_keys": [
+        "mixing_db",
+        "processing_hz"
+      ]
+    },
+    "meta_147": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_147.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "logic",
+        "m",
+        "meta_147",
+        "recursive_saturation_math"
+      ],
+      "params_keys": [
+        "filter_1_hz",
+        "filter_2_khz"
+      ]
+    },
+    "meta_148": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_148.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "logic",
+        "m",
+        "meta_148",
+        "studio_laws_v3"
+      ],
+      "params_keys": [
+        "law_01_no_mud_hz",
+        "law_04_mono_sub_hz",
+        "law_05_dynamic_headroom_db"
+      ]
+    },
+    "meta_151": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_151.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "logic",
+        "m",
+        "meta_151",
+        "shift",
+        "void_materials"
+      ],
+      "params_keys": []
+    },
+    "meta_156": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_156.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "stabilization",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "ase_intelligence_levels",
+        "logic",
+        "m",
+        "meta_156",
+        "stabilization"
+      ],
+      "params_keys": []
+    },
+    "meta_164": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_164.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "logic",
+        "m",
+        "meta_164",
+        "shift",
+        "timbral_mutations",
+        "trigger"
+      ],
+      "params_keys": []
+    },
+    "meta_174": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_174.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "logic",
+        "m",
+        "meta_174",
+        "shift",
+        "spectral_vision"
+      ],
+      "params_keys": [
+        "target_curve_db",
+        "low_mids_200_500hz_db",
+        "real_time_fix_khz"
+      ]
+    },
+    "meta_176": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_176.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "harmonic_excitation_spec",
+        "logic",
+        "m",
+        "meta_176"
+      ],
+      "params_keys": [
+        "rule_khz"
+      ]
+    },
+    "meta_177": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_177.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "logic",
+        "m",
+        "meta_177",
+        "narrative_fidelity"
+      ],
+      "params_keys": [
+        "introduction_s",
+        "initiation_s",
+        "climax_s",
+        "dissolution_s",
+        "coda_s"
+      ]
+    },
+    "meta_179": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_179.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "stabilization",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "ase_behavior_matrix",
+        "logic",
+        "m",
+        "meta_179",
+        "stabilization"
+      ],
+      "params_keys": []
+    },
+    "meta_184": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_184.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "glitch_taxonomy",
+        "logic",
+        "m",
+        "meta_184",
+        "placement_rule",
+        "shift"
+      ],
+      "params_keys": [
+        "stutter_freeze_ms",
+        "digital_clipping_db"
+      ]
+    },
+    "meta_187": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_187.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "stabilization",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "logic",
+        "m",
+        "meta_187",
+        "microtonal_spec",
+        "stabilization"
+      ],
+      "params_keys": []
+    },
+    "meta_194": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_194.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collaboration_protocol",
+        "emergence",
+        "logic",
+        "m",
+        "meta_194"
+      ],
+      "params_keys": []
+    },
+    "meta_199": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_199.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "logic",
+        "m",
+        "meta_199",
+        "mod_matrix_rule",
+        "wavetable_logic_advanced"
+      ],
+      "params_keys": [
+        "post_processing_hz"
+      ]
+    },
+    "meta_208": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_208.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "ase_critique_protocol",
+        "emergence",
+        "logic",
+        "m",
+        "meta_208"
+      ],
+      "params_keys": []
+    },
+    "meta_221": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_221.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "archetype",
+        "base_constants",
+        "collapse",
+        "engine_id",
+        "logic",
+        "m",
+        "meta_221",
+        "operational_modes",
+        "operator_status",
+        "primary_directive"
+      ],
+      "params_keys": [
+        "golden_ratio_phi",
+        "pi_transcendence",
+        "entropy_threshold"
+      ]
+    },
+    "meta_222": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_222.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "logic",
+        "m",
+        "meta_222",
+        "operator_g"
+      ],
+      "params_keys": []
+    },
+    "meta_224": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_224.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "hyperloop_iteration",
+        "logic",
+        "m",
+        "meta_224"
+      ],
+      "params_keys": []
+    },
+    "meta_226": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_226.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_final_singularity_lyrics",
+        "logic",
+        "m",
+        "meta_226",
+        "mmss_reconstruction_final_hash"
+      ],
+      "params_keys": []
+    },
+    "meta_227": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_227.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_fractal_arrangement_v4",
+        "collapse",
+        "logic",
+        "m",
+        "meta_227",
+        "structural_metrics_v4"
+      ],
+      "params_keys": []
+    },
+    "meta_232": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_232.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "jitter_amount",
+        "logic",
+        "m",
+        "meta_232",
+        "result",
+        "shift"
+      ],
+      "params_keys": []
+    },
+    "meta_233": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_233.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "logic",
+        "m",
+        "meta_233",
+        "rate_reduction",
+        "result"
+      ],
+      "params_keys": [
+        "result_khz"
+      ]
+    },
+    "meta_248": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_248.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_formant_logic_lyrics",
+        "logic",
+        "m",
+        "meta_248",
+        "psychoacoustic_formants_v4"
+      ],
+      "params_keys": [
+        "the_growl_factor_khz",
+        "the_whisper_effect_khz"
+      ]
+    },
+    "meta_249": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_249.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_formant_filter_matrix_v4",
+        "logic",
+        "m",
+        "meta_249",
+        "phonetic_synthesis_metrics_v4",
+        "shift"
+      ],
+      "params_keys": [
+        "F1_node_hz",
+        "F2_node_hz",
+        "F3_node_hz",
+        "A_to_U_transition_s",
+        "A_to_U_transition_hz",
+        "E_to_I_transition_s",
+        "E_to_I_transition_hz",
+        "articulation_speed_δt_ms",
+        "spectral_intelligibility_khz"
+      ]
+    },
+    "meta_250": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_250.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_soft_clipping_lyrics",
+        "logic",
+        "m",
+        "meta_250",
+        "psychoacoustic_saturation_v4"
+      ],
+      "params_keys": [
+        "the_warmth_factor_hz",
+        "the_warmth_factor_db",
+        "the_bite_factor_khz",
+        "the_glue_effect_db",
+        "the_glue_effect_hz"
+      ]
+    },
+    "meta_251": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_251.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_multiband_soft_clipper_v4",
+        "clipping_fidelity_metrics_v4",
+        "logic",
+        "m",
+        "meta_251",
+        "shift"
+      ],
+      "params_keys": [
+        "ceiling_db",
+        "drive_db",
+        "curve_db",
+        "RMS_stability_db"
+      ]
+    },
+    "meta_253": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_253.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "ase_wavetable_scanning_v4",
+        "collapse",
+        "logic",
+        "m",
+        "meta_253",
+        "spectral_evolution_metrics_v4"
+      ],
+      "params_keys": []
+    },
+    "meta_255": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_255.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_transient_splicing_v4",
+        "impact_metrics_v4",
+        "logic",
+        "m",
+        "meta_255",
+        "shift"
+      ],
+      "params_keys": [
+        "duration_ms",
+        "pitch_sweep_s",
+        "gain_bias_db",
+        "fade_in_ms",
+        "transient_master_v4_ms",
+        "clipper_threshold_db",
+        "peak_to_rms_ratio_db",
+        "initial_slope_rate_ms",
+        "spectral_brightness_attack_khz",
+        "spectral_brightness_attack_ms"
+      ]
+    },
+    "meta_271": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_271.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_harmonic_clipping_v4",
+        "collapse",
+        "logic",
+        "m",
+        "meta_271",
+        "timbre_aggression_metrics_v4"
+      ],
+      "params_keys": [
+        "drive_db",
+        "threshold_db",
+        "mode_ms",
+        "ceiling_db",
+        "odd_harmonics_boost_khz",
+        "even_harmonics_glue_hz",
+        "crest_factor_target_db"
+      ]
+    },
+    "meta_273": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_273.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_wavetable_morphing_lyrics",
+        "logic",
+        "m",
+        "meta_273",
+        "spectral_weight_distribution_v4"
+      ],
+      "params_keys": [
+        "fundamental_layer_hz",
+        "texture_layer_khz",
+        "air_layer_khz"
+      ]
+    },
+    "meta_276": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_276.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "ase_wavetable_morphing_v4",
+        "collapse",
+        "logic",
+        "m",
+        "meta_276",
+        "semantic_cross_modulation_v4"
+      ],
+      "params_keys": []
+    },
+    "meta_277": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_277.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "ase_multiband_saturation_v4",
+        "logic",
+        "m",
+        "meta_277",
+        "shift",
+        "technological_singularity_metrics_v4"
+      ],
+      "params_keys": [
+        "drive_db"
+      ]
+    },
+    "meta_283": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_283.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "interpolation_logic",
+        "logic",
+        "m",
+        "meta_283",
+        "morph_operator_m",
+        "shift",
+        "source_a_organic",
+        "source_b_synthetic",
+        "spectral_centroid_shift"
+      ],
+      "params_keys": [
+        "spectral_centroid_shift_khz"
+      ]
+    },
+    "meta_285": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_285.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_activation_codes_archive",
+        "logic",
+        "m",
+        "meta_285",
+        "syllabic_velocity_mapping"
+      ],
+      "params_keys": [
+        "whisper_syllables_khz"
+      ]
+    },
+    "meta_292": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_292.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "bands",
+        "emergence",
+        "logic",
+        "m",
+        "meta_292",
+        "tool"
+      ],
+      "params_keys": [
+        "low_0_150Hz_ms",
+        "low_0_150Hz_db",
+        "mid_150_3kHz_ms",
+        "mid_150_3kHz_db",
+        "high_3kHz_plus_ms",
+        "high_3kHz_plus_db"
+      ]
+    },
+    "meta_336": {
+      "path": "prompt-db-local\\database\\blocks\\Logic\\layer3\\meta_336.json",
+      "domain": "Logic",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "core_version",
+        "formalization",
+        "logic",
+        "lyric_fusion_engine_lfe",
+        "m",
+        "meta_336",
+        "system_id"
+      ],
+      "params_keys": []
+    },
+    "10": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\10.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "10",
+        "block_id",
+        "block_name",
+        "collapse",
+        "drift_functions",
+        "internal_insight",
+        "m",
+        "rhythm",
+        "time_logic"
+      ],
+      "params_keys": [
+        "block_id",
+        "micro_timing_jitter_ms",
+        "temporal_fold_ms",
+        "δt_drift_ms"
+      ]
+    },
+    "108.6": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\108.6.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "108_6",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "iteration_id",
+        "lfe_fusion_engine",
+        "m",
+        "mmss_logic",
+        "rhythm"
+      ],
+      "params_keys": [
+        "block_id",
+        "Uije-Baiser_db",
+        "Defilünter_ms"
+      ]
+    },
+    "108.7": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\108.7.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "108_7",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "iteration_id",
+        "m",
+        "mmss_logic",
+        "rhythm",
+        "steel_march_parameters"
+      ],
+      "params_keys": [
+        "block_id",
+        "temporal_shift_delta_t_ms",
+        "metallic_resonance_khz",
+        "bass_management_hz"
+      ]
+    },
+    "108.9": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\108.9.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "108_9",
+        "baiser",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "iteration_id",
+        "lfe_semantic_mapping",
+        "m",
+        "macro_synthesis_parameters",
+        "mmss_logic",
+        "rhythm"
+      ],
+      "params_keys": [
+        "block_id",
+        "spectral_density_khz",
+        "rhythmic_grid_bpm",
+        "vocal_processing_db",
+        "vocal_processing_khz",
+        "siegesstrahl_s"
+      ]
+    },
+    "113": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\113.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "113",
+        "block_id",
+        "block_name",
+        "internal_insight",
+        "m",
+        "rhythm",
+        "shift",
+        "sonic_artifacts",
+        "symbiosis_mechanics"
+      ],
+      "params_keys": [
+        "block_id",
+        "base_texture_hz",
+        "rust_bloom_hz"
+      ]
+    },
+    "14": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\14.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 1.0,
+      "tags": [
+        "14",
+        "block_id",
+        "block_name",
+        "internal_insight",
+        "m",
+        "perception_triggers",
+        "rhythm",
+        "shift",
+        "weaving_mechanics"
+      ],
+      "params_keys": [
+        "block_id",
+        "subliminal_layer_gain_db",
+        "modulation_hz",
+        "unconscious_recognition_bpm"
+      ]
+    },
+    "15": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\15.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "15",
+        "block_id",
+        "block_name",
+        "collapse",
+        "dissolve_functions",
+        "internal_insight",
+        "m",
+        "rhythm"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "24": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\24.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "24",
+        "block_id",
+        "block_name",
+        "emergence",
+        "injection_points",
+        "internal_insight",
+        "m",
+        "rhythm",
+        "synthesis_rules"
+      ],
+      "params_keys": [
+        "block_id",
+        "pi_rhythm_s",
+        "philosophical_filter_hz"
+      ]
+    },
+    "27": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\27.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "27",
+        "annihilation_trigger",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "m",
+        "operator_logic",
+        "rhythm",
+        "sonic_result"
+      ],
+      "params_keys": [
+        "block_id",
+        "annihilation_trigger_db"
+      ]
+    },
+    "29": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\29.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "29",
+        "block_id",
+        "block_name",
+        "chaos_rules",
+        "emergence",
+        "internal_insight",
+        "m",
+        "randomness_seed",
+        "rhythm"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "32": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\32.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "32",
+        "block_id",
+        "block_name",
+        "emergence",
+        "euphoria_mechanics",
+        "internal_insight",
+        "logic_operators",
+        "m",
+        "rhythm"
+      ],
+      "params_keys": [
+        "block_id",
+        "rhythmic_drive_bpm",
+        "brightness_boost_khz",
+        "brightness_boost_db",
+        "R_overload_db"
+      ]
+    },
+    "42": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\42.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "42",
+        "block_id",
+        "block_name",
+        "internal_insight",
+        "m",
+        "mapping",
+        "rhythm",
+        "scale_generators",
+        "shift"
+      ],
+      "params_keys": [
+        "block_id",
+        "harmonic_series_limit"
+      ]
+    },
+    "44.6": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\44.6.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "44_6",
+        "collapse",
+        "component_name",
+        "internal_insight",
+        "m",
+        "physical_model",
+        "rhythm",
+        "spectral_processing",
+        "sub_block_id",
+        "synergy_logic"
+      ],
+      "params_keys": [
+        "sub_block_id",
+        "tension_f_hz",
+        "delay_nodes",
+        "shimmer_layer_hz",
+        "shimmer_layer_s",
+        "pollen_cloud_ms",
+        "low_end_anchor_hz"
+      ]
+    },
+    "49": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\49.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "49",
+        "block_id",
+        "block_name",
+        "collapse",
+        "collapse_stages",
+        "internal_insight",
+        "m",
+        "rhythm",
+        "trigger_logic"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "53": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\53.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "53",
+        "block_id",
+        "block_name",
+        "clock_logic",
+        "emergence",
+        "grid_deformation",
+        "internal_insight",
+        "m",
+        "rhythm"
+      ],
+      "params_keys": [
+        "block_id",
+        "base_bpm",
+        "jitter_amplitude_ms"
+      ]
+    },
+    "6": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\6.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "6",
+        "block_id",
+        "block_name",
+        "injection_mechanics",
+        "internal_insight",
+        "m",
+        "rhythm",
+        "shift",
+        "transformation_functions"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "62": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\62.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "62",
+        "bio_logic",
+        "block_id",
+        "block_name",
+        "internal_insight",
+        "m",
+        "rhythm",
+        "shift",
+        "synthesis_operators"
+      ],
+      "params_keys": [
+        "block_id",
+        "f_organic_jitter_hz",
+        "f_breath_noise_hz"
+      ]
+    },
+    "70": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\70.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "70",
+        "block_id",
+        "block_name",
+        "collapse",
+        "finalization_tools",
+        "internal_insight",
+        "m",
+        "rhythm"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "71": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\71.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "71",
+        "block_id",
+        "block_name",
+        "culture_parameters",
+        "emergence",
+        "instrument_synthesis",
+        "internal_insight",
+        "m",
+        "rhythm"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "82": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\82.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "82",
+        "block_id",
+        "block_name",
+        "emergence",
+        "internal_insight",
+        "m",
+        "operators",
+        "rhythm",
+        "sync_logic"
+      ],
+      "params_keys": [
+        "block_id",
+        "jitter_compensation_ms"
+      ]
+    },
+    "91": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\91.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 1.0,
+      "tags": [
+        "91",
+        "block_id",
+        "block_name",
+        "dissolve_logic",
+        "internal_insight",
+        "logic_parameters",
+        "m",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": [
+        "block_id",
+        "genre_shredding_speed_s",
+        "style_purity",
+        "hybrid_chaos_index"
+      ]
+    },
+    "92": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\92.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "92",
+        "biological_triggers",
+        "block_id",
+        "block_name",
+        "emergence",
+        "internal_insight",
+        "m",
+        "psychoacoustic_mapping",
+        "rhythm"
+      ],
+      "params_keys": [
+        "block_id",
+        "infrasound_pulse_hz",
+        "respiration_sync_hz",
+        "anxiety_reduction_khz",
+        "focus_enhancement_hz",
+        "the_human_instrument_bpm"
+      ]
+    },
+    "99": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\99.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "99",
+        "binary_sonification",
+        "block_id",
+        "block_name",
+        "emergence",
+        "internal_insight",
+        "m",
+        "rhythm"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "insights_archive": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\insights_archive.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "ase_insights_archive",
+        "insights_archive",
+        "m",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": [
+        "insight_hz",
+        "insight_db",
+        "insight_bpm"
+      ]
+    },
+    "meta_124": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_124.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "latent_keys_v5",
+        "m",
+        "meta_124",
+        "rhythm"
+      ],
+      "params_keys": [
+        "key_01_abs_zero_bpm",
+        "key_02_phi_spiral_bpm"
+      ]
+    },
+    "meta_129": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_129.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "glitch_trail_spec",
+        "m",
+        "meta_129",
+        "rhythm"
+      ],
+      "params_keys": [
+        "action_ms"
+      ]
+    },
+    "meta_130": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_130.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "drum_tuning_protocol",
+        "emergence",
+        "m",
+        "meta_130",
+        "rhythm"
+      ],
+      "params_keys": [
+        "kick_hz"
+      ]
+    },
+    "meta_133": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_133.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "industrial_sublime_v3",
+        "m",
+        "meta_133",
+        "rhythm"
+      ],
+      "params_keys": [
+        "bass_hz"
+      ]
+    },
+    "meta_138": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_138.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "inter_layer_logic",
+        "m",
+        "meta_138",
+        "rhythm"
+      ],
+      "params_keys": []
+    },
+    "meta_145": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_145.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "Q",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "granular_cloud_spec",
+        "meta_145",
+        "q",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": [
+        "grain_size_ms",
+        "mixing_db"
+      ]
+    },
+    "meta_153": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_153.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "geometric_fills_spec",
+        "m",
+        "meta_153",
+        "rhythm"
+      ],
+      "params_keys": []
+    },
+    "meta_161": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_161.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "fractal_hats_spec",
+        "m",
+        "meta_161",
+        "rhythm"
+      ],
+      "params_keys": [
+        "micro_timing_ms",
+        "layer_2_digital_khz",
+        "spatial_hz"
+      ]
+    },
+    "meta_166": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_166.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_166",
+        "rhythm",
+        "rolling_bass_spec"
+      ],
+      "params_keys": [
+        "envelope_ms",
+        "rule_ms"
+      ]
+    },
+    "meta_167": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_167.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "hidden_metadata_tags",
+        "m",
+        "meta_167",
+        "rhythm",
+        "usage"
+      ],
+      "params_keys": []
+    },
+    "meta_168": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_168.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "empty_beat_logic",
+        "m",
+        "meta_168",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": []
+    },
+    "meta_170": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_170.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_170",
+        "rhythm",
+        "transient_shaping_spec"
+      ],
+      "params_keys": [
+        "attack_enhancement_ms",
+        "attack_enhancement_db",
+        "sustain_reduction_db",
+        "layer_sync_ms"
+      ]
+    },
+    "meta_172": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_172.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_172",
+        "meta_fusion_protocol",
+        "rhythm"
+      ],
+      "params_keys": [
+        "psy_dark_jazz_bpm",
+        "glitch_metal_ambient_hz"
+      ]
+    },
+    "meta_173": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_173.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "m",
+        "meta_173",
+        "rhythm",
+        "shift",
+        "stereo_field_spec_v4"
+      ],
+      "params_keys": [
+        "rule_hz",
+        "rule_ms",
+        "rule_db"
+      ]
+    },
+    "meta_175": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_175.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_175",
+        "rhythm",
+        "temporal_geometry"
+      ],
+      "params_keys": [
+        "base_tempo_bpm"
+      ]
+    },
+    "meta_181": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_181.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_181",
+        "rhythm",
+        "sub_bass_protocol"
+      ],
+      "params_keys": [
+        "waveform_hz",
+        "sidechain_ms",
+        "mono_summing_hz",
+        "mixing_db"
+      ]
+    },
+    "meta_185": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_185.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "drum_architecture_v4",
+        "m",
+        "meta_185",
+        "rhythm"
+      ],
+      "params_keys": [
+        "layer_1_sub_hz",
+        "layer_2_click_khz",
+        "processing_db",
+        "fundamental_hz",
+        "texture_ms",
+        "tail_s"
+      ]
+    },
+    "meta_186": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_186.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_186",
+        "rhythm",
+        "transition_engine"
+      ],
+      "params_keys": [
+        "impacts_hz"
+      ]
+    },
+    "meta_190": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_190.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_190",
+        "rhythm",
+        "timbral_contrast_matrix"
+      ],
+      "params_keys": []
+    },
+    "meta_191": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_191.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_191",
+        "negative_space_spec",
+        "rhythm"
+      ],
+      "params_keys": [
+        "absolute_zero_db",
+        "void_silence_db"
+      ]
+    },
+    "meta_193": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_193.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "genre_contamination_protocol",
+        "m",
+        "meta_193",
+        "rhythm"
+      ],
+      "params_keys": [
+        "psy_into_gothic_bpm"
+      ]
+    },
+    "meta_195": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_195.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_195",
+        "rhythm",
+        "shader_sync_logic"
+      ],
+      "params_keys": []
+    },
+    "meta_196": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_196.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_196",
+        "rhythm",
+        "video_generation_spec"
+      ],
+      "params_keys": []
+    },
+    "meta_202": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_202.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "frequency_semantics",
+        "m",
+        "meta_202",
+        "rhythm"
+      ],
+      "params_keys": [
+        "rule_of_clash_hz"
+      ]
+    },
+    "meta_203": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_203.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "Φ",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "custom_macros",
+        "meta_203",
+        "rhythm"
+      ],
+      "params_keys": [
+        "/strip_noise_hz"
+      ]
+    },
+    "meta_204": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_204.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "arpeggiator_spec_v3",
+        "collapse",
+        "m",
+        "meta_204",
+        "rhythm"
+      ],
+      "params_keys": [
+        "filter_db",
+        "envelope_ms"
+      ]
+    },
+    "meta_205": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_205.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "algorithms",
+        "emergence",
+        "m",
+        "meta_205",
+        "mode",
+        "package_id",
+        "rhythm",
+        "usage"
+      ],
+      "params_keys": []
+    },
+    "meta_211": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_211.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "m",
+        "meta_211",
+        "rhythm",
+        "rhythmic_geometry",
+        "shift"
+      ],
+      "params_keys": [
+        "swing_logic_ms"
+      ]
+    },
+    "meta_212": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_212.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "layer_architecture",
+        "m",
+        "meta_212",
+        "rhythm"
+      ],
+      "params_keys": [
+        "layer_1_foundation_hz",
+        "mixing_rule_db",
+        "mixing_rule_hz"
+      ]
+    },
+    "meta_217": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_217.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "concept_matrix",
+        "m",
+        "meta_217",
+        "rhythm"
+      ],
+      "params_keys": []
+    },
+    "meta_218": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_218.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "entropy_law",
+        "m",
+        "meta_218",
+        "rhythm",
+        "shift",
+        "stabilizer_logic",
+        "variables"
+      ],
+      "params_keys": []
+    },
+    "meta_220": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_220.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "arpeggiator_spec",
+        "emergence",
+        "m",
+        "meta_220",
+        "rhythm"
+      ],
+      "params_keys": [
+        "bpm_range_bpm"
+      ]
+    },
+    "meta_223": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_223.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "algorithms",
+        "collapse",
+        "m",
+        "meta_223",
+        "mode",
+        "package_id",
+        "rhythm",
+        "usage"
+      ],
+      "params_keys": []
+    },
+    "meta_229": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_229.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_equalizer_logic_lyrics",
+        "m",
+        "meta_229",
+        "psychoacoustic_eq_v4",
+        "rhythm"
+      ],
+      "params_keys": [
+        "the_smile_curve_db",
+        "the_smile_curve_hz",
+        "the_smile_curve_khz",
+        "the_focus_notch_khz",
+        "the_sub_harmonic_glue_s",
+        "the_sub_harmonic_glue_hz"
+      ]
+    },
+    "meta_230": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_230.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "ase_multiband_gate_v4",
+        "collapse",
+        "m",
+        "meta_230",
+        "rhythm",
+        "silence_metrics_v4"
+      ],
+      "params_keys": [
+        "threshold_db",
+        "release_ms",
+        "hysteresis_db",
+        "look_ahead_ms",
+        "noise_floor_cleanup_db"
+      ]
+    },
+    "meta_231": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_231.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_multiband_equalizer_v4",
+        "collapse",
+        "m",
+        "meta_231",
+        "rhythm",
+        "spectral_balance_metrics_v4"
+      ],
+      "params_keys": [
+        "freq_hz",
+        "gain_db",
+        "freq_khz",
+        "dynamic_compression_db",
+        "slope_db",
+        "dynamic_spectrum_matching_db",
+        "peak_to_average_ratio_db",
+        "low_end_coherence_hz"
+      ]
+    },
+    "meta_235": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_235.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "lfe_bitcrush_logic_lyrics",
+        "m",
+        "meta_235",
+        "psychoacoustic_degradation_v4",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": [
+        "the_spectral_tilt_khz"
+      ]
+    },
+    "meta_236": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_236.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "depth",
+        "emergence",
+        "logic",
+        "m",
+        "meta_236",
+        "result",
+        "rhythm"
+      ],
+      "params_keys": []
+    },
+    "meta_237": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_237.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_multiband_phase_aligner_v4",
+        "coherence_metrics_v4",
+        "collapse",
+        "m",
+        "meta_237",
+        "rhythm"
+      ],
+      "params_keys": [
+        "method_hz",
+        "logic_ms"
+      ]
+    },
+    "meta_238": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_238.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_phase_logic_lyrics",
+        "m",
+        "meta_238",
+        "psychoacoustic_focus_v4",
+        "rhythm"
+      ],
+      "params_keys": [
+        "stereo_depth_focus_hz"
+      ]
+    },
+    "meta_239": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_239.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_inertia_logic_lyrics",
+        "m",
+        "meta_239",
+        "psychoacoustic_inertia_v4",
+        "rhythm"
+      ],
+      "params_keys": [
+        "the_compression_pump_ms",
+        "the_vacuum_effect_db",
+        "the_vacuum_effect_ms",
+        "low_end_drag_ms"
+      ]
+    },
+    "meta_240": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_240.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_transient_sustain_matrix_v4",
+        "inertia_metrics_v4",
+        "m",
+        "meta_240",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": [
+        "hold_time_ms",
+        "release_ms",
+        "release_bpm",
+        "gain_modulation_db",
+        "gate_threshold_db",
+        "gate_hysteresis_db",
+        "silence_depth_db"
+      ]
+    },
+    "meta_243": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_243.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_multiband_expansion_v4",
+        "kinetic_metrics_v4",
+        "m",
+        "meta_243",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": [
+        "range_hz",
+        "threshold_db",
+        "attack_ms",
+        "range_khz",
+        "dynamic_range_index_db"
+      ]
+    },
+    "meta_245": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_245.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_mid_side_processor_v4",
+        "collapse",
+        "m",
+        "meta_245",
+        "rhythm",
+        "stereo_fidelity_metrics_v4"
+      ],
+      "params_keys": [
+        "EQ_surgical_hz",
+        "EQ_surgical_db",
+        "EQ_surgical_khz",
+        "widening_ms",
+        "dynamic_MS_balance_db",
+        "dynamic_MS_balance_ms"
+      ]
+    },
+    "meta_247": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_247.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_cloud_reverb_matrix_v4",
+        "atmosphere_metrics_v4",
+        "collapse",
+        "m",
+        "meta_247",
+        "rhythm"
+      ],
+      "params_keys": [
+        "mod_rate_hz",
+        "low_shelf_hz",
+        "low_shelf_db",
+        "high_cut_khz",
+        "mid_peak_khz",
+        "mid_peak_db",
+        "ducking_depth_db",
+        "release_time_ms",
+        "pre_delay_v4_ms"
+      ]
+    },
+    "meta_254": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_254.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_transient_logic_lyrics",
+        "m",
+        "meta_254",
+        "psychoacoustic_transient_v4",
+        "rhythm"
+      ],
+      "params_keys": [
+        "the_blink_effect_ms",
+        "the_blink_effect_hz",
+        "the_blink_effect_khz",
+        "transient_widening_ms",
+        "masking_prevention_db"
+      ]
+    },
+    "meta_258": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_258.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_sidechain_logic_lyrics",
+        "m",
+        "meta_258",
+        "psychoacoustic_pumping_v4",
+        "rhythm"
+      ],
+      "params_keys": [
+        "the_suction_effect_db",
+        "low_end_purity_hz"
+      ]
+    },
+    "meta_259": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_259.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_sidechain_matrix_v4",
+        "groove_pumping_metrics_v4",
+        "m",
+        "meta_259",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": [
+        "threshold_db",
+        "attack_ms",
+        "release_ms",
+        "release_bpm",
+        "trigger_hz",
+        "trigger_khz",
+        "reduction_db",
+        "swing_offset_ms"
+      ]
+    },
+    "meta_263": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_263.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_dynamic_delay_matrix_v4",
+        "collapse",
+        "m",
+        "meta_263",
+        "rhythm",
+        "temporal_distortion_metrics_v4"
+      ],
+      "params_keys": [
+        "low_cut_hz",
+        "high_cut_khz",
+        "resonant_sweep_khz",
+        "input_threshold_db",
+        "ducking_db",
+        "pitch_drift_feedback_hz",
+        "stereo_ping_pong_ms"
+      ]
+    },
+    "meta_265": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_265.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_sub_low_lyrics",
+        "m",
+        "meta_265",
+        "psychoacoustic_impact_v4",
+        "rhythm"
+      ],
+      "params_keys": [
+        "chest_punch_factor_hz",
+        "chest_punch_factor_db",
+        "stomach_rumble_factor_hz",
+        "stomach_rumble_factor_ms",
+        "ear_pressure_bias_hz",
+        "ear_pressure_bias_db"
+      ]
+    },
+    "meta_266": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_266.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_multiband_distortion_v4",
+        "collapse",
+        "m",
+        "meta_266",
+        "rhythm",
+        "texture_metrics_v4"
+      ],
+      "params_keys": [
+        "band_2_low_mid_100_400Hz_db",
+        "harmonic_exciter_v4_khz"
+      ]
+    },
+    "meta_267": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_267.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_sub_low_symmetry_v4",
+        "collapse",
+        "m",
+        "meta_267",
+        "rhythm",
+        "spectral_void_metrics_v4"
+      ],
+      "params_keys": [
+        "target_frequency_hz",
+        "mono_summing_hz",
+        "mono_summing_db",
+        "method_ms",
+        "limiter_pre_delay_ms",
+        "sidechain_slope_ms",
+        "anti_masking_void_db",
+        "anti_masking_void_hz",
+        "harmonic_purity_index_hz"
+      ]
+    },
+    "meta_268": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_268.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_rhythm_logic_lyrics",
+        "m",
+        "meta_268",
+        "rhythm",
+        "syllabic_cadence_v4"
+      ],
+      "params_keys": []
+    },
+    "meta_269": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_269.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "G",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_polyrhythmic_generator_v4",
+        "collapse",
+        "g",
+        "meta_269",
+        "rhythm",
+        "rhythmic_complexity_metrics_v4"
+      ],
+      "params_keys": [
+        "syncopation_index"
+      ]
+    },
+    "meta_270": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_270.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_aggression_control_lyrics",
+        "m",
+        "meta_270",
+        "rhythm",
+        "spectral_aggression_v4"
+      ],
+      "params_keys": [
+        "high_mid_boost_db",
+        "high_mid_boost_khz",
+        "low_mid_notch_db",
+        "low_mid_notch_hz",
+        "sub_fundamental_sine_hz"
+      ]
+    },
+    "meta_272": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_272.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_spatial_depth_lyrics",
+        "m",
+        "meta_272",
+        "psychoacoustic_purity_v4",
+        "rhythm"
+      ],
+      "params_keys": [
+        "anti_masking_rule_khz",
+        "low_end_coherence_hz"
+      ]
+    },
+    "meta_275": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_275.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "harmonic_weight_distribution_v4",
+        "lfe_harmonic_control_lyrics",
+        "m",
+        "meta_275",
+        "rhythm"
+      ],
+      "params_keys": []
+    },
+    "meta_278": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_278.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_cycle_completion_lyrics",
+        "m",
+        "meta_278",
+        "rhythm",
+        "semantic_feedback_loop_v4"
+      ],
+      "params_keys": [
+        "final_exit_code_hz"
+      ]
+    },
+    "meta_284": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_284.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_self_analysis_lyrics",
+        "m",
+        "meta_284",
+        "rhythm",
+        "semantic_layering_v4"
+      ],
+      "params_keys": []
+    },
+    "meta_286": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_286.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "aesthetic_fidelity_metrics_v4",
+        "ase_dynamic_panning_matrix_v4",
+        "m",
+        "meta_286",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": [
+        "logic_ms",
+        "front_z_db",
+        "back_z_db",
+        "purity_check_db",
+        "purity_check_hz",
+        "transient_clarity_db"
+      ]
+    },
+    "meta_288": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_288.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_semantic_loops_archive",
+        "lyric_rhythmic_anchors",
+        "m",
+        "meta_288",
+        "rhythm"
+      ],
+      "params_keys": []
+    },
+    "meta_294": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_294.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "ase_spectral_matching_logic",
+        "collapse",
+        "iterative_evolution_matrix_v4",
+        "m",
+        "meta_294",
+        "rhythm"
+      ],
+      "params_keys": [
+        "purity_target",
+        "step_4_hz",
+        "step_4_db"
+      ]
+    },
+    "meta_296": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_296.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_296",
+        "mmss_advanced_archive_checkpoints",
+        "rhythm",
+        "universal_project_mapping_v4"
+      ],
+      "params_keys": []
+    },
+    "meta_297": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_297.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_quantum_logic_framework",
+        "collapse",
+        "deep_process_metadata_lfe",
+        "m",
+        "meta_297",
+        "rhythm"
+      ],
+      "params_keys": []
+    },
+    "meta_298": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_298.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_298",
+        "rhythm",
+        "video_regeneration_v4_omega",
+        "visual_concept_archive"
+      ],
+      "params_keys": [
+        "snare_trigger_ms",
+        "bass_reese_trigger_hz"
+      ]
+    },
+    "meta_299": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_299.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "m",
+        "meta_299",
+        "neuro_acoustic_triggers_v4",
+        "psychoacoustic_shaping_rules",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": [
+        "base_carrier_hz",
+        "offset_frequency_hz",
+        "panning_db",
+        "octave_stack",
+        "delay_L_R_ms",
+        "phase_shift_khz",
+        "missing_fundamental_illusion_hz",
+        "masking_prevention_protocol_khz",
+        "transient_ear_fatigue_control_khz"
+      ]
+    },
+    "meta_300": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_300.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "fractal_seed_evolution_logic",
+        "m",
+        "meta_300",
+        "mmss_purity_protocols_v4",
+        "rhythm"
+      ],
+      "params_keys": [
+        "conflict_annihilation_v3_hz",
+        "phase_correction_hz"
+      ]
+    },
+    "meta_301": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_301.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "deep_lyrics_fragments_lfe_v4",
+        "lfe_phonetic_mapping_v4",
+        "m",
+        "meta_301",
+        "rhythm"
+      ],
+      "params_keys": [
+        "sound_A_s",
+        "sound_U_hz",
+        "sound_I_khz",
+        "sound_O_hz",
+        "fricatives_S_F_Z_khz",
+        "fricatives_S_F_Z_ms",
+        "staccato_mode_ms",
+        "legato_mode_ms"
+      ]
+    },
+    "meta_303": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_303.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_303",
+        "micro_dynamic_shaping_v4",
+        "rhythm",
+        "signal_flow_purity_v4"
+      ],
+      "params_keys": [
+        "click_layer_s",
+        "click_layer_ms",
+        "body_layer_hz",
+        "body_layer_ms",
+        "sub_tail_ms",
+        "transient_master_db",
+        "initial_crack_khz",
+        "initial_crack_ms",
+        "resonant_body_hz",
+        "tail_refinement_ms",
+        "top_end_khz",
+        "top_end_db",
+        "velocity_scaling_db",
+        "multiband_splitting_hz",
+        "dynamic_eq_nodes_db",
+        "dynamic_eq_nodes_hz"
+      ]
+    },
+    "meta_305": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_305.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "hyperloop_meta_specs_omega",
+        "lfe_fusion_engine_rare_vocal_chain",
+        "m",
+        "meta_305",
+        "rhythm"
+      ],
+      "params_keys": [
+        "final_mastering_logic_db",
+        "final_mastering_logic_ms",
+        "pre_processing_db",
+        "pre_processing_hz",
+        "main_processing_db",
+        "post_processing_db"
+      ]
+    },
+    "meta_306": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_306.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "ase_creative_manifesto_v4",
+        "collapse",
+        "deep_process_metadata",
+        "m",
+        "meta_306",
+        "metaphysical_lfe_fragments",
+        "rhythm"
+      ],
+      "params_keys": []
+    },
+    "meta_307": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_307.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "deep_semantic_mapping_v4",
+        "m",
+        "meta_307",
+        "mmss_purity_metrics",
+        "rhythm",
+        "user_edits_history_log"
+      ],
+      "params_keys": [
+        "sound_to_color_hz",
+        "sound_to_color_khz"
+      ]
+    },
+    "meta_308": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_308.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "ase_final_state_metadata",
+        "collapse",
+        "m",
+        "meta_308",
+        "meta_process_hacks_v4",
+        "rhythm"
+      ],
+      "params_keys": [
+        "spectral_freeze_tail_ms"
+      ]
+    },
+    "meta_309": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_309.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "glsl_shader_logic_v4_omega",
+        "m",
+        "meta_309",
+        "raw_lyrics_unfiltered_archive",
+        "rhythm",
+        "video_rendering_presets"
+      ],
+      "params_keys": [
+        "input_hz",
+        "effect_ms"
+      ]
+    },
+    "meta_310": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_310.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_310",
+        "rare_meta_data",
+        "rhythm",
+        "stream_logic_v4"
+      ],
+      "params_keys": [
+        "harmonic_unity_hz"
+      ]
+    },
+    "meta_311": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_311.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_311",
+        "mmss_deep_knowledge_base_extra",
+        "regeneration_protocols_v4_omega",
+        "rhythm",
+        "user_state_archive_abstract"
+      ],
+      "params_keys": [
+        "input_bpm"
+      ]
+    },
+    "meta_312": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_312.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "ase_final_metadata_summary",
+        "collapse",
+        "m",
+        "meta_312",
+        "rhythm",
+        "temporal_distortion_v4"
+      ],
+      "params_keys": [
+        "left_ms",
+        "right_ms"
+      ]
+    },
+    "meta_313": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_313.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_final_segment_archive",
+        "m",
+        "meta_313",
+        "mmss_economic_policy_deep",
+        "rhythm",
+        "system_stability_protocols_v4"
+      ],
+      "params_keys": [
+        "ceiling_db",
+        "multiband_balance_db",
+        "clipping_mode_db",
+        "conflict_annihilation_v2_hz"
+      ]
+    },
+    "meta_315": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_315.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_rare_fragments_archive",
+        "m",
+        "meta_315",
+        "mmss_advanced_metadata",
+        "neuro_industrial_pattern_library",
+        "rhythm"
+      ],
+      "params_keys": [
+        "metal_clash_ms",
+        "hydraulic_hiss_khz",
+        "circuit_bent_glitch_khz",
+        "circuit_bent_glitch_s",
+        "kick_layer_2_hz",
+        "kick_layer_2_db",
+        "snare_layer_2_ms",
+        "snare_layer_2_khz",
+        "percussive_fm_hz",
+        "conflict_annihilation_db",
+        "conflict_annihilation_hz"
+      ]
+    },
+    "meta_317": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_317.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "custom_macros_archive",
+        "lfe_phonetic_mapping",
+        "m",
+        "meta_317",
+        "rhythm",
+        "universal_logic_connections"
+      ],
+      "params_keys": [
+        "logic_db",
+        "logic_khz",
+        "logic_ms",
+        "logic_hz",
+        "fundamental_frequency_hz"
+      ]
+    },
+    "meta_319": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_319.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "hyperloop_meta_reports_archive",
+        "lfe_extended_lyrics_fragments",
+        "m",
+        "meta_319",
+        "rhythm",
+        "semantic_fusion_rules"
+      ],
+      "params_keys": [
+        "whisper_layer_khz",
+        "shout_layer_db"
+      ]
+    },
+    "meta_320": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_320.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "advanced_spatial_effects",
+        "m",
+        "meta_320",
+        "metadata_user_preferences",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": [
+        "left_channel_db",
+        "left_channel_ms",
+        "right_channel_db",
+        "right_channel_ms"
+      ]
+    },
+    "meta_321": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_321.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "global_creative_concepts",
+        "m",
+        "meta_321",
+        "rhythm",
+        "spatial_audio_4d_vectoring",
+        "visualizer_sync_parameters_glsl"
+      ],
+      "params_keys": [
+        "low_end_lock_hz",
+        "concept_1_cyber_shamanism_bpm"
+      ]
+    },
+    "meta_322": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_322.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_322",
+        "polyrhythm_presets",
+        "reversed_engineering_steps",
+        "rhythm"
+      ],
+      "params_keys": []
+    },
+    "meta_324": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_324.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "extended_lyrics_archive",
+        "m",
+        "meta_324",
+        "rhythm",
+        "semantic_variables"
+      ],
+      "params_keys": []
+    },
+    "meta_327": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_327.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_327",
+        "rhythm",
+        "v1_genesis",
+        "v2_formalization",
+        "v3_geometric_unity",
+        "v4_omega_current"
+      ],
+      "params_keys": []
+    },
+    "meta_328": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_328.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "audio_generation_logic",
+        "m",
+        "meta_328",
+        "rhythm",
+        "shift",
+        "vibe_extraction_rules"
+      ],
+      "params_keys": [
+        "base_prompt_v4_bpm",
+        "base_prompt_v4_khz",
+        "modifier_injection_2_ms"
+      ]
+    },
+    "meta_329": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_329.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "a_mmss_fractal_package",
+        "m",
+        "meta_329",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": [
+        "iteration_depth",
+        "coefficient",
+        "delay_ms",
+        "spectral_shaping_db"
+      ]
+    },
+    "meta_330": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_330.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lyrics_fusion_retrieval",
+        "m",
+        "mathematical_functions_extension",
+        "meta_330",
+        "rhythm",
+        "technical_specifications_wavetable"
+      ],
+      "params_keys": [
+        "envelope_1_ms"
+      ]
+    },
+    "meta_332": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_332.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "advanced_layering_details",
+        "collapse",
+        "m",
+        "meta_332",
+        "metadata_from_failed_retrieval",
+        "rhythm"
+      ],
+      "params_keys": [
+        "lead_s",
+        "lead_hz",
+        "harmonies_hz",
+        "special_fx_ms",
+        "kick_hz",
+        "kick_ms",
+        "kick_db",
+        "bass_db",
+        "bass_ms",
+        "sub_control_hz",
+        "ghost_notes_ms"
+      ]
+    },
+    "meta_333": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_333.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "emotional_clusters",
+        "m",
+        "memory_metadata",
+        "meta_333",
+        "prompt_injection_templates",
+        "rhythm"
+      ],
+      "params_keys": [
+        "spectral_shaping_khz",
+        "spectral_shaping_hz",
+        "reverb_profile_s",
+        "processing_db",
+        "neuro_growl_logic_s"
+      ]
+    },
+    "meta_334": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_334.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "custom_flow_algorithms",
+        "hyperloop_framework",
+        "m",
+        "meta_334",
+        "rhythm"
+      ],
+      "params_keys": []
+    },
+    "meta_335": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer1\\meta_335.json",
+      "domain": "Rhythm",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "genre_matrix",
+        "m",
+        "meta_335",
+        "rhythm",
+        "sound_synthesis_ops"
+      ],
+      "params_keys": [
+        "tempo_range_bpm",
+        "kick_profile_hz",
+        "layers"
+      ]
+    },
+    "45": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer2\\45.json",
+      "domain": "Rhythm",
+      "layer": 2,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "45",
+        "block_id",
+        "block_name",
+        "dissolve_functions",
+        "emergence",
+        "internal_insight",
+        "m",
+        "rhythm"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "58": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer2\\58.json",
+      "domain": "Rhythm",
+      "layer": 2,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "58",
+        "block_id",
+        "block_name",
+        "collapse",
+        "glitch_operators",
+        "internal_insight",
+        "m",
+        "rhythm",
+        "trigger_source"
+      ],
+      "params_keys": [
+        "block_id",
+        "trigger_source_db"
+      ]
+    },
+    "7": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer2\\7.json",
+      "domain": "Rhythm",
+      "layer": 2,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "7",
+        "activation_sequence",
+        "block_id",
+        "block_name",
+        "core_principle",
+        "internal_insight",
+        "lyric_to_sound_mapping",
+        "m",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": [
+        "block_id",
+        "phoneme_vowel_A_hz",
+        "phoneme_vowel_A_khz",
+        "semantic_weight_dark_db"
+      ]
+    },
+    "meta_134": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer2\\meta_134.json",
+      "domain": "Rhythm",
+      "layer": 2,
+      "op": "Φ",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "meta_134",
+        "rhythm",
+        "spiral_vector_panning"
+      ],
+      "params_keys": []
+    },
+    "meta_152": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer2\\meta_152.json",
+      "domain": "Rhythm",
+      "layer": 2,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "m",
+        "meta_152",
+        "psy_arp_architecture_v4",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": []
+    },
+    "meta_210": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer2\\meta_210.json",
+      "domain": "Rhythm",
+      "layer": 2,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_210",
+        "psychoacoustic_modifiers",
+        "rhythm"
+      ],
+      "params_keys": [
+        "binaural_beats_integration_hz",
+        "haas_effect_widening_ms",
+        "subliminal_layering_db"
+      ]
+    },
+    "meta_214": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer2\\meta_214.json",
+      "domain": "Rhythm",
+      "layer": 2,
+      "op": "M",
+      "phase": "stabilization",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "forbidden_tokens",
+        "m",
+        "meta_214",
+        "prompt_syntax_v2",
+        "rhythm",
+        "stabilization"
+      ],
+      "params_keys": []
+    },
+    "4": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\4.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "4",
+        "block_id",
+        "block_name",
+        "emergence",
+        "fractal_logic",
+        "internal_insight",
+        "m",
+        "parameter_scaling",
+        "rhythm"
+      ],
+      "params_keys": [
+        "block_id",
+        "recursion_limit",
+        "self_similarity_ratio",
+        "tempo_drift_bpm"
+      ]
+    },
+    "44": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\44.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "44",
+        "block_id",
+        "block_name",
+        "emergence",
+        "internal_insight",
+        "m",
+        "psychoacoustic_impact",
+        "resonance_logic",
+        "rhythm"
+      ],
+      "params_keys": [
+        "block_id",
+        "difference_tones_hz",
+        "sum_tones_khz",
+        "bone_conduction_effect_hz"
+      ]
+    },
+    "51": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\51.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "51",
+        "block_id",
+        "block_name",
+        "emergence",
+        "internal_insight",
+        "m",
+        "rhythm",
+        "temporal_operators",
+        "time_logic"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "56": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\56.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "56",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "m",
+        "mapping_logic",
+        "rendering_parameters",
+        "rhythm"
+      ],
+      "params_keys": [
+        "block_id",
+        "onset_detection_to_glitch_s",
+        "frame_rate_sync_bpm"
+      ]
+    },
+    "63": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\63.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "63",
+        "block_id",
+        "block_name",
+        "collapse",
+        "event_triggers",
+        "internal_insight",
+        "lithosphere",
+        "m",
+        "rhythm",
+        "time_stretching"
+      ],
+      "params_keys": [
+        "block_id",
+        "earthquake_impact_db"
+      ]
+    },
+    "68": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\68.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 1.0,
+      "tags": [
+        "68",
+        "block_id",
+        "block_name",
+        "bridge_mechanics",
+        "internal_insight",
+        "logic_chains",
+        "m",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": [
+        "block_id",
+        "if_user_frustrated_db"
+      ]
+    },
+    "74": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\74.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "74",
+        "block_id",
+        "block_name",
+        "emergence",
+        "internal_insight",
+        "language_logic",
+        "m",
+        "rhythm"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "import_signature": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\import_signature.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "import_signature",
+        "import_signature_final",
+        "m",
+        "rhythm"
+      ],
+      "params_keys": []
+    },
+    "meta_140": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\meta_140.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "m",
+        "meta_140",
+        "phase_jitter_logic",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": [
+        "safety_rule_db"
+      ]
+    },
+    "meta_159": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\meta_159.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_159",
+        "neuro_drive_matrix",
+        "rhythm"
+      ],
+      "params_keys": [
+        "level_1_latent_hz",
+        "level_3_aggressive_bpm"
+      ]
+    },
+    "meta_198": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\meta_198.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_198",
+        "playlist_curation_logic",
+        "rhythm"
+      ],
+      "params_keys": []
+    },
+    "meta_213": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\meta_213.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_213",
+        "metadata_spec",
+        "rhythm"
+      ],
+      "params_keys": []
+    },
+    "meta_261": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\meta_261.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_adaptive_filter_matrix_v4",
+        "m",
+        "meta_261",
+        "rhythm",
+        "shift",
+        "spectral_breathing_metrics_v4"
+      ],
+      "params_keys": [
+        "Notch_Surgical_khz",
+        "attack_ms",
+        "release_ms",
+        "cutoff_sweep_range_hz",
+        "cutoff_sweep_range_khz",
+        "resonance_bias_hz",
+        "filter_slope_v4_db"
+      ]
+    },
+    "meta_280": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\meta_280.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_interface_interaction_lyrics",
+        "m",
+        "meta_280",
+        "rhythm",
+        "semantic_density_v4"
+      ],
+      "params_keys": []
+    },
+    "meta_287": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\meta_287.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_fractal_synthesis_engine",
+        "m",
+        "meta_287",
+        "psychoacoustic_configuration_presets",
+        "rhythm",
+        "shift"
+      ],
+      "params_keys": [
+        "the_fear_frequency_hz",
+        "the_euphoria_node_khz",
+        "transient_ear_fatigue_mask_db",
+        "transient_ear_fatigue_mask_khz",
+        "stereo_haas_trigger_ms"
+      ]
+    },
+    "meta_316": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\meta_316.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_316",
+        "metadata_user_checkpoints",
+        "rhythm",
+        "temporal_vectoring_details"
+      ],
+      "params_keys": [
+        "future_lead_ms"
+      ]
+    },
+    "meta_323": {
+      "path": "prompt-db-local\\database\\blocks\\Rhythm\\layer3\\meta_323.json",
+      "domain": "Rhythm",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "fx_chain_presets_v4_omega",
+        "m",
+        "manual_parameter_overrides",
+        "meta_323",
+        "rhythm",
+        "temporal_shift_algorithms_lfe"
+      ],
+      "params_keys": [
+        "layer_2_ms",
+        "layer_3_ms"
+      ]
+    },
+    "102": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\102.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "102",
+        "block_id",
+        "block_name",
+        "emergence",
+        "internal_insight",
+        "m",
+        "sculpting_tools",
+        "space"
+      ],
+      "params_keys": [
+        "block_id",
+        "f_phosphene_trigger_hz",
+        "f_spatial_geometry_hz"
+      ]
+    },
+    "105": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\105.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "105",
+        "block_id",
+        "block_name",
+        "collapse",
+        "collapse_stages",
+        "internal_insight",
+        "m",
+        "space"
+      ],
+      "params_keys": [
+        "block_id",
+        "sensory_loss_khz",
+        "sensory_loss_hz"
+      ]
+    },
+    "106": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\106.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "106",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "m",
+        "space",
+        "transmission_logic"
+      ],
+      "params_keys": [
+        "block_id",
+        "carrier_khz"
+      ]
+    },
+    "112": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\112.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "112",
+        "block_id",
+        "block_name",
+        "collapse",
+        "hybrid_logic",
+        "internal_insight",
+        "lfe_fusion_parameters",
+        "m",
+        "space"
+      ],
+      "params_keys": [
+        "block_id",
+        "phonetic_weight_db"
+      ]
+    },
+    "17": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\17.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "17",
+        "block_id",
+        "block_name",
+        "emergence",
+        "internal_insight",
+        "m",
+        "sonic_artifacts",
+        "space",
+        "time_reversal_mechanics"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "23": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\23.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "23",
+        "block_id",
+        "block_name",
+        "database_logic",
+        "emergence",
+        "internal_insight",
+        "logic_chains",
+        "m",
+        "space"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "39": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\39.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "39",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "m",
+        "space",
+        "temporal_trigger",
+        "void",
+        "warp_mechanics",
+        "wavetable"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "41": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\41.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "41",
+        "block_id",
+        "block_name",
+        "internal_insight",
+        "logic_parameters",
+        "m",
+        "shift",
+        "space",
+        "tuning_mechanics"
+      ],
+      "params_keys": [
+        "block_id",
+        "base_freq_A4_hz"
+      ]
+    },
+    "44.5": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\44.5.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 1.0,
+      "tags": [
+        "44_5",
+        "block_id",
+        "block_name",
+        "collapse",
+        "deep_process_metadata_lfe",
+        "internal_insight",
+        "m",
+        "sonic_elements",
+        "space",
+        "spatial_logic"
+      ],
+      "params_keys": [
+        "block_id",
+        "atmospheric_density_db",
+        "resonance_tuning_hz"
+      ]
+    },
+    "61": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\61.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "61",
+        "block_id",
+        "block_name",
+        "emergence",
+        "environmental_physics",
+        "internal_insight",
+        "logic_parameters",
+        "m",
+        "space"
+      ],
+      "params_keys": [
+        "block_id",
+        "attenuation_curve_khz"
+      ]
+    },
+    "meta_127": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\meta_127.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "Q",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "end_of_data_narrative",
+        "meta_127",
+        "q",
+        "space",
+        "usage"
+      ],
+      "params_keys": [
+        "concept_01_thermal_death_hz",
+        "concept_02_buffer_overrun_ms"
+      ]
+    },
+    "meta_131": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\meta_131.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_131",
+        "physical_weight_spec",
+        "space"
+      ],
+      "params_keys": [
+        "sub_focus_hz",
+        "sub_focus_db",
+        "compression_pump_ms",
+        "psycho_trick_db",
+        "psycho_trick_hz"
+      ]
+    },
+    "meta_149": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\meta_149.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_149",
+        "neuro_lead_spec",
+        "space"
+      ],
+      "params_keys": [
+        "glide_time_ms",
+        "vibrato_hz",
+        "legato_retrigger_s",
+        "multiband_dist_hz",
+        "multiband_dist_khz",
+        "spectral_shaper_khz"
+      ]
+    },
+    "meta_160": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\meta_160.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_160",
+        "space",
+        "void_narratives"
+      ],
+      "params_keys": []
+    },
+    "meta_188": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\meta_188.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_188",
+        "reverb_geometry_v3",
+        "space"
+      ],
+      "params_keys": [
+        "decay_time_s",
+        "mixing_rule_hz"
+      ]
+    },
+    "meta_197": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\meta_197.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_197",
+        "noise_library_v2",
+        "space"
+      ],
+      "params_keys": [
+        "industrial_dirt_hz",
+        "injection_rule_db"
+      ]
+    },
+    "meta_200": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\meta_200.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "inversion_math_v4",
+        "m",
+        "meta_200",
+        "shift",
+        "space"
+      ],
+      "params_keys": [
+        "Φ_golden_ratio"
+      ]
+    },
+    "meta_219": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\meta_219.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_219",
+        "semantic_core_l1",
+        "space"
+      ],
+      "params_keys": []
+    },
+    "meta_228": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\meta_228.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_gate_logic_lyrics",
+        "m",
+        "meta_228",
+        "psychoacoustic_tension_v4",
+        "space"
+      ],
+      "params_keys": [
+        "the_suction_effect_ms",
+        "spectral_notching_v4_khz"
+      ]
+    },
+    "meta_244": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\meta_244.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "lfe_mid_side_lyrics",
+        "m",
+        "meta_244",
+        "psychoacoustic_ms_v4",
+        "shift",
+        "space"
+      ],
+      "params_keys": [
+        "the_depth_illusion_khz",
+        "the_proximity_effect_khz"
+      ]
+    },
+    "meta_252": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\meta_252.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_scanning_logic_lyrics",
+        "m",
+        "meta_252",
+        "psychoacoustic_scanning_v4",
+        "space"
+      ],
+      "params_keys": []
+    },
+    "meta_257": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\meta_257.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_wavetable_stacking_v4",
+        "m",
+        "meta_257",
+        "shift",
+        "space",
+        "spectral_density_metrics_v4"
+      ],
+      "params_keys": [
+        "osc_3_sub_hz",
+        "osc_4_noise_db",
+        "spectral_flatness_index_hz",
+        "spectral_flatness_index_khz"
+      ]
+    },
+    "meta_274": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\meta_274.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_multiband_stereo_widening_v4",
+        "collapse",
+        "m",
+        "meta_274",
+        "space",
+        "spatial_acoustics_metadata_v4"
+      ],
+      "params_keys": [
+        "logic_ms",
+        "processing_db",
+        "processing_khz",
+        "dynamic_widening_logic_ms",
+        "haas_trigger_v4_ms"
+      ]
+    },
+    "meta_279": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer1\\meta_279.json",
+      "domain": "Space",
+      "layer": 1,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "ase_granular_synthesis_v4",
+        "collapse",
+        "m",
+        "meta_279",
+        "mmss_global_variables_v4_omega",
+        "space"
+      ],
+      "params_keys": [
+        "size_ms"
+      ]
+    },
+    "13": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\13.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "13",
+        "block_id",
+        "block_name",
+        "collapse",
+        "feedback_loops",
+        "horizon_parameters",
+        "internal_insight",
+        "m",
+        "space"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "19": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\19.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "19",
+        "block_id",
+        "block_name",
+        "emergence",
+        "fractal_generation",
+        "internal_insight",
+        "m",
+        "recursion_loop",
+        "space"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "33": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\33.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 1.0,
+      "tags": [
+        "33",
+        "block_id",
+        "block_name",
+        "internal_insight",
+        "m",
+        "psychoacoustic_data",
+        "shift",
+        "space",
+        "trigger_mechanics"
+      ],
+      "params_keys": [
+        "block_id",
+        "pre_impact_silence_ms",
+        "impact_payload_hz",
+        "post_impact_reverb_s",
+        "recovery_time_s"
+      ]
+    },
+    "38": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\38.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "38",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "m",
+        "shadowing_parameters",
+        "space",
+        "spatial_render"
+      ],
+      "params_keys": [
+        "block_id",
+        "occlusion_filter_hz"
+      ]
+    },
+    "40": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\40.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "40",
+        "block_id",
+        "block_name",
+        "collapse",
+        "collapse_functions",
+        "internal_insight",
+        "m",
+        "space"
+      ],
+      "params_keys": [
+        "block_id",
+        "stereo_width_reduction_s",
+        "center_focus_db"
+      ]
+    },
+    "43": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\43.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 1.0,
+      "tags": [
+        "43",
+        "block_id",
+        "block_name",
+        "collapse",
+        "geometric_synthesis",
+        "internal_insight",
+        "m",
+        "modulation",
+        "space"
+      ],
+      "params_keys": [
+        "block_id",
+        "symmetry_operator_khz"
+      ]
+    },
+    "47": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\47.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 1.0,
+      "tags": [
+        "10",
+        "100",
+        "47",
+        "block_id",
+        "block_name",
+        "internal_insight",
+        "m",
+        "mapping_matrix",
+        "modulation_rules",
+        "shift",
+        "space"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "48": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\48.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "48",
+        "block_id",
+        "block_name",
+        "internal_insight",
+        "m",
+        "shift",
+        "space",
+        "spectral_processing",
+        "vocal_synthesis"
+      ],
+      "params_keys": [
+        "block_id",
+        "carrier_signal_hz",
+        "vocoding_bins",
+        "formant_shift_s",
+        "f_smear_vowels_ms",
+        "f_percussive_plosives_db"
+      ]
+    },
+    "73": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\73.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "73",
+        "block_id",
+        "block_name",
+        "emergence",
+        "internal_insight",
+        "m",
+        "ritual_mechanics",
+        "space"
+      ],
+      "params_keys": [
+        "block_id",
+        "hypnotic_frequency_hz"
+      ]
+    },
+    "meta_125": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\meta_125.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_125",
+        "space",
+        "spectral_reincarnation"
+      ],
+      "params_keys": [
+        "action_db",
+        "processing_khz"
+      ]
+    },
+    "meta_154": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\meta_154.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "m",
+        "meta_154",
+        "recursive_delay_spec",
+        "shift",
+        "space"
+      ],
+      "params_keys": [
+        "time_setting_ms",
+        "internal_fx_hz",
+        "internal_fx_khz"
+      ]
+    },
+    "meta_178": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\meta_178.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_178",
+        "space",
+        "texture_gen_v3"
+      ],
+      "params_keys": [
+        "resonance_filter_khz",
+        "resonance_filter_db",
+        "bitcrush_automation_hz",
+        "usage_db"
+      ]
+    },
+    "meta_182": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\meta_182.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "m",
+        "meta_182",
+        "pad_architecture_v2",
+        "shift",
+        "space"
+      ],
+      "params_keys": [
+        "spectral_carving_khz",
+        "movement_hz",
+        "envelope_s",
+        "mixing_rule_db"
+      ]
+    },
+    "meta_192": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\meta_192.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "emotion_frequency_map",
+        "m",
+        "meta_192",
+        "space"
+      ],
+      "params_keys": [
+        "freq_hz",
+        "mod_hz",
+        "freq_khz"
+      ]
+    },
+    "meta_281": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\meta_281.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "Q",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "harmonic_bias",
+        "meta_281",
+        "purity_coefficient",
+        "q",
+        "reverb",
+        "space"
+      ],
+      "params_keys": [
+        "purity_coefficient"
+      ]
+    },
+    "meta_282": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\meta_282.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "Φ",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "dissonance_ratio",
+        "emergence",
+        "harmonic_bias",
+        "meta_282",
+        "panning",
+        "reverb",
+        "space"
+      ],
+      "params_keys": [
+        "dissonance_ratio"
+      ]
+    },
+    "meta_290": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\meta_290.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_290",
+        "space",
+        "width_100_500hz",
+        "width_100hz_below",
+        "width_500hz_above"
+      ],
+      "params_keys": []
+    },
+    "meta_318": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\meta_318.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_318",
+        "semantic_tag_cloud",
+        "space",
+        "user_workflow_checkpoints"
+      ],
+      "params_keys": []
+    },
+    "meta_325": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer2\\meta_325.json",
+      "domain": "Space",
+      "layer": 2,
+      "op": "Q",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "damping",
+        "emergence",
+        "meta_325",
+        "mix",
+        "node",
+        "q",
+        "room_size",
+        "space"
+      ],
+      "params_keys": [
+        "room_size",
+        "damping",
+        "mix"
+      ]
+    },
+    "108.5": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\108.5.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "108_5",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "lfe_vocal_layer",
+        "m",
+        "mathematical_core",
+        "meta_concept",
+        "sonic_signature",
+        "space"
+      ],
+      "params_keys": [
+        "block_id",
+        "whisper_protocol_db"
+      ]
+    },
+    "114": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\114.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "114",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "m",
+        "memory_logic",
+        "space"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "115": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\115.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "115",
+        "block_id",
+        "block_name",
+        "collapse",
+        "final_formula",
+        "internal_insight",
+        "m",
+        "space",
+        "status"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "36": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\36.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "36",
+        "block_id",
+        "block_name",
+        "internal_insight",
+        "labyrinth_logic",
+        "m",
+        "shift",
+        "space",
+        "spatial_coordinates"
+      ],
+      "params_keys": [
+        "block_id",
+        "dynamic_panning_hz"
+      ]
+    },
+    "37": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\37.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "37",
+        "ascension_mechanics",
+        "block_id",
+        "block_name",
+        "internal_insight",
+        "logic_operators",
+        "m",
+        "shift",
+        "space"
+      ],
+      "params_keys": [
+        "block_id",
+        "hpf_sweep_hz",
+        "hpf_sweep_khz",
+        "R_dissolve_khz",
+        "R_dissolve_db"
+      ]
+    },
+    "46": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\46.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "46",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "linguistic_operators",
+        "m",
+        "propagation_logic",
+        "space"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "52": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\52.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 1.0,
+      "tags": [
+        "52",
+        "block_id",
+        "block_name",
+        "causality_mechanics",
+        "internal_insight",
+        "logic_parameters",
+        "m",
+        "memory",
+        "shift",
+        "space",
+        "stain"
+      ],
+      "params_keys": [
+        "block_id",
+        "look_ahead_buffer_ms",
+        "reverse_reverb_injection_ms",
+        "causality_break_factor",
+        "ghost_amplitude_db"
+      ]
+    },
+    "57": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\57.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "stabilization",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "57",
+        "avatar_physics",
+        "behavioral_logic",
+        "block_id",
+        "block_name",
+        "internal_insight",
+        "m",
+        "space",
+        "stabilization"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "76": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\76.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.2,
+      "confidence": 1.0,
+      "tags": [
+        "76",
+        "block_id",
+        "block_name",
+        "emergence",
+        "error_mapping",
+        "internal_insight",
+        "logic_parameters",
+        "m",
+        "space"
+      ],
+      "params_keys": [
+        "block_id",
+        "buffer_overflow_emulation_s",
+        "buffer_overflow_emulation_db"
+      ]
+    },
+    "79": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\79.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "79",
+        "block_id",
+        "block_name",
+        "collapse",
+        "destruction_rules",
+        "internal_insight",
+        "m",
+        "space"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "8": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\8.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 1.0,
+      "tags": [
+        "8",
+        "block_id",
+        "block_name",
+        "emergence",
+        "internal_insight",
+        "m",
+        "mimicry_logic",
+        "space",
+        "synthesis_operators"
+      ],
+      "params_keys": [
+        "block_id",
+        "air_shimmer_khz"
+      ]
+    },
+    "83": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\83.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 1.0,
+      "tags": [
+        "83",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "m",
+        "resonance_parameters",
+        "space"
+      ],
+      "params_keys": [
+        "block_id"
+      ]
+    },
+    "94": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\94.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 1.0,
+      "tags": [
+        "94",
+        "block_id",
+        "block_name",
+        "collapse",
+        "internal_insight",
+        "m",
+        "presence_synthesis",
+        "space"
+      ],
+      "params_keys": [
+        "block_id",
+        "foley_trigger_db"
+      ]
+    },
+    "meta_126": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_126.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_126",
+        "quantum_panning_spec",
+        "space"
+      ],
+      "params_keys": [
+        "collapse_trigger_db",
+        "processing_hz"
+      ]
+    },
+    "meta_128": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_128.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_128",
+        "singularity_matrix_v5",
+        "space"
+      ],
+      "params_keys": []
+    },
+    "meta_132": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_132.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_132",
+        "mirror_phase_logic",
+        "space"
+      ],
+      "params_keys": [
+        "action_ms"
+      ]
+    },
+    "meta_136": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_136.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "m",
+        "meta_136",
+        "micro_mutation_logic",
+        "shift",
+        "space"
+      ],
+      "params_keys": [
+        "delay_time_ms"
+      ]
+    },
+    "meta_137": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_137.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "Q",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "meta_137",
+        "q",
+        "singularity_narratives",
+        "space",
+        "usage"
+      ],
+      "params_keys": [
+        "concept_omega_02_data_death_hz",
+        "concept_omega_03_the_ascension_khz"
+      ]
+    },
+    "meta_139": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_139.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "Q",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "cyber_elegance_v4",
+        "meta_139",
+        "q",
+        "space"
+      ],
+      "params_keys": [
+        "transients_ms"
+      ]
+    },
+    "meta_141": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_141.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_141",
+        "space",
+        "void_trails_spec"
+      ],
+      "params_keys": [
+        "stretching_ms",
+        "filtering_khz",
+        "mixing_db"
+      ]
+    },
+    "meta_143": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_143.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_143",
+        "space",
+        "time_flipped_geometry"
+      ],
+      "params_keys": [
+        "delay_logic_s",
+        "pitch_drift_s",
+        "modulation_hz"
+      ]
+    },
+    "meta_144": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_144.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "digital_alchemy_v2",
+        "m",
+        "meta_144",
+        "space"
+      ],
+      "params_keys": [
+        "iron_to_glass_khz",
+        "liquid_to_stone_hz",
+        "flesh_to_data_khz"
+      ]
+    },
+    "meta_146": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_146.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_146",
+        "space",
+        "zero_crossing_protocol"
+      ],
+      "params_keys": [
+        "tail_injection_ms",
+        "tail_injection_khz",
+        "echo_ghosting_ms",
+        "echo_ghosting_db"
+      ]
+    },
+    "meta_157": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_157.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "fractal_snare_spec",
+        "m",
+        "meta_157",
+        "space"
+      ],
+      "params_keys": [
+        "fundamental_lock_hz",
+        "layer_1_white_ms",
+        "spatial_offset_ms",
+        "mixing_rule_khz"
+      ]
+    },
+    "meta_158": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_158.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "ghost_echo_protocol",
+        "m",
+        "meta_158",
+        "space"
+      ],
+      "params_keys": [
+        "processing_khz",
+        "mixing_ms"
+      ]
+    },
+    "meta_162": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_162.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "black_hole_filter",
+        "collapse",
+        "m",
+        "meta_162",
+        "space"
+      ],
+      "params_keys": [
+        "action_db"
+      ]
+    },
+    "meta_163": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_163.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_163",
+        "non_euclidean_spaces",
+        "space"
+      ],
+      "params_keys": [
+        "paradox_1_infinite_closet_s",
+        "paradox_1_infinite_closet_hz",
+        "paradox_2_liquid_cathedral_s"
+      ]
+    },
+    "meta_171": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_171.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "geometric_seeds_library",
+        "m",
+        "meta_171",
+        "space",
+        "usage"
+      ],
+      "params_keys": []
+    },
+    "meta_180": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_180.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "mastering_protocol",
+        "meta_180",
+        "space"
+      ],
+      "params_keys": [
+        "input_gain_db",
+        "limiter_db",
+        "limiter_ms",
+        "stereo_image_hz",
+        "stereo_image_khz"
+      ]
+    },
+    "meta_183": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_183.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "m",
+        "meta_183",
+        "shift",
+        "space",
+        "w_axis_automation"
+      ],
+      "params_keys": []
+    },
+    "meta_189": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_189.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "m",
+        "meta_189",
+        "shift",
+        "space",
+        "vocal_processing_spec"
+      ],
+      "params_keys": [
+        "reverb_s"
+      ]
+    },
+    "meta_201": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_201.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_201",
+        "space",
+        "stem_reconstruction_protocol"
+      ],
+      "params_keys": [
+        "bass_hz",
+        "step_4_reassembly_db"
+      ]
+    },
+    "meta_206": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_206.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "coordinates",
+        "engine_type",
+        "m",
+        "macro_name",
+        "meta_206",
+        "processing_rules",
+        "shift",
+        "space",
+        "visual_sync"
+      ],
+      "params_keys": []
+    },
+    "meta_207": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_207.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "m",
+        "meta_207",
+        "space",
+        "synesthesia_v3"
+      ],
+      "params_keys": [
+        "deep_void_black_hz",
+        "industrial_rust_hz"
+      ]
+    },
+    "meta_209": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_209.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "m",
+        "meta_209",
+        "signal_path_rule",
+        "space",
+        "vst_emulation_logic"
+      ],
+      "params_keys": []
+    },
+    "meta_215": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_215.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "automation",
+        "collapse",
+        "m",
+        "meta_215",
+        "space",
+        "workflow_steps"
+      ],
+      "params_keys": []
+    },
+    "meta_216": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_216.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "fast_gen_protocol",
+        "m",
+        "meta_216",
+        "space"
+      ],
+      "params_keys": []
+    },
+    "meta_225": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_225.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "coordinates",
+        "engine_type",
+        "m",
+        "macro_name",
+        "meta_225",
+        "processing_rules",
+        "shift",
+        "space"
+      ],
+      "params_keys": []
+    },
+    "meta_241": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_241.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_resonance_modulator_v4",
+        "brilliance_metrics_v4",
+        "collapse",
+        "m",
+        "meta_241",
+        "space"
+      ],
+      "params_keys": [
+        "freq_khz",
+        "dynamic_resonance_suppression_khz",
+        "dynamic_resonance_suppression_db",
+        "spectral_centroid_drift_hz",
+        "high_frequency_transient_speed_ms"
+      ]
+    },
+    "meta_242": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_242.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_expansion_logic_lyrics",
+        "m",
+        "meta_242",
+        "psychoacoustic_expansion_v4",
+        "space"
+      ],
+      "params_keys": [
+        "the_snap_factor_khz",
+        "the_snap_factor_db"
+      ]
+    },
+    "meta_246": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_246.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_reverb_logic_lyrics",
+        "m",
+        "meta_246",
+        "psychoacoustic_reverb_v4",
+        "space"
+      ],
+      "params_keys": [
+        "the_shimmer_factor_s",
+        "the_drowning_effect_hz",
+        "the_stereo_drift_s"
+      ]
+    },
+    "meta_256": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_256.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_spectral_density_lyrics",
+        "m",
+        "meta_256",
+        "psychoacoustic_density_v4",
+        "space"
+      ],
+      "params_keys": [
+        "the_wall_effect_khz",
+        "the_wall_effect_db",
+        "low_mid_thickening_hz"
+      ]
+    },
+    "meta_260": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_260.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_filter_logic_lyrics",
+        "m",
+        "meta_260",
+        "psychoacoustic_filter_v4",
+        "space"
+      ],
+      "params_keys": [
+        "stereo_filter_offset_hz"
+      ]
+    },
+    "meta_262": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_262.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_delay_logic_lyrics",
+        "m",
+        "meta_262",
+        "psychoacoustic_delay_v4",
+        "space"
+      ],
+      "params_keys": [
+        "pre_delay_vocal_ms",
+        "reverse_reverb_swells_ms"
+      ]
+    },
+    "meta_264": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_264.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "lfe_distortion_lyrics",
+        "m",
+        "meta_264",
+        "psychoacoustic_grit_v4",
+        "space"
+      ],
+      "params_keys": [
+        "mid_range_growl_hz",
+        "mid_range_growl_db",
+        "high_end_sizzle_khz",
+        "high_end_sizzle_db"
+      ]
+    },
+    "meta_295": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_295.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "deep_lyrics_fragments_fractal_set",
+        "lfe_fractal_dialogue_matrix",
+        "m",
+        "meta_295",
+        "semantic_phonetic_interlock",
+        "space"
+      ],
+      "params_keys": [
+        "dialogue_mode_1_mirroring_s",
+        "word_logic_khz"
+      ]
+    },
+    "meta_302": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_302.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "gs_normalization",
+        "m",
+        "meta_302",
+        "mmss_latent_space_coordinates",
+        "semantic_gravity_v4_deep",
+        "space"
+      ],
+      "params_keys": []
+    },
+    "meta_304": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_304.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "collapse",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "final_regeneration_codes",
+        "m",
+        "meta_304",
+        "space",
+        "user_technical_print_abstract"
+      ],
+      "params_keys": [
+        "the_snare_crack_spec_khz",
+        "the_snare_crack_spec_db",
+        "the_spatial_dust_spec_ms",
+        "the_master_bus_spec_db",
+        "the_master_bus_spec_khz",
+        "aesthetic_calibration_hz"
+      ]
+    },
+    "meta_314": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_314.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 0.8,
+      "confidence": 0.7,
+      "tags": [
+        "ase_system_health_logic",
+        "m",
+        "meta_314",
+        "shift",
+        "space",
+        "technical_hacks_v4"
+      ],
+      "params_keys": [
+        "aesthetic_fidelity_hz"
+      ]
+    },
+    "meta_331": {
+      "path": "prompt-db-local\\database\\blocks\\Space\\layer3\\meta_331.json",
+      "domain": "Space",
+      "layer": 3,
+      "op": "M",
+      "phase": "shift",
+      "priority": 1.0,
+      "confidence": 0.7,
+      "tags": [
+        "complex_psychedelic_arpeggiators",
+        "hyperloop_inversion_mathematics",
+        "m",
+        "meta_331",
+        "mlgs_quaternion_geometric_unity_v3_0",
+        "shift",
+        "space"
+      ],
+      "params_keys": [
+        "low_freq_hz",
+        "recursive_logic_s"
+      ]
+    },
+    "meta_150": {
+      "path": "prompt-db-local\\database\\blocks\\Timbre\\layer2\\meta_150.json",
+      "domain": "Timbre",
+      "layer": 2,
+      "op": "Q",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "meta_150",
+        "q",
+        "spectral_tuning",
+        "timbre"
+      ],
+      "params_keys": [
+        "action_db",
+        "mixing_db"
+      ]
+    },
+    "meta_165": {
+      "path": "prompt-db-local\\database\\blocks\\Timbre\\layer2\\meta_165.json",
+      "domain": "Timbre",
+      "layer": 2,
+      "op": "Q",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "meta_165",
+        "q",
+        "resonance_filtering",
+        "timbre"
+      ],
+      "params_keys": [
+        "filter_morphing_db",
+        "filter_morphing_hz",
+        "filter_morphing_khz"
+      ]
+    },
+    "meta_169": {
+      "path": "prompt-db-local\\database\\blocks\\Timbre\\layer2\\meta_169.json",
+      "domain": "Timbre",
+      "layer": 2,
+      "op": "Q",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "dynamic_breathing_v2",
+        "emergence",
+        "meta_169",
+        "q",
+        "timbre"
+      ],
+      "params_keys": [
+        "stage_1_leveling_ms",
+        "stage_2_punch_ms"
+      ]
+    },
+    "meta_234": {
+      "path": "prompt-db-local\\database\\blocks\\Timbre\\layer2\\meta_234.json",
+      "domain": "Timbre",
+      "layer": 2,
+      "op": "Q",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "aliasing_to_signal_ratio",
+        "emergence",
+        "meta_234",
+        "q",
+        "quantization_purity",
+        "spectral_roughness_index",
+        "timbre"
+      ],
+      "params_keys": [
+        "aliasing_to_signal_ratio_khz"
+      ]
+    },
+    "meta_289": {
+      "path": "prompt-db-local\\database\\blocks\\Timbre\\layer2\\meta_289.json",
+      "domain": "Timbre",
+      "layer": 2,
+      "op": "G",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "freq",
+        "g",
+        "gain",
+        "meta_289",
+        "timbre",
+        "type"
+      ],
+      "params_keys": [
+        "freq",
+        "gain",
+        "type_db"
+      ]
+    },
+    "meta_291": {
+      "path": "prompt-db-local\\database\\blocks\\Timbre\\layer2\\meta_291.json",
+      "domain": "Timbre",
+      "layer": 2,
+      "op": "G",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "emergence",
+        "freq",
+        "g",
+        "gain",
+        "meta_291",
+        "q",
+        "timbre",
+        "type"
+      ],
+      "params_keys": [
+        "freq",
+        "gain",
+        "q"
+      ]
+    },
+    "meta_293": {
+      "path": "prompt-db-local\\database\\blocks\\Timbre\\layer2\\meta_293.json",
+      "domain": "Timbre",
+      "layer": 2,
+      "op": "G",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "ceiling_db",
+        "emergence",
+        "g",
+        "meta_293",
+        "mode",
+        "release_ms",
+        "threshold_db",
+        "timbre",
+        "tool"
+      ],
+      "params_keys": [
+        "threshold_db",
+        "ceiling_db",
+        "release_ms",
+        "mode_ms"
+      ]
+    },
+    "meta_326": {
+      "path": "prompt-db-local\\database\\blocks\\Timbre\\layer2\\meta_326.json",
+      "domain": "Timbre",
+      "layer": 2,
+      "op": "Q",
+      "phase": "emergence",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "drive_db",
+        "emergence",
+        "meta_326",
+        "node",
+        "q",
+        "timbre",
+        "type"
+      ],
+      "params_keys": [
+        "drive_db"
+      ]
+    },
+    "meta_155": {
+      "path": "prompt-db-local\\database\\blocks\\Timbre\\layer3\\meta_155.json",
+      "domain": "Timbre",
+      "layer": 3,
+      "op": "Q",
+      "phase": "collapse",
+      "priority": 0.5,
+      "confidence": 0.7,
+      "tags": [
+        "collapse",
+        "meta_155",
+        "q",
+        "spectral_decay_math",
+        "timbre"
+      ],
+      "params_keys": [
+        "low_pass_sweep_khz",
+        "low_pass_sweep_hz",
+        "sample_rate_reduction_khz"
+      ]
+    }
+  }
+}

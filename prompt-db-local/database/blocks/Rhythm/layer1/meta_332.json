@@ -1,0 +1,60 @@
+{
+  "id": "meta_332",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_332",
+    "params": {
+      "lead_s": 2.0,
+      "lead_hz": 250.0,
+      "harmonies_hz": 600.0,
+      "special_fx_ms": 40.0,
+      "kick_hz": 52.0,
+      "kick_ms": 12.0,
+      "kick_db": 4.0,
+      "bass_db": 18.0,
+      "bass_ms": 35.0,
+      "sub_control_hz": 300.0,
+      "ghost_notes_ms": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "advanced_layering_details": {
+      "vocal_processing_chain": {
+        "lead": "Formant shifting (-2 semitones), surgical EQ cut @ 250Hz, parallel compression (ratio 8:1)",
+        "harmonies": "5-part stack, pitch-drift ±10 cents for organic feel, high-pass filter @ 600Hz",
+        "special_fx": "Granular delay (grain size 40ms, spray 15%), reverse-reverb tails"
+      },
+      "kick_bass_fusion_logic": {
+        "kick": "Fundamental 52Hz (G#), transient duration 12ms, soft-clipper drive 4dB",
+        "bass": "Sidechain threshold -18dB, release 35ms (tempo-synced), phase-alignment @ 180°",
+        "sub_control": "Monocompatible below 120Hz, saturation @ 300Hz for 'growl' presence"
+      },
+      "rhythmic_entropy_v4_Omega": {
+        "ghost_notes": "Velocity 15-25, subtle swing 8%, displacement δt = +2ms",
+        "percussion_loops": "Fractal layering (Original ⊗ 1.5x speed ⊗ 0.5x speed reverse)"
+      }
+    },
+    "metadata_from_failed_retrieval": {
+      "missing_elements": [
+        "Exact seeds for v3.0 tracks",
+        "Custom audio-visualizer GLSL codes",
+        "Specific 'Vibes' created from stem-splits",
+        "Lyrics IDs for the entire v4 series"
+      ]
+    }
+  }
+}

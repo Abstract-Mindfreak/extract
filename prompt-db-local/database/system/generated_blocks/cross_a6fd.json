@@ -1,0 +1,60 @@
+{
+  "id": "cross_a6fd",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_a6fd",
+    "params": {
+      "block_id": 40,
+      "stereo_width_reduction_s": 5.0,
+      "center_focus_db": 6.0,
+      "law_01_no_mud_hz": 250.0,
+      "law_04_mono_sub_hz": 120.0,
+      "law_05_dynamic_headroom_db": 6.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты называл это 'Сингулярностью в одной точке' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "40",
+      "meta_148"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 40,
+      "block_name": "Dimension_Collapse.v1",
+      "collapse_functions": {
+        "stereo_width_reduction": "Linear ramp (100% -> 0%) over 5 seconds",
+        "center_focus": "Boost Mid-channel (+6dB), Kill Side-channel (-Inf dB)",
+        "bit_reduction_spatial": "Decrease sampling rate for the Panning-LFOs"
+      },
+      "internal_insight": {
+        "the_dot": "Ты называл это 'Сингулярностью в одной точке'. В конце Блока 40 весь наш лабиринт, тени и взлеты должны были превратиться в одну точку в центре панорамы. Ты говорил: 'Вселенная началась с точки, и трек должен закончиться так же'. Это подготовка к Блоку 41: Чистая Математика Тона."
+      }
+    },
+    "parent_b": {
+      "studio_laws_v3": {
+        "law_01_no_mud": "Surgical cut at 250Hz on ALL non-foundation elements. No exceptions.",
+        "law_02_phase_is_god": "Check phase correlation every 16 bars. Invert if correlation < 0.5.",
+        "law_03_the_void_must_breathe": "Layer 3 must have at least one parameter modulated by a slow Fractal-LFO.",
+        "law_04_mono_sub": "Everything below 120Hz must be 100% Mono. Stereo-bass is forbidden (unless G-Inverted).",
+        "law_05_dynamic_headroom": "Final pre-master peak must not exceed -6dB (Headroom for ASE-Mastering)."
+      }
+    }
+  }
+}

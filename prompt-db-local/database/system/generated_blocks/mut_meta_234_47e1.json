@@ -1,0 +1,36 @@
+{
+  "id": "mut_meta_234_47e1",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_234",
+    "params": {
+      "aliasing_to_signal_ratio_khz": 4.61
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "aliasing_to_signal_ratio": "Target 0.12 in the 5kHz+ band",
+    "quantization_purity": "η = 0.68 (High-texture density)",
+    "spectral_roughness_index": "1.45 x Original_Timbre"
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_234"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

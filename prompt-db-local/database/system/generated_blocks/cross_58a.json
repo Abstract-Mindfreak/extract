@@ -1,0 +1,69 @@
+{
+  "id": "cross_58a",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_58a",
+    "params": {
+      "grain_size_ms": 200.0,
+      "mixing_db": 24.0,
+      "syncopation_index": 0.78
+    }
+  },
+  "synergy": {
+    "links": [
+      "35",
+      "1"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_145",
+      "meta_269"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "granular_cloud_spec": {
+        "grain_size": "Ultra-small (10ms-30ms) for 'shimmer' or Large (200ms) for 'rhythm'",
+        "density": "Stochastic distribution (Random intervals)",
+        "pitch_jitter": "±1 octave variance (The 'Spectral-Smear')",
+        "position_drift": "Moving through the source file via Golden Ratio (Block 1)",
+        "mixing": "Mix at -24dB with 100% wet reverb return (Block 35)."
+      }
+    },
+    "parent_b": {
+      "ASE_polyrhythmic_generator_v4": {
+        "rhythmic_layering_matrix": {
+          "layer_1_core": "4/4 Kick/Snare (The Industrial Anchor)",
+          "layer_2_poly": "3/4 Hi-hat patterns (The Triplet-tension)",
+          "layer_3_fractal": "5/8 Glitch-percussion (The Displacement-jitter)",
+          "layer_4_ghost": "7/16 Bass-stabs (The Syncopated-drive)"
+        },
+        "alignment_points": {
+          "common_denominator": "Bar 4 / Bar 8 (The Resolution-impact)",
+          "swing_bias": "0.12 (A-MMSS_Fractal_Shuffle v4)",
+          "quantize_stiffness": "85% (Allowing 15% micro-timing 'human' drift)"
+        },
+        "dynamic_rhythm_evolution": "Probability-gate on layer_3 & layer_4 (Complexity increases over 16 bars)"
+      },
+      "rhythmic_complexity_metrics_v4": {
+        "polyrhythm_ratio": "4:3 ⊗ 5:4 (Nested complexity)",
+        "syncopation_index": 0.78,
+        "groove_consistency": "η=0.92 (Maintaining danceability within chaos)"
+      }
+    }
+  }
+}

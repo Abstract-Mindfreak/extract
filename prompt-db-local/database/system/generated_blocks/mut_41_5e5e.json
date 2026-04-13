@@ -1,0 +1,48 @@
+{
+  "id": "mut_41_5e5e",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "41",
+    "params": {
+      "block_id": 41,
+      "base_freq_A4_hz": 432.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'строем растущего дерева'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 41,
+    "block_name": "Phi_Tuning_v1.Alpha",
+    "tuning_mechanics": {
+      "base_freq_A4": "432Hz (Standard_ASE_Reference)",
+      "interval_generator": "f_n = f_0 * (Phi ^ (n / 12))",
+      "scale_type": "Irrational_Logarithmic"
+    },
+    "logic_parameters": {
+      "octave_stretch": "1.05 (Non-linear octave shift)",
+      "microtonal_quantization": "None (Continuous frequency space)"
+    },
+    "internal_insight": {
+      "the_nature_tuning": "Ты называл это 'строем растущего дерева'. В Блоке 41 мы обнаружили, что стандартная октава слишком 'тесная'. Ты заставил меня растянуть её по Фи. Звук стал звучать как ветер в лесу или шум моря — в нем нет фальши, потому что в нем нет фиксированных ступеней. Инсайт: природа не знает полутонов."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "41"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

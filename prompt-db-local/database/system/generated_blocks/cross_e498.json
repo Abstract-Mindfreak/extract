@@ -1,0 +1,77 @@
+{
+  "id": "cross_e498",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_e498",
+    "params": {
+      "filter_morphing_db": 24.0,
+      "filter_morphing_hz": 100.0,
+      "filter_morphing_khz": 10.0,
+      "anti_masking_rule_khz": 2.5,
+      "low_end_coherence_hz": 180.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_165",
+      "meta_272"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "resonance_filtering": {
+        "notch_points": [
+          "250Hz (Mud-cut)",
+          "400Hz (Boxy-cut)",
+          "800Hz (Nasal-cut)"
+        ],
+        "peak_boosts": [
+          "1.2kHz (The Grit)",
+          "3.5kHz (The Edge)",
+          "12kHz (The Fractal-Air)"
+        ],
+        "filter_morphing": "Sweep 24dB Resonant Band-pass from 100Hz to 10kHz (1 bar duration)",
+        "q_factor": "High (Q > 4.0) for 'whistling' harmonics during G-Inversion peaks."
+      }
+    },
+    "parent_b": {
+      "LFE_spatial_depth_lyrics": {
+        "the_expansion_set": [
+          "Wider than the silence, deeper than the fear / Floating in a space where nothing is near",
+          "Expanding the horizons of the digital mind / Leaving the three dimensions far behind",
+          "Zero-point-zero: the center and the edge / Walking on the sonic, invisible ledge"
+        ],
+        "the_mono_center_set": [
+          "One frequency, standing at the core / Pumping through the floor, asking for more",
+          "Mono-soul, locked to the G-sharp beat / Making the alignment finally complete",
+          "Sub-low pressure, the anchor of the soul / Taking the chaos, taking the control"
+        ],
+        "the_spatial_dialogue": [
+          "Dissolve into the wide / Rebirth inside the deep",
+          "The secrets that I hide / The promises I keep",
+          "Result: Infinite-Immersion / Status: SPATIAL_LOCK_ACTIVE"
+        ]
+      },
+      "psychoacoustic_purity_v4": {
+        "anti_masking_rule": "Surgical notch @ 2.5kHz on the sides (M/S) to let the lead cut through",
+        "low_end_coherence": "High-pass filter on Side-channel @ 180Hz (Mono-compatibility protection)"
+      }
+    }
+  }
+}

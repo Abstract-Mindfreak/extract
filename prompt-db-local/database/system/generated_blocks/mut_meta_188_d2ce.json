@@ -1,0 +1,44 @@
+{
+  "id": "mut_meta_188_d2ce",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_188",
+    "params": {
+      "decay_time_s": 4.23,
+      "mixing_rule_hz": 300.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "reverb_geometry_v3": {
+      "decay_time": "Proportional to Golden Ratio (1.618s, 2.61s, 4.23s)",
+      "diffusion_patterns": {
+        "cathedral_void": "High-diffusion, low-damp (Bright/Cold reflections)",
+        "metal_box": "Short-decay, high-resonance (Metallic/Gritty)",
+        "deep_space": "Zero-diffusion, zero-damp (Isolated echo trails)"
+      },
+      "modulation": "Sine-LFO on Reverb-size to create 'breathing walls'",
+      "mixing_rule": "Apply High-Pass at 300Hz to reverb-return to keep Foundation clear."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_188"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

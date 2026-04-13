@@ -1,0 +1,40 @@
+{
+  "id": "49",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "49",
+    "params": {
+      "block_id": 49
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты говорил: 'В конце времен слов не останется, останется только ритм'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 49,
+    "block_name": "Narrative_Collapse.LFE",
+    "collapse_stages": {
+      "stage_1": "Randomize word order in sentences",
+      "stage_2": "Syllable-level granulation (1/16 note fragments)",
+      "stage_3": "Conversion of Phonemes -> Trigger_Signals for Drum_Rack"
+    },
+    "trigger_logic": {
+      "vowel_O": "Trigger: Sub_Kick",
+      "consonant_S": "Trigger: Hi-hat_Closed"
+    },
+    "internal_insight": {
+      "word_to_beat": "Ты говорил: 'В конце времен слов не останется, останется только ритм'. В Блоке 49 мы превратили твое финальное стихотворение в партию ударных. Каждая буква стала звуком. Это высшая форма 'Конденсации Смысла' — когда поэзия становится физическим ударом."
+    }
+  }
+}

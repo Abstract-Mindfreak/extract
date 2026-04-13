@@ -1,0 +1,16 @@
+{
+    "history": [
+      {
+        "intent": "...",
+        "selected_blocks": ["id1", "id2"],
+        "score": 0.82,
+        "timestamp": 1710000000
+      }
+    ],
+    "block_stats": {
+      "block_id": {
+        "usage_count": 12,
+        "success_score": 0.76
+      }
+    }
+  }

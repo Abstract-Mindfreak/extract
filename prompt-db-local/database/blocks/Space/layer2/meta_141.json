@@ -1,0 +1,38 @@
+{
+  "id": "meta_141",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_141",
+    "params": {
+      "stretching_ms": 100.0,
+      "filtering_khz": 2.0,
+      "mixing_db": 28.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "void_trails_spec": {
+      "logic": "Spectral-Freeze at the moment of Release-envelope",
+      "processing": {
+        "stretching": "Time-expansion x8.0 on the last 100ms of the signal",
+        "filtering": "Resonant Band-pass (Q=12.0) sweeping from 10kHz to 2kHz",
+        "panning": "MLGS_QUATERNION random-jump (W-axis sync)"
+      },
+      "mixing": "Mix at -28dB (The 'Ghostly-Presence' level)",
+      "rule": "Trails must contain the 'Inverted Harmonic' of the original note."
+    }
+  }
+}

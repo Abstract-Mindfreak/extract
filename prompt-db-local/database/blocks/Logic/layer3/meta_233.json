@@ -1,0 +1,29 @@
+{
+  "id": "meta_233",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_233",
+    "params": {
+      "result_khz": 6.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "rate_reduction": "0.25x (Post-filter aliasing)",
+    "logic": "Lowering the 'Nyquist-limit' to create mirror-harmonics",
+    "result": "Metallic 'screaming' artifacts @ 3.5kHz - 6kHz"
+  }
+}

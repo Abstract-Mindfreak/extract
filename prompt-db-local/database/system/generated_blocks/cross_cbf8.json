@@ -1,0 +1,65 @@
+{
+  "id": "cross_cbf8",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_cbf8",
+    "params": {
+      "mixing_db": 18.0,
+      "processing_hz": 40.0,
+      "block_id": 38,
+      "occlusion_filter_hz": 800.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "47",
+      "41"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты называл это 'эффектом преследователя'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_142",
+      "38"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "sub_harmonic_spec": {
+        "action": "Generate f/2 (Sub-octave) sine wave linked to Layer 2 (Lead)",
+        "mixing": "Mix at -18dB relative to the main Bass (Block 41)",
+        "processing": "Strict low-pass at 40Hz. No harmonics allowed.",
+        "psychoacoustic_effect": "The sense of 'Massive Weight' that bypasses the ears",
+        "rule": "Only use during Climax (Block 47) for maximum impact."
+      }
+    },
+    "parent_b": {
+      "block_id": 38,
+      "block_name": "Acoustic_Shadow_Matrix.Alpha",
+      "shadowing_parameters": {
+        "occlusion_filter": "Low-pass at 800Hz (simulating a thick wall)",
+        "diffraction_index": "0.45 (sound bending around corners)",
+        "shadow_trigger": "Randomized or tied to LFE-semantic markers (e.g., word 'Behind')"
+      },
+      "spatial_render": {
+        "environment": "Concrete_Bunker / Digital_Abyss",
+        "wall_absorption": "0.95 (High absorption, no bounce)"
+      },
+      "internal_insight": {
+        "hidden_presence": "Ты называл это 'эффектом преследователя'. В Блоке 38 мы прятали один из лид-синтезаторов 'за стену' фильтра и заставляли его шептать. Слушатель инстинктивно оборачивался. Ты сказал: 'Музыка должна быть опасной, она должна следить за тобой'. Это наш протокол 'Паранойи Сингулярности'."
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "id": "cross_3aec",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_3aec",
+    "params": {}
+  },
+  "synergy": {
+    "links": [
+      "3"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_318",
+      "meta_160"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "semantic_tag_cloud": {
+        "vibe_tags": [
+          "Neuro-Aggression",
+          "Psy-Fractal",
+          "Industrial-Minimal",
+          "Cyber-Gothic"
+        ],
+        "technical_tags": [
+          "Sidechain-Compression",
+          "Phase-Alignment",
+          "Surgical-EQ",
+          "Multiband-OTT"
+        ],
+        "process_tags": [
+          "Iterative-Gen",
+          "Hyperloop-Active",
+          "ASE-Controlled",
+          "MMSS-Optimized"
+        ]
+      },
+      "user_workflow_checkpoints": [
+        "Always start with audio__create_song (2 versions, no seed)",
+        "Refine via audio__modify_song using JSON-specifications",
+        "Finalize with audio__apply_effect for spatial 4D-Vectoring"
+      ]
+    },
+    "parent_b": {
+      "void_narratives": {
+        "concept_01_event_horizon": "Sound at the edge of disappearance. Maximum tension, zero release.",
+        "concept_02_cold_ignition": "Frozen textures suddenly igniting into distorted neuro-bass.",
+        "concept_03_digital_reincarnation": "Old 8-bit artifacts processed through modern 4D-spatializers.",
+        "concept_04_absolute_stillness": "A track with zero transients, only shifting spectral masses.",
+        "usage": "Used as the [CONCEPT] anchor in the L1 Core (Block 3)."
+      }
+    }
+  }
+}

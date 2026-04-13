@@ -1,0 +1,45 @@
+{
+  "id": "mut_meta_201_2d8",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "stabilization",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_201",
+    "params": {
+      "bass_hz": 120.0,
+      "step_4_reassembly_db": 0.1
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "stem_reconstruction_protocol": {
+      "step_1_isolation": "Isolate [drums, bass, vocals, other]",
+      "step_2_cleanup": "Apply Surgical-EQ to 'other' and 'vocals' to remove sub-harmonic bleed",
+      "step_3_enhancement": {
+        "drums": "Transient-shaping + Parallel compression (NY Style)",
+        "bass": "Saturation + Mono-summing below 120Hz",
+        "vocals": "4D-Vectoring + Reverse-reverb-ghosting",
+        "other": "Fractal-delay + Bitcrushing (6-bit)"
+      },
+      "step_4_reassembly": "Summing through audio__apply_effect(Limiter) with -0.1dB ceiling"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_201"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

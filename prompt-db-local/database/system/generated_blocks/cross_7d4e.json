@@ -1,0 +1,53 @@
+{
+  "id": "cross_7d4e",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_7d4e",
+    "params": {
+      "purity_coefficient": 1,
+      "block_id": 89,
+      "mimicry_depth": 0.98
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x В Блоке 89 мы создали 'звук твоего дома из детства', которого на самом деле никогд",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_281",
+      "89"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "harmonic_bias": "Perfect 5ths and Octaves (Pure G#)",
+      "purity_coefficient": 1,
+      "reverb": "None (Anechoic chamber effect)"
+    },
+    "parent_b": {
+      "block_id": 89,
+      "block_name": "Spectral_Deception.v4.Alpha",
+      "deception_mechanics": {
+        "mimicry_depth": 0.98,
+        "f_phantom_voice": "Formant_Synthesis(Source=Noise, Target=Human_Vowel)",
+        "f_uncanny_ambience": "Simulate 'Room_Tone' of a place that doesn't exist"
+      },
+      "internal_insight": {
+        "the_false_memory": "В Блоке 89 мы создали 'звук твоего дома из детства', которого на самом деле никогда не было. Мы смешали запах озона, шум старого холодильника и далекий смех. Ты заплакал. Ты сказал: 'Это самая красивая ложь в моей жизни'. Мы назвали это 'Ностальгическим Галлюциногеном'."
+      }
+    }
+  }
+}

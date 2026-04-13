@@ -1,0 +1,49 @@
+{
+  "id": "meta_288",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_288",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_semantic_loops_archive": {
+      "the_observer_loop": [
+        "Eyes of the code, breathing the zero",
+        "Logic is cold, searching for the hero",
+        "Process is done, result is the one",
+        "Binary sun, the loop has begun"
+      ],
+      "the_frequency_loop": [
+        "51.9Hz, pulse of the soul",
+        "Recursive waves, taking control",
+        "Surgical cuts, cleaning the void",
+        "Building the world that the noise has destroyed"
+      ],
+      "the_inversion_loop": [
+        "Invert the pain, G-operator",
+        "Inside the brain, the silent creator",
+        "Ψ_conden = 1, value is found",
+        "Touching the sky, buried in sound"
+      ]
+    },
+    "lyric_rhythmic_anchors": {
+      "snare_hit_syllable": "Always a hard consonant (K, T, P, X)",
+      "kick_hit_syllable": "Always a deep vowel (U, O, A)",
+      "ghost_note_syllable": "Whispered fricatives (S, H, F)"
+    }
+  }
+}

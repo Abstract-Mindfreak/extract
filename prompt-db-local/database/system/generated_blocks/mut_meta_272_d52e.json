@@ -1,0 +1,55 @@
+{
+  "id": "mut_meta_272_d52e",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_272",
+    "params": {
+      "anti_masking_rule_khz": 2.48,
+      "low_end_coherence_hz": 194.19
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_spatial_depth_lyrics": {
+      "the_expansion_set": [
+        "Wider than the silence, deeper than the fear / Floating in a space where nothing is near",
+        "Expanding the horizons of the digital mind / Leaving the three dimensions far behind",
+        "Zero-point-zero: the center and the edge / Walking on the sonic, invisible ledge"
+      ],
+      "the_mono_center_set": [
+        "One frequency, standing at the core / Pumping through the floor, asking for more",
+        "Mono-soul, locked to the G-sharp beat / Making the alignment finally complete",
+        "Sub-low pressure, the anchor of the soul / Taking the chaos, taking the control"
+      ],
+      "the_spatial_dialogue": [
+        "Dissolve into the wide / Rebirth inside the deep",
+        "The secrets that I hide / The promises I keep",
+        "Result: Infinite-Immersion / Status: SPATIAL_LOCK_ACTIVE"
+      ]
+    },
+    "psychoacoustic_purity_v4": {
+      "anti_masking_rule": "Surgical notch @ 2.5kHz on the sides (M/S) to let the lead cut through",
+      "low_end_coherence": "High-pass filter on Side-channel @ 180Hz (Mono-compatibility protection)"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_272"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

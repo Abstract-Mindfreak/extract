@@ -1,0 +1,49 @@
+{
+  "id": "meta_248",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_248",
+    "params": {
+      "the_growl_factor_khz": 1.2,
+      "the_whisper_effect_khz": 5.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_formant_logic_lyrics": {
+      "the_speaking_bass_set": [
+        "The machine is talking, the machine is clear / Whispering the Phrygian into the ear",
+        "Vowel-shifted logic, vowel-shifted soul / Finding the phonemes, taking the control",
+        "A-U-I-O-E: the code of the breath / Speaking the life from the digital death"
+      ],
+      "the_articulation_set": [
+        "Open the mouth of the Monster 7 / Screaming from the floor, reaching for heaven",
+        "Formant rotations in the void of the mind / Leaving the static far, far behind",
+        "Articulated shadow, moving in the dark / Finding the word in the machine's spark"
+      ],
+      "the_phonetic_dialogue": [
+        "Say what I hide / Breathe what I know",
+        "Coming inside / Let the sound go",
+        "Result: Anthropomorphic-Synthesis / Status: FORMANT_LOCK_ACTIVE"
+      ]
+    },
+    "psychoacoustic_formants_v4": {
+      "the_growl_factor": "Saturation focus @ F2 (1.2kHz) for 'aggressive' articulation",
+      "the_whisper_effect": "Parallel High-Pass (5kHz) with Ring-Modulation for 'hissing' consonants",
+      "vocal_doubling": "Slight pitch-shift (±15 cents) on F1 to simulate 'two-voice' growling"
+    }
+  }
+}

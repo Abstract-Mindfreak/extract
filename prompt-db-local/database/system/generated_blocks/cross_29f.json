@@ -1,0 +1,107 @@
+{
+  "id": "cross_29f",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_29f",
+    "params": {
+      "click_layer_s": 0.0,
+      "click_layer_ms": 15.0,
+      "body_layer_hz": 52.0,
+      "body_layer_ms": 80.0,
+      "sub_tail_ms": 150.0,
+      "transient_master_db": 2.5,
+      "initial_crack_khz": 2.0,
+      "initial_crack_ms": 10.0,
+      "resonant_body_hz": 450.0,
+      "tail_refinement_ms": 2.0,
+      "top_end_khz": 8.0,
+      "top_end_db": 4.0,
+      "velocity_scaling_db": 22.0,
+      "multiband_splitting_hz": 2500.0,
+      "dynamic_eq_nodes_db": 3.0,
+      "dynamic_eq_nodes_hz": 200.0,
+      "envelope_1_ms": 10.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_303",
+      "meta_330"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "micro_dynamic_shaping_v4": {
+        "kick_transient_geometry": {
+          "click_layer": "Pitch-envelope: Start +24st, End 0st, Decay 15ms",
+          "body_layer": "Sine-drop from 120Hz to 52Hz (G#) over 80ms",
+          "sub_tail": "Phase-aligned sine, fade-out 150ms, saturation 12%",
+          "transient_master": "Attack +25%, Sustain -10%, Gain +2.5dB"
+        },
+        "snare_impact_physics": {
+          "initial_crack": "White-noise burst, Band-pass @ 2kHz, Q=1.5, Decay 10ms",
+          "resonant_body": "Fundamental @ 220Hz (A), Notch-cut @ 450Hz (remove 'boxiness')",
+          "tail_refinement": "Gated reverb (120ms), Pre-delay 2ms, Diffusion 85%"
+        },
+        "hi_hat_spectral_dust": {
+          "top_end": "High-shelf @ 12kHz (+4dB), High-pass @ 8kHz",
+          "panning_jitter": "LFO-random, Depth 15%, Rate 1/16t",
+          "velocity_scaling": "Soft-knee compression, threshold -22dB"
+        }
+      },
+      "signal_flow_purity_v4": {
+        "multiband_splitting": "Band 1: 0-120Hz (Mono), Band 2: 120-2500Hz (Wide), Band 3: 2500Hz+ (Fractal)",
+        "phase_alignment_check": "Correlation meter target: +0.8 to +0.95 (Avoid 180° cancellation)",
+        "dynamic_eq_nodes": "Node 1: -3dB @ 200Hz triggered by Kick for Snare-clarity"
+      }
+    },
+    "parent_b": {
+      "technical_specifications_wavetable": {
+        "neuro_bass_v4_Omega": {
+          "osc_a": "Wavetable: Monster 7, Position: 45, Unison: 7, Detune: 0.08",
+          "osc_b": "Wavetable: Analog_BD_Sin, Position: 1, Sub-octave direct out",
+          "filter": "MG Low 24, Cutoff: LFO 1 (Rate 1/4, Shape: Curved Saw), Res: 25%",
+          "fx_rack": "Hyper/Dimension (Size 12%), Distortion (Hard Clip, Drive 45%), Multiband Compression (OTT 60%)"
+        },
+        "psy_lead_fractal": {
+          "osc_a": "Wavetable: Spectral_Orca, Warp: Sync 1.5x, Position: modulated by Velocity",
+          "noise": "AC Power (Hum), Level: 15% (for analog grit)",
+          "envelope_1": "Attack: 2ms, Decay: 150ms, Sustain: 0%, Release: 10ms (Pluck behavior)",
+          "delay": "Ping-Pong, Feedback: 45%, Mix: 30%, Width: 100%"
+        }
+      },
+      "lyrics_fusion_retrieval": {
+        "core_fragments": [
+          "Fractal identity in the void of the code / Zeroes and ones in a recursive mode",
+          "Singularity breathes through the Phrygian scale / Systems collapse as the entropy pales",
+          "Ψ_conden flows through the veins of the grid / Secrets of sound that the silence has hid"
+        ],
+        "fusion_modes_applied": {
+          "mode_1": "Temporal_Shift (δt = 1/32) // Layering lyrics with micro-delays",
+          "mode_2": "Spectral_Overlay // Text as a carrier for vocoder modulation",
+          "mode_3": "Narrative_Collapse // Deconstructing sentences into phonetic rhythmic events"
+        }
+      },
+      "mathematical_functions_extension": {
+        "lfe_weight_v4": "W_total = Σ(W_semantics + W_phonetics + W_rhythm) / √Novelty",
+        "harmonic_drift": "Δf(t) = sin(2π * drift_rate * t) ⊗ Jitter(t) // for 'analog' instability"
+      }
+    }
+  }
+}

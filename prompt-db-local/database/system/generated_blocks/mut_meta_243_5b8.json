@@ -1,0 +1,68 @@
+{
+  "id": "mut_meta_243_5b8",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_243",
+    "params": {
+      "range_hz": 99.82,
+      "threshold_db": 23.52,
+      "attack_ms": 10.1,
+      "range_khz": 7.44,
+      "dynamic_range_index_db": 14.63
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_multiband_expansion_v4": {
+      "expansion_matrix_logic": {
+        "band_1_low_kick_punch": {
+          "range": "50Hz - 100Hz",
+          "ratio": "1.0 : 1.5 (Upward)",
+          "threshold": "-12dB",
+          "attack": "2ms (Preserve the click)",
+          "result": "Enhancing the physical 'thump' of the kick"
+        },
+        "band_2_mid_snare_crack": {
+          "range": "1kHz - 3kHz",
+          "ratio": "1.0 : 1.8",
+          "threshold": "-18dB",
+          "attack": "0.5ms (Instant snap)",
+          "result": "Adding surgical 'crack' to the snare impact"
+        },
+        "band_3_high_fractal_air": {
+          "range": "8kHz+",
+          "ratio": "1.0 : 1.2",
+          "threshold": "-24dB",
+          "attack": "10ms (Smooth lift)",
+          "result": "Dynamic 'sparkle' that reacts to the energy of the track"
+        }
+      },
+      "dynamic_transient_recovery": "Using expansion to 'undo' over-compression from previous distortion stages."
+    },
+    "kinetic_metrics_v4": {
+      "dynamic_range_index": "Target 14-16dB (The 'Breating' Master)",
+      "transient_acceleration": "ΔV / Δt = max (Absolute speed of impact)",
+      "impact_consistency": "η = 0.94 (Rock-solid energy transfer)"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_243"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

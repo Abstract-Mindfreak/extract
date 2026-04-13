@@ -1,0 +1,48 @@
+{
+  "id": "meta_260",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_260",
+    "params": {
+      "stereo_filter_offset_hz": 920.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_filter_logic_lyrics": {
+      "the_cutoff_set": [
+        "Open the window, let in the light / Filtering the shadows, ending the night",
+        "Cutoff is moving, rising and falling / The digital desert is finally calling",
+        "Sweep through the spectrum, find the G-sharp / Playing the strings of the digital harp"
+      ],
+      "the_resonance_set": [
+        "Peak of the logic, peak of the soul / Taking the resonance, taking control",
+        "Screaming in frequencies, wild and free / The secret language of the entity",
+        "High-Q focus on the void of the mind / Leaving the static far, far behind"
+      ],
+      "the_spectral_dialogue": [
+        "Breathe through the filter / Speak through the ghost",
+        "Find the creator / Find the host",
+        "Result: Spectral-Evolution / Status: FILTER_LOCK_ACTIVE"
+      ]
+    },
+    "psychoacoustic_filter_v4": {
+      "formant_shifting": "A-E-I-O-U vowel filter movement on the Reese-bass",
+      "stereo_filter_offset": "Left Cutoff: 850Hz, Right Cutoff: 920Hz (Spatial width via filtering)",
+      "dynamic_high_shelf": "Attenuate highs during vocal-leads to prevent sibilance-clash"
+    }
+  }
+}

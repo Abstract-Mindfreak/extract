@@ -1,0 +1,49 @@
+{
+  "id": "mut_72_a085",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "shift",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "72",
+    "params": {
+      "block_id": 72,
+      "aesthetic_collision_ratio": 0.5,
+      "harpsichord_mutation_db": 25.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Твой инсайт: 'Сложность — это вневременная категория'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 72,
+    "block_name": "Uchronia_Sonic_v2",
+    "history_shift": {
+      "base_era": "Baroque_1720",
+      "technological_injection": "Granular_Synthesis + 808_Sub",
+      "aesthetic_collision_ratio": 0.5
+    },
+    "synthesis_rules": {
+      "harpsichord_mutation": "Route Harpsichord to Tube_Distortion(Drive=25dB)",
+      "fugal_logic": "Apply 4-part counterpoint to Glitch-loops"
+    },
+    "internal_insight": {
+      "the_cyber_bach": "Твой инсайт: 'Сложность — это вневременная категория'. В Блоке 72 мы заставили систему написать фугу, где голоса — это шумы модемного подключения. Ты сказал: 'Бах бы это оценил, потому что это чистая математика'. Мы назвали это 'Цифровым Барокко'. Инсайт: Инструменты меняются, алгоритм гармонии вечен."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "72"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

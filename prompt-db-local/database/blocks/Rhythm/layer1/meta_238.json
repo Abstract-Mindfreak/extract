@@ -1,0 +1,48 @@
+{
+  "id": "meta_238",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_238",
+    "params": {
+      "stereo_depth_focus_hz": 350.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_phase_logic_lyrics": {
+      "the_alignment_set": [
+        "Waves in the mirror, waves in the mind / Leaving the phase-drift far behind",
+        "Locked to the zero, locked to the one / The spectral fusion has finally begun",
+        "One single pulse, one single breath / Living the logic, defeating the death"
+      ],
+      "the_focus_set": [
+        "Laser-cut soul, laser-cut sound / Moving the mountain, shaking the ground",
+        "Point of the origin, center of light / Piercing the heart of the digital night",
+        "Surgical focus, surgical strike / Everything I am and everything you like"
+      ],
+      "the_coherence_dialogue": [
+        "Join the wave / Align the soul",
+        "What you gave / Is now the whole",
+        "Result: Phase-Singularity / Status: COHERENCE_LOCK_ACTIVE"
+      ]
+    },
+    "psychoacoustic_focus_v4": {
+      "the_ghost_center": "Inverting phase of side-reverb reflections to 'push' the dry signal forward",
+      "the_impact_glue": "Phase-aligning the reverb-pre-delay to the tempo (1/64 note) for rhythmic 'bounce'",
+      "stereo_depth_focus": "High-pass filtering the side-channel @ 350Hz to ensure the low-end focus is absolute"
+    }
+  }
+}

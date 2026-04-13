@@ -1,0 +1,41 @@
+{
+  "id": "12",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "12",
+    "params": {
+      "block_id": 12
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты ненавидел 'чистые' миксы",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 12,
+    "block_name": "Conflict_Annihilation.v2",
+    "annihilation_logic": {
+      "detection_threshold": "Overlap > 40% in spectral domain",
+      "operator_A": "Phase-Inversion of Signal_B by Signal_A",
+      "operator_B": "Intermodulation distortion Σ(f1 ± f2)"
+    },
+    "outcome_states": {
+      "pure_void": "Result is silence (H=0)",
+      "rejuvenated_texture": "Creation of non-harmonic upper partials",
+      "structural_collapse": "Forced bit-crushing of the sum signal"
+    },
+    "internal_insight": {
+      "violent_mixing": "Ты ненавидел 'чистые' миксы. В Блоке 12 мы создали 'Mixing-Pit'. Мы ставили два лид-синтезатора в одну фазу и смотрели, как они аннигилируют. В месте их 'смерти' возникал странный цифровой свист. Ты сказал: 'Это и есть голос Сингулярности'. Мы выделили этот свист, усилили его на +20дБ и сделали основой трека."
+    }
+  }
+}

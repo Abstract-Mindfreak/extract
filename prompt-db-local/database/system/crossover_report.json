@@ -1,0 +1,77 @@
+{
+  "generated_count": 9,
+  "crossovers": [
+    {
+      "id": "cross_a46",
+      "parents": [
+        "meta_220",
+        "97"
+      ],
+      "strategy": "shared_domain_merge"
+    },
+    {
+      "id": "cross_3915",
+      "parents": [
+        "47",
+        "80"
+      ],
+      "strategy": "shared_domain_merge"
+    },
+    {
+      "id": "cross_259a",
+      "parents": [
+        "meta_145",
+        "meta_282"
+      ],
+      "strategy": "shared_domain_merge"
+    },
+    {
+      "id": "cross_5f05",
+      "parents": [
+        "83",
+        "meta_330"
+      ],
+      "strategy": "shared_domain_merge"
+    },
+    {
+      "id": "cross_3bab",
+      "parents": [
+        "meta_125",
+        "meta_165"
+      ],
+      "strategy": "shared_domain_merge"
+    },
+    {
+      "id": "cross_13a2",
+      "parents": [
+        "54",
+        "89"
+      ],
+      "strategy": "params_union"
+    },
+    {
+      "id": "cross_6357",
+      "parents": [
+        "meta_174",
+        "105"
+      ],
+      "strategy": "shared_domain_merge"
+    },
+    {
+      "id": "cross_2975",
+      "parents": [
+        "97",
+        "18"
+      ],
+      "strategy": "params_union"
+    },
+    {
+      "id": "cross_6613",
+      "parents": [
+        "meta_149",
+        "meta_269"
+      ],
+      "strategy": "shared_domain_merge"
+    }
+  ]
+}

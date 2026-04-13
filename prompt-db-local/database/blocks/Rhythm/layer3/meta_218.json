@@ -1,0 +1,35 @@
+{
+  "id": "meta_218",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_218",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "entropy_law": "H(p,c) = Σ(p_i * log(1/p_i)) + Δc",
+    "variables": {
+      "p_order": "Rhythmic stability, Harmonic coherence, Narrative fidelity",
+      "c_chaos": "Glitch injection, Spectral smearing, Random seed variance",
+      "target_balance": {
+        "ambient_mode": "p:0.8, c:0.2",
+        "neuro_mode": "p:0.4, c:0.6",
+        "singularity_mode": "p:0.5, c:0.5 (Ideal Symmetry)"
+      }
+    },
+    "stabilizer_logic": "If H > 0.9, apply low-pass filter and rhythmic quantization. If H < 0.3, apply bitcrush and tempo-shift."
+  }
+}

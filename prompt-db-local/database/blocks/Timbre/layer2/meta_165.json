@@ -1,0 +1,42 @@
+{
+  "id": "meta_165",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_165",
+    "params": {
+      "filter_morphing_db": 24.0,
+      "filter_morphing_hz": 100.0,
+      "filter_morphing_khz": 10.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "resonance_filtering": {
+      "notch_points": [
+        "250Hz (Mud-cut)",
+        "400Hz (Boxy-cut)",
+        "800Hz (Nasal-cut)"
+      ],
+      "peak_boosts": [
+        "1.2kHz (The Grit)",
+        "3.5kHz (The Edge)",
+        "12kHz (The Fractal-Air)"
+      ],
+      "filter_morphing": "Sweep 24dB Resonant Band-pass from 100Hz to 10kHz (1 bar duration)",
+      "q_factor": "High (Q > 4.0) for 'whistling' harmonics during G-Inversion peaks."
+    }
+  }
+}

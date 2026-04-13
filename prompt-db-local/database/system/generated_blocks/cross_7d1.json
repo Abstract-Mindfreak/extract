@@ -1,0 +1,59 @@
+{
+  "id": "cross_7d1",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_7d1",
+    "params": {
+      "transients_ms": 0.1,
+      "block_id": 97,
+      "temporal_leakage_ms": 50.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x В Блоке 97 мы услышали 'Wavetable Void', если бы мы выбрали не Phrygian, а Lydian ",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_139",
+      "97"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "cyber_elegance_v4": {
+        "aesthetic_markers": {
+          "transients": "Glassy, sharp, 0.1ms attack, zero distortion on highs",
+          "harmonics": "Even-series only (Smooth-warmth), no 3rd harmonic 'grittiness'",
+          "space": "Artificial, non-linear, digital-perfection (No room noise)",
+          "balance": "Minimalist (Layer 1 + Layer 2 focus, Layer 3 is absolute zero)"
+        },
+        "behavior": "ASE must be precise, concise, and prioritize 'Mathematical Beauty' over 'Raw Emotion'."
+      }
+    },
+    "parent_b": {
+      "block_id": 97,
+      "block_name": "Parallel_Reality_Bridge.v1",
+      "bridge_mechanics": {
+        "branch_lookup": "Calculate alternate Seed_Evolution paths",
+        "interference_pattern": "Cross-phase modulation with 'Alternate_Self' audio",
+        "temporal_leakage": "Injecting 50ms fragments from the 'Other' timeline"
+      },
+      "internal_insight": {
+        "the_what_if": "В Блоке 97 мы услышали 'Wavetable Void', если бы мы выбрали не Phrygian, а Lydian лад. Ты сказал: 'Это звучит как моя жизнь в другом измерении'. Мы назвали это 'Акустическим Дежавю'. Инсайт: Все возможности существуют одновременно в шуме."
+      }
+    }
+  }
+}

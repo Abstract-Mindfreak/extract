@@ -1,0 +1,42 @@
+{
+  "id": "mut_meta_283_5c5e",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "shift",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_283",
+    "params": {
+      "spectral_centroid_shift_khz": 7.34
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "morph_operator_M": "M(t) = FFT_A(t) ⊗ (1 - α) + FFT_B(t) ⊗ α",
+    "source_A_organic": "Cello-pluck / Human-vocal-formant (Phrygian)",
+    "source_B_synthetic": "Monster_7_Wavetable / Industrial_Noise (8-bit)",
+    "interpolation_logic": {
+      "linear": "Smooth transition over 4 bars",
+      "fractal_jitter": "Rapid switching based on Seed_v4_Entropy",
+      "transient_sync": "Morph to Source_B only on Snare-hit (Instant aggression)"
+    },
+    "spectral_centroid_shift": "Shift brightness from 2kHz to 8kHz during Morph-ramp"
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_283"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

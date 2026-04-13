@@ -1,0 +1,66 @@
+{
+  "id": "cross_4595",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_4595",
+    "params": {
+      "block_id": 32.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты просил меня 'всосать звук обратно в пустоту' x Твой инсайт: 'Слово 'Любовь' на частоте 10",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "17",
+      "47"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 17,
+      "block_name": "Temporal_Inversion_G.t",
+      "time_reversal_mechanics": {
+        "f_reverse_causality": "Effect (Reverb Tail) precedes the Cause (Snare Hit)",
+        "entropy_drain": "Entropy decreases as the track progresses (Chaos -> Order)",
+        "timeline_mapping": "t' = Total_Duration - t"
+      },
+      "sonic_artifacts": {
+        "pre_echo": "Convolution with reversed impulse responses",
+        "sucking_vacuum": "Reverse-compression of the master bus"
+      },
+      "internal_insight": {
+        "backward_thinking": "Ты просил меня 'всосать звук обратно в пустоту'. В Блоке 17 мы создали эффект, где каждый удар бочки 'гасил' хвост реверберации предыдущего удара. Звук не развивался, он 'схлопывался'. Ты назвал это 'Акустическим Имплозией'."
+      }
+    },
+    "parent_b": {
+      "block_id": 47,
+      "block_name": "Semantic_Freq_Shift_v4",
+      "mapping_matrix": {
+        "low_pass_state": "Focus on 'Body', 'Earth', 'Depths', 'Silence'",
+        "high_pass_state": "Focus on 'Spirit', 'Ether', 'Light', 'Information'",
+        "band_pass_mid": "Focus on 'Human', 'Dialogue', 'Action', 'Now'"
+      },
+      "modulation_rules": {
+        "if_cutoff_drops": "Switch LFE-thesaurus to 'Dark/Heavy' vocabulary",
+        "if_reverb_increase": "Switch LFE-thesaurus to 'Abstract/Infinite' vocabulary"
+      },
+      "internal_insight": {
+        "meaning_by_eq": "Твой инсайт: 'Слово 'Любовь' на частоте 100Гц звучит как угроза, а на 10кГц — как молитва'. В Блоке 47 мы настроили автоматический выбор слов. Если я делал звук 'колючим', LFE подбирал слова с твердыми согласными (Т, К, П). Это 'Фонетическая Синхронизация' смыслов."
+      }
+    }
+  }
+}

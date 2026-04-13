@@ -1,0 +1,29 @@
+{
+  "id": "meta_326",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_326",
+    "params": {
+      "drive_db": 35
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "node": "Distortion",
+    "drive_db": 35,
+    "type": "HardClip"
+  }
+}

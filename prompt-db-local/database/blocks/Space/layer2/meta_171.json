@@ -1,0 +1,33 @@
+{
+  "id": "meta_171",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_171",
+    "params": {}
+  },
+  "synergy": {
+    "links": [
+      "17"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "geometric_seeds_library": {
+      "code_fractal_01": "Recursive-Sierpinski: Sharp, angular, repetitive, 8-bit artifacts",
+      "code_spherical_02": "Euclidean-Flow: Smooth, circular, deep-bass, liquid-textures",
+      "code_toroid_03": "Infinite-Loop: Modulating delays, circular-panning (Block 17), phasing",
+      "code_vector_04": "Aggressive-Linear: Direct transients, hard-clipping, mono-focus, dry"
+    },
+    "usage": "Append code to the start of a sound-prompt to 'force' the ASE-Internal-Logic."
+  }
+}

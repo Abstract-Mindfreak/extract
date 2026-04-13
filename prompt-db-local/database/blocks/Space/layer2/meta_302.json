@@ -1,0 +1,49 @@
+{
+  "id": "meta_302",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_302",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "semantic_gravity_v4_deep": {
+      "attraction_force_F_gs": "F_gs = (G * m1 * m2) / (r² * √Novelty)",
+      "variable_m1_concept": "Mass of the core idea (e.g., 'Recursive Chaos')",
+      "variable_m2_soundscape": "Mass of the sonic environment (e.g., 'Dystopian Industrial')",
+      "distance_r": "Conceptual distance in the MMSS-latent-space",
+      "collision_logic": "IF F_gs > Threshold THEN apply Semantic_Fusion(Fusion_Mode_Fractal)"
+    },
+    "MMSS_latent_space_coordinates": {
+      "node_alpha_dark": [
+        -0.85,
+        0.42,
+        0.95
+      ],
+      "node_beta_psy": [
+        0.33,
+        -0.78,
+        0.61
+      ],
+      "node_gamma_industrial": [
+        0.91,
+        0.15,
+        -0.22
+      ]
+    },
+    "GS_normalization": "Ensure Σ(Mass_i) = 1.0 (Conservation of Meaning)"
+  }
+}

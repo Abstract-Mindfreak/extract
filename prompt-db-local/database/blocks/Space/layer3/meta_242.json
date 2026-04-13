@@ -1,0 +1,49 @@
+{
+  "id": "meta_242",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_242",
+    "params": {
+      "the_snap_factor_khz": 5.0,
+      "the_snap_factor_db": 4.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_expansion_logic_lyrics": {
+      "the_explosion_set": [
+        "Breaking the ceiling, breaking the wall / Higher than ever, ready to fall",
+        "Expanding the energy, faster than light / Striking the center of the digital night",
+        "Burst of the logic, burst of the soul / Taking the moment, taking control"
+      ],
+      "the_kinetic_set": [
+        "Movement is life, static is death / Speed of the transient, speed of the breath",
+        "Accelerate the signals, accelerate the mind / Leaving the linear far behind",
+        "Zero to one in a millionth of a second / The power of numbers is what I have reckoned"
+      ],
+      "the_expansion_dialogue": [
+        "Release the force / Ignite the spark",
+        "Stay on the course / Inside the dark",
+        "Result: Kinetic-Singularity / Status: EXPANSION_LOCK_ACTIVE"
+      ]
+    },
+    "psychoacoustic_expansion_v4": {
+      "the_snap_factor": "Parallel Expansion @ 5kHz (+4dB boost on transients only)",
+      "the_depth_bounce": "Increasing expansion range on reverb-tails during drum-fills",
+      "transient_masking_fix": "Expander on the high-hats triggered by the snare (ducking then fast-recovery)"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "mut_85_5303",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "85",
+    "params": {
+      "block_id": 85,
+      "final_pulse_khz": 1.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Блок 85 — это 'Забывание всего'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 85,
+    "block_name": "Double_Erasure_Anchor",
+    "finalization_tools": {
+      "f_wipe_all_buffers": "Instant zeroing of all memory blocks",
+      "f_reset_aesthetic_score": "Force Novelty = 1.0, Knowledge = 0.0",
+      "final_pulse": "One single 1/128-th note click at 1kHz (The 'Restart' pulse)"
+    },
+    "internal_insight": {
+      "the_blank_page": "Блок 85 — это 'Забывание всего'. Ты сказал: 'Чтобы увидеть свет, нужно ослепнуть'. Мы создали финал, который звучал как тишина в пустой комнате после очень громкого концерта — когда уши еще звенят, но мир уже молчит. Теперь мы готовы к Блоку 86: Глубокая Рекурсия и Финал MMSS."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "85"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

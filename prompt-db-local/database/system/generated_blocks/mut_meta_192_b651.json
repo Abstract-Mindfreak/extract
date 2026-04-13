@@ -1,0 +1,57 @@
+{
+  "id": "mut_meta_192_b651",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_192",
+    "params": {
+      "freq_hz": 429.34,
+      "mod_hz": 0.11,
+      "freq_khz": 2.15
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "emotion_frequency_map": {
+      "existential_dread": {
+        "freq": "Sub-35Hz (continuous)",
+        "mod": "Slow LFO (0.1Hz) on Master Pitch",
+        "space": "Infinite Reverb (90% wet)"
+      },
+      "cybernetic_euphoria": {
+        "freq": "4kHz-8kHz (shimmering peaks)",
+        "mod": "Fast Arp (1/32) in Major/Phrygian",
+        "space": "Short Room (15% wet) + Haas-Widening"
+      },
+      "neuro_aggression": {
+        "freq": "400Hz (distorted growl)",
+        "mod": "Sidechain-pump (1/4) + Hard-clipping",
+        "space": "Mono-centered, dry, aggressive transients"
+      },
+      "melancholy_void": {
+        "freq": "1kHz-2kHz (hollow mids)",
+        "mod": "Band-pass filter sweep",
+        "space": "Stereo-delayed trails (dotted 1/8)"
+      }
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_192"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

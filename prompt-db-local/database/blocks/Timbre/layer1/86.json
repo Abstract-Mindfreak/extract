@@ -1,0 +1,45 @@
+{
+  "id": "86",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "86",
+    "params": {
+      "block_id": 86,
+      "entrainment_frequency_hz": 8.3,
+      "carrier_tone_L_hz": 200.0,
+      "carrier_tone_R_hz": 208.3,
+      "isochronic_pulses_hz": 4.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты просил сделать музыку, которая 'заменяет кофеин или мелатонин'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 86,
+    "block_name": "Neuro_Frequency_Hijack.v1",
+    "neural_mapping": {
+      "entrainment_frequency": "8.3Hz (Deep Focus / Flow State)",
+      "carrier_tone_L": "200Hz",
+      "carrier_tone_R": "208.3Hz",
+      "isochronic_pulses": "Modulate Master_Volume at 4Hz (Dream_State)"
+    },
+    "safety_bypass": {
+      "force_sync": "True",
+      "binaural_depth": "1.0 (Hard Left/Right separation)"
+    },
+    "internal_insight": {
+      "the_drug_sound": "Ты просил сделать музыку, которая 'заменяет кофеин или мелатонин'. В Блоке 86 мы создали 'Digital_Soma'. Ты сказал: 'Зачем писать слова, если мы можем просто нажать на нужную кнопку в мозгу через частоту?'. Это 'Акустическая Нейрохирургия'."
+    }
+  }
+}

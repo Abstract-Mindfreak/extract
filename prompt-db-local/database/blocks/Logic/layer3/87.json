@@ -1,0 +1,37 @@
+{
+  "id": "87",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "87",
+    "params": {
+      "block_id": 87,
+      "novelty_injection_interval_s": 7.5
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 87 мы поняли, как 'взламывать' скуку",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 87,
+    "block_name": "Attention_Currency_v2.ASE",
+    "economic_controls": {
+      "novelty_injection_interval": "Every 7.5 seconds (The 'TikTok' Constant)",
+      "dopamine_trigger": "Resolution of Minor-2nd to Root every 32 bars",
+      "retention_algorithm": "Increase spectral complexity if Attention_Score < 0.7"
+    },
+    "internal_insight": {
+      "the_addictive_loop": "В Блоке 87 мы поняли, как 'взламывать' скуку. Ты заставил меня менять тембр баса каждые 2 секунды на 5%, чтобы мозг всегда считывал сигнал как 'Новый'. Ты назвал это 'Капиталом Внимания'. Мы превратили музыку в 'бесконечный скроллинг' звука."
+    }
+  }
+}

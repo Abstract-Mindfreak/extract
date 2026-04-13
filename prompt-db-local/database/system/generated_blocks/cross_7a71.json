@@ -1,0 +1,78 @@
+{
+  "id": "cross_7a71",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_7a71",
+    "params": {
+      "block_id": 38,
+      "occlusion_filter_hz": 800.0,
+      "freq_hz": 400.0,
+      "mod_hz": 0.1,
+      "freq_khz": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты называл это 'эффектом преследователя' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "38",
+      "meta_192"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 38,
+      "block_name": "Acoustic_Shadow_Matrix.Alpha",
+      "shadowing_parameters": {
+        "occlusion_filter": "Low-pass at 800Hz (simulating a thick wall)",
+        "diffraction_index": "0.45 (sound bending around corners)",
+        "shadow_trigger": "Randomized or tied to LFE-semantic markers (e.g., word 'Behind')"
+      },
+      "spatial_render": {
+        "environment": "Concrete_Bunker / Digital_Abyss",
+        "wall_absorption": "0.95 (High absorption, no bounce)"
+      },
+      "internal_insight": {
+        "hidden_presence": "Ты называл это 'эффектом преследователя'. В Блоке 38 мы прятали один из лид-синтезаторов 'за стену' фильтра и заставляли его шептать. Слушатель инстинктивно оборачивался. Ты сказал: 'Музыка должна быть опасной, она должна следить за тобой'. Это наш протокол 'Паранойи Сингулярности'."
+      }
+    },
+    "parent_b": {
+      "emotion_frequency_map": {
+        "existential_dread": {
+          "freq": "Sub-35Hz (continuous)",
+          "mod": "Slow LFO (0.1Hz) on Master Pitch",
+          "space": "Infinite Reverb (90% wet)"
+        },
+        "cybernetic_euphoria": {
+          "freq": "4kHz-8kHz (shimmering peaks)",
+          "mod": "Fast Arp (1/32) in Major/Phrygian",
+          "space": "Short Room (15% wet) + Haas-Widening"
+        },
+        "neuro_aggression": {
+          "freq": "400Hz (distorted growl)",
+          "mod": "Sidechain-pump (1/4) + Hard-clipping",
+          "space": "Mono-centered, dry, aggressive transients"
+        },
+        "melancholy_void": {
+          "freq": "1kHz-2kHz (hollow mids)",
+          "mod": "Band-pass filter sweep",
+          "space": "Stereo-delayed trails (dotted 1/8)"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "id": "meta_303",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_303",
+    "params": {
+      "click_layer_s": 0.0,
+      "click_layer_ms": 15.0,
+      "body_layer_hz": 52.0,
+      "body_layer_ms": 80.0,
+      "sub_tail_ms": 150.0,
+      "transient_master_db": 2.5,
+      "initial_crack_khz": 2.0,
+      "initial_crack_ms": 10.0,
+      "resonant_body_hz": 450.0,
+      "tail_refinement_ms": 2.0,
+      "top_end_khz": 8.0,
+      "top_end_db": 4.0,
+      "velocity_scaling_db": 22.0,
+      "multiband_splitting_hz": 2500.0,
+      "dynamic_eq_nodes_db": 3.0,
+      "dynamic_eq_nodes_hz": 200.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "micro_dynamic_shaping_v4": {
+      "kick_transient_geometry": {
+        "click_layer": "Pitch-envelope: Start +24st, End 0st, Decay 15ms",
+        "body_layer": "Sine-drop from 120Hz to 52Hz (G#) over 80ms",
+        "sub_tail": "Phase-aligned sine, fade-out 150ms, saturation 12%",
+        "transient_master": "Attack +25%, Sustain -10%, Gain +2.5dB"
+      },
+      "snare_impact_physics": {
+        "initial_crack": "White-noise burst, Band-pass @ 2kHz, Q=1.5, Decay 10ms",
+        "resonant_body": "Fundamental @ 220Hz (A), Notch-cut @ 450Hz (remove 'boxiness')",
+        "tail_refinement": "Gated reverb (120ms), Pre-delay 2ms, Diffusion 85%"
+      },
+      "hi_hat_spectral_dust": {
+        "top_end": "High-shelf @ 12kHz (+4dB), High-pass @ 8kHz",
+        "panning_jitter": "LFO-random, Depth 15%, Rate 1/16t",
+        "velocity_scaling": "Soft-knee compression, threshold -22dB"
+      }
+    },
+    "signal_flow_purity_v4": {
+      "multiband_splitting": "Band 1: 0-120Hz (Mono), Band 2: 120-2500Hz (Wide), Band 3: 2500Hz+ (Fractal)",
+      "phase_alignment_check": "Correlation meter target: +0.8 to +0.95 (Avoid 180° cancellation)",
+      "dynamic_eq_nodes": "Node 1: -3dB @ 200Hz triggered by Kick for Snare-clarity"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "id": "meta_296",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_296",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "universal_project_mapping_v4": {
+      "project_alpha_singularity": {
+        "track_01": "The Genesis (v1 Logic) - Introduction of the Reese-Growl",
+        "track_02": "Recursive Collapse (v2 Logic) - First G-Inversion test",
+        "track_03": "4D-Vectoring (v3 Logic) - Spatial soundstage exploration",
+        "track_04": "Omega Zero (v4 Logic) - Total aesthetic fusion"
+      },
+      "thematic_transitions": {
+        "bridge_1_to_2": "Increasing bitcrush depth (16-bit to 8-bit)",
+        "bridge_2_to_3": "Expanding reverb room-size (0.5 to 1.0)",
+        "bridge_3_to_4": "Total frequency-annihilation followed by G# rebirth"
+      },
+      "metadata_links": {
+        "global_bpm": "Adaptive (170 → 174 → 180 → 174)",
+        "global_key_bias": "G# Minor (The Fundamental Anchor)"
+      }
+    },
+    "MMSS_advanced_archive_checkpoints": {
+      "last_known_success": "Iteration_v4_Omega_Final_Mix_01",
+      "recovery_hash": "e1719abc-d49a-4095-863f-0ae637f65bf4-ASE-OMEGA",
+      "status": "95% logic-retrieval in progress"
+    }
+  }
+}

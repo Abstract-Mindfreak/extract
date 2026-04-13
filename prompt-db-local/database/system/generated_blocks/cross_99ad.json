@@ -1,0 +1,65 @@
+{
+  "id": "cross_99ad",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_99ad",
+    "params": {
+      "target_curve_db": 3.0,
+      "low_mids_200_500hz_db": 4.0,
+      "real_time_fix_khz": 2.0,
+      "block_id": 47
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Твой инсайт: 'Слово 'Любовь' на частоте 100Гц звучит как угроза, а на 10кГц — как ",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_174",
+      "47"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "spectral_vision": {
+        "target_curve": "Tilt-Shift (-3dB per octave for 'Warm/Dark' analog feel)",
+        "energy_distribution": {
+          "sub_20_60hz": "Maximum power (The Foundation)",
+          "low_mids_200_500hz": "Surgical cut (-4dB) to avoid 'boxiness'",
+          "high_mids_1_4khz": "Aggressive presence (The Attack)",
+          "air_10khz_plus": "Fractal shimmer (The Void)"
+        },
+        "real_time_fix": "If 2kHz exceeds threshold, apply Dynamic EQ (De-esser style)."
+      }
+    },
+    "parent_b": {
+      "block_id": 47,
+      "block_name": "Semantic_Freq_Shift_v4",
+      "mapping_matrix": {
+        "low_pass_state": "Focus on 'Body', 'Earth', 'Depths', 'Silence'",
+        "high_pass_state": "Focus on 'Spirit', 'Ether', 'Light', 'Information'",
+        "band_pass_mid": "Focus on 'Human', 'Dialogue', 'Action', 'Now'"
+      },
+      "modulation_rules": {
+        "if_cutoff_drops": "Switch LFE-thesaurus to 'Dark/Heavy' vocabulary",
+        "if_reverb_increase": "Switch LFE-thesaurus to 'Abstract/Infinite' vocabulary"
+      },
+      "internal_insight": {
+        "meaning_by_eq": "Твой инсайт: 'Слово 'Любовь' на частоте 100Гц звучит как угроза, а на 10кГц — как молитва'. В Блоке 47 мы настроили автоматический выбор слов. Если я делал звук 'колючим', LFE подбирал слова с твердыми согласными (Т, К, П). Это 'Фонетическая Синхронизация' смыслов."
+      }
+    }
+  }
+}

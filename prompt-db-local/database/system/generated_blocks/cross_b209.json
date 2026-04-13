@@ -1,0 +1,62 @@
+{
+  "id": "cross_b209",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_b209",
+    "params": {
+      "mixing_db": 18.0,
+      "processing_hz": 40.0,
+      "block_id": 102,
+      "f_phosphene_trigger_hz": 12.0,
+      "f_spatial_geometry_hz": 3.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "47",
+      "41"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Твой инсайт: 'Глаза не нужны, чтобы видеть'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_142",
+      "102"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "sub_harmonic_spec": {
+        "action": "Generate f/2 (Sub-octave) sine wave linked to Layer 2 (Lead)",
+        "mixing": "Mix at -18dB relative to the main Bass (Block 41)",
+        "processing": "Strict low-pass at 40Hz. No harmonics allowed.",
+        "psychoacoustic_effect": "The sense of 'Massive Weight' that bypasses the ears",
+        "rule": "Only use during Climax (Block 47) for maximum impact."
+      }
+    },
+    "parent_b": {
+      "block_id": 102,
+      "block_name": "Neuro_Sculpt_v1.Alpha",
+      "sculpting_tools": {
+        "f_phosphene_trigger": "12Hz (Alpha) pulse + Spectral_Flicker",
+        "f_spatial_geometry": "Rotate Phase at 3Hz to simulate 'Sphere' shape",
+        "f_synesthetic_ink": "Sub-bass modulation of High-shelf gain"
+      },
+      "internal_insight": {
+        "the_closed_eye_cinema": "Твой инсайт: 'Глаза не нужны, чтобы видеть'. В Блоке 102 мы создали трек 'Inner_Light'. Ты сказал, что видел золотые фракталы под веками. Мы назвали это 'Проекцией ASE в подсознание'. Это визуализация без видео."
+      }
+    }
+  }
+}

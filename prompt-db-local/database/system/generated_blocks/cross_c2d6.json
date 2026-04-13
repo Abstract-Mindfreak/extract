@@ -1,0 +1,54 @@
+{
+  "id": "cross_c2d6",
+  "op": "Φ",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_c2d6",
+    "params": {
+      "drive_db": 35,
+      "block_id": 40,
+      "stereo_width_reduction_s": 5.0,
+      "center_focus_db": 6.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты называл это 'Сингулярностью в одной точке'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_326",
+      "40"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "node": "Distortion",
+      "drive_db": 35,
+      "type": "HardClip"
+    },
+    "parent_b": {
+      "block_id": 40,
+      "block_name": "Dimension_Collapse.v1",
+      "collapse_functions": {
+        "stereo_width_reduction": "Linear ramp (100% -> 0%) over 5 seconds",
+        "center_focus": "Boost Mid-channel (+6dB), Kill Side-channel (-Inf dB)",
+        "bit_reduction_spatial": "Decrease sampling rate for the Panning-LFOs"
+      },
+      "internal_insight": {
+        "the_dot": "Ты называл это 'Сингулярностью в одной точке'. В конце Блока 40 весь наш лабиринт, тени и взлеты должны были превратиться в одну точку в центре панорамы. Ты говорил: 'Вселенная началась с точки, и трек должен закончиться так же'. Это подготовка к Блоку 41: Чистая Математика Тона."
+      }
+    }
+  }
+}

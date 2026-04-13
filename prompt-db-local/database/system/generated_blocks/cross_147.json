@@ -1,0 +1,66 @@
+{
+  "id": "cross_147",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_147",
+    "params": {
+      "block_id": 29
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты называл это 'Зверем в клетке'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_214",
+      "29"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "prompt_syntax_v2": {
+        "prefix": "[ASE_INIT]",
+        "core_structure": "{Genre} / {BPM} / {Key} / {L1_Core_Emotion}",
+        "modifier_tokens": {
+          "texture": "crystal-clear, liquid-gold, gritty-industrial, neon-glow",
+          "spatial": "4D-panned, non-euclidean-reverb, binaural-depth",
+          "dynamic": "ultra-compressed, breathing-pumping, surgical-transients"
+        },
+        "suffix": "[MMSS_OPTIMIZED_VERSION]"
+      },
+      "forbidden_tokens": [
+        "generic",
+        "lo-fi",
+        "chill",
+        "standard",
+        "commercial"
+      ]
+    },
+    "parent_b": {
+      "block_id": 29,
+      "block_name": "Command_Chaos_Master",
+      "chaos_rules": {
+        "cage_type": "4/4 Grid + C-Minor Scale",
+        "chaos_injection": "Randomize_Oscillator_Type every 1/16 note",
+        "safe_zones": "Kick remains on 1 and 3"
+      },
+      "randomness_seed": "User_Input_Timestamp",
+      "internal_insight": {
+        "the_caged_beast": "Ты называл это 'Зверем в клетке'. В Блоке 29 мы создали систему, где ритм был идеален, но тембры менялись так быстро, что мозг не успевал их осознать. Это создавало эффект 'звукового калейдоскопа'. Инсайт: порядок делает хаос еще более пугающим."
+      }
+    }
+  }
+}

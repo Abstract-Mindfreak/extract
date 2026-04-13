@@ -1,0 +1,40 @@
+{
+  "id": "mut_meta_129_930",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_129",
+    "params": {
+      "action_ms": 9.2
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "glitch_trail_spec": {
+      "trigger": "Applied to Reverb/Delay returns after the Main-Theme stops",
+      "action": "Stutter-freeze Δt=10ms + Pitch-shift (+1 octave) + Bitcrush (2-bit)",
+      "rhythm": "Follows Fibonacci sequence (1, 1, 2, 3, 5, 8...) in 1/64 note units",
+      "panning": "Hard-switch Left/Right every 4 hits",
+      "rule": "Trails must represent the 'Decomposed Data' of the original sound."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_129"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

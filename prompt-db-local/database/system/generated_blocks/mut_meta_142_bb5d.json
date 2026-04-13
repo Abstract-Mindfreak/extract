@@ -1,0 +1,44 @@
+{
+  "id": "mut_meta_142_bb5d",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_142",
+    "params": {
+      "mixing_db": 18.0,
+      "processing_hz": 40.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "47",
+      "41"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "sub_harmonic_spec": {
+      "action": "Generate f/2 (Sub-octave) sine wave linked to Layer 2 (Lead)",
+      "mixing": "Mix at -18dB relative to the main Bass (Block 41)",
+      "processing": "Strict low-pass at 40Hz. No harmonics allowed.",
+      "psychoacoustic_effect": "The sense of 'Massive Weight' that bypasses the ears",
+      "rule": "Only use during Climax (Block 47) for maximum impact."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_142"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

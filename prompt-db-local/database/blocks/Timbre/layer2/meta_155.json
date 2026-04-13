@@ -1,0 +1,39 @@
+{
+  "id": "meta_155",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_155",
+    "params": {
+      "low_pass_sweep_khz": 20.0,
+      "low_pass_sweep_hz": 200.0,
+      "sample_rate_reduction_khz": 8.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "47"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "spectral_decay_math": {
+      "function": "D(f, t) = f * e^(-λt) + Noise(t)",
+      "effects": {
+        "low_pass_sweep": "Descending cutoff from 20kHz to 200Hz over 8 bars",
+        "sample_rate_reduction": "Automated down-sampling from 44.1kHz to 8kHz",
+        "bit_rot": "Randomly flipping bits in the digital stream (Bitcrush automation)",
+        "usage": "During the 'Dissolution' phase (Block 47) to symbolize the death of the Narrative."
+      }
+    }
+  }
+}

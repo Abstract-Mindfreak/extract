@@ -1,0 +1,29 @@
+{
+  "id": "meta_281",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_281",
+    "params": {
+      "purity_coefficient": 1
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "harmonic_bias": "Perfect 5ths and Octaves (Pure G#)",
+    "purity_coefficient": 1,
+    "reverb": "None (Anechoic chamber effect)"
+  }
+}

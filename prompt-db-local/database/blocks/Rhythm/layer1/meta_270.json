@@ -1,0 +1,52 @@
+{
+  "id": "meta_270",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "stabilization",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_270",
+    "params": {
+      "high_mid_boost_db": 4.5,
+      "high_mid_boost_khz": 3.5,
+      "low_mid_notch_db": 2.0,
+      "low_mid_notch_hz": 250.0,
+      "sub_fundamental_sine_hz": 51.9
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_aggression_control_lyrics": {
+      "the_razor_edge_set": [
+        "Sharp as a digital blade, cutting the air / Logic of madness, the architect's prayer",
+        "Clip the peaks, release the heat / Hard-clipped soul and a soft-clipped beat",
+        "Aggression is order, chaos is dead / Follow the signals inside of your head"
+      ],
+      "the_containment_set": [
+        "Monster 7, locked in a cage / Synthesizing beauty, synthesizing rage",
+        "Limit the void, boost the gain / Pumping the pressure through every vein",
+        "Surgical precision, the final strike / Everything I am and everything you like"
+      ],
+      "the_aggression_dialogue": [
+        "Tame the beast / Feed the machine",
+        "The greatest feast / That you've ever seen",
+        "Result: Controlled-Fury / Status: CLIP_LOCK_ACTIVE"
+      ]
+    },
+    "spectral_aggression_v4": {
+      "high_mid_boost": "+4.5dB @ 3.5kHz (Phrygian Lead bite)",
+      "low_mid_notch": "-2.0dB @ 250Hz (Clarity hole for the Kick-punch)",
+      "sub_fundamental_sine": "Pure 51.9Hz (G#) - The unclipped core"
+    }
+  }
+}

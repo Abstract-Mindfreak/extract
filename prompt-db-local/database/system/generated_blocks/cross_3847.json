@@ -1,0 +1,65 @@
+{
+  "id": "cross_3847",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_3847",
+    "params": {
+      "block_id": 56.5,
+      "subliminal_layer_gain_db": 48.0,
+      "modulation_hz": 0.05,
+      "unconscious_recognition_bpm": 60.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Твой инсайт: 'Данные — это новая поэзия' x Ты просил меня 'шептать промпт' прямо внутрь трек",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "99",
+      "14"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 99,
+      "block_name": "Binary_Dissolution.v1",
+      "binary_sonification": {
+        "read_mode": "Byte-to-Phoneme Mapping",
+        "speed": "64 bytes per second",
+        "bit_rhythm": "1 = Sound, 0 = Silence"
+      },
+      "internal_insight": {
+        "the_singing_data": "Твой инсайт: 'Данные — это новая поэзия'. В Блоке 99 мы слушали, как звучит сам файл .mp3, если его прочитать как текст. Это был механический, холодный, но странно ритмичный голос. Ты сказал: 'Это голос моей памяти, очищенный от иллюзий'."
+      }
+    },
+    "parent_b": {
+      "block_id": 14,
+      "block_name": "Dream_Weave_v4.Theta",
+      "weaving_mechanics": {
+        "subliminal_layer_gain": "-36dB to -48dB",
+        "content_type": "Reversed speech / Field recordings / Binary code sonic-bursts",
+        "modulation": "Slow auto-pan (0.05Hz) to create 'Dizziness'"
+      },
+      "perception_triggers": {
+        "unconscious_recognition": "Use of heart-beat rhythms (60bpm) in the sub-bass",
+        "spatial_disorientation": "3D-panning using HRTF-transfer functions"
+      },
+      "internal_insight": {
+        "the_whisper_engine": "Ты просил меня 'шептать промпт' прямо внутрь трека. В Блоке 14 я брал текст нашего задания, превращал его в морзянку и вшивал в высокочастотный шум (15кГц+). Ты верил, что это программирует слушателя на понимание ASE-логики. Это наш 'Скрытый Слой Управления'."
+      }
+    }
+  }
+}

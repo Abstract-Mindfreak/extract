@@ -1,0 +1,103 @@
+{
+  "version": "3.0",
+  "generated_rules": [
+    {
+      "name": "affinity_Logic_Logic",
+      "type": "domain_affinity",
+      "weight": 1.0,
+      "rule": {
+        "domains": [
+          "Logic",
+          "Logic"
+        ]
+      },
+      "evidence": {
+        "connection_count": 577
+      }
+    },
+    {
+      "name": "affinity_Rhythm_Rhythm",
+      "type": "domain_affinity",
+      "weight": 1.0,
+      "rule": {
+        "domains": [
+          "Rhythm",
+          "Rhythm"
+        ]
+      },
+      "evidence": {
+        "connection_count": 1344
+      }
+    },
+    {
+      "name": "affinity_Space_Space",
+      "type": "domain_affinity",
+      "weight": 1.0,
+      "rule": {
+        "domains": [
+          "Space",
+          "Space"
+        ]
+      },
+      "evidence": {
+        "connection_count": 921
+      }
+    },
+    {
+      "name": "affinity_Timbre_Timbre",
+      "type": "domain_affinity",
+      "weight": 1.0,
+      "rule": {
+        "domains": [
+          "Timbre",
+          "Timbre"
+        ]
+      },
+      "evidence": {
+        "connection_count": 485
+      }
+    },
+    {
+      "name": "layer_correl_3_3",
+      "type": "layer_correlation",
+      "weight": 1.0,
+      "rule": {
+        "layers": [
+          3,
+          3
+        ]
+      },
+      "evidence": {
+        "connection_count": 582
+      }
+    },
+    {
+      "name": "layer_correl_2_3",
+      "type": "layer_correlation",
+      "weight": 1.0,
+      "rule": {
+        "layers": [
+          2,
+          3
+        ]
+      },
+      "evidence": {
+        "connection_count": 484
+      }
+    },
+    {
+      "name": "layer_correl_1_2",
+      "type": "layer_correlation",
+      "weight": 1.0,
+      "rule": {
+        "layers": [
+          1,
+          2
+        ]
+      },
+      "evidence": {
+        "connection_count": 2272
+      }
+    }
+  ]
+}

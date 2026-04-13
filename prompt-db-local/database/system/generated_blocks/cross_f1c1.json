@@ -1,0 +1,56 @@
+{
+  "id": "cross_f1c1",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_f1c1",
+    "params": {
+      "block_id": 13,
+      "purity_coefficient": 1
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: В Блоке 13 мы внедрили 'Черную Дыру' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "13",
+      "meta_281"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 13,
+      "block_name": "Event_Horizon_Matrix.Alpha",
+      "horizon_parameters": {
+        "t_critical": "Point of no return in track timeline",
+        "buildup_slope": "Logarithmic (acceleration towards t_critical)",
+        "release_type": "Instant_Collapse OR Infinite_Expansion"
+      },
+      "feedback_loops": {
+        "positive_feedback": "Self-oscillating delay at 99.9% feedback",
+        "semantic_saturation": "LFE-layer repeating the final word until it loses meaning"
+      },
+      "internal_insight": {
+        "no_return_insight": "В Блоке 13 мы внедрили 'Черную Дыру'. На 3:42 трека все фильтры закрываются до 20Гц, а Reverb-Wet уходит в 100%. Ты говорил, что слушатель должен почувствовать 'смерть звука', прежде чем мы дадим финальный аккорд. Это 'Ложная Концовка' для перезагрузки Ψ-Конденсации."
+      }
+    },
+    "parent_b": {
+      "harmonic_bias": "Perfect 5ths and Octaves (Pure G#)",
+      "purity_coefficient": 1,
+      "reverb": "None (Anechoic chamber effect)"
+    }
+  }
+}

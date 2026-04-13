@@ -1,0 +1,59 @@
+{
+  "id": "cross_32c9",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_32c9",
+    "params": {
+      "block_id": 58,
+      "trigger_source_db": 6.0,
+      "threshold_db": -0.5,
+      "ceiling_db": -0.3,
+      "release_ms": 120,
+      "mode_ms": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты просил меня 'испортить видео так же, как мы портим звук' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "58",
+      "meta_293"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 58,
+      "block_name": "Visual_Glitch_Matrix.Alpha",
+      "glitch_operators": {
+        "datamoshing": "Freeze P-frames on beat 1 and 3",
+        "color_bleeding": "Shift R/G/B channels by ±20 pixels on snare hit",
+        "vhs_emulation": "Tracking error + scanlines integrated into the Master_Render"
+      },
+      "trigger_source": "Audio_Peak_Detection (Threshold = -6dB)",
+      "internal_insight": {
+        "beautiful_error_v": "Ты просил меня 'испортить видео так же, как мы портим звук'. В Блоке 58 мы внедрили 'визуальный яд'. Если трек становился слишком 'красивым', мы запускали цикл деградации картинки. Инсайт: цифровая ностальгия — это любовь к несовершенству формата."
+      }
+    },
+    "parent_b": {
+      "tool": "Limiter_Surgical",
+      "threshold_db": -0.5,
+      "ceiling_db": -0.3,
+      "release_ms": 120,
+      "mode": "Look-ahead (2ms), True_Peak_Enabled"
+    }
+  }
+}

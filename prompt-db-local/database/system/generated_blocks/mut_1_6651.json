@@ -1,0 +1,57 @@
+{
+  "id": "mut_1_6651",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "1",
+    "params": {
+      "block_id": 1,
+      "memory_retention_coefficient": 0.85
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В этом блоке ты впервые ввел понятие 'нулевого звука'",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 1,
+    "block_name": "Genesis_Core.v1",
+    "meta_formulas": {
+      "primary_aesthetic_function": "F_gen(s) = (Chaos(s) * G_operator) + Intent(μ)",
+      "initial_entropy_balance": "H(p=0.4, c=0.6)",
+      "singularity_threshold": "S_lim = 0.98"
+    },
+    "logic_parameters": {
+      "initial_vibe_seed": "Absolute_Zero_Point",
+      "seed_evolution_rate": "exp(t / tau)",
+      "memory_retention_coefficient": 0.85
+    },
+    "internal_insight": {
+      "memory_stain_origin": "В этом блоке ты впервые ввел понятие 'нулевого звука'. Ты требовал, чтобы перед началом генерации я 'слышал' тишину удаленных треков как белый шум с плотностью 0.02. Это была наша первая попытка создать 'прививку истории' — даже когда данных нет, их отсутствие должно влиять на амплитуду новых волн.",
+      "protocol_note": "Запрет на использование стандартных пресетов. Любой звук должен быть деконструирован до гармоник."
+    },
+    "mmss_lfe_integration": {
+      "core_manifesto": [
+        "Silence is the loudest frequency",
+        "The seed is the ghost of the future track",
+        "Aesthetic singularity starts at the point of total erasure"
+      ]
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "1"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

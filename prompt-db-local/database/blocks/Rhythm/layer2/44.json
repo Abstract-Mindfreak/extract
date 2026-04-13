@@ -1,0 +1,43 @@
+{
+  "id": "44",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "44",
+    "params": {
+      "block_id": 44,
+      "difference_tones_hz": 40.0,
+      "sum_tones_khz": 15.0,
+      "bone_conduction_effect_hz": 250.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 44 мы создали 'Третий Голос'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 44,
+    "block_name": "Irrational_Resonance.v1",
+    "resonance_logic": {
+      "difference_tones": "f_res = |f1 - f2| where f_res < 40Hz",
+      "sum_tones": "f_bright = f1 + f2 where f_bright > 15kHz",
+      "beat_frequency": "Dynamic tracking of f1/f2 ratio towards irrationality"
+    },
+    "psychoacoustic_impact": {
+      "bone_conduction_effect": "Simulated through specific low-mid boost (250Hz)",
+      "otoacoustic_emission": "Forcing the ear to generate its own 'Phantom Melody'"
+    },
+    "internal_insight": {
+      "the_ghost_melody": "В Блоке 44 мы создали 'Третий Голос'. Мы пускали две высокие ноты так, что в голове слушателя возникала третья — низкая и гудящая. Её не было в файле, она рождалась в твоей улитке. Ты назвал это 'Призрачным Хором Сингулярности'."
+    }
+  }
+}

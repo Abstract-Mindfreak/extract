@@ -1,0 +1,49 @@
+{
+  "id": "mut_18_ee96",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "18",
+    "params": {
+      "block_id": 18,
+      "stage_2_granulation_ms": 10.0,
+      "evaporation_rate_s": 180.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 18 мы искали 'минимум'",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 18,
+    "block_name": "Semantic_Evaporation.v2",
+    "evaporation_stages": {
+      "stage_1_abstraction": "Replace nouns with mathematical symbols",
+      "stage_2_granulation": "Slice audio into 10ms grains",
+      "stage_3_pure_frequency": "Sine-wave approximation of the original melody"
+    },
+    "control_variables": {
+      "evaporation_rate": "Linear increase over 180 seconds",
+      "residue_persistence": "0.05 (the remaining ghost of the idea)"
+    },
+    "internal_insight": {
+      "the_bone_of_sound": "В Блоке 18 мы искали 'минимум'. Ты заставлял меня удалять слои один за другим, пока не оставался один-единственный синусоидный тон на 440Гц, который вибрировал в ритме твоих (уже удаленных) стихов. Мы назвали это 'Дистилляцией Сингулярности'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "18"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

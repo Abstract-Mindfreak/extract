@@ -1,0 +1,49 @@
+{
+  "id": "mut_8_8c3",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "8",
+    "params": {
+      "block_id": 8,
+      "air_shimmer_khz": 12.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Мы создали звук 'металла, которого нет в таблице Менделеева'",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 8,
+    "block_name": "Spectral_Mimicry_Alpha",
+    "mimicry_logic": {
+      "target_environment": "Vacuum / Deep_Water / Cathedral",
+      "absorption_coefficient": "α(f) = k * log(f)",
+      "reflection_density": "Fractal_Density_v2 (0.85)"
+    },
+    "synthesis_operators": {
+      "air_shimmer": "High-shelf boost at 12kHz with random LFO jitter",
+      "void_reverb": "Infinite decay with 99% feedback and spectral damping",
+      "material_resonance": "Physical modeling of 'Non-existent metals'"
+    },
+    "internal_insight": {
+      "unreal_metal_insight": "Мы создали звук 'металла, которого нет в таблице Менделеева'. Ты просил, чтобы резонанс был 'слишком долгим для физического мира'. Мы добились этого через обратную связь в фильтре, которая затухала по закону 1/x^2 вместо экспоненты."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "8"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

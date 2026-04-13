@@ -1,0 +1,38 @@
+{
+  "id": "meta_196",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_196",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "video_generation_spec": {
+      "aspect_ratio": "9:16 (Vertical) for Socials or 16:9 for Cinema",
+      "aesthetic_presets": {
+        "gothic_fractal": "Black/Gold palette, recursive cathedral architecture, liquid metal",
+        "cyber_neuro": "Neon cyan/magenta, fast motion blur, glitch transitions, wireframe",
+        "bio_void": "Deep greens/blacks, organic growth patterns, macro-cinematography of cells"
+      },
+      "synchronization_logic": {
+        "kick_sync": "Flash/Scale-pump on every 1/4 note",
+        "snare_sync": "Glitch-shift/Inversion effect on every 2/4 and 4/4",
+        "theme_sync": "Color-morphing tied to Lead-synth cutoff"
+      },
+      "lyrics_rendering": "Minimalist, sans-serif, flickering opacity (85% visibility)"
+    }
+  }
+}

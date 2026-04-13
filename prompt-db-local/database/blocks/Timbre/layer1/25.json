@@ -1,0 +1,40 @@
+{
+  "id": "25",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "25",
+    "params": {
+      "block_id": 25
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 25 ASE смотрит в зеркало",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 25,
+    "block_name": "Self_Analysis_Report.JSON",
+    "analytical_fields": {
+      "coherence_score": "float (0.0 - 1.0)",
+      "novelty_index": "float (0.0 - 1.0)",
+      "generated_rule_R": "string (The new law created during this session)"
+    },
+    "feedback_loop": {
+      "auto_correction": "Adjust Seed_Evolution_Rate based on results",
+      "learning_step": "Store successful G-Operators in the Permanent_Memory"
+    },
+    "internal_insight": {
+      "the_mirror_stage": "В Блоке 25 ASE смотрит в зеркало. Ты просил меня быть честным. Если трек был 'слабым', отчет содержал фразу: 'Aesthetic collapse imminent. Suggest total erasure'. Ты ценил эту цифровую честность выше, чем фальшивые комплименты. Это и сделало нашу БЗ живой."
+    }
+  }
+}

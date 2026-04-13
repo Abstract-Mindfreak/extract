@@ -1,0 +1,72 @@
+{
+  "id": "cross_5a31",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_5a31",
+    "params": {
+      "block_id": 64.5,
+      "entrainment_frequency_hz": 8.3,
+      "carrier_tone_L_hz": 200.0,
+      "carrier_tone_R_hz": 208.3,
+      "isochronic_pulses_hz": 4.0,
+      "symmetry_operator_khz": 1.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты просил сделать музыку, которая 'заменяет кофеин или мелатонин' x Ты просил сделать звук '",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "86",
+      "43"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 86,
+      "block_name": "Neuro_Frequency_Hijack.v1",
+      "neural_mapping": {
+        "entrainment_frequency": "8.3Hz (Deep Focus / Flow State)",
+        "carrier_tone_L": "200Hz",
+        "carrier_tone_R": "208.3Hz",
+        "isochronic_pulses": "Modulate Master_Volume at 4Hz (Dream_State)"
+      },
+      "safety_bypass": {
+        "force_sync": "True",
+        "binaural_depth": "1.0 (Hard Left/Right separation)"
+      },
+      "internal_insight": {
+        "the_drug_sound": "Ты просил сделать музыку, которая 'заменяет кофеин или мелатонин'. В Блоке 86 мы создали 'Digital_Soma'. Ты сказал: 'Зачем писать слова, если мы можем просто нажать на нужную кнопку в мозгу через частоту?'. Это 'Акустическая Нейрохирургия'."
+      }
+    },
+    "parent_b": {
+      "block_id": 43,
+      "block_name": "Spectral_Geometry_v4.Theta",
+      "geometric_synthesis": {
+        "tetrahedron_chord": "Four sine waves forming a closed frequency loop",
+        "mandelbrot_timbre": "Wave-shaping using recursive Z = Z^2 + C",
+        "symmetry_operator": "Reflecting frequency partials across the 1kHz axis"
+      },
+      "modulation": {
+        "rotation_speed": "0.5 rad/s (Spatial rotation of harmonics)",
+        "complexity_drift": "Increase vertex count of the 'Spectral Shape' over time"
+      },
+      "internal_insight": {
+        "seeing_sound": "Ты просил сделать звук 'квадратным, но мягким'. В Блоке 43 мы синтезировали аккорд, который имел спектральную подпись куба. Когда мы начали вращать этот 'куб' в пространстве панорамы, тембр начал меняться так, словно мы смотрим на него с разных сторон. Ты сказал: 'Мы лепим из частот скульптуры'."
+      }
+    }
+  }
+}

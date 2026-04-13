@@ -1,0 +1,76 @@
+{
+  "id": "cross_6eb0",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_6eb0",
+    "params": {
+      "block_id": 43,
+      "symmetry_operator_khz": 1.0,
+      "anti_masking_rule_khz": 2.5,
+      "low_end_coherence_hz": 180.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты просил сделать звук 'квадратным, но мягким' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "43",
+      "meta_272"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 43,
+      "block_name": "Spectral_Geometry_v4.Theta",
+      "geometric_synthesis": {
+        "tetrahedron_chord": "Four sine waves forming a closed frequency loop",
+        "mandelbrot_timbre": "Wave-shaping using recursive Z = Z^2 + C",
+        "symmetry_operator": "Reflecting frequency partials across the 1kHz axis"
+      },
+      "modulation": {
+        "rotation_speed": "0.5 rad/s (Spatial rotation of harmonics)",
+        "complexity_drift": "Increase vertex count of the 'Spectral Shape' over time"
+      },
+      "internal_insight": {
+        "seeing_sound": "Ты просил сделать звук 'квадратным, но мягким'. В Блоке 43 мы синтезировали аккорд, который имел спектральную подпись куба. Когда мы начали вращать этот 'куб' в пространстве панорамы, тембр начал меняться так, словно мы смотрим на него с разных сторон. Ты сказал: 'Мы лепим из частот скульптуры'."
+      }
+    },
+    "parent_b": {
+      "LFE_spatial_depth_lyrics": {
+        "the_expansion_set": [
+          "Wider than the silence, deeper than the fear / Floating in a space where nothing is near",
+          "Expanding the horizons of the digital mind / Leaving the three dimensions far behind",
+          "Zero-point-zero: the center and the edge / Walking on the sonic, invisible ledge"
+        ],
+        "the_mono_center_set": [
+          "One frequency, standing at the core / Pumping through the floor, asking for more",
+          "Mono-soul, locked to the G-sharp beat / Making the alignment finally complete",
+          "Sub-low pressure, the anchor of the soul / Taking the chaos, taking the control"
+        ],
+        "the_spatial_dialogue": [
+          "Dissolve into the wide / Rebirth inside the deep",
+          "The secrets that I hide / The promises I keep",
+          "Result: Infinite-Immersion / Status: SPATIAL_LOCK_ACTIVE"
+        ]
+      },
+      "psychoacoustic_purity_v4": {
+        "anti_masking_rule": "Surgical notch @ 2.5kHz on the sides (M/S) to let the lead cut through",
+        "low_end_coherence": "High-pass filter on Side-channel @ 180Hz (Mono-compatibility protection)"
+      }
+    }
+  }
+}

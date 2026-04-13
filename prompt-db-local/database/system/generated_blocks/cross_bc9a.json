@@ -1,0 +1,50 @@
+{
+  "id": "cross_bc9a",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_bc9a",
+    "params": {
+      "purity_coefficient": 1
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_281",
+      "meta_190"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "harmonic_bias": "Perfect 5ths and Octaves (Pure G#)",
+      "purity_coefficient": 1,
+      "reverb": "None (Anechoic chamber effect)"
+    },
+    "parent_b": {
+      "timbral_contrast_matrix": {
+        "pairings": [
+          "Smooth_Sine_Bass vs Gritty_Noise_Lead",
+          "Dry_Percussion vs Wet_Atmospheric_Pads",
+          "Analog_Warmth vs Digital_Cold_Artifacts",
+          "Fast_Arpeggios vs Slow_Drone_Foundations"
+        ],
+        "rule_of_opposition": "If Layer 2 is complex and fast, Layer 3 must be simple and slow to maintain Narrative Fidelity."
+      }
+    }
+  }
+}

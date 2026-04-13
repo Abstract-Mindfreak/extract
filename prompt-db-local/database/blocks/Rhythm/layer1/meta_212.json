@@ -1,0 +1,34 @@
+{
+  "id": "meta_212",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_212",
+    "params": {
+      "layer_1_foundation_hz": 60.0,
+      "mixing_rule_db": 3.0,
+      "mixing_rule_hz": 400.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "layer_architecture": {
+      "layer_1_foundation": "Sub-atomic Bass (20-60Hz) + Surgical Kick (Clarity first)",
+      "layer_2_narrative": "Main Theme / Arpeggiator / Vocal Chops (Semantic Core)",
+      "layer_3_atmosphere": "Fractal Noise / Field Recordings / 4D-Delay-Trails (The Void)",
+      "mixing_rule": "Subtract 3dB at 400Hz for Layer 2 to let Layer 1 breathe. Sidechain Layer 3 to Layer 1."
+    }
+  }
+}

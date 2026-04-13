@@ -1,0 +1,41 @@
+{
+  "id": "mut_meta_202_5701",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "stabilization",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_202",
+    "params": {
+      "rule_of_clash_hz": 200.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "frequency_semantics": {
+      "20-60Hz (The Foundation)": "Visceral fear, Earth-grounding, Sub-atomic vibration",
+      "100-250Hz (The Body)": "Physical impact, Punch, Rhythmic presence (The 'Thump')",
+      "400-800Hz (The Meaning)": "Semantic clarity, Vocal presence, Harmonic 'warmth' or 'mud'",
+      "1kHz-4kHz (The Attack)": "Psychoacoustic aggression, Transient clarity, The 'Bite'",
+      "8kHz-16kHz (The Void)": "Fractal air, Shimmering textures, Spatial transcendence",
+      "rule_of_clash": "Never let Layer 2 (Meaning) overlap with Layer 1 (Foundation) in the 200Hz zone."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_202"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

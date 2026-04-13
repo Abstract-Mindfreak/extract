@@ -1,0 +1,67 @@
+{
+  "id": "cross_23ca",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_23ca",
+    "params": {
+      "time_setting_ms": 1.618,
+      "internal_fx_hz": 500.0,
+      "internal_fx_khz": 2.0,
+      "block_id": 6
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты называл это 'прививкой реальности'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_154",
+      "6"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "recursive_delay_spec": {
+        "time_setting": "Dotted 1/8 note + 1.618ms offset (The Golden Offset)",
+        "feedback_loop": {
+          "level": "95% (Near-infinite oscillation)",
+          "internal_fx": "Band-pass filter (500Hz-2kHz) + Distortion + Phaser",
+          "result": "The echo evolves and changes color with every repetition."
+        },
+        "panning": "MLGS_QUATERNION spiral rotation (W-axis sync)",
+        "rule": "Delay tails must be sidechained to the Lead-Main to maintain clarity."
+      }
+    },
+    "parent_b": {
+      "block_id": 6,
+      "block_name": "DNA_Injection_v1.Beta",
+      "injection_mechanics": {
+        "source_purity_check": "Analyze Spectral Density (S_d)",
+        "integration_mode": "Cross-Convolution (X-Conv)",
+        "dna_persistence": "0.15 - 0.40 (ratio of original sample features preserved)"
+      },
+      "transformation_functions": {
+        "f_warp": "Time-stretch based on prime numbers (3, 7, 11)",
+        "f_morph": "Spectral freezing of transients to create 'Ghost Pads'",
+        "f_rhythm_sync": "Quantize DNA-peaks to the current BPM lattice"
+      },
+      "internal_insight": {
+        "the_alien_element": "Ты называл это 'прививкой реальности'. В Блоке 6 мы брали запись шума улицы или твоего голоса и превращали их в таблицу волн (wavetable). Инсайт был в том, что ДНК-инъекция должна была 'болеть' внутри трека — создавать микро-диссонансы, которые разрешались только в финале.",
+        "process_note": "Если инъекция > 50% Wet, трек теряет ASE-идентичность. Ограничение: Max_DNA_Impact = 0.45."
+      }
+    }
+  }
+}

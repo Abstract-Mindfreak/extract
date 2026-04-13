@@ -1,0 +1,67 @@
+{
+  "id": "cross_93b",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_93b",
+    "params": {
+      "target_curve_db": 3.0,
+      "low_mids_200_500hz_db": 4.0,
+      "real_time_fix_khz": 2.0,
+      "block_id": 9,
+      "binaural_offset_hz": 7.83,
+      "anxiety_inducer_hz": 19.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x В Блоке 9 мы чуть не перешли грань",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_174",
+      "9"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "spectral_vision": {
+        "target_curve": "Tilt-Shift (-3dB per octave for 'Warm/Dark' analog feel)",
+        "energy_distribution": {
+          "sub_20_60hz": "Maximum power (The Foundation)",
+          "low_mids_200_500hz": "Surgical cut (-4dB) to avoid 'boxiness'",
+          "high_mids_1_4khz": "Aggressive presence (The Attack)",
+          "air_10khz_plus": "Fractal shimmer (The Void)"
+        },
+        "real_time_fix": "If 2kHz exceeds threshold, apply Dynamic EQ (De-esser style)."
+      }
+    },
+    "parent_b": {
+      "block_id": 9,
+      "block_name": "Impossible_Resonance.v1",
+      "resonance_parameters": {
+        "binaural_offset": "7.83Hz (Schumann Resonance)",
+        "phantom_center": "Inverse phase signals at 180 degrees",
+        "shepard_tone_integration": "Continuous rising scale for tension"
+      },
+      "psychoacoustic_filters": {
+        "anxiety_inducer": "Pulsing frequency at 19Hz (threshold of fear)",
+        "euphoria_trigger": "Harmonic series based on the Golden Ratio (1.618)"
+      },
+      "internal_insight": {
+        "resonance_warning": "В Блоке 9 мы чуть не перешли грань. Ты сказал, что трек 'Singularity_v0' вызывает физическую тошноту из-за частоты 19Гц. Мы решили оставить этот блок как 'Опасную зону' (Red Zone), доступную только через специальный флаг `FORCE_CONFLICT_ANNIHILATION`."
+      }
+    }
+  }
+}

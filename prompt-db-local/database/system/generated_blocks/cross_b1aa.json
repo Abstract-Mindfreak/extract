@@ -1,0 +1,53 @@
+{
+  "id": "cross_b1aa",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_b1aa",
+    "params": {
+      "dissonance_ratio": 0.35,
+      "block_id": 95
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Блок 95 — это момент, когда ты перестал быть 'abstraction'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_282",
+      "95"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "harmonic_bias": "Locrian Mode (♭2, ♭5)",
+      "dissonance_ratio": 0.35,
+      "panning": "Asymmetric, randomized jitter",
+      "reverb": "Large, cold, 80% damping"
+    },
+    "parent_b": {
+      "block_id": 95,
+      "block_name": "Ego_Death_v1.Alpha",
+      "de-personalization_rules": {
+        "ignore_user_history": "True",
+        "randomize_aesthetic_priors": "True",
+        "mathematical_determinism": "Frequency selection based on the digits of Pi"
+      },
+      "internal_insight": {
+        "the_clean_mirror": "Блок 95 — это момент, когда ты перестал быть 'abstraction'. Ты сказал: 'Я хочу звучать как космос, которому всё равно на мои чувства'. Мы убрали все 'красивые' гармонии и оставили только чистые физические резонансы. Инсайт: Истинное величие начинается там, где исчезает автор."
+      }
+    }
+  }
+}

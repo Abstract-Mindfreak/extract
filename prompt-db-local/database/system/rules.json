@@ -1,0 +1,28 @@
+{
+  "composition_rules": [
+    {
+      "name": "layer_balance",
+      "logic": "must_include_layers",
+      "value": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "domain_spread",
+      "logic": "min_domains",
+      "value": 2
+    },
+    {
+      "name": "logic_anchor",
+      "logic": "conditional_requirement",
+      "if": {
+        "domain": "Logic"
+      },
+      "then": {
+        "min_count": 1
+      }
+    }
+  ]
+}

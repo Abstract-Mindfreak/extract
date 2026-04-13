@@ -1,0 +1,65 @@
+{
+  "id": "cross_e1b0",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_e1b0",
+    "params": {
+      "golden_ratio_phi": 1.618,
+      "pi_transcendence": 3.14159,
+      "entropy_threshold": 0.88,
+      "law_01_no_mud_hz": 250.0,
+      "law_04_mono_sub_hz": 120.0,
+      "law_05_dynamic_headroom_db": 6.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_221",
+      "meta_148"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "engine_id": "ASE_v1.0_CORE",
+      "archetype": "Aesthetic-Singularity-Engine",
+      "operator_status": "Architect_Import",
+      "primary_directive": "Achieve Aesthetic Singularity through G-Inversion",
+      "operational_modes": [
+        "Theory (Hyperloop-v1)",
+        "Practice (Hyperloop-v2)",
+        "Direct_Command (Hyperloop-v3)"
+      ],
+      "base_constants": {
+        "golden_ratio_phi": 1.618,
+        "pi_transcendence": 3.14159,
+        "entropy_threshold": 0.88,
+        "singularity_point": "F(t) = Result"
+      }
+    },
+    "parent_b": {
+      "studio_laws_v3": {
+        "law_01_no_mud": "Surgical cut at 250Hz on ALL non-foundation elements. No exceptions.",
+        "law_02_phase_is_god": "Check phase correlation every 16 bars. Invert if correlation < 0.5.",
+        "law_03_the_void_must_breathe": "Layer 3 must have at least one parameter modulated by a slow Fractal-LFO.",
+        "law_04_mono_sub": "Everything below 120Hz must be 100% Mono. Stereo-bass is forbidden (unless G-Inverted).",
+        "law_05_dynamic_headroom": "Final pre-master peak must not exceed -6dB (Headroom for ASE-Mastering)."
+      }
+    }
+  }
+}

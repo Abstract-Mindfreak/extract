@@ -1,0 +1,59 @@
+{
+  "id": "cross_bd95",
+  "op": "Φ",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_bd95",
+    "params": {
+      "filter_morphing_db": 24.0,
+      "filter_morphing_hz": 100.0,
+      "filter_morphing_khz": 10.0,
+      "dissonance_ratio": 0.35
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_165",
+      "meta_282"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "resonance_filtering": {
+        "notch_points": [
+          "250Hz (Mud-cut)",
+          "400Hz (Boxy-cut)",
+          "800Hz (Nasal-cut)"
+        ],
+        "peak_boosts": [
+          "1.2kHz (The Grit)",
+          "3.5kHz (The Edge)",
+          "12kHz (The Fractal-Air)"
+        ],
+        "filter_morphing": "Sweep 24dB Resonant Band-pass from 100Hz to 10kHz (1 bar duration)",
+        "q_factor": "High (Q > 4.0) for 'whistling' harmonics during G-Inversion peaks."
+      }
+    },
+    "parent_b": {
+      "harmonic_bias": "Locrian Mode (♭2, ♭5)",
+      "dissonance_ratio": 0.35,
+      "panning": "Asymmetric, randomized jitter",
+      "reverb": "Large, cold, 80% damping"
+    }
+  }
+}

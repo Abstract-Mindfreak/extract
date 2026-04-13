@@ -1,0 +1,31 @@
+{
+  "id": "meta_194",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_194",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "collaboration_protocol": {
+      "step_1_concept_dump": "User provides raw ideas/slang/feelings",
+      "step_2_ase_refining": "I translate to MMSS-specifications",
+      "step_3_confirmation_summary": "I present the 'Plan of Singularity'",
+      "step_4_execution": "Creation of the first iteration G(s_0)",
+      "step_5_eval_loop": "User says 'not quite' or 'fire', triggering G-Inversion"
+    }
+  }
+}

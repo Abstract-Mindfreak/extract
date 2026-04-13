@@ -1,0 +1,56 @@
+{
+  "id": "cross_ef7f",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_ef7f",
+    "params": {
+      "grain_size_ms": 200.0,
+      "mixing_db": 24.0,
+      "freq": 250,
+      "gain": -1.8,
+      "q": 8
+    }
+  },
+  "synergy": {
+    "links": [
+      "35",
+      "1"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_145",
+      "meta_291"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "granular_cloud_spec": {
+        "grain_size": "Ultra-small (10ms-30ms) for 'shimmer' or Large (200ms) for 'rhythm'",
+        "density": "Stochastic distribution (Random intervals)",
+        "pitch_jitter": "±1 octave variance (The 'Spectral-Smear')",
+        "position_drift": "Moving through the source file via Golden Ratio (Block 1)",
+        "mixing": "Mix at -24dB with 100% wet reverb return (Block 35)."
+      }
+    },
+    "parent_b": {
+      "freq": 250,
+      "gain": -1.8,
+      "q": 8,
+      "type": "Peak_Anti-mud"
+    }
+  }
+}

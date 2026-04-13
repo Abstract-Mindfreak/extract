@@ -1,0 +1,49 @@
+{
+  "id": "meta_220",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_220",
+    "params": {
+      "bpm_range_bpm": 195.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "arpeggiator_spec": {
+      "mode": "Phrygian_Dominant",
+      "scale_degrees": [
+        1,
+        "b2",
+        3,
+        4,
+        5,
+        "b6",
+        "b7"
+      ],
+      "rhythm_grid": "Polyrhythmic (5/8 over 4/4)",
+      "timbre_profile": {
+        "oscillator": "Wavetable (Serum-style: 'Acid-Squeltch')",
+        "filter_cutoff": "Envelope-following with high Resonance (Q > 0.8)",
+        "fx_chain": [
+          "Bitcrusher(4-bit)",
+          "Chorus(wide)",
+          "Delay(dotted-eighth)"
+        ]
+      },
+      "bpm_range": "170-195 BPM (High-Velocity Flow)"
+    }
+  }
+}

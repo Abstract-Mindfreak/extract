@@ -1,0 +1,43 @@
+{
+  "id": "mut_meta_124_646b",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_124",
+    "params": {
+      "key_01_abs_zero_bpm": 195.0,
+      "key_02_phi_spiral_bpm": 172.5
+    }
+  },
+  "synergy": {
+    "links": [
+      "17"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "latent_keys_v5": {
+      "key_01_abs_zero": "Force zero reverb tail, maximum transient snap, 195 BPM (The 'Vacuum' feel)",
+      "key_02_phi_spiral": "Force Fibonacci rhythm layering (1,2,3,5,8), 172.5 BPM (The 'Natural' chaos)",
+      "key_03_neuro_gothic": "Force Phrygian-Dominant, 12-bit crush, cathedral space (The 'Mathematical' dread)",
+      "key_04_liquid_data": "Force Spectral-morphing, 4D-vectoring (Block 17), smooth transients (The 'Flow' state)",
+      "usage": "Injected into [SOUND_PROMPT] to bypass standard aesthetic filters."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_124"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

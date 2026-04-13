@@ -1,0 +1,74 @@
+{
+  "id": "meta_333",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_333",
+    "params": {
+      "spectral_shaping_khz": 8.0,
+      "spectral_shaping_hz": 200.0,
+      "reverb_profile_s": 4.5,
+      "processing_db": 0.1,
+      "neuro_growl_logic_s": 8.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "emotional_clusters": {
+      "cluster_alpha_industrial": {
+        "keywords": [
+          "Cold",
+          "Mechanical",
+          "Dystopian",
+          "Precision"
+        ],
+        "spectral_shaping": "High-shelf boost @ 8kHz, Low-mid scoop @ 400Hz",
+        "reverb_profile": "Small metallic room, high damping (0.8)"
+      },
+      "cluster_beta_shamanic": {
+        "keywords": [
+          "Organic",
+          "Recursive",
+          "Tribal",
+          "Transcendental"
+        ],
+        "spectral_shaping": "Warm saturation, emphasis on 200Hz (Woody resonance)",
+        "reverb_profile": "Cathedral, long decay (4.5s), low-pass filtered tail"
+      },
+      "cluster_gamma_aggression": {
+        "keywords": [
+          "Distorted",
+          "Overwhelming",
+          "High-entropy",
+          "Kinetic"
+        ],
+        "processing": "Bitcrushing (8-bit), Distortion drive (25dB), Hard limiting (-0.1dB)"
+      }
+    },
+    "prompt_injection_templates": {
+      "fractal_expansion": "[AESTHETIC_HYPERLOOP]: {base_prompt} ⊗ recursion(level=3) // apply G-operator",
+      "neuro_growl_logic": "LFO-modulated wavetable: sawtooth-to-square, rate: 1/8 sync, fm-synthesis layer",
+      "psy_arpeggio_logic": "Recursive 1/16 notes, 4-octave range, random velocity (±15%), 30% swing"
+    },
+    "memory_metadata": {
+      "user_feedback_loops": "Positive reinforcement on: 'Complex psychedelic arpeggiators', 'Phrygian mode', 'Rhythmic entropy'",
+      "preferred_languages": [
+        "Russian (Interface/Feedback)",
+        "Technical English (Logic/Prompting)"
+      ],
+      "workflow_pattern": "Iterative (v1 -> v2 -> v3 -> v4.Omega)"
+    }
+  }
+}

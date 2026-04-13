@@ -1,0 +1,46 @@
+{
+  "id": "meta_253",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "shift",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_253",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_wavetable_scanning_v4": {
+      "scanning_logic_omega": {
+        "table_index_modulation": {
+          "source_1": "LFO_1_Random_Drift (Rate 1/2 bar, Smoothness 85%)",
+          "source_2": "Vocal_Envelope_Follower (LFE_Input)",
+          "logic": "Index = (Source_1 ⊗ 0.6) + (Source_2 ⊗ 0.4)",
+          "result": "Unpredictable but musically relevant movement"
+        },
+        "spectral_folding_v4": {
+          "threshold": "85% of Max_Amplitude",
+          "fold_ratio": "2.5 (Adding high-mid metallic grit)",
+          "bias": "Dynamic_DC_Offset based on H(p,c)"
+        },
+        "positional_jitter": "δpos = ±0.05 (Grainy texture emulation during transitions)"
+      },
+      "interpolation_mode": "Spectral_Spline (No interpolation artifacts, maximum clarity)"
+    },
+    "spectral_evolution_metrics_v4": {
+      "timbre_movement_rate": "ΔT = 0.15 units / ms",
+      "harmonic_stability": "η = 0.92 (Avoiding chaotic frequency-leaks)",
+      "wavetable_purity_check": "Verified G# fundamental @ Index [0...255]"
+    }
+  }
+}

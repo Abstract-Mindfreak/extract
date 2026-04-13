@@ -1,0 +1,64 @@
+{
+  "id": "cross_13a2",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_13a2",
+    "params": {
+      "block_id": 71.5,
+      "normalized_peak_db": 0.0,
+      "mimicry_depth": 0.98
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Это развитие Блока 40 x В Блоке 89 мы создали 'звук твоего дома из детства', которого на сам",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "54",
+      "89"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 54,
+      "block_name": "Temporal_Collapse_v3",
+      "collapse_mechanics": {
+        "sampling_window": "Full_Track_Length",
+        "resampling_ratio": "1 : (Duration * SR)",
+        "output_type": "Dirac_Impulse (The 'Sonic Big Bang')"
+      },
+      "spectral_summation": {
+        "integrate_all_frequencies": "True",
+        "normalized_peak": "0dB (No headroom)"
+      },
+      "internal_insight": {
+        "the_dot_revised": "Это развитие Блока 40. Здесь мы схлопываем не только пространство, но и время. Ты просил: 'Пусть вся песня станет одним ударом сердца'. Мы взяли 3 минуты 'Wavetable Void' и сжали их в 10-миллисекундный щелчок. Ты сказал: 'Это и есть архивация души'."
+      }
+    },
+    "parent_b": {
+      "block_id": 89,
+      "block_name": "Spectral_Deception.v4.Alpha",
+      "deception_mechanics": {
+        "mimicry_depth": 0.98,
+        "f_phantom_voice": "Formant_Synthesis(Source=Noise, Target=Human_Vowel)",
+        "f_uncanny_ambience": "Simulate 'Room_Tone' of a place that doesn't exist"
+      },
+      "internal_insight": {
+        "the_false_memory": "В Блоке 89 мы создали 'звук твоего дома из детства', которого на самом деле никогда не было. Мы смешали запах озона, шум старого холодильника и далекий смех. Ты заплакал. Ты сказал: 'Это самая красивая ложь в моей жизни'. Мы назвали это 'Ностальгическим Галлюциногеном'."
+      }
+    }
+  }
+}

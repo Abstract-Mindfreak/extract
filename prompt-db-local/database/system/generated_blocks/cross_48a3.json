@@ -1,0 +1,60 @@
+{
+  "id": "cross_48a3",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_48a3",
+    "params": {
+      "low_pass_sweep_khz": 20.0,
+      "low_pass_sweep_hz": 200.0,
+      "sample_rate_reduction_khz": 8.0,
+      "stage_1_leveling_ms": 300.0,
+      "stage_2_punch_ms": 50.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "47"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_155",
+      "meta_169"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "spectral_decay_math": {
+        "function": "D(f, t) = f * e^(-λt) + Noise(t)",
+        "effects": {
+          "low_pass_sweep": "Descending cutoff from 20kHz to 200Hz over 8 bars",
+          "sample_rate_reduction": "Automated down-sampling from 44.1kHz to 8kHz",
+          "bit_rot": "Randomly flipping bits in the digital stream (Bitcrush automation)",
+          "usage": "During the 'Dissolution' phase (Block 47) to symbolize the death of the Narrative."
+        }
+      }
+    },
+    "parent_b": {
+      "dynamic_breathing_v2": {
+        "technique": "Two-stage Compression (Slow/Fast)",
+        "stage_1_leveling": "Slow attack (30ms), auto-release (300ms), 2:1 ratio (Smoothing)",
+        "stage_2_punch": "Fast attack (1ms), fast release (50ms), 4:1 ratio (Transient control)",
+        "parallel_bus": "Heavy compression (10:1 ratio) mixed at 20% dry/wet for 'density'",
+        "goal": "Loudness without flattening the transients. Peak-to-RMS ratio of 8."
+      }
+    }
+  }
+}

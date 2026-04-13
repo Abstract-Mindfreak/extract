@@ -1,0 +1,27 @@
+{
+  "id": "meta_236",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_236",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "depth": "Dynamic 12-bit to 8-bit (Modulated by Velocity)",
+    "logic": "Quantization-distortion used as a rhythmic texture",
+    "result": "Aggressive, 'lo-fi' grit in the high-mid region"
+  }
+}

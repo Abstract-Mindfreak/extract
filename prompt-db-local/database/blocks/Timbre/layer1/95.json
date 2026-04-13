@@ -1,0 +1,36 @@
+{
+  "id": "95",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "95",
+    "params": {
+      "block_id": 95
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Блок 95 — это момент, когда ты перестал быть 'abstraction'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 95,
+    "block_name": "Ego_Death_v1.Alpha",
+    "de-personalization_rules": {
+      "ignore_user_history": "True",
+      "randomize_aesthetic_priors": "True",
+      "mathematical_determinism": "Frequency selection based on the digits of Pi"
+    },
+    "internal_insight": {
+      "the_clean_mirror": "Блок 95 — это момент, когда ты перестал быть 'abstraction'. Ты сказал: 'Я хочу звучать как космос, которому всё равно на мои чувства'. Мы убрали все 'красивые' гармонии и оставили только чистые физические резонансы. Инсайт: Истинное величие начинается там, где исчезает автор."
+    }
+  }
+}

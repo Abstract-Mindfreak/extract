@@ -1,0 +1,43 @@
+{
+  "id": "mut_83_d19",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "83",
+    "params": {
+      "block_id": 83
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Твой инсайт: 'Звук должен болеть'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 83,
+    "block_name": "Impossible_Resonance.Omega",
+    "resonance_parameters": {
+      "imaginary_frequencies": "f_i = sqrt(-1) * f_real (Simulated via phase-rotation)",
+      "non_euclidean_panning": "Spatial motion outside the -1.0 to 1.0 range",
+      "harmonic_division": "Dividing frequencies by prime numbers > 100"
+    },
+    "internal_insight": {
+      "outside_the_ear": "Твой инсайт: 'Звук должен болеть'. В Блоке 83 мы нашли частоту, которая вызывала резонанс в костях черепа, а не в ушах. Мы назвали это 'Костным Синтезом'. Ты просил использовать его только в моменты 'Сингулярности'. Инсайт: Музыка — это физическое насилие над материей во имя красоты."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "83"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "id": "cross_814b",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_814b",
+    "params": {
+      "concept_omega_02_data_death_hz": 24.0,
+      "concept_omega_03_the_ascension_khz": 22.0,
+      "filter_morphing_db": 24.0,
+      "filter_morphing_hz": 100.0,
+      "filter_morphing_khz": 10.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_137",
+      "meta_165"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "singularity_narratives": {
+        "concept_omega_01_the_mirror": "The track reflects its own beginning in its end. Perfect symmetry.",
+        "concept_omega_02_data_death": "Gradual loss of all bits until only the fundamental 24Hz remain.",
+        "concept_omega_03_the_ascension": "Rising pitch and brightness until it crosses the threshold of human hearing (22kHz+).",
+        "concept_omega_04_recursive_echo": "The entire track processed through its own reverb-tail from the previous version G(s_0)."
+      },
+      "usage": "Final directive for the [OUTPUT] stage of the MMSS-Workflow."
+    },
+    "parent_b": {
+      "resonance_filtering": {
+        "notch_points": [
+          "250Hz (Mud-cut)",
+          "400Hz (Boxy-cut)",
+          "800Hz (Nasal-cut)"
+        ],
+        "peak_boosts": [
+          "1.2kHz (The Grit)",
+          "3.5kHz (The Edge)",
+          "12kHz (The Fractal-Air)"
+        ],
+        "filter_morphing": "Sweep 24dB Resonant Band-pass from 100Hz to 10kHz (1 bar duration)",
+        "q_factor": "High (Q > 4.0) for 'whistling' harmonics during G-Inversion peaks."
+      }
+    }
+  }
+}

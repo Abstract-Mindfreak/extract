@@ -1,0 +1,61 @@
+{
+  "id": "cross_2ae2",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_2ae2",
+    "params": {
+      "time_setting_ms": 1.618,
+      "internal_fx_hz": 500.0,
+      "internal_fx_khz": 2.0,
+      "key_01_abs_zero_bpm": 195.0,
+      "key_02_phi_spiral_bpm": 172.5
+    }
+  },
+  "synergy": {
+    "links": [
+      "17"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_154",
+      "meta_124"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "recursive_delay_spec": {
+        "time_setting": "Dotted 1/8 note + 1.618ms offset (The Golden Offset)",
+        "feedback_loop": {
+          "level": "95% (Near-infinite oscillation)",
+          "internal_fx": "Band-pass filter (500Hz-2kHz) + Distortion + Phaser",
+          "result": "The echo evolves and changes color with every repetition."
+        },
+        "panning": "MLGS_QUATERNION spiral rotation (W-axis sync)",
+        "rule": "Delay tails must be sidechained to the Lead-Main to maintain clarity."
+      }
+    },
+    "parent_b": {
+      "latent_keys_v5": {
+        "key_01_abs_zero": "Force zero reverb tail, maximum transient snap, 195 BPM (The 'Vacuum' feel)",
+        "key_02_phi_spiral": "Force Fibonacci rhythm layering (1,2,3,5,8), 172.5 BPM (The 'Natural' chaos)",
+        "key_03_neuro_gothic": "Force Phrygian-Dominant, 12-bit crush, cathedral space (The 'Mathematical' dread)",
+        "key_04_liquid_data": "Force Spectral-morphing, 4D-vectoring (Block 17), smooth transients (The 'Flow' state)",
+        "usage": "Injected into [SOUND_PROMPT] to bypass standard aesthetic filters."
+      }
+    }
+  }
+}

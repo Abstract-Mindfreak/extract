@@ -1,0 +1,38 @@
+{
+  "id": "meta_147",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_147",
+    "params": {
+      "filter_1_hz": 400.0,
+      "filter_2_khz": 8.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "recursive_saturation_math": {
+      "logic": "Series(S1, S2, S3) with Inter-stage Filtering",
+      "stages": {
+        "s1_soft_clip": "Analog-warmth (even harmonics) for body",
+        "filter_1": "Notch at 400Hz (removing mud before next stage)",
+        "s2_hard_clip": "Digital-grit (odd harmonics) for edge",
+        "filter_2": "High-shelf at 8kHz (taming harshness)",
+        "s3_bitcrush": "6-bit depth (30% wet) for fractal artifacting"
+      },
+      "result": "Dense harmonic spectrum without losing transient clarity."
+    }
+  }
+}

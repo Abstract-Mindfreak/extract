@@ -1,0 +1,37 @@
+{
+  "id": "meta_195",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_195",
+    "params": {}
+  },
+  "synergy": {
+    "links": [
+      "14"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "shader_sync_logic": {
+      "variables_mapping": {
+        "u_time": "Song progress (Temporal Vector)",
+        "u_audio_low": "Sub-bass amplitude (Foundation pump)",
+        "u_audio_mid": "Mid-range energy (Semantic density)",
+        "u_audio_high": "High-freq transients (Fractal detail)"
+      },
+      "geometry": "Raymarching fractals (Mandelbulb/Sierpinski) controlled by ASE-coefficients",
+      "color_palette": "Inherited from Synesthesia Matrix (Block 14)",
+      "rule": "Shader complexity must increase with Entropy H(p,c)."
+    }
+  }
+}

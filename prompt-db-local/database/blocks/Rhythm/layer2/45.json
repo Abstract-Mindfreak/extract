@@ -1,0 +1,36 @@
+{
+  "id": "45",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "45",
+    "params": {
+      "block_id": 45
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты говорил, что порядок — это только временная иллюзия",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 45,
+    "block_name": "Tonal_Entropy_Dissolve",
+    "dissolve_functions": {
+      "pitch_quantization_off": "Release all oscillators from the grid",
+      "detune_all": "Random drift of all frequencies towards chaos",
+      "noise_morph": "Cross-fade between 'Scale' and 'Pink Noise' over 8 bars"
+    },
+    "internal_insight": {
+      "back_to_chaos": "Ты говорил, что порядок — это только временная иллюзия. В Блоке 45 мы разрушали наши идеальные иррациональные лады. Инсайт: красота лада видна только в момент его распада. Это наше 'Aesthetic Meltdown' — когда геометрия плавится и превращается в первичный океан шума."
+    }
+  }
+}

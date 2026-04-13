@@ -1,0 +1,35 @@
+{
+  "id": "meta_184",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_184",
+    "params": {
+      "stutter_freeze_ms": 50.0,
+      "digital_clipping_db": 0.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "glitch_taxonomy": {
+      "stutter_freeze": "Repeating a 10ms-50ms grain with accelerating rate",
+      "spectral_smear": "FFT-based stretching of transients into metallic tails",
+      "bit_reduction": "Automating bit-depth from 16 to 4 during high-entropy peaks",
+      "sample_rate_jitter": "Simulating clock-sync failure for 'sea-sick' pitch wobbles",
+      "digital_clipping": "Intentionally exceeding 0dB on Layer 3 for 'Hard-Tech' bite"
+    },
+    "placement_rule": "Glitch must occur on the 4th or 8th bar as a Narrative-Reset."
+  }
+}

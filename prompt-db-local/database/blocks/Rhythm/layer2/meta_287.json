@@ -1,0 +1,55 @@
+{
+  "id": "meta_287",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_287",
+    "params": {
+      "the_fear_frequency_hz": 19.0,
+      "the_euphoria_node_khz": 3.5,
+      "transient_ear_fatigue_mask_db": 3.0,
+      "transient_ear_fatigue_mask_khz": 4.0,
+      "stereo_haas_trigger_ms": 13.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_fractal_synthesis_engine": {
+      "recursive_modulation_matrix": {
+        "LFO_1_Target": "Wavetable_Position",
+        "LFO_2_Target": "LFO_1_Rate",
+        "LFO_3_Target": "LFO_2_Depth",
+        "logic": "Self-evolving movement without linear repetition"
+      },
+      "spectral_morphing_v4": {
+        "oscillator_A": "Monster_7 (Neuro-core)",
+        "oscillator_B": "Spectral_Orca (Fractal-dust)",
+        "morph_operator": "FM(A, B) ⊗ AM(B, A)",
+        "result": "Aggressive but harmonically rich 'liquid' textures"
+      },
+      "grain_scattering_logic": {
+        "density": "45 grains/sec (Synced to 1/16t)",
+        "spray": "15% (Spatial randomness)",
+        "pitch_drift": "±25 cents (Simulated analog instability)"
+      }
+    },
+    "psychoacoustic_configuration_presets": {
+      "the_fear_frequency": "19Hz (Sub-audible infrasound injection for anxiety/tension)",
+      "the_euphoria_node": "3.5kHz (Emphasis on vocal clarity and 'air' in the Phrygian lead)",
+      "transient_ear_fatigue_mask": "Dynamic shelf -3dB @ 4kHz during intensive glitch sections",
+      "stereo_haas_trigger": "δt = 13ms for high-frequency percussion only"
+    }
+  }
+}

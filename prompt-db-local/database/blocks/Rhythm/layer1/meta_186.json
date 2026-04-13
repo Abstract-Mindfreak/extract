@@ -1,0 +1,32 @@
+{
+  "id": "meta_186",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_186",
+    "params": {
+      "impacts_hz": 20.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "transition_engine": {
+      "risers": "Shepard-Tone ascending + White-noise sweep",
+      "impacts": "Reverse-reverb kick-tail + Sub-drop (80Hz to 20Hz)",
+      "fills": "Algorithmic-glitch (0.5 bar) via A_MMSS_FRACTAL_PACKAGE",
+      "bridge_rule": "The bridge must ALWAYS contain a G-Inversion of the main theme."
+    }
+  }
+}

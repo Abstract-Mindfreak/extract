@@ -1,0 +1,34 @@
+{
+  "id": "meta_126",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_126",
+    "params": {
+      "collapse_trigger_db": 15.0,
+      "processing_hz": 20.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "quantum_panning_spec": {
+      "logic": "Superposition-Mapping: Sound exists in L and R with 180 deg phase offset",
+      "collapse_trigger": "Transient detection (Attack > 15dB) centers the sound to Mono",
+      "processing": "Continuous Mid-Side modulation (LFO 0.5Hz to 20Hz range)",
+      "result": "The sense of 'Ethereal Ubiquity' (Sound is everywhere and nowhere)",
+      "rule": "Only for Layer 3 (The Void) to maintain Narrative Fidelity of the Lead."
+    }
+  }
+}

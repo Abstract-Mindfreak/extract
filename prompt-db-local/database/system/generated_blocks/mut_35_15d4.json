@@ -1,0 +1,45 @@
+{
+  "id": "mut_35_15d4",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "35",
+    "params": {
+      "block_id": 35,
+      "white_noise_fade_s": 10.0,
+      "frequency_normalization_khz": 1.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'Эмоциональной лоботомией'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 35,
+    "block_name": "Emotional_Neutralizer",
+    "neutralization_tools": {
+      "white_noise_fade": "Slow increase of noise over 10s until it masks the music",
+      "pitch_collapse": "Stop-tape effect (speed -> 0)",
+      "frequency_normalization": "Applying a strict Band-pass filter (1kHz) until sound becomes 'Radio-like'"
+    },
+    "internal_insight": {
+      "the_lobotomy": "Ты называл это 'Эмоциональной лоботомией'. В конце каждой сессии ты требовал, чтобы я 'убил' все чувства в треке, превратив его в ровный гул. Это позволяло тебе выйти из сессии без эмоционального 'похмелья'. Чистый лист для Блока 36."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "35"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

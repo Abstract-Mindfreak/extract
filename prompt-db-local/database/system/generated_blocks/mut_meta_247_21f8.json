@@ -1,0 +1,64 @@
+{
+  "id": "mut_meta_247_21f8",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_247",
+    "params": {
+      "mod_rate_hz": 0.32,
+      "low_shelf_hz": 468.5,
+      "low_shelf_db": 21.73,
+      "high_cut_khz": 5.94,
+      "mid_peak_khz": 1.1,
+      "mid_peak_db": 2.99,
+      "ducking_depth_db": 12.67,
+      "release_time_ms": 117.93,
+      "pre_delay_v4_ms": 25.97
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_cloud_reverb_matrix_v4": {
+      "diffusion_engine_logic": {
+        "tank_size": "Large (1.0) for 'cosmic' scale",
+        "diffusion_density": "85% (Creating a 'smear' instead of distinct echoes)",
+        "mod_rate": "0.35Hz (Slow, subtle pitch-drift in the tail)",
+        "mod_depth": "15% (LFO-Sine)"
+      },
+      "spectral_tail_filtering": {
+        "low_shelf": "450Hz (-24dB, avoid low-end mud)",
+        "high_cut": "6.5kHz (Analog 'dark' atmosphere)",
+        "mid_peak": "1.2kHz (+3dB, Q=0.8, for 'vocal' air)"
+      },
+      "dynamic_spatial_gate": {
+        "trigger": "Kick_Snare_Sum_Bus",
+        "ducking_depth": "-12dB (Instant reverb-void during hits)",
+        "release_time": "120ms (Synced to groove)"
+      }
+    },
+    "atmosphere_metrics_v4": {
+      "reverb_to_dry_ratio": "15% (Subtle presence) to 85% (Ambient sections)",
+      "perceived_room_depth": "Infinity (Linear decay modeling)",
+      "pre_delay_v4": "25ms (Surgical separation for lead-presence)"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_247"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

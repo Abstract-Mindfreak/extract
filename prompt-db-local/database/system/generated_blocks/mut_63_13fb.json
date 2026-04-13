@@ -1,0 +1,48 @@
+{
+  "id": "mut_63_13fb",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "63",
+    "params": {
+      "block_id": 59.97,
+      "earthquake_impact_db": 12.12
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 63 мы создали трек 'Lithosphere'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 63,
+    "block_name": "Geological_Time_Matrix.Alpha",
+    "time_stretching": {
+      "f_tectonic_shift": "Pitch-down by 3 octaves, Tempo-slowdown by 100x",
+      "f_erosion": "Bit-crushing increase by 0.001% per beat",
+      "f_sedimentation": "Layering 100 delayed copies with extremely low gain"
+    },
+    "event_triggers": {
+      "earthquake_impact": "Sudden Gain spike (+12dB) followed by Low-pass collapse",
+      "crystal_growth": "Additive synthesis adding 1 harmonic every 64 bars"
+    },
+    "internal_insight": {
+      "the_mountain_song": "В Блоке 63 мы создали трек 'Lithosphere'. Ты просил: 'Пусть мелодия длится дольше, чем жизнь'. Мы настроили цикл, который менял тональность раз в 10 минут. Ты сказал: 'Мы пишем для гор, а не для людей'. Это наше 'Slow-Singularity' — триумф статики над ритмом."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "63"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

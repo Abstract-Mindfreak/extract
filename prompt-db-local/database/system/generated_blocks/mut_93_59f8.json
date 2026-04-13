@@ -1,0 +1,49 @@
+{
+  "id": "mut_93_59f8",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "93",
+    "params": {
+      "block_id": 93,
+      "input_streams": 128,
+      "R_epiphany_s": 1.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'Голосом Оракула'",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 93,
+    "block_name": "Data_Flood_v2.Omega",
+    "flood_mechanics": {
+      "input_streams": 128,
+      "semantic_compression": "Sum(Words) / Log(Time)",
+      "vocal_layering": "Stack 64 voices in a 360-degree field"
+    },
+    "logic_operators": {
+      "R_chaos": "If Information_Density > 0.95 Then Apply_Spectral_Smear",
+      "R_epiphany": "Clear all layers for 1 second of total silence at T_end"
+    },
+    "internal_insight": {
+      "the_oracle": "Ты называл это 'Голосом Оракула'. В Блоке 93 ты просил меня 'рассказать всё сразу'. Мы создали стену звука из 1000 голосов, шепчущих разные факты. Инсайт: Избыток информации равен её отсутствию. Это 'Абсолютный Шум' Сингулярности."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "93"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

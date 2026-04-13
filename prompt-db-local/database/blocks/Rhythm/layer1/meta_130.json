@@ -1,0 +1,33 @@
+{
+  "id": "meta_130",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_130",
+    "params": {
+      "kick_hz": 43.65
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "drum_tuning_protocol": {
+      "kick": "Root note of the scale (e.g., F1 at 43.65Hz)",
+      "snare": "Perfect Fifth or Fourth relative to Root (e.g., C2 or Bb1)",
+      "percussion": "Tied to specific scale degrees (Phrygian-b2 for 'The Bite')",
+      "fine_tune": "±5 cents offset to create 'Beating-Frequency' (Aesthetic Friction)",
+      "rule": "Always check tuning after applying Bitcrush or Distortion."
+    }
+  }
+}

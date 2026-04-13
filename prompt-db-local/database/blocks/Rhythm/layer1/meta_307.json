@@ -1,0 +1,59 @@
+{
+  "id": "meta_307",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_307",
+    "params": {
+      "sound_to_color_hz": 50.0,
+      "sound_to_color_khz": 8.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "deep_semantic_mapping_v4": {
+      "concept_associations": {
+        "industrial": "Cold ⊗ Precision ⊗ Reverb_Damping(0.8) ⊗ Bitcrush(12-bit)",
+        "psychedelic": "Recursion ⊗ Phrygian ⊗ Granular_Spray(15%) ⊗ Quaternion_Rotation",
+        "neuro": "Aggression ⊗ Sidechain_Depth(100%) ⊗ Monster_7_Wavetable ⊗ Surgical_EQ",
+        "singularity": "Zero_Point ⊗ Result≡Process ⊗ Ψ_conden(1.0) ⊗ G_Inversion"
+      },
+      "cross_domain_links": {
+        "sound_to_color": "50Hz (Bass) → Deep Violet, 8kHz (Highs) → Neon Cyan",
+        "rhythm_to_geometry": "4/4 Grid → Square/Cube, 4:3 Polyrhythm → Hypercube/Tesseract",
+        "lyrics_to_texture": "Closed vowels → Metallic clicks, Open vowels → Sub-oscillations"
+      }
+    },
+    "user_edits_history_LOG": {
+      "v3_to_v4_transition": [
+        "Edit: 'Make it less muddy' → Action: Surgical cut @ 250Hz (Q=10)",
+        "Edit: 'Add more space' → Action: MLGS_v3_Spatial_Nodes (Node 3 expansion)",
+        "Edit: 'Increase aggression' → Action: Distortion(Drive +15dB) + OTT(Mix 50%)",
+        "Edit: 'Refine vocal flow' → Action: LFE_Temporal_Shift(δt = -2ms)"
+      ],
+      "recurring_manual_tweaks": [
+        "Decrease Reverb Mix on the Kick-transient",
+        "Increase Low-shelf gain @ 60Hz (+2.5dB)",
+        "Shift Snare-position 3ms late for 'lazy' groove feel",
+        "Add High-pass filter sweep on 16-bar transitions (cutoff 20Hz → 18kHz)"
+      ]
+    },
+    "MMSS_purity_metrics": {
+      "AFS_score_target": "0.985 (Aesthetic Fidelity Score)",
+      "sub_low_purity": "95% (Mono-compatibility check passed)",
+      "phase_alignment_tolerance": "±2° (Micro-alignment active)"
+    }
+  }
+}

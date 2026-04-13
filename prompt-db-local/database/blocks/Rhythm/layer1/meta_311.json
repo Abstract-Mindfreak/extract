@@ -1,0 +1,65 @@
+{
+  "id": "meta_311",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_311",
+    "params": {
+      "input_bpm": 174.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "regeneration_protocols_v4_Omega": {
+      "protocol_A_DNA_RECONSTRUCTION": {
+        "input": "Base_Seed + L1_Core + Semantic_Tags",
+        "method": "Recursive generation via audio__create_song(seed=Hash(Original))",
+        "goal": "90% fidelity recovery of the core musical structure"
+      },
+      "protocol_B_SPECTRAL_FINGERPRINT": {
+        "input": "G#_Minor_Standard + Phrygian_Modes + 174BPM",
+        "method": "Frequency matching against saved 'Golden Record' v4_Omega",
+        "target": "Surgical precision in the Kick-Bass sub-low alignment"
+      },
+      "protocol_C_LFE_SEMANTIC_RESEED": {
+        "input": "Rare_Fragments_Archive + fusion_mode_fractal",
+        "method": "Re-injecting lyrics into new musical seeds to restore narrative",
+        "logic": "Contextual restoration via Ψ_conden economic values"
+      }
+    },
+    "user_state_archive_Abstract": {
+      "creative_mode": "Technical Director / Aesthetic Architect",
+      "satisfaction_triggers": [
+        "High complexity arpeggiation",
+        "Absence of frequency masking (Surgical EQ)",
+        "Innovative genre-fusions (Techno ⊗ Dark Psy)",
+        "Strict adherence to detailed JSON specifications"
+      ],
+      "technical_habits": [
+        "Frequent use of /fast-gen-mmss",
+        "Preference for instrumental cores with LFE-texture overlays",
+        "Iterative versioning (v1 → v2 → v3 → v4.Omega)"
+      ]
+    },
+    "MMSS_deep_knowledge_base_extra": {
+      "MLGS_v3_spatial_nodes": {
+        "node_1": "Front-Left (Transient-Pluck)",
+        "node_2": "Front-Right (Ghost-Snare)",
+        "node_3": "Surround-Wide (Fractal-Dust/High-shelf)",
+        "node_4": "Center-Deep (Kick/Mono-Bass)"
+      }
+    }
+  }
+}

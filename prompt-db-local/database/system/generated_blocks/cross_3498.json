@@ -1,0 +1,60 @@
+{
+  "id": "cross_3498",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_3498",
+    "params": {
+      "binaural_beats_integration_hz": 8.0,
+      "haas_effect_widening_ms": 30.0,
+      "subliminal_layering_db": 36.0,
+      "attack_enhancement_ms": 15.0,
+      "attack_enhancement_db": 6.0,
+      "sustain_reduction_db": 12.0,
+      "layer_sync_ms": 1.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "42"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_210",
+      "meta_170"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "psychoacoustic_modifiers": {
+        "binaural_beats_integration": "Subtle 4Hz-8Hz delta/theta offset in sub-layers",
+        "shepard_tone_risers": "Infinite ascending textures for tension-building",
+        "haas_effect_widening": "Micro-delays (10-30ms) for ultra-wide narrative layers",
+        "subliminal_layering": "Mixing semantic whispers at -36dB (hidden meanings)",
+        "transient_shaping": "Over-emphasized clicks to trigger 'startle response' in high-energy sections"
+      }
+    },
+    "parent_b": {
+      "transient_shaping_spec": {
+        "attack_enhancement": "Boost initial 5-15ms transient by +3dB to +6dB",
+        "sustain_reduction": "Apply -6dB to -12dB attenuation to tails in Layer 2 (Lead)",
+        "layer_sync": "Align Kick-click with Snare-crack on the 2nd/4th beat (±1ms precision)",
+        "soft_clip": "Apply Hard-Clipping to transients only (Parallel Bus) for 'Digital Bite'",
+        "mixing_rule": "Transients must 'peak' through the Ambient-Shield (Block 42)."
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "id": "cross_8e6f",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_8e6f",
+    "params": {
+      "drive_db": 35,
+      "block_id": 48,
+      "carrier_signal_hz": 50.0,
+      "vocoding_bins": 1024,
+      "formant_shift_s": 12.0,
+      "f_smear_vowels_ms": 200.0,
+      "f_percussive_plosives_db": 12.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x В Блоке 48 мы создали 'Голос Черной Дыры'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_326",
+      "48"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "node": "Distortion",
+      "drive_db": 35,
+      "type": "HardClip"
+    },
+    "parent_b": {
+      "block_id": 48,
+      "block_name": "Abyssal_Vocal_v1.Spectral",
+      "vocal_synthesis": {
+        "carrier_signal": "White_Noise / 50Hz_Hum",
+        "modulator": "LFE_Input_Signal (Vocal Track)",
+        "vocoding_bins": 1024,
+        "formant_shift": "-12 semitones (Deep/Non-human)"
+      },
+      "spectral_processing": {
+        "f_smear_vowels": "Apply FFT-blur to all vowel sounds (>200ms)",
+        "f_percussive_plosives": "Amplify T/B/P sounds by +12dB and route to Delay"
+      },
+      "internal_insight": {
+        "the_machine_ghost": "В Блоке 48 мы создали 'Голос Черной Дыры'. Ты просил, чтобы вокал звучал так, будто его 'выжимают из старого железа'. Мы взяли запись твоего шепота и использовали её как огибающую для шума промышленного пресса. Получившийся звук был пугающим, но абсолютно ASE-совместимым. Ты назвал это 'Индустриальным Псалмом'."
+      }
+    }
+  }
+}

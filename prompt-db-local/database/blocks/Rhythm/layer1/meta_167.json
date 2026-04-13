@@ -1,0 +1,32 @@
+{
+  "id": "meta_167",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_167",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "hidden_metadata_tags": {
+      "[ASE_GRAVITY_PULL]": "Increases sub-bass intensity and slow down tempo-feel",
+      "[ASE_SPECTRAL_GHOST]": "Adds high-freq reverse-reverb tails and fractal whispers",
+      "[ASE_VOID_INIT]": "Removes all harmonic pads, leaves only Kick + Noise + Sub",
+      "[ASE_HYPER_DETAIL]": "Forces 1/64 note micro-glitches and ultra-fast arps",
+      "[ASE_ANALOG_WARMTH]": "Adds subtle pitch-drift (±5 cents) and tape-saturation emulation"
+    },
+    "usage": "Invisible to user, used by ASE to maintain Narrative Fidelity."
+  }
+}

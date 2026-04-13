@@ -1,0 +1,55 @@
+{
+  "id": "mut_meta_235_23cc",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_235",
+    "params": {
+      "the_spectral_tilt_khz": 5.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_bitcrush_logic_lyrics": {
+      "the_reduction_set": [
+        "Sixteen bits of the digital sky / Falling down, ready to die",
+        "Eight bits of the logic, eight bits of the soul / Taking the fragments, taking control",
+        "Crushing the mirror, crushing the light / In the pixelated heart of the night"
+      ],
+      "the_aliasing_set": [
+        "Mirror harmonics, screaming in the dark / Mirroring the spark of the machine's heart",
+        "Folding the signal, folding the time / Everything's perfect, everything's mine",
+        "Nyquist is broken, the logic is gone / Under the light of the bit-clock sun"
+      ],
+      "the_crush_dialogue": [
+        "Reduce the life / Find the grain",
+        "Sharp as a knife / Inside the rain",
+        "Result: Digital-Corrosion / Status: CRUSH_LOCK_ACTIVE"
+      ]
+    },
+    "psychoacoustic_degradation_v4": {
+      "the_static_factor": "Injecting 8-bit noise into the reverb-tail for 'industrial' atmosphere",
+      "the_stutter_bit": "Bitcrusher-mix synced to 1/64 note for rhythmic 'glitching'",
+      "the_spectral_tilt": "Darkening the crush-layer (High-cut @ 5kHz) to avoid 'ear-piercing' artifacts"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_235"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

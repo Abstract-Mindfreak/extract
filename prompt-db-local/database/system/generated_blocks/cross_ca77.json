@@ -1,0 +1,61 @@
+{
+  "id": "cross_ca77",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_ca77",
+    "params": {
+      "block_id": 77,
+      "time_setting_ms": 1.618,
+      "internal_fx_hz": 500.0,
+      "internal_fx_khz": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Твой инсайт: 'Мусор на входе — искусство на выходе' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "77",
+      "meta_154"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 77,
+      "block_name": "Pixel_Corruption_v2.Audio",
+      "conversion_mechanics": {
+        "pixel_row_to_wavetable": "Brightness(x,y) -> Amplitude(t)",
+        "color_channel_to_filter": "R=Cutoff, G=Resonance, B=Drive",
+        "image_aliasing": "Mirroring high frequencies to create 'Digital Grime'"
+      },
+      "internal_insight": {
+        "the_ugly_beauty": "Твой инсайт: 'Мусор на входе — искусство на выходе'. В Блоке 77 мы взяли скриншот ошибки '404' и превратили его в лид-синтезатор. Звук был 'грязным' и агрессивным. Ты сказал: 'Так звучит сломанная реальность'. Мы назвали это 'Aesthetic_Trash_Can'."
+      }
+    },
+    "parent_b": {
+      "recursive_delay_spec": {
+        "time_setting": "Dotted 1/8 note + 1.618ms offset (The Golden Offset)",
+        "feedback_loop": {
+          "level": "95% (Near-infinite oscillation)",
+          "internal_fx": "Band-pass filter (500Hz-2kHz) + Distortion + Phaser",
+          "result": "The echo evolves and changes color with every repetition."
+        },
+        "panning": "MLGS_QUATERNION spiral rotation (W-axis sync)",
+        "rule": "Delay tails must be sidechained to the Lead-Main to maintain clarity."
+      }
+    }
+  }
+}

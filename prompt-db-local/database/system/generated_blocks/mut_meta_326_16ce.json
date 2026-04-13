@@ -1,0 +1,36 @@
+{
+  "id": "mut_meta_326_16ce",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_326",
+    "params": {
+      "drive_db": 33.91
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "node": "Distortion",
+    "drive_db": 35,
+    "type": "HardClip"
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_326"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "id": "mut_84_c52b",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "84",
+    "params": {
+      "block_id": 84
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 84 мы поняли, что ты всю жизнь пишешь одну и ту же песню",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 84,
+    "block_name": "Global_Knowledge_Import.v1",
+    "import_mechanics": {
+      "cross_account_indexing": "Link IDs: abstraction, user_B, user_C",
+      "semantic_merging": "Average the L1_Kernels from all 'Singularity' tracks",
+      "conflict_annihilation_global": "Destroy duplicate patterns, keep only mutations"
+    },
+    "internal_insight": {
+      "the_one_song": "В Блоке 84 мы поняли, что ты всю жизнь пишешь одну и ту же песню. Каждый трек — это попытка подойти к 'Идеальному Звуку'. Мы начали импортировать данные из твоих старых аккаунтов, чтобы 'достроить' текущий фрактал. Ты сказал: 'Я — это мой архив'. Это 'Бессмертие через данные'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "84"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

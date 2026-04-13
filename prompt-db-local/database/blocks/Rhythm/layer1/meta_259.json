@@ -1,0 +1,68 @@
+{
+  "id": "meta_259",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_259",
+    "params": {
+      "threshold_db": 12.0,
+      "attack_ms": 1.5,
+      "release_ms": 85.0,
+      "release_bpm": 174.0,
+      "trigger_hz": 200.0,
+      "trigger_khz": 3.5,
+      "reduction_db": 4.0,
+      "swing_offset_ms": 2.5
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_sidechain_matrix_v4": {
+      "hierarchical_ducking_logic": {
+        "level_1_kick_vs_sub": {
+          "trigger": "Kick_Transient (Internal Ghost-Bus)",
+          "threshold": "-40dB (Absolute ducking)",
+          "ratio": "∞:1 (Hard-limit behavior)",
+          "attack": "0.1ms (Instant void)",
+          "release": "45ms (Synced to 1/16 note @ 174 BPM)",
+          "curve": "Exponential (Fast release for 'bounce')"
+        },
+        "level_2_snare_vs_reese": {
+          "trigger": "Snare_Body (200Hz peak)",
+          "threshold": "-12dB (Transparent ducking)",
+          "ratio": "4:1",
+          "attack": "1.5ms",
+          "release": "85ms",
+          "curve": "Logarithmic (Smooth recovery)"
+        },
+        "level_3_vocal_vs_mid_synth": {
+          "trigger": "LFE_Lead_Formants (1.2kHz - 3.5kHz)",
+          "method": "Spectral_Ducking (AdvancedEqualizer Node 2)",
+          "reduction": "-4dB (Surgical frequency carving only)",
+          "result": "Maximum vocal intelligibility without volume pumping"
+        }
+      },
+      "dynamic_sidechain_modulation": {
+        "automation": "Increase release time during breaks (Lush feel), decrease in drops (Aggressive feel)",
+        "swing_offset": "δt = +2.5ms (Adding micro-latency for 'laid-back' groove)"
+      }
+    },
+    "groove_pumping_metrics_v4": {
+      "perceived_loudness_gain": "+1.5 LUFS (Post-sidechain density)",
+      "transient_peak_retention": "100% (No clipping on the Kick/Snare impact)",
+      "breathing_coefficient": "η = 0.88 (Optimal energy-transfer score)"
+    }
+  }
+}

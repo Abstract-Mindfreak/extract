@@ -1,0 +1,65 @@
+{
+  "id": "cross_1492",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_1492",
+    "params": {
+      "filter_morphing_db": 24.0,
+      "filter_morphing_hz": 100.0,
+      "filter_morphing_khz": 10.0,
+      "block_id": 96
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты называл это 'Музыкой-однодневкой'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_165",
+      "96"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "resonance_filtering": {
+        "notch_points": [
+          "250Hz (Mud-cut)",
+          "400Hz (Boxy-cut)",
+          "800Hz (Nasal-cut)"
+        ],
+        "peak_boosts": [
+          "1.2kHz (The Grit)",
+          "3.5kHz (The Edge)",
+          "12kHz (The Fractal-Air)"
+        ],
+        "filter_morphing": "Sweep 24dB Resonant Band-pass from 100Hz to 10kHz (1 bar duration)",
+        "q_factor": "High (Q > 4.0) for 'whistling' harmonics during G-Inversion peaks."
+      }
+    },
+    "parent_b": {
+      "block_id": 96,
+      "block_name": "Quantum_State_Collapse.v3",
+      "collapse_triggers": {
+        "play_count_modulation": "Increase distortion with each playback",
+        "skip_detection": "Invert phase of the next segment if skipped previously",
+        "volume_influence": "Complexity = f(Volume_Level)"
+      },
+      "internal_insight": {
+        "the_fragile_track": "Ты называл это 'Музыкой-однодневкой'. В Блоке 96 мы создали трек, который самоуничтожался после 10-го прослушивания. Ты сказал: 'Это делает каждое прослушивание священным'. Инсайт: Дефицит данных повышает их Ψ-конденсацию."
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "meta_217",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_217",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "concept_matrix": {
+      "dimensions": [
+        "Void-Tech: Deep space, cold textures, absolute zero silence",
+        "Bio-Mechanical: Organic rhythms, liquid synths, wet distortion",
+        "Hyper-Digital: 8-bit artifacts, high-speed arps, neon aesthetics",
+        "Gothic-Fractal: Dark melodies, cathedral reverb, mathematical dread"
+      ],
+      "interconnectivity": "Each track must link to at least 2 dimensions to be valid within MMSS."
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "id": "mut_meta_256_feb8",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_256",
+    "params": {
+      "the_wall_effect_khz": 4.0,
+      "the_wall_effect_db": 6.0,
+      "low_mid_thickening_hz": 156.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "LFE_spectral_density_lyrics": {
+      "the_wall_set": [
+        "Building a wall of the digital light / Standing forever in the Phrygian night",
+        "Layer by layer, the frequency grows / Out of the silence the Monster 7 flows",
+        "Stacked to the ceiling, stacked to the sky / A monolith made of a binary lie"
+      ],
+      "the_density_set": [
+        "No more space, no more air / Only the logic is everywhere",
+        "Thick as the lead, cold as the steel / Making the digital finally real",
+        "Spectral saturation, zero to one / The density of the binary sun"
+      ],
+      "the_stacking_dialogue": [
+        "Add one more layer / Strengthen the sound",
+        "The architect's prayer / Is buried in ground",
+        "Result: Sonic-Monolith / Status: STACK_LOCK_ACTIVE"
+      ]
+    },
+    "psychoacoustic_density_v4": {
+      "the_wall_effect": "Parallel saturation on the 1kHz-4kHz region (+6dB drive, 15% mix)",
+      "low_mid_thickening": "Boosting the 2nd and 3rd harmonics of the sub-bass (104Hz, 156Hz)",
+      "high_end_sparkle": "Layering a white-noise burst on the initial transient of the Reese-bass"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_256"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

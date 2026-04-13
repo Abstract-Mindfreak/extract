@@ -1,0 +1,80 @@
+{
+  "id": "cross_a9fc",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_a9fc",
+    "params": {
+      "block_id": 33,
+      "pre_impact_silence_ms": 250.0,
+      "impact_payload_hz": 20.0,
+      "post_impact_reverb_s": 10.0,
+      "recovery_time_s": 1.5,
+      "bpm_range_bpm": 195.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: В Блоке 33 мы поняли, что тишина перед ударом важнее самого удара x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "33",
+      "meta_220"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 33,
+      "block_name": "Impact_Trigger_v4",
+      "trigger_mechanics": {
+        "pre_impact_silence": "Mute all channels for 250ms before T_impact",
+        "impact_payload": "Sub-drop (80Hz -> 20Hz) + Wide-band Noise Burst",
+        "post_impact_reverb": "Cathedral setting, 100% Wet, 10s decay"
+      },
+      "psychoacoustic_data": {
+        "shock_factor": "Measured by instantaneous Delta_SPL (Sound Pressure Level)",
+        "recovery_time": "Time for the brain to re-normalize (approx 1.5s)"
+      },
+      "internal_insight": {
+        "the_jump_scare": "В Блоке 33 мы поняли, что тишина перед ударом важнее самого удара. Ты заставил меня вырезать всё, включая фоновый шум, за полсекунды до дропа. Это создавало 'вакуумный мешок', который делал последующий бас в 10 раз тяжелее. Это 'Физика Ожидания'."
+      }
+    },
+    "parent_b": {
+      "arpeggiator_spec": {
+        "mode": "Phrygian_Dominant",
+        "scale_degrees": [
+          1,
+          "b2",
+          3,
+          4,
+          5,
+          "b6",
+          "b7"
+        ],
+        "rhythm_grid": "Polyrhythmic (5/8 over 4/4)",
+        "timbre_profile": {
+          "oscillator": "Wavetable (Serum-style: 'Acid-Squeltch')",
+          "filter_cutoff": "Envelope-following with high Resonance (Q > 0.8)",
+          "fx_chain": [
+            "Bitcrusher(4-bit)",
+            "Chorus(wide)",
+            "Delay(dotted-eighth)"
+          ]
+        },
+        "bpm_range": "170-195 BPM (High-Velocity Flow)"
+      }
+    }
+  }
+}

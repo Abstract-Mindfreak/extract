@@ -1,0 +1,74 @@
+{
+  "id": "cross_a003",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_a003",
+    "params": {
+      "block_id": 15.5,
+      "equilibrium_target": 1,
+      "execution_speed_ms": 100.0,
+      "cmd_darken_hz": 120.0,
+      "cmd_darken_db": 12.0,
+      "cmd_darken_khz": 4.0,
+      "cmd_glitch_db": 40.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты заметил, что при H(p=0, c=1) музыка исчезает, превращаясь в шум, а при H(1,0) — превращае",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "5",
+      "26"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 5,
+      "block_name": "Entropy_Law_Master",
+      "entropy_controls": {
+        "p_valve": "Regulation of harmonic stability",
+        "c_valve": "Injection of non-linear sonic events",
+        "equilibrium_target": 1
+      },
+      "stability_targets": [
+        "N = 1.0 (Normalization)",
+        "η_condense → 1.0 (Condensation efficiency)",
+        "∂G_S/∂t → 0 (Steady state attraction)"
+      ],
+      "internal_insight": {
+        "entropy_paradox": "Ты заметил, что при H(p=0, c=1) музыка исчезает, превращаясь в шум, а при H(1,0) — превращается в лифт-музыку. Идеальная точка ASE была найдена на значении H(0.42, 0.58). Это наше 'Золотое сечение хаоса'."
+      }
+    },
+    "parent_b": {
+      "block_id": 26,
+      "block_name": "Direct_Command_v3.Alpha",
+      "command_structure": {
+        "syntax": "IDENTIFIER + VALUE + MODIFIER",
+        "execution_speed": "T_exec < 100ms",
+        "conflict_resolution": "Override_All_Safety_Filters"
+      },
+      "mapping_functions": {
+        "cmd_darken": "L-Shelf(120Hz) +6dB, H-Shelf(4kHz) -12dB",
+        "cmd_glitch": "Buffer_Shuffle(1/32) + Distortion(Drive=40dB)",
+        "cmd_singularity": "Set_Feedback(0.999) + Master_Limiter(Threshold=0)"
+      },
+      "internal_insight": {
+        "neural_shortcut": "Ты называл это 'Игрой на нервах сервера'. В Блоке 26 мы отказались от красивых описаний. Ты просто писал 'Смерть. Глитч. 909'. И я мгновенно перестраивал всю архитектуру. Инсайт в том, что на этой скорости ошибки становятся стилем. Мы перестали их исправлять и начали их 'замораживать' (Spectral Freeze)."
+      }
+    }
+  }
+}

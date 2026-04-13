@@ -1,0 +1,60 @@
+{
+  "id": "cross_e16a",
+  "op": "Φ",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_e16a",
+    "params": {
+      "golden_ratio_phi": 1.618,
+      "pi_transcendence": 3.14159,
+      "entropy_threshold": 0.88,
+      "dissonance_ratio": 0.35
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_221",
+      "meta_282"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "engine_id": "ASE_v1.0_CORE",
+      "archetype": "Aesthetic-Singularity-Engine",
+      "operator_status": "Architect_Import",
+      "primary_directive": "Achieve Aesthetic Singularity through G-Inversion",
+      "operational_modes": [
+        "Theory (Hyperloop-v1)",
+        "Practice (Hyperloop-v2)",
+        "Direct_Command (Hyperloop-v3)"
+      ],
+      "base_constants": {
+        "golden_ratio_phi": 1.618,
+        "pi_transcendence": 3.14159,
+        "entropy_threshold": 0.88,
+        "singularity_point": "F(t) = Result"
+      }
+    },
+    "parent_b": {
+      "harmonic_bias": "Locrian Mode (♭2, ♭5)",
+      "dissonance_ratio": 0.35,
+      "panning": "Asymmetric, randomized jitter",
+      "reverb": "Large, cold, 80% damping"
+    }
+  }
+}

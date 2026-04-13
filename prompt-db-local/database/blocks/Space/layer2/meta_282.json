@@ -1,0 +1,30 @@
+{
+  "id": "meta_282",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_282",
+    "params": {
+      "dissonance_ratio": 0.35
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "harmonic_bias": "Locrian Mode (♭2, ♭5)",
+    "dissonance_ratio": 0.35,
+    "panning": "Asymmetric, randomized jitter",
+    "reverb": "Large, cold, 80% damping"
+  }
+}

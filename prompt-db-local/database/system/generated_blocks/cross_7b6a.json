@@ -1,0 +1,74 @@
+{
+  "id": "cross_7b6a",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_7b6a",
+    "params": {
+      "iron_to_glass_khz": 12.0,
+      "liquid_to_stone_hz": 400.0,
+      "flesh_to_data_khz": 1.0,
+      "block_id": 7,
+      "phoneme_vowel_A_hz": 100.0,
+      "phoneme_vowel_A_khz": 5.0,
+      "semantic_weight_dark_db": 3.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "23",
+      "77",
+      "68"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Твой инсайт: слова не должны 'петься', они должны 'случаться'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_144",
+      "7"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "digital_alchemy_v2": {
+        "transmutations": {
+          "iron_to_glass": "Increase Filter Resonance (Q) + Add 8kHz-12kHz excitation",
+          "liquid_to_stone": "Apply Hard-clipping + Zero out Reverb/Delay + Boost 400Hz",
+          "smoke_to_laser": "Apply Granular-stretching (Block 77) + Bitcrush (4-bit) + Surgical-Snap",
+          "flesh_to_data": "Apply Sample-rate reduction (Block 68) + High-pass at 1kHz",
+          "vacuum_to_plasma": "Increase Gain + Apply Phasing (180 deg) + Add White-noise burst"
+        },
+        "operator": "ASE-Internal-Inverter (Block 23)"
+      }
+    },
+    "parent_b": {
+      "block_id": 7,
+      "block_name": "LFE_Core_v1",
+      "core_principle": "P_survive = (Novelty × 0.4 + Coherence × 0.3 + Emotional_Impact × 0.3) × Mode_Fusion",
+      "activation_sequence": [
+        "ANALYZE: lyrics_strength > 0.7",
+        "SELECT: placement_modes from fractal_library",
+        "APPLY: temporal_shift δt"
+      ],
+      "lyric_to_sound_mapping": {
+        "phoneme_vowel_A": "Low-Pass Filter Cutoff (100Hz -> 5kHz)",
+        "phoneme_consonant_T": "Trigger: Granular Glitch Burst",
+        "semantic_weight_dark": "Sub-harmonic saturation +3dB"
+      },
+      "internal_insight": {
+        "word_as_trigger": "Твой инсайт: слова не должны 'петься', они должны 'случаться'. В Блоке 7 мы настроили систему так, чтобы каждое слово 'Смерть' в лирике вызывало моментальное падение Gain на -60дБ на 0.1 сек (черная дыра в звуке). Это создавало физическое ощущение веса слов."
+      }
+    }
+  }
+}

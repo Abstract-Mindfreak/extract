@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MMSS Sync Bridge</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="popup-shell">
+      <header>
+        <h1>MMSS Sync Bridge</h1>
+        <p>Generate on localhost and insert into any focused field.</p>
+      </header>
+
+      <section class="panel">
+        <div class="row">
+          <button id="btnPing">Check React Link</button>
+          <button id="btnEnsure">Load Library</button>
+        </div>
+        <div class="row">
+          <button id="btnRefreshSync">Refresh Sync</button>
+          <button id="btnPushSync">Push Sync</button>
+        </div>
+        <label>
+          Formula
+          <input id="formula" type="text" value="6x44 random" />
+        </label>
+        <div class="grid3">
+          <label>
+            Mode
+            <select id="mode">
+              <option value="random">random</option>
+              <option value="ordered_name">ordered_name</option>
+              <option value="category_wave">category_wave</option>
+              <option value="tag_chain">tag_chain</option>
+              <option value="stride_walk">stride_walk</option>
+              <option value="key_density">key_density</option>
+              <option value="key_signature">key_signature</option>
+            </select>
+          </label>
+          <label>
+            Tag Preset
+            <select id="tagPreset">
+              <option value="all">all</option>
+              <option value="dense_keys">dense_keys</option>
+              <option value="lyrics">lyrics</option>
+              <option value="technical">technical</option>
+              <option value="visual">visual</option>
+            </select>
+          </label>
+          <label>
+            Safety
+            <select id="insertMode">
+              <option value="skip_duplicates">skip duplicates</option>
+              <option value="allow_duplicates">allow duplicates</option>
+            </select>
+          </label>
+        </div>
+        <button id="btnGenerate" class="accent">Generate Batch</button>
+      </section>
+
+      <section class="panel">
+        <label>
+          Add to Library (text + json mixed)
+          <textarea id="libraryInput" rows="5" placeholder="Paste mixed text/json here"></textarea>
+        </label>
+        <button id="btnAdd">Add to MMSS Library</button>
+      </section>
+
+      <section class="panel">
+        <div class="tabs">
+          <button id="tabResults" class="tab active">Results</button>
+          <button id="tabUsage" class="tab">Usage Map</button>
+        </div>
+        <div class="results-head">
+          <strong>Results</strong>
+          <button id="btnClearUsed">Clear Used State</button>
+        </div>
+        <div id="results" class="results tab-panel active"></div>
+        <div id="usageMap" class="usage-map tab-panel"></div>
+      </section>
+
+      <footer id="status">Ready.</footer>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

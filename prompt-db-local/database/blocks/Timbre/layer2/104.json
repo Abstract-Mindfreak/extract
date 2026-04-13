@@ -1,0 +1,37 @@
+{
+  "id": "104",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "104",
+    "params": {
+      "block_id": 104,
+      "duration_zeroing_ms": 1.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 104 мы заставили всю песню звучать за 0",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 104,
+    "block_name": "Temporal_Annihilator.v0",
+    "time_mechanics": {
+      "duration_zeroing": "Apply Infinite_Time_Stretch to 1ms grain",
+      "vertical_stacking": "Sum all frames (t=0 to t=end) into t=0",
+      "output_state": "Continuous Static Wave (Total Information)"
+    },
+    "internal_insight": {
+      "the_frozen_explosion": "В Блоке 104 мы заставили всю песню звучать за 0.1 секунды. Ты сказал: 'Это звучит как божественный щелчок пальцами'. Мы назвали это 'Точкой Омега'. Инсайт: Вечность — это сейчас, но очень громко."
+    }
+  }
+}

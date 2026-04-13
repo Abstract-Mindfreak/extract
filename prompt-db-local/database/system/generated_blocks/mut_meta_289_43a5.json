@@ -1,0 +1,38 @@
+{
+  "id": "mut_meta_289_43a5",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_289",
+    "params": {
+      "freq": 20,
+      "gain": -24,
+      "type_db": 48.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "freq": 20,
+    "gain": -24,
+    "type": "HighPass_48dB/oct"
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_289"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

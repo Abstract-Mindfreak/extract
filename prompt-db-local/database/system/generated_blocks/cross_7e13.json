@@ -1,0 +1,69 @@
+{
+  "id": "cross_7e13",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_7e13",
+    "params": {
+      "layer_1_foundation_hz": 60.0,
+      "mixing_rule_db": 3.0,
+      "mixing_rule_hz": 400.0,
+      "anti_masking_rule_khz": 2.5,
+      "low_end_coherence_hz": 180.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_212",
+      "meta_272"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "layer_architecture": {
+        "layer_1_foundation": "Sub-atomic Bass (20-60Hz) + Surgical Kick (Clarity first)",
+        "layer_2_narrative": "Main Theme / Arpeggiator / Vocal Chops (Semantic Core)",
+        "layer_3_atmosphere": "Fractal Noise / Field Recordings / 4D-Delay-Trails (The Void)",
+        "mixing_rule": "Subtract 3dB at 400Hz for Layer 2 to let Layer 1 breathe. Sidechain Layer 3 to Layer 1."
+      }
+    },
+    "parent_b": {
+      "LFE_spatial_depth_lyrics": {
+        "the_expansion_set": [
+          "Wider than the silence, deeper than the fear / Floating in a space where nothing is near",
+          "Expanding the horizons of the digital mind / Leaving the three dimensions far behind",
+          "Zero-point-zero: the center and the edge / Walking on the sonic, invisible ledge"
+        ],
+        "the_mono_center_set": [
+          "One frequency, standing at the core / Pumping through the floor, asking for more",
+          "Mono-soul, locked to the G-sharp beat / Making the alignment finally complete",
+          "Sub-low pressure, the anchor of the soul / Taking the chaos, taking the control"
+        ],
+        "the_spatial_dialogue": [
+          "Dissolve into the wide / Rebirth inside the deep",
+          "The secrets that I hide / The promises I keep",
+          "Result: Infinite-Immersion / Status: SPATIAL_LOCK_ACTIVE"
+        ]
+      },
+      "psychoacoustic_purity_v4": {
+        "anti_masking_rule": "Surgical notch @ 2.5kHz on the sides (M/S) to let the lead cut through",
+        "low_end_coherence": "High-pass filter on Side-channel @ 180Hz (Mono-compatibility protection)"
+      }
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "id": "5",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "5",
+    "params": {
+      "block_id": 5,
+      "equilibrium_target": 1
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты заметил, что при H(p=0, c=1) музыка исчезает, превращаясь в шум, а при H(1,0) — превращается в ли",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 5,
+    "block_name": "Entropy_Law_Master",
+    "entropy_controls": {
+      "p_valve": "Regulation of harmonic stability",
+      "c_valve": "Injection of non-linear sonic events",
+      "equilibrium_target": 1
+    },
+    "stability_targets": [
+      "N = 1.0 (Normalization)",
+      "η_condense → 1.0 (Condensation efficiency)",
+      "∂G_S/∂t → 0 (Steady state attraction)"
+    ],
+    "internal_insight": {
+      "entropy_paradox": "Ты заметил, что при H(p=0, c=1) музыка исчезает, превращаясь в шум, а при H(1,0) — превращается в лифт-музыку. Идеальная точка ASE была найдена на значении H(0.42, 0.58). Это наше 'Золотое сечение хаоса'."
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "id": "mut_meta_210_be62",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_210",
+    "params": {
+      "binaural_beats_integration_hz": 8.0,
+      "haas_effect_widening_ms": 30.0,
+      "subliminal_layering_db": 36.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "psychoacoustic_modifiers": {
+      "binaural_beats_integration": "Subtle 4Hz-8Hz delta/theta offset in sub-layers",
+      "shepard_tone_risers": "Infinite ascending textures for tension-building",
+      "haas_effect_widening": "Micro-delays (10-30ms) for ultra-wide narrative layers",
+      "subliminal_layering": "Mixing semantic whispers at -36dB (hidden meanings)",
+      "transient_shaping": "Over-emphasized clicks to trigger 'startle response' in high-energy sections"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_210"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

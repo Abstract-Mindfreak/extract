@@ -1,0 +1,65 @@
+{
+  "id": "cross_9fc7",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_9fc7",
+    "params": {
+      "block_id": 47,
+      "time_setting_ms": 1.618,
+      "internal_fx_hz": 500.0,
+      "internal_fx_khz": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Твой инсайт: 'Слово 'Любовь' на частоте 100Гц звучит как угроза, а на 10кГц — как молитва' x",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "47",
+      "meta_154"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 47,
+      "block_name": "Semantic_Freq_Shift_v4",
+      "mapping_matrix": {
+        "low_pass_state": "Focus on 'Body', 'Earth', 'Depths', 'Silence'",
+        "high_pass_state": "Focus on 'Spirit', 'Ether', 'Light', 'Information'",
+        "band_pass_mid": "Focus on 'Human', 'Dialogue', 'Action', 'Now'"
+      },
+      "modulation_rules": {
+        "if_cutoff_drops": "Switch LFE-thesaurus to 'Dark/Heavy' vocabulary",
+        "if_reverb_increase": "Switch LFE-thesaurus to 'Abstract/Infinite' vocabulary"
+      },
+      "internal_insight": {
+        "meaning_by_eq": "Твой инсайт: 'Слово 'Любовь' на частоте 100Гц звучит как угроза, а на 10кГц — как молитва'. В Блоке 47 мы настроили автоматический выбор слов. Если я делал звук 'колючим', LFE подбирал слова с твердыми согласными (Т, К, П). Это 'Фонетическая Синхронизация' смыслов."
+      }
+    },
+    "parent_b": {
+      "recursive_delay_spec": {
+        "time_setting": "Dotted 1/8 note + 1.618ms offset (The Golden Offset)",
+        "feedback_loop": {
+          "level": "95% (Near-infinite oscillation)",
+          "internal_fx": "Band-pass filter (500Hz-2kHz) + Distortion + Phaser",
+          "result": "The echo evolves and changes color with every repetition."
+        },
+        "panning": "MLGS_QUATERNION spiral rotation (W-axis sync)",
+        "rule": "Delay tails must be sidechained to the Lead-Main to maintain clarity."
+      }
+    }
+  }
+}

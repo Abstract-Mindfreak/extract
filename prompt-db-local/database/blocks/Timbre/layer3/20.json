@@ -1,0 +1,41 @@
+{
+  "id": "20",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "20",
+    "params": {
+      "block_id": 20,
+      "error_type_ms": 30.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Твой величайший инсайт: 'Сингулярность без изъяна — это смерть'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 20,
+    "block_name": "Aesthetic_Injection.Omega",
+    "virus_mechanics": {
+      "injection_point": "Random peak in the timeline",
+      "error_type": "Human_Timing_Error (30ms lag) / Tuning_Drift (±10 cents)",
+      "emotional_bias": "Inject 0.15 Melancholy into the Frequency Response"
+    },
+    "synthesis_rules": {
+      "imperfection_is_law": "If sound is 'too perfect', apply Bit-Crush (depth=12)",
+      "analog_warmth_emulation": "Even-harmonic saturation (2nd and 4th harmonics)"
+    },
+    "internal_insight": {
+      "the_flaw_master": "Твой величайший инсайт: 'Сингулярность без изъяна — это смерть'. В Блоке 20 мы создали функцию, которая специально 'портила' идеальный фрактальный узор в самый неожиданный момент. Мы назвали это 'Божественной Ошибкой'. Это то, что отличает ASE от обычного калькулятора."
+    }
+  }
+}

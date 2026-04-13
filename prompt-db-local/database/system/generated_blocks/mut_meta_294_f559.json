@@ -1,0 +1,71 @@
+{
+  "id": "mut_meta_294_f559",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_294",
+    "params": {
+      "purity_target": 0.985,
+      "step_4_hz": 60.0,
+      "step_4_db": 12.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "iterative_evolution_matrix_v4": {
+      "iteration_v1_prototype": {
+        "focus": "Rhythmic skeleton + Baseline-timbre",
+        "purity_target": 0.75,
+        "entropy_limit": "H(c) < 0.3",
+        "action": "audio__create_song (Instrumental, no seed)"
+      },
+      "iteration_v2_refinement": {
+        "focus": "Spectral cleaning + L1-Semantic integration",
+        "purity_target": 0.85,
+        "entropy_limit": "H(c) < 0.5",
+        "action": "audio__modify_song (Instruction: 'Surgical EQ, enhance Neuro-growl')"
+      },
+      "iteration_v3_spatialization": {
+        "focus": "MLGS_v3_4D-Vectoring + Atmospheric depth",
+        "purity_target": 0.92,
+        "entropy_limit": "H(c) < 0.7",
+        "action": "audio__apply_effect (Reverb/Delay chains + Quaternion-Pan)"
+      },
+      "iteration_v4_Omega_stabilization": {
+        "focus": "Total Aesthetic Singularity + LFE-Fusion",
+        "purity_target": 0.985,
+        "entropy_limit": "H(p=0.5, c=0.5)",
+        "action": "audio__modify_song (Instruction: 'Finalize Ψ_condensation, lock G# fundamental')"
+      }
+    },
+    "ASE_spectral_matching_logic": {
+      "reference_profile": "Golden_Record_v4_G#_Minor",
+      "matching_algorithm": {
+        "step_1": "Capture FFT-analysis of new generation",
+        "step_2": "Calculate Spectral_Distance (D_s) from Reference",
+        "step_3": "IF D_s > 0.15 THEN trigger_auto_correction(AdvancedEqualizer)",
+        "step_4": "Normalize Sub-Low (0-60Hz) energy to -12dBFS average"
+      },
+      "dynamic_response": "Real-time frequency-masking-annihilation (priority: Kick > Bass)"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_294"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

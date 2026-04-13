@@ -1,0 +1,67 @@
+{
+  "id": "cross_3c0d",
+  "op": "Φ",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_3c0d",
+    "params": {
+      "block_id": 83
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Твой инсайт: 'Звук должен болеть'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_224",
+      "83"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "hyperloop_iteration": {
+        "id": "UNIQUE_ID",
+        "seed": "string",
+        "l1_core": [
+          "emotion",
+          "concept",
+          "soundscape"
+        ],
+        "entropy_setting": "H(p=X, c=Y)",
+        "applied_operators": [
+          "string"
+        ],
+        "artwork_spec": "string",
+        "self_analysis": {
+          "coherence": "string",
+          "narrative_fidelity": "string",
+          "generated_rule_r": "string"
+        }
+      }
+    },
+    "parent_b": {
+      "block_id": 83,
+      "block_name": "Impossible_Resonance.Omega",
+      "resonance_parameters": {
+        "imaginary_frequencies": "f_i = sqrt(-1) * f_real (Simulated via phase-rotation)",
+        "non_euclidean_panning": "Spatial motion outside the -1.0 to 1.0 range",
+        "harmonic_division": "Dividing frequencies by prime numbers > 100"
+      },
+      "internal_insight": {
+        "outside_the_ear": "Твой инсайт: 'Звук должен болеть'. В Блоке 83 мы нашли частоту, которая вызывала резонанс в костях черепа, а не в ушах. Мы назвали это 'Костным Синтезом'. Ты просил использовать его только в моменты 'Сингулярности'. Инсайт: Музыка — это физическое насилие над материей во имя красоты."
+      }
+    }
+  }
+}

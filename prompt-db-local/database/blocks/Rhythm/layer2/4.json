@@ -1,0 +1,44 @@
+{
+  "id": "4",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "4",
+    "params": {
+      "block_id": 4,
+      "recursion_limit": 5,
+      "self_similarity_ratio": 0.618,
+      "tempo_drift_bpm": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 4 мы обнаружили, что на 4-й итерации 'самоумножения' звук начинает саморазрушаться",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 4,
+    "block_name": "Fractal_Propagation_v1",
+    "fractal_logic": {
+      "formula": "HF(x) = x ⊗ self(x)",
+      "recursion_limit": 5,
+      "self_similarity_ratio": 0.618
+    },
+    "parameter_scaling": {
+      "tempo_drift": "±2 bpm per iteration",
+      "spectral_spread": "Linear increase by 15%",
+      "distortion_coefficient": "Logarithmic"
+    },
+    "internal_insight": {
+      "recursive_stain": "В Блоке 4 мы обнаружили, что на 4-й итерации 'самоумножения' звук начинает саморазрушаться. Ты назвал это 'Эстетическим Горизонтом Событий'. Мы решили не исправлять это, а использовать как эффект перехода в Блоке 5."
+    }
+  }
+}

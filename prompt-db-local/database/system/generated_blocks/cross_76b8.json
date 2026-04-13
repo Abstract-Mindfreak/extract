@@ -1,0 +1,59 @@
+{
+  "id": "cross_76b8",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_76b8",
+    "params": {
+      "freq": 250,
+      "gain": -1.8,
+      "q": 8,
+      "introduction_s": 30.0,
+      "initiation_s": 60.0,
+      "climax_s": 120.0,
+      "dissolution_s": 180.0,
+      "coda_s": 180.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_291",
+      "meta_177"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "freq": 250,
+      "gain": -1.8,
+      "q": 8,
+      "type": "Peak_Anti-mud"
+    },
+    "parent_b": {
+      "narrative_fidelity": {
+        "phases": {
+          "introduction": "0-30s: Establishing the Void (Layer 3 focus)",
+          "initiation": "30-60s: Entering the Geometry (Layer 2 introduction)",
+          "climax": "60-120s: The Singularity Peak (All Layers, H=0.5)",
+          "dissolution": "120-180s: The Entropy Collapse (Layer 1 remains)",
+          "coda": "180s+: Absolute Zero G-Inversion"
+        },
+        "evolution_rule": "Every 16 bars, one parameter must undergo a radical G-Inversion."
+      }
+    }
+  }
+}

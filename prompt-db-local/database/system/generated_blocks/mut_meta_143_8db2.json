@@ -1,0 +1,45 @@
+{
+  "id": "mut_meta_143_8db2",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_143",
+    "params": {
+      "delay_logic_s": 1.618,
+      "pitch_drift_s": 7.0,
+      "modulation_hz": 1.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "time_flipped_geometry": {
+      "delay_logic": "Reverse-Delay (L-R swapped) + 1.618s cycle",
+      "processing": {
+        "pitch_drift": "Ascending pitch-shift (+7 semitones) in the feedback loop",
+        "diffusion": "Zero (Isolated echoes) for clear spatial disorientation",
+        "modulation": "Sine-LFO on feedback (0.1Hz to 1Hz)"
+      },
+      "result": "The sense of 'Temporal Rewind' during the Narrative Cycle",
+      "usage": "During [THE COLLAPSE] phase to trigger G-Inversion expectations."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_143"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

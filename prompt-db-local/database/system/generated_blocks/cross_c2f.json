@@ -1,0 +1,67 @@
+{
+  "id": "cross_c2f",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_c2f",
+    "params": {
+      "envelope_ms": 26.0,
+      "rule_ms": 10.0,
+      "filter_db": 24.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_166",
+      "meta_204"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "rolling_bass_spec": {
+        "rhythm": "Triplets (1/8T) or Dotted (1/16.) relative to Kick",
+        "envelope": "Strictly Pluck: Attack 0ms, Decay 100ms, Sustain 0%, Release 50ms",
+        "phase_lock": "Every bass note starts at 0 degree phase to avoid cancellation",
+        "tonality": "Monotonic (One note focus) or Root-Fifth transitions",
+        "rule": "Kick-tail and Bass-attack must never coexist in the same 10ms window."
+      }
+    },
+    "parent_b": {
+      "arpeggiator_spec_v3": {
+        "harmonic_lock": "Phrygian Dominant (The 'Dark-Middle-Eastern' feel)",
+        "intervals": [
+          1,
+          "b2",
+          3,
+          4,
+          5,
+          "b6",
+          "b7"
+        ],
+        "rhythm_grid": "Polyrhythmic: 5/16 over 4/4 kicks",
+        "sound_design": {
+          "osc_1": "Wavetable (Morphing from Saw to Square)",
+          "filter": "24dB LowPass with Acid-style Resonance (Res > 80%)",
+          "envelope": "Decay-only (Pluck), zero Sustain, 2ms Attack",
+          "fx": "Bitcrusher (Reduce to 6-bit) -> OTT-style Multiband Compression"
+        },
+        "automation": "Filter Cutoff tied to G-Inversion Index (W-axis)"
+      }
+    }
+  }
+}

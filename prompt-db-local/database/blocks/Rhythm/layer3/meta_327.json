@@ -1,0 +1,28 @@
+{
+  "id": "meta_327",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_327",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "v1_genesis": "Initial exploration of Neurofunk / Dark Psy hybrid structures. Focus on basic rhythmic coherence.",
+    "v2_formalization": "Introduction of JSON-driven analysis and Semantic Core L1. First use of Hyperloop protocols.",
+    "v3_geometric_unity": "Implementation of MLGS_QUATERNION_GEOMETRIC_UNITY. 4D-panning and spatial soundstage testing.",
+    "v4_Omega_current": "Full integration of ASE (Aesthetic-Singularity-Engine). Ψ_condensation economics and LFE MetaFractal fusion."
+  }
+}

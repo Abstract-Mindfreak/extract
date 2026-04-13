@@ -1,0 +1,58 @@
+{
+  "id": "meta_241",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_241",
+    "params": {
+      "freq_khz": 8.5,
+      "dynamic_resonance_suppression_khz": 2.8,
+      "dynamic_resonance_suppression_db": 12.0,
+      "spectral_centroid_drift_hz": 250.0,
+      "high_frequency_transient_speed_ms": 0.05
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_resonance_modulator_v4": {
+      "spectral_brilliance_logic": {
+        "node_1_shimmer": {
+          "freq": "12.5kHz (The 'Diamond' node)",
+          "Q": "15.0 (Ultra-narrow)",
+          "mod_source": "Sub_Low_RMS (Inverse modulation)",
+          "result": "Highs breathe 'out' when bass hits, creating spectral space"
+        },
+        "node_2_grit": {
+          "freq": "4.2kHz (The 'Industrial' node)",
+          "Q": "8.0",
+          "mod_source": "Snare_Transient (Positive burst)",
+          "result": "Adding a metallic 'ping' to every snare-impact"
+        },
+        "node_3_vocal_air": {
+          "freq": "8.5kHz (The 'Human' node)",
+          "Q": "1.2 (Wide)",
+          "mod_source": "LFE_Phonetic_Weight",
+          "result": "Dynamic 'air' that follows the articulation of the lyrics"
+        }
+      },
+      "dynamic_resonance_suppression": "Surgical-Notch @ 2.8kHz (-12dB, Q=25) to avoid ear-fatigue during peak-energy sections."
+    },
+    "brilliance_metrics_v4": {
+      "spectral_centroid_drift": "±250Hz (Slow oscillation for 'alive' feel)",
+      "harmonic_exciter_purity": "η = 0.95 (Minimal aliasing)",
+      "high_frequency_transient_speed": "0.05ms (Razor-sharp high-end)"
+    }
+  }
+}

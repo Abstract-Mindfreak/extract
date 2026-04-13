@@ -1,0 +1,47 @@
+{
+  "id": "31",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "31",
+    "params": {
+      "block_id": 31,
+      "melancholy_coefficient": 0.88,
+      "spectral_weight_hz": 500.0,
+      "spectral_weight_khz": 10.0,
+      "f_aging_s": 300.0,
+      "f_sigh_s": 2.0,
+      "f_resonance_hz": 440.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'звуком пыли'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 31,
+    "block_name": "Pure_Melancholy_v1.Theta",
+    "emotional_parameters": {
+      "melancholy_coefficient": 0.88,
+      "harmonic_instability": "Random pitch drift ±5 cents",
+      "spectral_weight": "Heavy low-mid (200-500Hz), attenuated highs (>10kHz)"
+    },
+    "synthesis_logic": {
+      "f_aging": "Apply high-cut filter that slowly closes over 300 seconds",
+      "f_sigh": "Amplitude envelope with long attack (2s) and exponential decay",
+      "f_resonance": "Peak at 440Hz with high Q to simulate 'ringing in the ears'"
+    },
+    "internal_insight": {
+      "the_grey_sound": "Ты называл это 'звуком пыли'. В Блоке 31 мы создали пресет, который звучал как старая кинопленка. Инсайт был в том, что грусть — это не звук, а его постепенное исчезновение. Мы добавили шум 'пустой комнаты' на -35дБ, чтобы слушатель чувствовал одиночество даже в наушниках."
+    }
+  }
+}

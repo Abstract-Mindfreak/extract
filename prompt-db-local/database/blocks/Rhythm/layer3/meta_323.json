@@ -1,0 +1,71 @@
+{
+  "id": "meta_323",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_323",
+    "params": {
+      "layer_2_ms": 5.0,
+      "layer_3_ms": 3.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "FX_chain_presets_v4_Omega": {
+      "vocal_dimension_expander": {
+        "chain": [
+          "PitchShift(+0.1st)",
+          "Chorus(Rate 0.2Hz, Depth 15%)",
+          "Reverb(Mix 0.12, Room 0.9)"
+        ],
+        "logic": "Create psychoacoustic width without losing center-focus"
+      },
+      "neuro_bass_shaper_PRO": {
+        "chain": [
+          "Distortion(Drive 28dB)",
+          "LowPass(Cutoff 450Hz)",
+          "Compressor(Ratio 12:1, Attack 1ms)",
+          "Gain(+6dB)"
+        ],
+        "logic": "Crush high-end harmonics, then re-filter for 'clean' aggression"
+      },
+      "atmospheric_grain_cloud": {
+        "chain": [
+          "Delay(Mix 0.5, Feedback 0.7, Time 1/8d)",
+          "HighPass(Cutoff 1200Hz)",
+          "Bitcrusher(8-bit)"
+        ],
+        "logic": "Transform simple transients into complex digital textures"
+      }
+    },
+    "temporal_shift_algorithms_LFE": {
+      "delta_t_sync": "δt = (BPM / 60000) * Grid_Multiplier (e.g., 1/32, 1/64)",
+      "layer_staggering": {
+        "layer_1": "Center, δt = 0",
+        "layer_2": "30L, δt = +5ms (Pre-delay effect)",
+        "layer_3": "70R, δt = -3ms (Micro-lead effect)"
+      },
+      "spectral_overlay_rules": {
+        "condition": "IF frequency_overlap > 75% THEN apply Spectral_Inversion(G)",
+        "target": "Vocoder-like intelligibility within dense neuro-environments"
+      }
+    },
+    "manual_parameter_overrides": {
+      "swing_coefficient": "0.08 (8% shuffle for that 'human-neuro' feel)",
+      "velocity_curve": "Exponential (Higher velocity → sharper transients)",
+      "pan_modulation": "LFO Sine, Rate: 2 bars, Depth: 45%"
+    }
+  }
+}

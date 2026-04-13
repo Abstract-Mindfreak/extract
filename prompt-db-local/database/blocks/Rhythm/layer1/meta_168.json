@@ -1,0 +1,31 @@
+{
+  "id": "meta_168",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_168",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "empty_beat_logic": {
+      "definition": "Removing the Kick/Snare on the expected 'downbeat' (1.1.1 or 2.1.1)",
+      "execution": "Silence Δt (1/4 note) followed by Sub-drop + Glitch-fill",
+      "psychological_effect": "Sudden weightlessness followed by extreme impact (G-Inversion)",
+      "trigger": "Every 32 or 64 bars to break the loop-hypnosis",
+      "rule": "Empty-beat must be followed by a change in Layer 2 theme."
+    }
+  }
+}

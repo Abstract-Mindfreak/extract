@@ -1,0 +1,67 @@
+{
+  "combinator_schema": {
+    "version": "1.0.0_Ω",
+    "engine": "Aesthetic-Singularity-Engine",
+    "meta_rules": {
+      "MUTATION_RATE": "0.05..0.25",
+      "CROSSOVER_STRATEGY": "Φ_TOTAL_INTERFERENCE",
+      "BRANCHING_FACTOR": "λ_FRACTAL"
+    },
+    "logical_operators": {
+      "⊗": "TENSOR_PRODUCT (Style Crossover)",
+      "⊕": "DIRECT_SUM (Layer Stack)",
+      "⊢": "LOGICAL_DERIVATION (Sequence)",
+      "⧴": "TEMPORAL_SHIFT (Phase Modulation)"
+    },
+    "combinator_logic": [
+      {
+        "input": ["Φ_TOTAL", "QUANTUM_PHASE"],
+        "operator": "⊗",
+        "output": "SUPERPOSITION_DIVERGENCE",
+        "mutation": "Entanglement_Leak"
+      },
+      {
+        "input": ["ENTROPY_HARVESTER", "CHAOS_ENGINE"],
+        "operator": "⊕",
+        "output": "THERMODYNAMIC_GLITCH",
+        "mutation": "Heat_Dissipation"
+      },
+      {
+        "input": ["NARRATIVE_MELTDOWN", "BIOMECHANIC_SYNAPSE"],
+        "operator": "⊢",
+        "output": "CYBER_MYTH_RECOMPILE",
+        "mutation": "Semantic_Ghost"
+      },
+      {
+        "input": ["NEURAL_ENTRAINMENT", "TIME_CRYSTAL"],
+        "operator": "⊗",
+        "output": "CHRONO_NEURAL_LATTICE",
+        "mutation": "Memory_Echo"
+      },
+      {
+        "input": ["ALGORITHMIC_TRADING", "SOCIAL_ENGINEERING"],
+        "operator": "⊕",
+        "output": "MARKET_SENTIMENT_VIBE",
+        "mutation": "Greed_Bias"
+      },
+      {
+        "input": ["VOID_ENERGY", "QUARK_GLUON"],
+        "operator": "⊗",
+        "output": "PRIMORDIAL_VOID_PLASM",
+        "mutation": "Mass_Leak"
+      },
+      {
+        "input": ["MEMETIC_VIRUS", "FRACTAL_CITYSCAPE"],
+        "operator": "⊢",
+        "output": "URBAN_ECHO_PROPAGATION",
+        "mutation": "Signal_Decay"
+      }
+    ],
+    "branching_nodes": {
+      "NODE_0": "INITIAL_SEED_INJECTION",
+      "NODE_1": "OPERATIONAL_STACK_HACK",
+      "NODE_2": "RECOMPILATION_ERROR_INJECT",
+      "NODE_3": "OMEGA_STATE_COLLAPSE"
+    }
+  }
+}

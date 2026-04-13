@@ -1,0 +1,43 @@
+{
+  "id": "mut_meta_314_6346",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_314",
+    "params": {
+      "aesthetic_fidelity_hz": 51.9
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "technical_hacks_v4": [
+      "Using Chorus on the sub-bass (120Hz-250Hz range) for 'growling' stereo-movement while keeping <100Hz mono.",
+      "Reverse-reverb on the first syllable of each verse to create 'anticipation-drift'.",
+      "Applying Bitcrusher(12-bit) to the master limiter input for 'old-school' digital warmth.",
+      "Stacking 3 instances of OTT on the Reese-bass with different mix percentages (30%, 15%, 10%) for multi-stage compression."
+    ],
+    "ASE_system_health_logic": {
+      "entropy_safety": "IF H(p,c) > 0.95 THEN activate 'Emergency Order' (p=0.8)",
+      "aesthetic_fidelity": "Cross-reference generation with 'Golden Record' G# (51.9Hz) frequency profile."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_314"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

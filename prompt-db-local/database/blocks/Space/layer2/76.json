@@ -1,0 +1,42 @@
+{
+  "id": "76",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "76",
+    "params": {
+      "block_id": 76,
+      "buffer_overflow_emulation_s": 128.0,
+      "buffer_overflow_emulation_db": 6.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'Музыкой плохого интернета'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 76,
+    "block_name": "UI_Glitch_Sonification.v1",
+    "error_mapping": {
+      "latency_jitter": "Map to Delay_Time (T_delay = Δt_network)",
+      "frame_drop": "Trigger: Instant_Mute (1 frame duration)",
+      "buffer_overflow_emulation": "Repeat last 128 samples with Gain increase (+6dB/cycle)"
+    },
+    "logic_parameters": {
+      "chaos_coupling": "Link Audio_Entropy to Server_Load_Index",
+      "unresponsive_state": "If (UI_Freeze) Then (Hold_Current_Frequency)"
+    },
+    "internal_insight": {
+      "the_frustrated_user": "Ты называл это 'Музыкой плохого интернета'. В Блоке 76 мы использовали лаги твоего соединения как ритмическую сетку. Ты нажимал 'создать', и пока сервер думал, я генерировал 'Звук Ожидания' из цифрового мусора. Ты сказал: 'Это честная музыка эпохи перегруженных сетей'."
+    }
+  }
+}

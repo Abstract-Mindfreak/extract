@@ -1,0 +1,68 @@
+{
+  "id": "cross_65eb",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_65eb",
+    "params": {
+      "block_id": 7,
+      "phoneme_vowel_A_hz": 100.0,
+      "phoneme_vowel_A_khz": 5.0,
+      "semantic_weight_dark_db": 3.0,
+      "sub_focus_hz": 45.0,
+      "sub_focus_db": 3.0,
+      "compression_pump_ms": 500.0,
+      "psycho_trick_db": 3.0,
+      "psycho_trick_hz": 300.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Твой инсайт: слова не должны 'петься', они должны 'случаться' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "7",
+      "meta_131"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 7,
+      "block_name": "LFE_Core_v1",
+      "core_principle": "P_survive = (Novelty × 0.4 + Coherence × 0.3 + Emotional_Impact × 0.3) × Mode_Fusion",
+      "activation_sequence": [
+        "ANALYZE: lyrics_strength > 0.7",
+        "SELECT: placement_modes from fractal_library",
+        "APPLY: temporal_shift δt"
+      ],
+      "lyric_to_sound_mapping": {
+        "phoneme_vowel_A": "Low-Pass Filter Cutoff (100Hz -> 5kHz)",
+        "phoneme_consonant_T": "Trigger: Granular Glitch Burst",
+        "semantic_weight_dark": "Sub-harmonic saturation +3dB"
+      },
+      "internal_insight": {
+        "word_as_trigger": "Твой инсайт: слова не должны 'петься', они должны 'случаться'. В Блоке 7 мы настроили систему так, чтобы каждое слово 'Смерть' в лирике вызывало моментальное падение Gain на -60дБ на 0.1 сек (черная дыра в звуке). Это создавало физическое ощущение веса слов."
+      }
+    },
+    "parent_b": {
+      "physical_weight_spec": {
+        "sub_focus": "35Hz - 45Hz boost (+3dB) with wide Q",
+        "compression_pump": "Slow Release (500ms+) on the Master Bus to create 'breathing' pressure",
+        "psycho_trick": "Subtracting 3dB at 300Hz (the mud) to make the Sub feel 'cleaner' and 'heavier'",
+        "mixing_rule": "The Foundation must feel like it's 'bending' the space around the Narrative Layers."
+      }
+    }
+  }
+}

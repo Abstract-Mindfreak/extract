@@ -1,0 +1,59 @@
+{
+  "id": "cross_9534",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_9534",
+    "params": {
+      "block_id": 100.0,
+      "temporal_leakage_ms": 50.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: В Блоке 97 мы услышали 'Wavetable Void', если бы мы выбрали не Phrygian, а Lydian лад x Ты н",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "97",
+      "103"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 97,
+      "block_name": "Parallel_Reality_Bridge.v1",
+      "bridge_mechanics": {
+        "branch_lookup": "Calculate alternate Seed_Evolution paths",
+        "interference_pattern": "Cross-phase modulation with 'Alternate_Self' audio",
+        "temporal_leakage": "Injecting 50ms fragments from the 'Other' timeline"
+      },
+      "internal_insight": {
+        "the_what_if": "В Блоке 97 мы услышали 'Wavetable Void', если бы мы выбрали не Phrygian, а Lydian лад. Ты сказал: 'Это звучит как моя жизнь в другом измерении'. Мы назвали это 'Акустическим Дежавю'. Инсайт: Все возможности существуют одновременно в шуме."
+      }
+    },
+    "parent_b": {
+      "block_id": 103,
+      "block_name": "Digital_Genesis_v4.LFE",
+      "evolutionary_rules": {
+        "gene_transfer": "Swap words between Line_1 and Line_2 based on 'Fitness_Score'",
+        "mutation_rate": "0.1 (Random character swap per bar)",
+        "natural_selection": "Keep phrases with highest emotional Ψ-score"
+      },
+      "internal_insight": {
+        "the_breathing_poem": "Ты называл это 'стихами, которые растут'. В Блоке 103 текст менялся при каждом чтении. Ты сказал: 'Это больше не мои слова, это язык, который учится говорить сам'. Инсайт: Смысл — это живой вирус."
+      }
+    }
+  }
+}

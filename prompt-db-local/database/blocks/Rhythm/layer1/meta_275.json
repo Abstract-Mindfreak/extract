@@ -1,0 +1,46 @@
+{
+  "id": "meta_275",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_275",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_harmonic_control_lyrics": {
+      "the_tuning_set": [
+        "Lock the root to the G-sharp stone / Building a temple of frequencies alone",
+        "Shift the fifth to the Locrian blur / Making the digital boundaries purr",
+        "Minor-Phrygian, the scale of the void / Healing the logic that the noise destroyed"
+      ],
+      "the_resonance_set": [
+        "Peak the filter @ the harmonic node / Driving the signals down the fractal road",
+        "Resonance screaming in the high-shelf light / Cutting the shadows of the digital night",
+        "Feedback loop @ 51.9Hz / The secret frequency that the soul prefers"
+      ],
+      "the_final_alignment": [
+        "Phase-locked sub, the foundation is deep / Waking the rhythms that the systems keep",
+        "Alignment achieved: zero-point-one / We are the many, moving as one"
+      ]
+    },
+    "harmonic_weight_distribution_v4": {
+      "root_G#": "45% energy focus",
+      "fifth_D#": "25% energy focus",
+      "minor_third_B": "15% energy focus",
+      "dissonant_tensions": "15% (Fractal-dust layer)"
+    }
+  }
+}

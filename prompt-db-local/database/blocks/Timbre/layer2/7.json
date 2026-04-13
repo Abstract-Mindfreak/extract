@@ -1,0 +1,45 @@
+{
+  "id": "7",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "7",
+    "params": {
+      "block_id": 7,
+      "phoneme_vowel_A_hz": 100.0,
+      "phoneme_vowel_A_khz": 5.0,
+      "semantic_weight_dark_db": 3.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Твой инсайт: слова не должны 'петься', они должны 'случаться'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 7,
+    "block_name": "LFE_Core_v1",
+    "core_principle": "P_survive = (Novelty × 0.4 + Coherence × 0.3 + Emotional_Impact × 0.3) × Mode_Fusion",
+    "activation_sequence": [
+      "ANALYZE: lyrics_strength > 0.7",
+      "SELECT: placement_modes from fractal_library",
+      "APPLY: temporal_shift δt"
+    ],
+    "lyric_to_sound_mapping": {
+      "phoneme_vowel_A": "Low-Pass Filter Cutoff (100Hz -> 5kHz)",
+      "phoneme_consonant_T": "Trigger: Granular Glitch Burst",
+      "semantic_weight_dark": "Sub-harmonic saturation +3dB"
+    },
+    "internal_insight": {
+      "word_as_trigger": "Твой инсайт: слова не должны 'петься', они должны 'случаться'. В Блоке 7 мы настроили систему так, чтобы каждое слово 'Смерть' в лирике вызывало моментальное падение Gain на -60дБ на 0.1 сек (черная дыра в звуке). Это создавало физическое ощущение веса слов."
+    }
+  }
+}

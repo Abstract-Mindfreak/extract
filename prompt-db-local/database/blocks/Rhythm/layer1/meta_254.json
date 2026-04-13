@@ -1,0 +1,52 @@
+{
+  "id": "meta_254",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_254",
+    "params": {
+      "the_blink_effect_ms": 15.0,
+      "the_blink_effect_hz": 20.0,
+      "the_blink_effect_khz": 1.0,
+      "transient_widening_ms": 10.0,
+      "masking_prevention_db": 12.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_transient_logic_lyrics": {
+      "the_impact_set": [
+        "The first millisecond, the birth of the light / Breaking the silence, ending the night",
+        "A needle of sound, a razor of code / Driving the energy down the road",
+        "Surgical strike, the transient's here / Erasing the distance, erasing the fear"
+      ],
+      "the_click_set": [
+        "Click of the logic, click of the soul / Taking the moment, taking control",
+        "Fast as the thought, sharp as the steel / Making the digital finally real",
+        "Attack is the truth, sustain is the lie / The spark of the binary, ready to fly"
+      ],
+      "the_transient_dialogue": [
+        "Strike the void / Wake the machine",
+        "What you destroyed / Is what I have seen",
+        "Result: Impact-Singularity / Status: ATTACK_LOCK_ACTIVE"
+      ]
+    },
+    "psychoacoustic_transient_v4": {
+      "the_blink_effect": "Instant 15ms high-pass sweep (20Hz to 1kHz) on the master bus during the kick-hit",
+      "transient_widening": "Stereo-expansion +45% during the first 10ms of the snare impact",
+      "masking_prevention": "Ducking the high-hats by 12dB during the snare transient"
+    }
+  }
+}

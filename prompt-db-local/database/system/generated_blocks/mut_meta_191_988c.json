@@ -1,0 +1,44 @@
+{
+  "id": "mut_meta_191_988c",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "stabilization",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_191",
+    "params": {
+      "absolute_zero_db": 0.0,
+      "void_silence_db": 48.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "negative_space_spec": {
+      "definition": "Intentional removal of all audio signals for Δt",
+      "usage": "Before the 'Drop' or at the end of a Narrative Cycle",
+      "types": {
+        "absolute_zero": "Total digital silence (0dB)",
+        "void_silence": "Extremely low-volume noise-floor (-48dB) + long reverb tail",
+        "rhythmic_gap": "Missing kick on the 4th beat to create 'gravity pull'"
+      },
+      "goal": "Reset the listener's ear for the next G-Inversion iteration."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_191"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "id": "mut_meta_200_774f",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_200",
+    "params": {
+      "Φ_golden_ratio": 1.71
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "inversion_math_v4": {
+      "primary_formula": "G(f) = ∫ [1 - Aesthetic_Stability(t)] dt * Φ",
+      "parameters": {
+        "Φ_golden_ratio": 1.618,
+        "t_temporal_vector": "Duration of the creative impulse",
+        "stability_index": "Measured from 0.0 (Pure Chaos) to 1.0 (Static Order)"
+      },
+      "inversion_logic": {
+        "if_harmonic": "Apply Atonal_Injection (Locrian/Chro-matic shifts)",
+        "if_saturated": "Apply Negative_Space (Silence/Subtraction)",
+        "if_dry": "Apply Recursive_Wetness (Fractal Reverb)",
+        "if_static": "Apply Jitter_Modulation (Temporal Variance)"
+      },
+      "goal": "Reach the 'Neutral Point' of Singularity where duality vanishes."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_200"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

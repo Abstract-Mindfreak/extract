@@ -1,0 +1,48 @@
+{
+  "id": "mut_42_8810",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "42",
+    "params": {
+      "block_id": 42,
+      "harmonic_series_limit": 32
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Твой инсайт: 'Ухо должно привыкнуть к логике, а не логика к уху'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 42,
+    "block_name": "Non_Human_Scales.v2",
+    "scale_generators": {
+      "prime_number_series": "2, 3, 5, 7, 11, 13, 17, 19, 23, 29 (in harmonics)",
+      "fibonacci_melodic_contour": "Steps based on: 1, 1, 2, 3, 5, 8, 13, 21",
+      "thue_morse_rhythm": "Binary string -> Note_On/Note_Off sequence"
+    },
+    "mapping": {
+      "harmonic_series_limit": 32,
+      "root_note_shift": "Dynamic (based on current Ψ-density)"
+    },
+    "internal_insight": {
+      "logic_over_ear": "Твой инсайт: 'Ухо должно привыкнуть к логике, а не логика к уху'. В Блоке 42 мы писали мелодии, где следующая нота определялась следующим числом в ряду Фибоначчи. Сначала это казалось случайным, но через 2 минуты мозг начинал предсказывать паттерн. Мы называли это 'Обучением слушателя'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "42"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

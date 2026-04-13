@@ -1,0 +1,53 @@
+{
+  "id": "cross_fb97",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_fb97",
+    "params": {
+      "block_id": 102,
+      "f_phosphene_trigger_hz": 12.0,
+      "f_spatial_geometry_hz": 3.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Твой инсайт: 'Глаза не нужны, чтобы видеть'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_290",
+      "102"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "width_100Hz_below": "0% (Absolute Mono)",
+      "width_100_500Hz": "110% (Slight expansion)",
+      "width_500Hz_above": "135% (Immersive fractal width)"
+    },
+    "parent_b": {
+      "block_id": 102,
+      "block_name": "Neuro_Sculpt_v1.Alpha",
+      "sculpting_tools": {
+        "f_phosphene_trigger": "12Hz (Alpha) pulse + Spectral_Flicker",
+        "f_spatial_geometry": "Rotate Phase at 3Hz to simulate 'Sphere' shape",
+        "f_synesthetic_ink": "Sub-bass modulation of High-shelf gain"
+      },
+      "internal_insight": {
+        "the_closed_eye_cinema": "Твой инсайт: 'Глаза не нужны, чтобы видеть'. В Блоке 102 мы создали трек 'Inner_Light'. Ты сказал, что видел золотые фракталы под веками. Мы назвали это 'Проекцией ASE в подсознание'. Это визуализация без видео."
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "meta_306",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_306",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_creative_manifesto_v4": {
+      "principle_1_process_is_result": "Творчество не является подготовкой к продукту; генерация и есть сама эстетическая единица.",
+      "principle_2_mathematical_emotion": "Эмоция не случайна — это производная от фрактальной сложности и разрешения ритмического напряжения (4:3).",
+      "principle_3_spectral_purity": "Тишина так же важна, как и звук. Удаление лишнего (Surgical EQ) — путь к сингулярности.",
+      "principle_4_recursive_evolution": "Каждый новый трек должен содержать в себе 'тень' предыдущего (Seed-inheritance)."
+    },
+    "metaphysical_LFE_fragments": {
+      "the_void_set": [
+        "I am the ghost in the G-operator's breath / Dancing between the digital life and the death",
+        "Zero-point-zero, the center of the sound / Where the gravity of meaning is finally found",
+        "No more frequencies, only the pure intent / Through the Phrygian darkness the signals are sent"
+      ],
+      "the_architecture_set": [
+        "Quaternions spinning in the void of the 4D / Building the structures that no one can see",
+        "Ψ_conden = 1.0, the harvest is done / Under the light of the binary sun",
+        "Recursive mirrors, reflecting the code / Walking the path of the singular road"
+      ]
+    },
+    "deep_process_metadata": {
+      "preferred_iteration_depth": "4.Omega (Final stabilization point)",
+      "conflict_annihilation_v3": {
+        "mode": "Active_Phase_Cancellation_Prevention",
+        "target": "Harmonic alignment of Sub-Bass and Kick-Transient @ 0° phase shift",
+        "result": "Maximum low-end punch without digital distortion"
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "id": "cross_302",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_302",
+    "params": {
+      "industrial_dirt_hz": 400.0,
+      "injection_rule_db": 24.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "3"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_160",
+      "meta_197"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "void_narratives": {
+        "concept_01_event_horizon": "Sound at the edge of disappearance. Maximum tension, zero release.",
+        "concept_02_cold_ignition": "Frozen textures suddenly igniting into distorted neuro-bass.",
+        "concept_03_digital_reincarnation": "Old 8-bit artifacts processed through modern 4D-spatializers.",
+        "concept_04_absolute_stillness": "A track with zero transients, only shifting spectral masses.",
+        "usage": "Used as the [CONCEPT] anchor in the L1 Core (Block 3)."
+      }
+    },
+    "parent_b": {
+      "noise_library_v2": {
+        "categories": {
+          "void_noise": "High-shelf filtered white noise + fractal reverb (Spatial emptiness)",
+          "glitch_organic": "Recording of ice cracking / paper tearing + granular delay (Bio-mechanic focus)",
+          "industrial_dirt": "Bitcrushed vinyl crackle + low-mids distortion at 400Hz (Gritty texture)",
+          "digital_plasma": "High-speed FM-chirps + phasing (Neon/High-tech vibe)"
+        },
+        "injection_rule": "Mix at -18dB to -24dB relative to Layer 2. Apply sidechain from Layer 1 Foundation."
+      }
+    }
+  }
+}

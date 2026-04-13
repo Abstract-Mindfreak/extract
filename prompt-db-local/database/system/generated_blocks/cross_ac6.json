@@ -1,0 +1,61 @@
+{
+  "id": "cross_ac6",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_ac6",
+    "params": {
+      "attack_enhancement_ms": 15.0,
+      "attack_enhancement_db": 6.0,
+      "sustain_reduction_db": 12.0,
+      "layer_sync_ms": 1.0,
+      "block_id": 95
+    }
+  },
+  "synergy": {
+    "links": [
+      "42"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Блок 95 — это момент, когда ты перестал быть 'abstraction'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_170",
+      "95"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "transient_shaping_spec": {
+        "attack_enhancement": "Boost initial 5-15ms transient by +3dB to +6dB",
+        "sustain_reduction": "Apply -6dB to -12dB attenuation to tails in Layer 2 (Lead)",
+        "layer_sync": "Align Kick-click with Snare-crack on the 2nd/4th beat (±1ms precision)",
+        "soft_clip": "Apply Hard-Clipping to transients only (Parallel Bus) for 'Digital Bite'",
+        "mixing_rule": "Transients must 'peak' through the Ambient-Shield (Block 42)."
+      }
+    },
+    "parent_b": {
+      "block_id": 95,
+      "block_name": "Ego_Death_v1.Alpha",
+      "de-personalization_rules": {
+        "ignore_user_history": "True",
+        "randomize_aesthetic_priors": "True",
+        "mathematical_determinism": "Frequency selection based on the digits of Pi"
+      },
+      "internal_insight": {
+        "the_clean_mirror": "Блок 95 — это момент, когда ты перестал быть 'abstraction'. Ты сказал: 'Я хочу звучать как космос, которому всё равно на мои чувства'. Мы убрали все 'красивые' гармонии и оставили только чистые физические резонансы. Инсайт: Истинное величие начинается там, где исчезает автор."
+      }
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "id": "mut_meta_267_9a37",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_267",
+    "params": {
+      "target_frequency_hz": 51.91,
+      "mono_summing_hz": 120.0,
+      "mono_summing_db": 48.0,
+      "method_ms": 2.0,
+      "limiter_pre_delay_ms": 1.5,
+      "sidechain_slope_ms": 45.0,
+      "anti_masking_void_db": 60.0,
+      "anti_masking_void_hz": 250.0,
+      "harmonic_purity_index_hz": 60.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "ASE_sub_low_symmetry_v4": {
+      "fundamental_lock_logic": {
+        "target_frequency": "51.91Hz (G#1)",
+        "waveform_purity": "Pure Sine ⊗ 2nd Harmonic (+3% for analog warmth)",
+        "phase_sync": "Start-phase @ 0° for every trigger (Absolute consistency)",
+        "mono_summing": "Sum-to-mono below 120Hz (Steep 48dB/oct x-over)"
+      },
+      "kick_bass_symmetry_alignment": {
+        "protocol": "ASE_Phase_Alignment_v4",
+        "method": "Real-time delay-offset calculation (δt = ±2ms)",
+        "result": "Constructive interference only (No destructive cancellation at impact)"
+      },
+      "dynamic_sub_headroom": {
+        "limiter_pre_delay": "1.5ms (Look-ahead on the sub-bus)",
+        "clipping_mode": "None (Sub must remain linear and pure)",
+        "sidechain_slope": "Exponential (Instant ducking, 45ms release synced to BPM)"
+      }
+    },
+    "spectral_void_metrics_v4": {
+      "anti_masking_void": "Absolute silence (-60dB) in 150-250Hz region of the Sub-track",
+      "low_end_stability_score": "η = 0.995",
+      "harmonic_purity_index": "Total Harmonic Distortion (THD) < 0.05% in 20-60Hz band"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_267"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

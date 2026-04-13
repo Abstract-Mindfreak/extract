@@ -1,0 +1,57 @@
+{
+  "id": "meta_286",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_286",
+    "params": {
+      "logic_ms": 0.0,
+      "front_z_db": 1.0,
+      "back_z_db": 4.0,
+      "purity_check_db": 18.0,
+      "purity_check_hz": 300.0,
+      "transient_clarity_db": 14.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_dynamic_panning_matrix_v4": {
+      "quaternion_rotation_engine": {
+        "spatial_nodes": {
+          "node_1_sub": "Fixed (0,0,-1) // Absolute Mono Center-Deep",
+          "node_2_lead": "Spiral (sin(t), cos(t), z=sin(t/2)) // 4D Circular movement",
+          "node_3_glitch": "Random_Scatter (X,Y,Z) @ transient_event // Instant jumps",
+          "node_4_atmosphere": "Wide_Expansion (L:100, R:100, phase=180°) // Infinite width"
+        },
+        "rotation_speed_sync": "BPM / 240 (Slow cinematic rotations) or BPM / 15 (Aggressive neuro-swirls)"
+      },
+      "dynamic_haas_panning": {
+        "logic": "IF velocity > 100 THEN δt = 15ms (L->R shift) ELSE δt = 0ms",
+        "target": "Adding 'weight' to accented notes through spatial offset"
+      },
+      "distance_attenuation_model": {
+        "front_z": "Gain +2dB, High-shelf +1dB, Reverb-Mix 5%",
+        "back_z": "Gain -6dB, High-shelf -4dB, Reverb-Mix 45%",
+        "motion": "Linear ramp from Back to Front over 8 bars (The 'Coming-at-you' effect)"
+      }
+    },
+    "aesthetic_fidelity_metrics_v4": {
+      "AFS_calculation": "Score = (Purity * 0.4) + (Novelty * 0.3) + (Narrative_Fidelity * 0.3)",
+      "purity_check": "No frequencies > -18dB in the 150-300Hz range (Anti-mud-masking)",
+      "impact_factor": "Kick-to-Sub ratio = 1.25 (Kick always leads the sub-low transient)",
+      "transient_clarity": "Crest factor target: 12-14dB (Preserving peak energy before limiting)"
+    }
+  }
+}

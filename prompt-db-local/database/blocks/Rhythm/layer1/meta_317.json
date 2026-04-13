@@ -1,0 +1,66 @@
+{
+  "id": "meta_317",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_317",
+    "params": {
+      "logic_db": 20.0,
+      "logic_khz": 5.0,
+      "logic_ms": 20.0,
+      "logic_hz": 150.0,
+      "fundamental_frequency_hz": 51.9
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "custom_macros_archive": {
+      "macro_A_CRUSH_REESE": {
+        "command": "/crush-reese",
+        "logic": "Distortion(40dB) ⊗ LowPass(Cutoff=LFO_1) ⊗ Gain(-6dB)",
+        "target": "Transform basic bass into aggressive neuro-growl"
+      },
+      "macro_B_FRACTAL_SPARKLE": {
+        "command": "/fractal-sparkle",
+        "logic": "HighPass(5kHz) ⊗ Granular_Delay(Grain=20ms) ⊗ Reverb(Mix=0.6)",
+        "target": "Add high-frequency recursive 'dust' to transitions"
+      },
+      "macro_C_PHASE_LOCK": {
+        "command": "/phase-lock",
+        "logic": "MonoSum(0-150Hz) ⊗ Gain(+3dB) ⊗ Sidechain(Threshold=-20dB)",
+        "target": "Instant punch-alignment for Kick/Bass fusion"
+      }
+    },
+    "universal_logic_connections": {
+      "the_singularity_arc": {
+        "connection_1": "Cyber-Shamanism (Concept 1) → DNA for Algorithm-Soul (Concept 3)",
+        "connection_2": "Recursive Collapse (Concept 2) → Feedback Loop for Neuro-Geometry (Concept 4)",
+        "thematic_anchor": "The transition from human ritual to machine-led evolution"
+      },
+      "spectral_signature": {
+        "fundamental_frequency": "G# (51.9Hz) - твой 'золотой стандарт' для баса",
+        "harmonic_bias": "Odd harmonics (Aggressive/Industrial feel)",
+        "spatial_bias": "Width > 120%, Depth < 50% (Wide but upfront)"
+      }
+    },
+    "LFE_phonetic_mapping": {
+      "syllable_triggers": {
+        "closed_vowels": "Trigger Hi-hat / Percussion (High frequency)",
+        "open_vowels": "Trigger Kick / Snare transients (Low-mid frequency)",
+        "consonants": "Trigger Glitch / Noise bursts (Aperiodic events)"
+      }
+    }
+  }
+}

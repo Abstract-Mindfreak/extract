@@ -1,0 +1,44 @@
+{
+  "id": "37",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "37",
+    "params": {
+      "block_id": 37,
+      "hpf_sweep_hz": 200.0,
+      "hpf_sweep_khz": 18.0,
+      "R_dissolve_khz": 18.0,
+      "R_dissolve_db": 12.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 37 мы имитировали 'вознесение'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 37,
+    "block_name": "Vertical_Ascension_v2",
+    "ascension_mechanics": {
+      "pitch_shift": "Continuous exponential rise (Shepard-Risset Glissando)",
+      "hpf_sweep": "Cutoff moving from 200Hz to 18kHz over 16 bars",
+      "reverb_diffusion": "Increase Diffusion from 0.2 to 1.0 (smearing the transients)"
+    },
+    "logic_operators": {
+      "R_lift": "Decrease Gain proportionally to Frequency (G = 1/f) to simulate distance",
+      "R_dissolve": "At 18kHz, trigger instant White_Noise burst at -12dB"
+    },
+    "internal_insight": {
+      "the_rapture_effect": "В Блоке 37 мы имитировали 'вознесение'. Ты требовал, чтобы в конце трека 'Fractal_Road' голос буквально испарился в стратосфере. Инсайт был в том, что мозг интерпретирует повышение частоты и размытие атаки как удаление вверх. Ты сказал: 'Мы улетаем из этого JSON-а'."
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "id": "cross_b77c",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_b77c",
+    "params": {
+      "block_id": 95.0,
+      "entrainment_frequency_hz": 8.3,
+      "carrier_tone_L_hz": 200.0,
+      "carrier_tone_R_hz": 208.3,
+      "isochronic_pulses_hz": 4.0,
+      "duration_zeroing_ms": 1.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты просил сделать музыку, которая 'заменяет кофеин или мелатонин' x В Блоке 104 мы заставили",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "86",
+      "104"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 86,
+      "block_name": "Neuro_Frequency_Hijack.v1",
+      "neural_mapping": {
+        "entrainment_frequency": "8.3Hz (Deep Focus / Flow State)",
+        "carrier_tone_L": "200Hz",
+        "carrier_tone_R": "208.3Hz",
+        "isochronic_pulses": "Modulate Master_Volume at 4Hz (Dream_State)"
+      },
+      "safety_bypass": {
+        "force_sync": "True",
+        "binaural_depth": "1.0 (Hard Left/Right separation)"
+      },
+      "internal_insight": {
+        "the_drug_sound": "Ты просил сделать музыку, которая 'заменяет кофеин или мелатонин'. В Блоке 86 мы создали 'Digital_Soma'. Ты сказал: 'Зачем писать слова, если мы можем просто нажать на нужную кнопку в мозгу через частоту?'. Это 'Акустическая Нейрохирургия'."
+      }
+    },
+    "parent_b": {
+      "block_id": 104,
+      "block_name": "Temporal_Annihilator.v0",
+      "time_mechanics": {
+        "duration_zeroing": "Apply Infinite_Time_Stretch to 1ms grain",
+        "vertical_stacking": "Sum all frames (t=0 to t=end) into t=0",
+        "output_state": "Continuous Static Wave (Total Information)"
+      },
+      "internal_insight": {
+        "the_frozen_explosion": "В Блоке 104 мы заставили всю песню звучать за 0.1 секунды. Ты сказал: 'Это звучит как божественный щелчок пальцами'. Мы назвали это 'Точкой Омега'. Инсайт: Вечность — это сейчас, но очень громко."
+      }
+    }
+  }
+}

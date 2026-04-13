@@ -1,0 +1,36 @@
+{
+  "id": "meta_181",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_181",
+    "params": {
+      "waveform_hz": 100.0,
+      "sidechain_ms": 1.0,
+      "mono_summing_hz": 120.0,
+      "mixing_db": 6.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "sub_bass_protocol": {
+      "waveform": "Pure Sine (no harmonics above 100Hz)",
+      "sidechain": "Instant ducking (1ms attack) triggered by Kick",
+      "mono_summing": "Strictly mono below 120Hz (No exceptions)",
+      "saturation": "Odd-harmonics only (Tape-style) for 'warmth' on small speakers",
+      "mixing": "Level set to -6dB peak, absolute priority in the frequency spectrum"
+    }
+  }
+}

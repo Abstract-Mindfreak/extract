@@ -1,0 +1,48 @@
+{
+  "id": "mut_61_ef4b",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "61",
+    "params": {
+      "block_id": 61,
+      "attenuation_curve_khz": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'звуком, которому не в чем лететь'",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 61,
+    "block_name": "Dead_Planet_Acoustics.v1",
+    "environmental_physics": {
+      "speed_of_sound_modifier": "c' = c * 0.25 (Gas_Giant / Methane_Mist)",
+      "attenuation_curve": "Non-linear high-frequency loss (f > 2kHz is void)",
+      "gravitational_shimmer": "LFO-pitch-warp based on G-force (1.5g)"
+    },
+    "logic_parameters": {
+      "reverb_type": "Metallic_Cavern / Frozen_Surface",
+      "absorption_coefficient": "0.99 (Dust-laden air)"
+    },
+    "internal_insight": {
+      "the_cold_vacuum": "Ты называл это 'звуком, которому не в чем лететь'. В Блоке 61 мы создали эффект, где звук бочки 'замерзал' в воздухе — мы использовали бесконечный Spectral Hold с затуханием в 30 секунд. Ты сказал: 'Так звучит одиночество спутника на орбите'. Это 'Акустика Абсолютного Нуля'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "61"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

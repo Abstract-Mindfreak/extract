@@ -1,0 +1,45 @@
+{
+  "id": "mut_meta_136_3367",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_136",
+    "params": {
+      "delay_time_ms": 1.87
+    }
+  },
+  "synergy": {
+    "links": [
+      "67"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "micro_mutation_logic": {
+      "iteration": "G(s_n+1) = G(s_n) + Δ_mutation",
+      "targets": {
+        "filter_resonance": "Shift ±0.05 Q every 8 bars",
+        "delay_time": "Micro-drift (±2ms) to create phase-smearing",
+        "harmonic_content": "Add/Subtract 1 harmonic partial (Sine-additive synthesis)"
+      },
+      "trigger": "Always active in ASE-Autonomous-Mode (Block 67)",
+      "goal": "Avoid 'Loop-Fatigue' and maintain Narrative Fidelity through infinite variation."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_136"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

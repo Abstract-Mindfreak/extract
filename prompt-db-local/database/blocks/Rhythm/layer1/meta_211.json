@@ -1,0 +1,37 @@
+{
+  "id": "meta_211",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_211",
+    "params": {
+      "swing_logic_ms": 12.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "rhythmic_geometry": {
+      "base_grid": "4/4 (The Anchor)",
+      "overlay_polyrhythms": [
+        "5/8 (Lead Sync)",
+        "7/16 (Percussive Glitch)",
+        "3/4 (Sub-Bass Pulse)"
+      ],
+      "swing_logic": "Micro-timing shifts (±5-12ms) for 'Organic-Machine' feel",
+      "euclidean_sequences": "Generating drum patterns via Euclidean algorithm distribution",
+      "rule_of_three": "One rhythmic layer stays stable, two evolve fractally."
+    }
+  }
+}

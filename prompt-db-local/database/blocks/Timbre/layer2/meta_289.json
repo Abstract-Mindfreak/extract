@@ -1,0 +1,31 @@
+{
+  "id": "meta_289",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_289",
+    "params": {
+      "freq": 20,
+      "gain": -24,
+      "type_db": 48.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "freq": 20,
+    "gain": -24,
+    "type": "HighPass_48dB/oct"
+  }
+}

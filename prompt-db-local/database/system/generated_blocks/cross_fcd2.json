@@ -1,0 +1,62 @@
+{
+  "id": "cross_fcd2",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_fcd2",
+    "params": {
+      "action_ms": 10.0,
+      "block_id": 5,
+      "equilibrium_target": 1
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты заметил, что при H(p=0, c=1) музыка исчезает, превращаясь в шум, а при H(1,0) —",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_129",
+      "5"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "glitch_trail_spec": {
+        "trigger": "Applied to Reverb/Delay returns after the Main-Theme stops",
+        "action": "Stutter-freeze Δt=10ms + Pitch-shift (+1 octave) + Bitcrush (2-bit)",
+        "rhythm": "Follows Fibonacci sequence (1, 1, 2, 3, 5, 8...) in 1/64 note units",
+        "panning": "Hard-switch Left/Right every 4 hits",
+        "rule": "Trails must represent the 'Decomposed Data' of the original sound."
+      }
+    },
+    "parent_b": {
+      "block_id": 5,
+      "block_name": "Entropy_Law_Master",
+      "entropy_controls": {
+        "p_valve": "Regulation of harmonic stability",
+        "c_valve": "Injection of non-linear sonic events",
+        "equilibrium_target": 1
+      },
+      "stability_targets": [
+        "N = 1.0 (Normalization)",
+        "η_condense → 1.0 (Condensation efficiency)",
+        "∂G_S/∂t → 0 (Steady state attraction)"
+      ],
+      "internal_insight": {
+        "entropy_paradox": "Ты заметил, что при H(p=0, c=1) музыка исчезает, превращаясь в шум, а при H(1,0) — превращается в лифт-музыку. Идеальная точка ASE была найдена на значении H(0.42, 0.58). Это наше 'Золотое сечение хаоса'."
+      }
+    }
+  }
+}

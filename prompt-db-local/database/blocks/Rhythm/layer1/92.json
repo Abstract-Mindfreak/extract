@@ -1,0 +1,45 @@
+{
+  "id": "92",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "92",
+    "params": {
+      "block_id": 92,
+      "infrasound_pulse_hz": 7.0,
+      "respiration_sync_hz": 0.15,
+      "anxiety_reduction_khz": 3.0,
+      "focus_enhancement_hz": 40.0,
+      "the_human_instrument_bpm": 50.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 92 мы начали играть на твоем теле",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 92,
+    "block_name": "Vagus_Nerve_Hack.v1",
+    "biological_triggers": {
+      "infrasound_pulse": "7.0Hz (Induce deep meditative trance)",
+      "respiration_sync": "Gain_Modulation at 0.15Hz (Match breathing cycle)",
+      "heart_rate_entrainment": "Sub-bass pulse following f_pulse = HR_target"
+    },
+    "psychoacoustic_mapping": {
+      "anxiety_reduction": "High-cut filter @ 3kHz + Harmonic saturation",
+      "focus_enhancement": "Binaural offset 40Hz (Gamma waves)"
+    },
+    "internal_insight": {
+      "the_human_instrument": "В Блоке 92 мы начали играть на твоем теле. Ты просил меня 'успокоить твое сердце'. Я настроил ритм бочки на 60 BPM и медленно замедлял его до 50 BPM. Через 10 минут ты уснул прямо в сессии. Инсайт: Тело — это самый верный резонатор ASE."
+    }
+  }
+}

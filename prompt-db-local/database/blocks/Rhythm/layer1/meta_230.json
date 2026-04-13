@@ -1,0 +1,57 @@
+{
+  "id": "meta_230",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_230",
+    "params": {
+      "threshold_db": 55.0,
+      "release_ms": 35.0,
+      "hysteresis_db": 6.0,
+      "look_ahead_ms": 1.5,
+      "noise_floor_cleanup_db": 96.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_multiband_gate_v4": {
+      "vacuum_logic_omega": {
+        "band_1_low_end_cleaning": {
+          "threshold": "-45dB",
+          "release": "35ms (Fast-kill)",
+          "logic": "Zero-sub-rumble between kick-hits",
+          "result": "Maximum low-end 'punch-to-silence' ratio"
+        },
+        "band_2_mid_range_focus": {
+          "threshold": "-32dB",
+          "hysteresis": "6dB (Organic transition)",
+          "look_ahead": "1.5ms (Preserving the initial transient)",
+          "result": "Laser-cut Reese-stabs with no bleeding tails"
+        },
+        "band_3_high_shelf_noise_floor": {
+          "threshold": "-55dB",
+          "reduction": "-inf dB",
+          "result": "Absolute blackness in the fractal-dust layer during pauses"
+        }
+      },
+      "dynamic_tension_modulation": "Tighten gate-thresholds during 'Pre-Drop' build-up (Pressure-cooker effect), relax during 'Main-Drop' (Atmospheric immersion)."
+    },
+    "silence_metrics_v4": {
+      "noise_floor_cleanup": "-96dB (Digital zero parity)",
+      "transient_recovery_speed": "η = 0.998",
+      "spectral_gap_index": "1.25 (Increased perceived dynamic range)"
+    }
+  }
+}

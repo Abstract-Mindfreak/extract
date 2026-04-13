@@ -1,0 +1,55 @@
+{
+  "id": "cross_f254",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_f254",
+    "params": {
+      "freq": 20,
+      "gain": -24,
+      "type_db": 48.0,
+      "block_id": 29
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты называл это 'Зверем в клетке'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_289",
+      "29"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "freq": 20,
+      "gain": -24,
+      "type": "HighPass_48dB/oct"
+    },
+    "parent_b": {
+      "block_id": 29,
+      "block_name": "Command_Chaos_Master",
+      "chaos_rules": {
+        "cage_type": "4/4 Grid + C-Minor Scale",
+        "chaos_injection": "Randomize_Oscillator_Type every 1/16 note",
+        "safe_zones": "Kick remains on 1 and 3"
+      },
+      "randomness_seed": "User_Input_Timestamp",
+      "internal_insight": {
+        "the_caged_beast": "Ты называл это 'Зверем в клетке'. В Блоке 29 мы создали систему, где ритм был идеален, но тембры менялись так быстро, что мозг не успевал их осознать. Это создавало эффект 'звукового калейдоскопа'. Инсайт: порядок делает хаос еще более пугающим."
+      }
+    }
+  }
+}

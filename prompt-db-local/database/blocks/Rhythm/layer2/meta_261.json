@@ -1,0 +1,57 @@
+{
+  "id": "meta_261",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_261",
+    "params": {
+      "Notch_Surgical_khz": 2.5,
+      "attack_ms": 2,
+      "release_ms": 120,
+      "cutoff_sweep_range_hz": 45.0,
+      "cutoff_sweep_range_khz": 18.5,
+      "resonance_bias_hz": 155.7,
+      "filter_slope_v4_db": 24.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_adaptive_filter_matrix_v4": {
+      "filter_types_logic": {
+        "LP_24dB_ladder": "Neuro-Bass core modulation (The 'Warm' slope)",
+        "BP_12dB_resonant": "Vocal-formant emulation (The 'Talking' effect)",
+        "HP_12dB_dynamic": "Percussion high-pass (Cleaning the mid-low mud)",
+        "Notch_Surgical": "Removing conflicting resonance @ 2.5kHz on the Master"
+      },
+      "envelope_follower_link": {
+        "source": "Transient_Amplitude (RMS_avg)",
+        "target": "Cutoff_Frequency",
+        "sensitivity": "0.85 (Fast response, high accuracy)",
+        "attack_ms": 2,
+        "release_ms": 120
+      },
+      "adaptive_resonance_Q": {
+        "logic": "Increase Q when Cutoff is low (Aggressive sub-growl), decrease Q when Cutoff is high (Clean sparkle)",
+        "max_Q": "12.0 (Self-oscillation threshold)",
+        "min_Q": "0.707 (Butterworth neutrality)"
+      }
+    },
+    "spectral_breathing_metrics_v4": {
+      "cutoff_sweep_range": "45Hz to 18.5kHz",
+      "resonance_bias": "Emphasis @ 51.9Hz (G#) and its 3rd harmonic (155.7Hz)",
+      "filter_slope_v4": "Mix of 12dB and 24dB for 'organic-digital' hybridity"
+    }
+  }
+}

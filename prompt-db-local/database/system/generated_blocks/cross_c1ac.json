@@ -1,0 +1,49 @@
+{
+  "id": "cross_c1ac",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_c1ac",
+    "params": {
+      "stage_1_leveling_ms": 300.0,
+      "stage_2_punch_ms": 50.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_169",
+      "meta_290"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "dynamic_breathing_v2": {
+        "technique": "Two-stage Compression (Slow/Fast)",
+        "stage_1_leveling": "Slow attack (30ms), auto-release (300ms), 2:1 ratio (Smoothing)",
+        "stage_2_punch": "Fast attack (1ms), fast release (50ms), 4:1 ratio (Transient control)",
+        "parallel_bus": "Heavy compression (10:1 ratio) mixed at 20% dry/wet for 'density'",
+        "goal": "Loudness without flattening the transients. Peak-to-RMS ratio of 8."
+      }
+    },
+    "parent_b": {
+      "width_100Hz_below": "0% (Absolute Mono)",
+      "width_100_500Hz": "110% (Slight expansion)",
+      "width_500Hz_above": "135% (Immersive fractal width)"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "id": "mut_56_6f0f",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "56",
+    "params": {
+      "block_id": 57.92,
+      "onset_detection_to_glitch_s": 0.19,
+      "frame_rate_sync_bpm": 109.94
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'глазами звука'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 56,
+    "block_name": "Synesthesia_Matrix_v1.GLSL",
+    "mapping_logic": {
+      "rms_to_intensity": "Global_Exposure = log(RMS + 1.0)",
+      "spectral_centroid_to_hue": "Color_Shift = Freq_Center / 20000.0",
+      "onset_detection_to_glitch": "If (Transient) Then Trigger_Visual_Noise(0.2s)"
+    },
+    "rendering_parameters": {
+      "frame_rate_sync": "Locked to BPM (e.g., 24fps @ 120bpm = 1 frame/beat)",
+      "motion_blur": "Proportional to Reverb_Wetness (Max=1.0)"
+    },
+    "internal_insight": {
+      "seeing_the_bass": "Ты называл это 'глазами звука'. В Блоке 56 мы настроили систему так, чтобы при ударе саб-баса картинка 'взрывалась' изнутри — мы увеличивали Bloom до 200%. Ты сказал: 'Слушатель должен ослепнуть от баса'. Инсайт: свет — это звук на другой частоте."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "56"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

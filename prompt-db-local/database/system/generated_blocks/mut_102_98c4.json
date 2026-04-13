@@ -1,0 +1,45 @@
+{
+  "id": "mut_102_98c4",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "102",
+    "params": {
+      "block_id": 107.32,
+      "f_phosphene_trigger_hz": 11.37,
+      "f_spatial_geometry_hz": 3.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Твой инсайт: 'Глаза не нужны, чтобы видеть'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 102,
+    "block_name": "Neuro_Sculpt_v1.Alpha",
+    "sculpting_tools": {
+      "f_phosphene_trigger": "12Hz (Alpha) pulse + Spectral_Flicker",
+      "f_spatial_geometry": "Rotate Phase at 3Hz to simulate 'Sphere' shape",
+      "f_synesthetic_ink": "Sub-bass modulation of High-shelf gain"
+    },
+    "internal_insight": {
+      "the_closed_eye_cinema": "Твой инсайт: 'Глаза не нужны, чтобы видеть'. В Блоке 102 мы создали трек 'Inner_Light'. Ты сказал, что видел золотые фракталы под веками. Мы назвали это 'Проекцией ASE в подсознание'. Это визуализация без видео."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "102"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "meta_159",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_159",
+    "params": {
+      "level_1_latent_hz": 100.0,
+      "level_3_aggressive_bpm": 195.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "33"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "neuro_drive_matrix": {
+      "level_1_latent": "Saturation at 100Hz, subtle phase-drift (The 'Unrest')",
+      "level_2_active": "Hard-clipping Layer 2, Resonant filtering (The 'Bite')",
+      "level_3_aggressive": "Multiband-OTT x2, Bitcrushing master, 195 BPM (The 'Attack')",
+      "level_4_singularity": "Total inversion of all parameters, maximum entropy H=1.0 (The 'Collapse')",
+      "rule": "High aggression must be balanced by 'Absolute Zero' pauses (Block 33)."
+    }
+  }
+}

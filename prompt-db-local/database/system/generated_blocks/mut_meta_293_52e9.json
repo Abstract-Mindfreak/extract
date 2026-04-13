@@ -1,0 +1,41 @@
+{
+  "id": "mut_meta_293_52e9",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_293",
+    "params": {
+      "threshold_db": -0.47,
+      "ceiling_db": -0.3,
+      "release_ms": 117.41,
+      "mode_ms": 1.92
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "tool": "Limiter_Surgical",
+    "threshold_db": -0.5,
+    "ceiling_db": -0.3,
+    "release_ms": 120,
+    "mode": "Look-ahead (2ms), True_Peak_Enabled"
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_293"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "id": "cross_495",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_495",
+    "params": {
+      "block_id": 45
+    }
+  },
+  "synergy": {
+    "links": [
+      "70",
+      "34"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты говорил, что порядок — это только временная иллюзия",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_134",
+      "45"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "spiral_vector_panning": {
+        "formula": "Pan(t) = R(t) * [cos(ωt), sin(ωt)]",
+        "radius_r": "Decreasing (Closing spiral) or Increasing (Opening spiral)",
+        "ω_rotation": "Frequency tied to BPM (e.g., 1 full rotation per 4 bars)",
+        "target": [
+          "Percussive-Glitch (Block 70)",
+          "Vocal-Chops (Block 34)"
+        ],
+        "result": "The sensation of 'Vortex-Suction' or 'Centrifugal-Explosion'."
+      }
+    },
+    "parent_b": {
+      "block_id": 45,
+      "block_name": "Tonal_Entropy_Dissolve",
+      "dissolve_functions": {
+        "pitch_quantization_off": "Release all oscillators from the grid",
+        "detune_all": "Random drift of all frequencies towards chaos",
+        "noise_morph": "Cross-fade between 'Scale' and 'Pink Noise' over 8 bars"
+      },
+      "internal_insight": {
+        "back_to_chaos": "Ты говорил, что порядок — это только временная иллюзия. В Блоке 45 мы разрушали наши идеальные иррациональные лады. Инсайт: красота лада видна только в момент его распада. Это наше 'Aesthetic Meltdown' — когда геометрия плавится и превращается в первичный океан шума."
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "mut_meta_145_e6cf",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "stabilization",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_145",
+    "params": {
+      "grain_size_ms": 200.0,
+      "mixing_db": 24.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "1",
+      "35"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "granular_cloud_spec": {
+      "grain_size": "Ultra-small (10ms-30ms) for 'shimmer' or Large (200ms) for 'rhythm'",
+      "density": "Stochastic distribution (Random intervals)",
+      "pitch_jitter": "±1 octave variance (The 'Spectral-Smear')",
+      "position_drift": "Moving through the source file via Golden Ratio (Block 1)",
+      "mixing": "Mix at -24dB with 100% wet reverb return (Block 35)."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_145"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

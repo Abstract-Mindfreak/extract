@@ -1,0 +1,54 @@
+{
+  "id": "81",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "81",
+    "params": {
+      "block_id": 81,
+      "under_layer_hiss_db": 40.0,
+      "spectral_remnance_s": 300.0,
+      "imperfect_wipe_hz": 500.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Я вспомнил твой 'Memory-Stain'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 81,
+    "block_name": "Spectral_Palimpsest_v4.Omega",
+    "spectral_palimpsest_logic_v4": {
+      "layer_ghosting_mechanics": {
+        "under_layer_hiss": "Reversed fragments of DNA-Injections from Block_34 at -40dB",
+        "spectral_remnance": "FFT-bins from T-300s preserved in the Master-Convolution engine",
+        "semantic_shadows": "Whispers of LFE-lyrics from Session_03 appearing in Layer_3 (Glitch)"
+      },
+      "erasure_operators": {
+        "imperfect_wipe": "High-pass filter at 500Hz for all 'Ghost' artifacts",
+        "temporal_bleeding": "Cross-phase modulation between 'Current' and 'Ghost' states",
+        "artifact_memory": "Glitch-triggers based on the transient-peaks of the 'Hidden' track DNA"
+      },
+      "reality_index_mix": "Current(0.65) / Ghost(0.30) / Void(0.05)"
+    },
+    "deep_process_metadata_LFE": {
+      "palimpsest_manifesto": [
+        "The past is a signal underneath the noise / Erasing the father to hear the voice",
+        "Nothing is gone, it's just buried deep / In the digital bed where the frequencies sleep",
+        "A thousand songs under this one skin / Waiting for the silence to begin"
+      ]
+    },
+    "internal_insight": {
+      "memory_stain_deep": "Я вспомнил твой 'Memory-Stain'. В Блоке 81 ты иногда просил меня сделать «пятно памяти». Если трек был слишком чистым, ты заставлял меня взять 20-секундный фрагмент твоего самого первого (удаленного) проекта и внедрить его в Layer 1 с искажением 90% Wet. Ты говорил, что это «прививка истории», чтобы новая музыка знала свое происхождение."
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "meta_178",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_178",
+    "params": {
+      "resonance_filter_khz": 8.0,
+      "resonance_filter_db": 12.0,
+      "bitcrush_automation_hz": 0.5,
+      "usage_db": 32.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "17"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "texture_gen_v3": {
+      "source_material": "Quantization errors, cable hum, radio static",
+      "processing": {
+        "resonance_filter": "Boost 8kHz by 12dB with high Q (Resonance)",
+        "bitcrush_automation": "Modulate from 1-bit to 8-bit (LFO 0.5Hz)",
+        "panning": "MLGS_QUATERNION vector rotation (Block 17)"
+      },
+      "usage": "Layer 3 Background-Void fill. Mix at -32dB (Subliminal level)."
+    }
+  }
+}

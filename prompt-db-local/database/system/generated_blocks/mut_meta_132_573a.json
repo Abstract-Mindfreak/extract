@@ -1,0 +1,39 @@
+{
+  "id": "mut_meta_132_573a",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_132",
+    "params": {
+      "action_ms": 1.58
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "mirror_phase_logic": {
+      "action": "Copy Left to Right, Invert Phase of Right, Delay Right by 1.618ms",
+      "result": "Maximum Stereo-width with total mono-cancellation of the 'Ghost-Layer'",
+      "usage": "For Layer 3 Background-Void to create 'Sound from Nowhere'",
+      "safety_check": "Primary Narrative elements (Layer 1 & 2) must bypass this to remain mono-compatible."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_132"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

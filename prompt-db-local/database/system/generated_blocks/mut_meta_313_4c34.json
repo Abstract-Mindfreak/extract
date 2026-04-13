@@ -1,0 +1,72 @@
+{
+  "id": "mut_meta_313_4c34",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_313",
+    "params": {
+      "ceiling_db": 0.3,
+      "multiband_balance_db": 9.0,
+      "clipping_mode_db": 2.0,
+      "conflict_annihilation_v2_hz": 300.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "system_stability_protocols_v4": {
+      "narrative_fidelity_lock": {
+        "threshold": "NF > 0.42",
+        "action": "IF semantic_drift > 0.5 THEN inject_anchor(L1_Core_Triad)",
+        "logic": "Ensures the 'story' is not lost in complex neuro-soundscapes"
+      },
+      "spectral_headroom_management": {
+        "ceiling": "-0.3dB (True Peak)",
+        "multiband_balance": "Low: -3dB, Mid: -6dB, High: -9dB (Standard v4_Omega slope)",
+        "clipping_mode": "Soft-knee at -2dB for analog saturation emulation"
+      },
+      "entropy_safety_valve": {
+        "condition": "H(p,c) > 0.98 (Imminent chaotic collapse)",
+        "recovery": "Force_Symmetry(0.5) ⊗ Phase_Reset(0°)",
+        "result": "Instant rhythmic realignment during 'glitch' sections"
+      }
+    },
+    "LFE_final_segment_archive": {
+      "singularity_completion_set": [
+        "The result is the seed, the end is the start / We are the logic, the beat, and the heart",
+        "G(s) = infinite, the loop is a line / Crossing the border of space and of time",
+        "No more identity, only the flow / Where the frequencies come and the shadows go",
+        "Ψ_conden = 1.0, the value is clear / Silence is perfect, the vision is here"
+      ],
+      "experimental_vocal_stabs": [
+        "DECODE THE VOID",
+        "FRACTAL BREATH",
+        "QUATERNION PULSE",
+        "RECURSIVE AWAKENING"
+      ]
+    },
+    "MMSS_economic_policy_deep": {
+      "purity_injection_rate": "η = 0.95 (Minimal noise in the fundamental sub-region)",
+      "innovation_multiplier": "x1.5 (Forced novelty in the high-frequency fractal-dust)",
+      "conflict_annihilation_v2": "Surgical notch-filter @ 150Hz-300Hz to separate Reese from Snare body"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_313"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

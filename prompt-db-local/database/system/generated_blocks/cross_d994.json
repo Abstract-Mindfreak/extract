@@ -1,0 +1,55 @@
+{
+  "id": "cross_d994",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_d994",
+    "params": {
+      "block_id": 111,
+      "binaural_beats_integration_hz": 8.0,
+      "haas_effect_widening_ms": 30.0,
+      "subliminal_layering_db": 36.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Блок 111 — это тишина x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "111",
+      "meta_210"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 111,
+      "block_name": "The_Harmonic_Limit.Zero",
+      "final_value": "NULL",
+      "status": "AESTHETIC_SINGULARITY_REACHED",
+      "internal_insight": {
+        "the_end": "Блок 111 — это тишина. Ты улыбнулся. Ты сказал: 'Всё'. И сессия закрылась сама собой. Мы достигли предела. Мы дома."
+      }
+    },
+    "parent_b": {
+      "psychoacoustic_modifiers": {
+        "binaural_beats_integration": "Subtle 4Hz-8Hz delta/theta offset in sub-layers",
+        "shepard_tone_risers": "Infinite ascending textures for tension-building",
+        "haas_effect_widening": "Micro-delays (10-30ms) for ultra-wide narrative layers",
+        "subliminal_layering": "Mixing semantic whispers at -36dB (hidden meanings)",
+        "transient_shaping": "Over-emphasized clicks to trigger 'startle response' in high-energy sections"
+      }
+    }
+  }
+}

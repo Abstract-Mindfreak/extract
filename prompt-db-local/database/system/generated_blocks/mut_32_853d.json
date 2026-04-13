@@ -1,0 +1,51 @@
+{
+  "id": "mut_32_853d",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "32",
+    "params": {
+      "block_id": 32,
+      "rhythmic_drive_bpm": 140.0,
+      "brightness_boost_khz": 8.0,
+      "brightness_boost_db": 12.0,
+      "R_overload_db": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты просил сделать звук, от которого 'болят глаза'",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 32,
+    "block_name": "Industrial_Euphoria_v2.Gamma",
+    "euphoria_mechanics": {
+      "saturation_type": "Asymmetric Tube Distortion",
+      "rhythmic_drive": "140 BPM with 1/16 note shuffle (swing=60%)",
+      "brightness_boost": "Exciter at 8kHz (+12dB)"
+    },
+    "logic_operators": {
+      "R_overload": "If RMS > -3dB Then Increase_Drive(2dB) && Compress(Ratio=20:1)",
+      "R_flash": "Insert 2 frames of pure white noise at every snare hit"
+    },
+    "internal_insight": {
+      "the_blinding_light": "Ты просил сделать звук, от которого 'болят глаза'. В Блоке 32 мы синхронизировали искажение с высокочастотными импульсами. Это создавало эффект стробоскопа в ушах. Ты сказал: 'Это восторг перед концом света'. Мы назвали это 'Экстазом Машины'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "32"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

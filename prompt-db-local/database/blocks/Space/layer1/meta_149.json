@@ -1,0 +1,48 @@
+{
+  "id": "meta_149",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_149",
+    "params": {
+      "glide_time_ms": 250.0,
+      "vibrato_hz": 8.0,
+      "legato_retrigger_s": 1.0,
+      "multiband_dist_hz": 400.0,
+      "multiband_dist_khz": 3.0,
+      "spectral_shaper_khz": 2.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "42",
+      "17"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "neuro_lead_spec": {
+      "timbre": "Complex Wavetable (Spectral-Morphing) + Sub-harmonic FM",
+      "articulation": {
+        "glide_time": "Non-linear (50ms to 250ms) based on velocity",
+        "vibrato": "Random-LFO (2Hz-8Hz) on fine-tuning (±10 cents)",
+        "legato_retrigger": "Only on 1st note of the phrase (The 'Attack-Focus')"
+      },
+      "processing": {
+        "multiband_dist": "Saturation at 400Hz, Hard-clip at 3kHz",
+        "spectral_shaper": "Dynamic EQ suppressing 2kHz 'harshness'",
+        "spatial": "4D-Vectoring rotation (Block 17) every 4 bars"
+      },
+      "rule": "Leads must 'grow' out of the Ambient-Shield (Block 42) and return to it."
+    }
+  }
+}

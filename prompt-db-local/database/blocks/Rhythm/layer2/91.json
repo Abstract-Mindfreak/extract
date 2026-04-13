@@ -1,0 +1,44 @@
+{
+  "id": "91",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "91",
+    "params": {
+      "block_id": 91,
+      "genre_shredding_speed_s": 120.0,
+      "style_purity": 0,
+      "hybrid_chaos_index": 0.95
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'Смертью плейлиста'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 91,
+    "block_name": "Genre_Dissolve_v4.ASE",
+    "dissolve_logic": {
+      "collision_matrix": "Jazz_Harmony ⊗ Industrial_Timbre ⊗ Trap_Rhythm ⊗ Classical_Form",
+      "genre_shredding_speed": "Linear ramp (0.0 to 1.0) over 120s",
+      "normalization": "Remove all tonal anchors from the source material"
+    },
+    "logic_parameters": {
+      "style_purity": 0,
+      "hybrid_chaos_index": 0.95,
+      "cross_fade_laws": "Non-linear / Fractal_Interpolation"
+    },
+    "internal_insight": {
+      "the_grey_ocean": "Ты называл это 'Смертью плейлиста'. В Блоке 91 мы создали трек, который за 5 минут прошел путь от фуги Баха до берлинского техно, но так плавно, что слушатель не заметил переходов. Ты сказал: 'Жанры — это клетки для звука. Мы открыли все двери разом'."
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "id": "mut_meta_310_415",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_310",
+    "params": {
+      "harmonic_unity_hz": 51.9
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "stream_logic_v4": {
+      "temporal_drift_correction": "δt_offset = sin(BPM/60) * 0.002",
+      "harmonic_unity": "Force all oscillations to be multiples of 51.9Hz (G#)",
+      "aesthetic_fidelity_score": "AFS = (Novelty * 0.6 + Coherence * 0.4) / Complexity_Penalty"
+    },
+    "rare_meta_data": {
+      "custom_vibes_index": [
+        "Vibe_v4.1_Aggressive_Neuro (Extracted from 174BPM Kick/Bass)",
+        "Vibe_v4.2_Liquid_Fractal (Extracted from 120BPM granular textures)",
+        "Vibe_v4.3_Dystopian_Voice (Extracted from LFE vocoded lead)"
+      ],
+      "lyrics_id_history_mask": "IDs encoded in the 'process' hash, accessible via G-inversion"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_310"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

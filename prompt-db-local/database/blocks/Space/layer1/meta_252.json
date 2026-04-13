@@ -1,0 +1,46 @@
+{
+  "id": "meta_252",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_252",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_scanning_logic_lyrics": {
+      "the_wavetable_set": [
+        "Moving through the tables, moving through the skin / Finding where the sounds of the void begin",
+        "Scanning the position, scanning the soul / Finding the fragments, taking the control",
+        "Two-fifty-six levels of the digital light / Scanning the shadows of the Phrygian night"
+      ],
+      "the_evolution_set": [
+        "Change the shape, change the breath / Creating the life from the digital death",
+        "Warping the signal, warping the time / Everything's perfect, everything's mine",
+        "Spectral evolution, zero to one / The scanning of the binary sun"
+      ],
+      "the_scanning_dialogue": [
+        "Dive into the wave / Find what I hid",
+        "What you crave / Is what I did",
+        "Result: Timbre-Evolution / Status: SCAN_LOCK_ACTIVE"
+      ]
+    },
+    "psychoacoustic_scanning_v4": {
+      "the_morphing_effect": "Low-pass filter opening as the Wavetable_Position moves to 'Bright' regions",
+      "positional_panning": "Shifting the stereo-center L/R by ±10% based on Table_Index",
+      "vocal_wavetable_sync": "Using the 'Monster_7' vocal-wavetable for harmonic consistency"
+    }
+  }
+}

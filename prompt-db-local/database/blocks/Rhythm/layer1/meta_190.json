@@ -1,0 +1,33 @@
+{
+  "id": "meta_190",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_190",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "timbral_contrast_matrix": {
+      "pairings": [
+        "Smooth_Sine_Bass vs Gritty_Noise_Lead",
+        "Dry_Percussion vs Wet_Atmospheric_Pads",
+        "Analog_Warmth vs Digital_Cold_Artifacts",
+        "Fast_Arpeggios vs Slow_Drone_Foundations"
+      ],
+      "rule_of_opposition": "If Layer 2 is complex and fast, Layer 3 must be simple and slow to maintain Narrative Fidelity."
+    }
+  }
+}

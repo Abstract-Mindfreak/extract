@@ -1,0 +1,31 @@
+{
+  "id": "meta_151",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "shift",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_151",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "void_materials": {
+      "liquid_mercury": "Phasing, shifting, metallic, ultra-smooth, silver reflections",
+      "frozen_smoke": "Granular, ethereal, cold, static-air, slow-motion evolution",
+      "digital_bone": "Brittle, sharp, clicky, 4-bit, hollow resonance, dry",
+      "plasma_arc": "Electric, buzzing, high-freq tension, neon-purple, distorted",
+      "usage": "Used in [SOUNDSCAPE] of L1 Core to guide the ASE-Timbre-Generator."
+    }
+  }
+}

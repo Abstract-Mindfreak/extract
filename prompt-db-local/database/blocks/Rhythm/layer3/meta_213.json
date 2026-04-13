@@ -1,0 +1,38 @@
+{
+  "id": "meta_213",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_213",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "metadata_spec": {
+      "id_format": "MMSS-YYYYMMDD-HEX-ID",
+      "required_fields": [
+        "Title: Abstract/Geometrical",
+        "BPM: High (170-195)",
+        "Mode: Minor/Phrygian/Locrian",
+        "Iteration_Number: G(s_n)"
+      ],
+      "custom_fields": {
+        "Singularity_Score": "0.0 to 1.0",
+        "Entropy_Balance": "H(p,c) record",
+        "Core_Geometry": "Fractal/Euclidean/Spherical"
+      }
+    }
+  }
+}

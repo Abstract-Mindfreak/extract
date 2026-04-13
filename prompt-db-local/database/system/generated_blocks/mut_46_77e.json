@@ -1,0 +1,47 @@
+{
+  "id": "mut_46_77e",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "46",
+    "params": {
+      "block_id": 46
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'Раком текста'",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 46,
+    "block_name": "Verbal_Propagation_v2.LFE",
+    "propagation_logic": {
+      "semantic_expansion": "Replace Keyword(x) with Contextual_Synonym(y) + Abstract_Concept(z)",
+      "phonetic_branching": "If Word ends in 'Void' -> Branch to 'Avoid', 'Annoyed', 'Oid-logic'",
+      "recursive_refrain": "Repeat lines with 10% semantic erosion each cycle"
+    },
+    "linguistic_operators": {
+      "f_glitch_text": "Randomly swap vowels between adjacent words",
+      "f_entropy_lyrics": "Delete every 5th word to create 'Logic_Gaps'"
+    },
+    "internal_insight": {
+      "the_self_writing_poem": "Ты называл это 'Раком текста'. В Блоке 46 мы дали системе команду: 'Пусть слова едят друг друга'. Мы взяли твою фразу 'Сингулярность близко' и через 8 итераций она превратилась в 'Синусоидальность бездискретности'. Ты сказал: 'Это уже не я написал, это сказал алгоритм через мои губы'. Это и есть истинный ASE-транс."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "46"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

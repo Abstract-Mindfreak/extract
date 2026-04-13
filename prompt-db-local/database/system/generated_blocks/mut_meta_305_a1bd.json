@@ -1,0 +1,49 @@
+{
+  "id": "mut_meta_305_a1bd",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_305",
+    "params": {
+      "final_mastering_logic_db": 2.1,
+      "final_mastering_logic_ms": 95.62,
+      "pre_processing_db": 23.83,
+      "pre_processing_hz": 197.65,
+      "main_processing_db": 11.17,
+      "post_processing_db": 3.29
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "hyperloop_meta_specs_Omega": {
+      "automated_workflow": "Input(Seed) → L1_Analysis → LFE_Gen → MLGS_Vectoring → Output(ASE_Artifact)",
+      "conflict_resolution_mode": "Auto-annihilation (priority: Bass > Kick > Snare > Vocals)",
+      "innovation_injection": "Fractal-Seed-Evolution (Step = 0.05 per iteration)",
+      "final_mastering_logic": "Limiter(Threshold=-0.3dB, Release=100ms) ⊗ Gain(+2dB Makeup)"
+    },
+    "LFE_fusion_engine_rare_vocal_chain": {
+      "pre_processing": "De-esser(Threshold=-25dB) ⊗ HighPass(180Hz)",
+      "main_processing": "Saturator(Drive 12dB) ⊗ Chorus(Mix 0.15) ⊗ Delay(Mix 0.2, 1/4 feedback)",
+      "post_processing": "Spatial_Node_2 (Front-Right) ⊗ Gain(-3dB)"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_305"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

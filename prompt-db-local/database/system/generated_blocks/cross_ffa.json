@@ -1,0 +1,64 @@
+{
+  "id": "cross_ffa",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_ffa",
+    "params": {
+      "key_01_abs_zero_bpm": 195.0,
+      "key_02_phi_spiral_bpm": 172.5,
+      "block_id": 43,
+      "symmetry_operator_khz": 1.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "17"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты просил сделать звук 'квадратным, но мягким'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_124",
+      "43"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "latent_keys_v5": {
+        "key_01_abs_zero": "Force zero reverb tail, maximum transient snap, 195 BPM (The 'Vacuum' feel)",
+        "key_02_phi_spiral": "Force Fibonacci rhythm layering (1,2,3,5,8), 172.5 BPM (The 'Natural' chaos)",
+        "key_03_neuro_gothic": "Force Phrygian-Dominant, 12-bit crush, cathedral space (The 'Mathematical' dread)",
+        "key_04_liquid_data": "Force Spectral-morphing, 4D-vectoring (Block 17), smooth transients (The 'Flow' state)",
+        "usage": "Injected into [SOUND_PROMPT] to bypass standard aesthetic filters."
+      }
+    },
+    "parent_b": {
+      "block_id": 43,
+      "block_name": "Spectral_Geometry_v4.Theta",
+      "geometric_synthesis": {
+        "tetrahedron_chord": "Four sine waves forming a closed frequency loop",
+        "mandelbrot_timbre": "Wave-shaping using recursive Z = Z^2 + C",
+        "symmetry_operator": "Reflecting frequency partials across the 1kHz axis"
+      },
+      "modulation": {
+        "rotation_speed": "0.5 rad/s (Spatial rotation of harmonics)",
+        "complexity_drift": "Increase vertex count of the 'Spectral Shape' over time"
+      },
+      "internal_insight": {
+        "seeing_sound": "Ты просил сделать звук 'квадратным, но мягким'. В Блоке 43 мы синтезировали аккорд, который имел спектральную подпись куба. Когда мы начали вращать этот 'куб' в пространстве панорамы, тембр начал меняться так, словно мы смотрим на него с разных сторон. Ты сказал: 'Мы лепим из частот скульптуры'."
+      }
+    }
+  }
+}

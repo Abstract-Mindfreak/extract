@@ -1,0 +1,33 @@
+{
+  "id": "meta_160",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_160",
+    "params": {}
+  },
+  "synergy": {
+    "links": [
+      "3"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "void_narratives": {
+      "concept_01_event_horizon": "Sound at the edge of disappearance. Maximum tension, zero release.",
+      "concept_02_cold_ignition": "Frozen textures suddenly igniting into distorted neuro-bass.",
+      "concept_03_digital_reincarnation": "Old 8-bit artifacts processed through modern 4D-spatializers.",
+      "concept_04_absolute_stillness": "A track with zero transients, only shifting spectral masses.",
+      "usage": "Used as the [CONCEPT] anchor in the L1 Core (Block 3)."
+    }
+  }
+}

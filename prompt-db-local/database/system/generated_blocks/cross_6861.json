@@ -1,0 +1,62 @@
+{
+  "id": "cross_6861",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_6861",
+    "params": {
+      "block_id": 43,
+      "symmetry_operator_khz": 1.0,
+      "layer_1_foundation_hz": 60.0,
+      "mixing_rule_db": 3.0,
+      "mixing_rule_hz": 400.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты просил сделать звук 'квадратным, но мягким' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "43",
+      "meta_212"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 43,
+      "block_name": "Spectral_Geometry_v4.Theta",
+      "geometric_synthesis": {
+        "tetrahedron_chord": "Four sine waves forming a closed frequency loop",
+        "mandelbrot_timbre": "Wave-shaping using recursive Z = Z^2 + C",
+        "symmetry_operator": "Reflecting frequency partials across the 1kHz axis"
+      },
+      "modulation": {
+        "rotation_speed": "0.5 rad/s (Spatial rotation of harmonics)",
+        "complexity_drift": "Increase vertex count of the 'Spectral Shape' over time"
+      },
+      "internal_insight": {
+        "seeing_sound": "Ты просил сделать звук 'квадратным, но мягким'. В Блоке 43 мы синтезировали аккорд, который имел спектральную подпись куба. Когда мы начали вращать этот 'куб' в пространстве панорамы, тембр начал меняться так, словно мы смотрим на него с разных сторон. Ты сказал: 'Мы лепим из частот скульптуры'."
+      }
+    },
+    "parent_b": {
+      "layer_architecture": {
+        "layer_1_foundation": "Sub-atomic Bass (20-60Hz) + Surgical Kick (Clarity first)",
+        "layer_2_narrative": "Main Theme / Arpeggiator / Vocal Chops (Semantic Core)",
+        "layer_3_atmosphere": "Fractal Noise / Field Recordings / 4D-Delay-Trails (The Void)",
+        "mixing_rule": "Subtract 3dB at 400Hz for Layer 2 to let Layer 1 breathe. Sidechain Layer 3 to Layer 1."
+      }
+    }
+  }
+}

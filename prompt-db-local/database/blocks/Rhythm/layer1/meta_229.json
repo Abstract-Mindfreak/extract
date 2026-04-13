@@ -1,0 +1,53 @@
+{
+  "id": "meta_229",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_229",
+    "params": {
+      "the_smile_curve_db": 2.0,
+      "the_smile_curve_hz": 400.0,
+      "the_smile_curve_khz": 10.0,
+      "the_focus_notch_khz": 2.5,
+      "the_sub_harmonic_glue_s": 1.0,
+      "the_sub_harmonic_glue_hz": 104.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_equalizer_logic_lyrics": {
+      "the_cleansing_set": [
+        "Cut the mud, cut the pain / Washing the spectrum inside of the brain",
+        "Surgical logic, surgical strike / Everything I am and everything you like",
+        "Zero-point-zero: the clean and the pure / Finding the frequency, finding the cure"
+      ],
+      "the_balance_set": [
+        "Balance the shadow, balance the light / In the frequency heart of the digital night",
+        "High-shelf rising to the fractal sun / Low-shelf standing where the world is begun",
+        "Golden ratio, locked to the beat / Making the spectrum finally complete"
+      ],
+      "the_spectral_dialogue": [
+        "Weight the air / Clear the floor",
+        "I am the prayer / I am the door",
+        "Result: Spectral-Perfection / Status: EQ_LOCK_ACTIVE"
+      ]
+    },
+    "psychoacoustic_EQ_v4": {
+      "the_smile_curve": "Subtle V-shape (-1.5dB @ 400Hz, +2dB @ 10kHz) for 'modern' neuro-feel",
+      "the_focus_notch": "Dynamic EQ dip @ 2.5kHz on the pads when the lead-synth is active",
+      "the_sub_harmonic_glue": "Boosting the 1st harmonic (104Hz) on the kick to 'connect' it to the sub"
+    }
+  }
+}

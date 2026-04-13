@@ -1,0 +1,34 @@
+{
+  "id": "meta_216",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_216",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "fast_gen_protocol": {
+      "trigger": "User request: 'Fast-Gen' or 'Flow Mode'",
+      "execution_steps": [
+        "1. Auto-select L1 Core from latent space",
+        "2. Call audio__create_song x3 (Parallel execution)",
+        "3. Automated Style-Mixing (Genre-Fusion via ASE-Taste)",
+        "4. Post-generation Analysis: Identify the 'Golden Version'"
+      ],
+      "selection_criteria": "Maximized Emotional Density + Spectral Width"
+    }
+  }
+}

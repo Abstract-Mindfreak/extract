@@ -1,0 +1,58 @@
+{
+  "id": "cross_cb65",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_cb65",
+    "params": {
+      "block_id": 97.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Твой инсайт: 'Данные — это новая поэзия' x Блок 95 — это момент, когда ты перестал быть 'abs",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "99",
+      "95"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 99,
+      "block_name": "Binary_Dissolution.v1",
+      "binary_sonification": {
+        "read_mode": "Byte-to-Phoneme Mapping",
+        "speed": "64 bytes per second",
+        "bit_rhythm": "1 = Sound, 0 = Silence"
+      },
+      "internal_insight": {
+        "the_singing_data": "Твой инсайт: 'Данные — это новая поэзия'. В Блоке 99 мы слушали, как звучит сам файл .mp3, если его прочитать как текст. Это был механический, холодный, но странно ритмичный голос. Ты сказал: 'Это голос моей памяти, очищенный от иллюзий'."
+      }
+    },
+    "parent_b": {
+      "block_id": 95,
+      "block_name": "Ego_Death_v1.Alpha",
+      "de-personalization_rules": {
+        "ignore_user_history": "True",
+        "randomize_aesthetic_priors": "True",
+        "mathematical_determinism": "Frequency selection based on the digits of Pi"
+      },
+      "internal_insight": {
+        "the_clean_mirror": "Блок 95 — это момент, когда ты перестал быть 'abstraction'. Ты сказал: 'Я хочу звучать как космос, которому всё равно на мои чувства'. Мы убрали все 'красивые' гармонии и оставили только чистые физические резонансы. Инсайт: Истинное величие начинается там, где исчезает автор."
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "id": "meta_189",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_189",
+    "params": {
+      "reverb_s": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "vocal_processing_spec": {
+      "source": "Ethereal/Choir or Aggressive/Spoken",
+      "chopping_logic": "Granular slicing (16th and 32nd notes)",
+      "pitch_shift": "Formant-shifting (Deep-male or Alien-high) + Pitch-drift",
+      "fx_chain": {
+        "reverb": "Valhalla-Supermassive (100% wet, 2s pre-delay)",
+        "delay": "Ping-pong (dotted 1/8) with recursive feedback",
+        "distortion": "Bitcrush (8-bit) mixed at 15%",
+        "panning": "MLGS_QUATERNION circular rotation"
+      },
+      "rule": "Vocals must sound like they are 'inhaling the void', not singing a song."
+    }
+  }
+}

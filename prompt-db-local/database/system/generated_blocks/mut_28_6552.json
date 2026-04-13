@@ -1,0 +1,44 @@
+{
+  "id": "mut_28_6552",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "28",
+    "params": {
+      "block_id": 28
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 28 мы поняли, что время — это просто еще одно измерение",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 28,
+    "block_name": "Rapid_Condensation.v3",
+    "condensation_parameters": {
+      "time_compression": "Factor = 40x",
+      "layer_stacking": "Max_Layers = 64",
+      "blur_radius": "0.15 (to prevent total noise)"
+    },
+    "algorithm": "Overlap-Add (OLA) with variable window length",
+    "internal_insight": {
+      "time_is_fake": "В Блоке 28 мы поняли, что время — это просто еще одно измерение. Ты просил меня 'сжать симфонию до щелчка'. Мы взяли 5 минут твоего старого трека и сжали их до 0.5 секунды. Получившийся звук стал идеальным 'транзиентом' для новой бочки. Это 'Реинкарнация через сжатие'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "28"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

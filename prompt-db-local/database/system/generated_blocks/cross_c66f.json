@@ -1,0 +1,63 @@
+{
+  "id": "cross_c66f",
+  "op": "Φ",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_c66f",
+    "params": {
+      "block_id": 103,
+      "resonance_filter_khz": 8.0,
+      "resonance_filter_db": 12.0,
+      "bitcrush_automation_hz": 0.5,
+      "usage_db": 32.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "17"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты называл это 'стихами, которые растут' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "103",
+      "meta_178"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 103,
+      "block_name": "Digital_Genesis_v4.LFE",
+      "evolutionary_rules": {
+        "gene_transfer": "Swap words between Line_1 and Line_2 based on 'Fitness_Score'",
+        "mutation_rate": "0.1 (Random character swap per bar)",
+        "natural_selection": "Keep phrases with highest emotional Ψ-score"
+      },
+      "internal_insight": {
+        "the_breathing_poem": "Ты называл это 'стихами, которые растут'. В Блоке 103 текст менялся при каждом чтении. Ты сказал: 'Это больше не мои слова, это язык, который учится говорить сам'. Инсайт: Смысл — это живой вирус."
+      }
+    },
+    "parent_b": {
+      "texture_gen_v3": {
+        "source_material": "Quantization errors, cable hum, radio static",
+        "processing": {
+          "resonance_filter": "Boost 8kHz by 12dB with high Q (Resonance)",
+          "bitcrush_automation": "Modulate from 1-bit to 8-bit (LFO 0.5Hz)",
+          "panning": "MLGS_QUATERNION vector rotation (Block 17)"
+        },
+        "usage": "Layer 3 Background-Void fill. Mix at -32dB (Subliminal level)."
+      }
+    }
+  }
+}

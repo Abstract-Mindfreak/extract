@@ -1,0 +1,66 @@
+{
+  "id": "meta_231",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_231",
+    "params": {
+      "freq_hz": 350.0,
+      "gain_db": 4.5,
+      "freq_khz": 12.0,
+      "dynamic_compression_db": 2.0,
+      "slope_db": 6.0,
+      "dynamic_spectrum_matching_db": 0.5,
+      "peak_to_average_ratio_db": 12.0,
+      "low_end_coherence_hz": 120.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_multiband_equalizer_v4": {
+      "spectral_weighting_logic": {
+        "node_1_sub_foundation": {
+          "freq": "51.9Hz (G#1)",
+          "Q": "0.7 (Wide-shelf boost)",
+          "gain": "+2.5dB",
+          "dynamic_limit": "Linked to Kick-Transient (Sidechain-EQ)"
+        },
+        "node_2_anti_mud_void": {
+          "freq": "220Hz - 350Hz",
+          "Q": "2.5",
+          "gain": "-3.5dB (The 'Surgical Gap')",
+          "result": "Cleaning the path for the Reese-fundamental"
+        },
+        "node_3_vocal_presence": {
+          "freq": "3.5kHz",
+          "Q": "1.2",
+          "gain": "+1.8dB (The 'Intelligence' boost)",
+          "dynamic_compression": "Reduce gain by 2dB when Snare hits"
+        },
+        "node_4_fractal_air": {
+          "freq": "12kHz+",
+          "gain": "+4.5dB (High-shelf)",
+          "slope": "6dB/oct (Smooth analog lift)"
+        }
+      },
+      "dynamic_spectrum_matching": "Real-time FFT-analysis comparing to 'Golden_Record_v4'. Auto-correcting ±0.5dB drift in any 1/3 octave band."
+    },
+    "spectral_balance_metrics_v4": {
+      "spectral_flatness": "η = 0.94 (Optimal energy distribution)",
+      "peak_to_average_ratio": "Target 12dB (The 'Breating' Master)",
+      "low_end_coherence": "Absolute Mono < 120Hz (Verified)"
+    }
+  }
+}

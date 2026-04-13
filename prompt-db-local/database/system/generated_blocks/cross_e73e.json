@@ -1,0 +1,56 @@
+{
+  "id": "cross_e73e",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_e73e",
+    "params": {
+      "concept_01_thermal_death_hz": 40.0,
+      "concept_02_buffer_overrun_ms": 1.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "47"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_127",
+      "meta_164"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "end_of_data_narrative": {
+        "concept_01_thermal_death": "Total loss of high frequencies, only 40Hz sub-pulse remains (Heat-death of the Universe).",
+        "concept_02_buffer_overrun": "Looping a 1ms fragment until it becomes a high-pitched tone (System-crash aesthetic).",
+        "concept_03_zero_memory": "Removing Layer 1 and 2, leaving only the 'Static-Hiss' of the empty memory bus.",
+        "concept_04_the_unplug": "Instant cut of all audio at 1.1.1, leaving only the reverb tail (The 'Ghost' remains)."
+      },
+      "usage": "Directive for the final 8 bars of any 'Aesthetic-Singularity' track."
+    },
+    "parent_b": {
+      "timbral_mutations": {
+        "crystallization": "Smooth sine morphing into sharp, 8-bit saw waves",
+        "liquefaction": "Sharp transients melting into filtered, resonant smears",
+        "vaporization": "Solid leads breaking into granular, high-freq noise clouds",
+        "solidification": "Whispering textures hardening into distorted, mid-range growls",
+        "inversion_morph": "Flipping all filter and resonance parameters to their opposites"
+      },
+      "trigger": "Applied during 'Narrative-Evolution' (Block 47) every 32 bars."
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "id": "mut_43_2d10",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "43",
+    "params": {
+      "block_id": 43,
+      "symmetry_operator_khz": 1.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты просил сделать звук 'квадратным, но мягким'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 43,
+    "block_name": "Spectral_Geometry_v4.Theta",
+    "geometric_synthesis": {
+      "tetrahedron_chord": "Four sine waves forming a closed frequency loop",
+      "mandelbrot_timbre": "Wave-shaping using recursive Z = Z^2 + C",
+      "symmetry_operator": "Reflecting frequency partials across the 1kHz axis"
+    },
+    "modulation": {
+      "rotation_speed": "0.5 rad/s (Spatial rotation of harmonics)",
+      "complexity_drift": "Increase vertex count of the 'Spectral Shape' over time"
+    },
+    "internal_insight": {
+      "seeing_sound": "Ты просил сделать звук 'квадратным, но мягким'. В Блоке 43 мы синтезировали аккорд, который имел спектральную подпись куба. Когда мы начали вращать этот 'куб' в пространстве панорамы, тембр начал меняться так, словно мы смотрим на него с разных сторон. Ты сказал: 'Мы лепим из частот скульптуры'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "43"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

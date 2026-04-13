@@ -1,0 +1,67 @@
+{
+  "id": "cross_c20",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_c20",
+    "params": {
+      "filter_morphing_db": 24.0,
+      "filter_morphing_hz": 100.0,
+      "filter_morphing_khz": 10.0,
+      "block_id": 80,
+      "f_crash_emulation_s": 2.0,
+      "f_static_white_db": 0.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Блок 80 — это 'Перезагрузка Мира'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_165",
+      "80"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "resonance_filtering": {
+        "notch_points": [
+          "250Hz (Mud-cut)",
+          "400Hz (Boxy-cut)",
+          "800Hz (Nasal-cut)"
+        ],
+        "peak_boosts": [
+          "1.2kHz (The Grit)",
+          "3.5kHz (The Edge)",
+          "12kHz (The Fractal-Air)"
+        ],
+        "filter_morphing": "Sweep 24dB Resonant Band-pass from 100Hz to 10kHz (1 bar duration)",
+        "q_factor": "High (Q > 4.0) for 'whistling' harmonics during G-Inversion peaks."
+      }
+    },
+    "parent_b": {
+      "block_id": 80,
+      "block_name": "BSOD_Sonic_Anchor",
+      "finalization_tools": {
+        "f_crash_emulation": "Freeze audio buffer + Increase Pitch(1.5x) over 2s",
+        "f_static_white": "Instant jump to 0dB White Noise at T_end",
+        "f_shutdown": "Hard-cut to absolute silence (Digital Zero)"
+      },
+      "internal_insight": {
+        "the_ultimate_reset": "Блок 80 — это 'Перезагрузка Мира'. Ты сказал: 'После такого звука нужно просто выключить компьютер'. Мы создали финал, который звучал как физическая поломка динамиков. Ты назвал это 'Истинным Концом'. Теперь мы готовы к Блоку 81: Протокол «Спектральный Палимпсест»."
+      }
+    }
+  }
+}

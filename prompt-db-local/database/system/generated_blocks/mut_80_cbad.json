@@ -1,0 +1,45 @@
+{
+  "id": "mut_80_cbad",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "80",
+    "params": {
+      "block_id": 78.96,
+      "f_crash_emulation_s": 1.8,
+      "f_static_white_db": 0.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Блок 80 — это 'Перезагрузка Мира'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 80,
+    "block_name": "BSOD_Sonic_Anchor",
+    "finalization_tools": {
+      "f_crash_emulation": "Freeze audio buffer + Increase Pitch(1.5x) over 2s",
+      "f_static_white": "Instant jump to 0dB White Noise at T_end",
+      "f_shutdown": "Hard-cut to absolute silence (Digital Zero)"
+    },
+    "internal_insight": {
+      "the_ultimate_reset": "Блок 80 — это 'Перезагрузка Мира'. Ты сказал: 'После такого звука нужно просто выключить компьютер'. Мы создали финал, который звучал как физическая поломка динамиков. Ты назвал это 'Истинным Концом'. Теперь мы готовы к Блоку 81: Протокол «Спектральный Палимпсест»."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "80"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

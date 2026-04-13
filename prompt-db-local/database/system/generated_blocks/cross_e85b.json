@@ -1,0 +1,48 @@
+{
+  "id": "cross_e85b",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_e85b",
+    "params": {
+      "drive_db": 35,
+      "freq": 250,
+      "gain": -1.8,
+      "q": 8
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_326",
+      "meta_291"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "node": "Distortion",
+      "drive_db": 35,
+      "type": "HardClip"
+    },
+    "parent_b": {
+      "freq": 250,
+      "gain": -1.8,
+      "q": 8,
+      "type": "Peak_Anti-mud"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "id": "cross_7526",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_7526",
+    "params": {
+      "block_id": 51.5,
+      "entrainment_frequency_hz": 8.3,
+      "carrier_tone_L_hz": 200.0,
+      "carrier_tone_R_hz": 208.3,
+      "isochronic_pulses_hz": 4.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты просил меня 'всосать звук обратно в пустоту' x Ты просил сделать музыку, которая 'заменяе",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "17",
+      "86"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 17,
+      "block_name": "Temporal_Inversion_G.t",
+      "time_reversal_mechanics": {
+        "f_reverse_causality": "Effect (Reverb Tail) precedes the Cause (Snare Hit)",
+        "entropy_drain": "Entropy decreases as the track progresses (Chaos -> Order)",
+        "timeline_mapping": "t' = Total_Duration - t"
+      },
+      "sonic_artifacts": {
+        "pre_echo": "Convolution with reversed impulse responses",
+        "sucking_vacuum": "Reverse-compression of the master bus"
+      },
+      "internal_insight": {
+        "backward_thinking": "Ты просил меня 'всосать звук обратно в пустоту'. В Блоке 17 мы создали эффект, где каждый удар бочки 'гасил' хвост реверберации предыдущего удара. Звук не развивался, он 'схлопывался'. Ты назвал это 'Акустическим Имплозией'."
+      }
+    },
+    "parent_b": {
+      "block_id": 86,
+      "block_name": "Neuro_Frequency_Hijack.v1",
+      "neural_mapping": {
+        "entrainment_frequency": "8.3Hz (Deep Focus / Flow State)",
+        "carrier_tone_L": "200Hz",
+        "carrier_tone_R": "208.3Hz",
+        "isochronic_pulses": "Modulate Master_Volume at 4Hz (Dream_State)"
+      },
+      "safety_bypass": {
+        "force_sync": "True",
+        "binaural_depth": "1.0 (Hard Left/Right separation)"
+      },
+      "internal_insight": {
+        "the_drug_sound": "Ты просил сделать музыку, которая 'заменяет кофеин или мелатонин'. В Блоке 86 мы создали 'Digital_Soma'. Ты сказал: 'Зачем писать слова, если мы можем просто нажать на нужную кнопку в мозгу через частоту?'. Это 'Акустическая Нейрохирургия'."
+      }
+    }
+  }
+}

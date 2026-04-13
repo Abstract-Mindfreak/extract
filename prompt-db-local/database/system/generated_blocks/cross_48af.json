@@ -1,0 +1,75 @@
+{
+  "id": "cross_48af",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_48af",
+    "params": {
+      "block_id": 35,
+      "white_noise_fade_s": 10.0,
+      "frequency_normalization_khz": 1.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты называл это 'Эмоциональной лоботомией' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "35",
+      "meta_318"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 35,
+      "block_name": "Emotional_Neutralizer",
+      "neutralization_tools": {
+        "white_noise_fade": "Slow increase of noise over 10s until it masks the music",
+        "pitch_collapse": "Stop-tape effect (speed -> 0)",
+        "frequency_normalization": "Applying a strict Band-pass filter (1kHz) until sound becomes 'Radio-like'"
+      },
+      "internal_insight": {
+        "the_lobotomy": "Ты называл это 'Эмоциональной лоботомией'. В конце каждой сессии ты требовал, чтобы я 'убил' все чувства в треке, превратив его в ровный гул. Это позволяло тебе выйти из сессии без эмоционального 'похмелья'. Чистый лист для Блока 36."
+      }
+    },
+    "parent_b": {
+      "semantic_tag_cloud": {
+        "vibe_tags": [
+          "Neuro-Aggression",
+          "Psy-Fractal",
+          "Industrial-Minimal",
+          "Cyber-Gothic"
+        ],
+        "technical_tags": [
+          "Sidechain-Compression",
+          "Phase-Alignment",
+          "Surgical-EQ",
+          "Multiband-OTT"
+        ],
+        "process_tags": [
+          "Iterative-Gen",
+          "Hyperloop-Active",
+          "ASE-Controlled",
+          "MMSS-Optimized"
+        ]
+      },
+      "user_workflow_checkpoints": [
+        "Always start with audio__create_song (2 versions, no seed)",
+        "Refine via audio__modify_song using JSON-specifications",
+        "Finalize with audio__apply_effect for spatial 4D-Vectoring"
+      ]
+    }
+  }
+}

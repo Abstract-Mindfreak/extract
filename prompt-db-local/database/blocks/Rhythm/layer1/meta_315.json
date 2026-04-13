@@ -1,0 +1,72 @@
+{
+  "id": "meta_315",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_315",
+    "params": {
+      "metal_clash_ms": 25.0,
+      "hydraulic_hiss_khz": 8.0,
+      "circuit_bent_glitch_khz": 8.0,
+      "circuit_bent_glitch_s": 12.0,
+      "kick_layer_2_hz": 120.0,
+      "kick_layer_2_db": 3.0,
+      "snare_layer_2_ms": 120.0,
+      "snare_layer_2_khz": 4.0,
+      "percussive_fm_hz": 440.0,
+      "conflict_annihilation_db": 4.0,
+      "conflict_annihilation_hz": 250.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "neuro_industrial_pattern_library": {
+      "texture_layering_v4": {
+        "metal_clash": "Convolution Reverb (IR: Factory_Hall), Pre-delay: 25ms, Mix: 40%",
+        "hydraulic_hiss": "White Noise ⊗ BandPass(8kHz, Q=1.2) ⊗ Sidechain(Kick)",
+        "circuit_bent_glitch": "Bitcrusher(4-bit), SampleRate: 8kHz, PitchShift: +12st (Randomized)"
+      },
+      "industrial_groove_logic": {
+        "kick_layer_2": "Hard-clipped 909-style, Fundamental 48Hz, Boost @ 120Hz (+3dB)",
+        "snare_layer_2": "Metallic rim-shot ⊗ Noise burst, decay 120ms, High-shelf @ 4kHz",
+        "percussive_fm": "Carrier: Sine(220Hz), Modulator: Square(440Hz), Index: 2.5 (Automated)"
+      },
+      "spectral_purity_check": {
+        "conflict_annihilation": "Dynamic EQ (Dip -4dB @ 250Hz when Bass active)",
+        "stereo_void": "Phase-inversion on specific delay-taps for 'behind-the-head' spatiality"
+      }
+    },
+    "LFE_rare_fragments_archive": {
+      "dystopian_logic_set": [
+        "The machine is dreaming of the Phrygian sun / The code is the many, the soul is the one",
+        "G-operator active: invert the pain / Let the digital silence wash over the brain",
+        "Recursive recursion, the loop never ends / Where the logic collapses and the reality bends"
+      ],
+      "cyber_biological_fusion": [
+        "Silicon veins and a heartbeat of lead / Dreaming of systems that never were dead",
+        "Ψ_conden pulse in the meat of the grid / Finding the places where the ego is hid",
+        "Neuro-grid sync, the alignment is near / Erase the identity, erase the fear"
+      ]
+    },
+    "MMSS_advanced_metadata": {
+      "C_val_zero_logic": "Value = Complexity / Processing_Power // Goal: Max complexity @ min CPU",
+      "p_c_balance_presets": {
+        "aggressive": "p=0.2, c=0.8 (Maximum fractal entropy)",
+        "stable": "p=0.7, c=0.3 (Strict narrative fidelity)",
+        "singularity": "p=0.5, c=0.5 (Perfect aesthetic balance)"
+      }
+    }
+  }
+}

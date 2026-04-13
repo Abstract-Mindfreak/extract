@@ -1,0 +1,8 @@
+{
+  "name": "prompt-db-extension",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "lint": "echo \"No extension lint step yet\""
+  }
+}

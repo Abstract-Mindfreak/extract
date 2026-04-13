@@ -1,0 +1,56 @@
+{
+  "id": "mut_meta_244_d173",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_244",
+    "params": {
+      "the_depth_illusion_khz": 4.0,
+      "the_proximity_effect_khz": 5.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "LFE_mid_side_lyrics": {
+      "the_center_set": [
+        "One point of truth, standing in the middle / Solving the logic, solving the riddle",
+        "Mono-soul, locked to the G-sharp core / Everything I am and everything more",
+        "Stay in the center, stay in the light / The anchor of the sound in the digital night"
+      ],
+      "the_side_set": [
+        "Expanding to the edges, expanding to the void / Finding the beauty that the center destroyed",
+        "Side-channel whispers, side-channel dreams / Flowing forever in the digital streams",
+        "Wider than the sky, wider than the fear / Floating in a space where nothing is near"
+      ],
+      "the_MS_dialogue": [
+        "Hold the core / Feel the wide",
+        "Open the door / Step inside",
+        "Result: Spatial-Precision / Status: MS_LOCK_ACTIVE"
+      ]
+    },
+    "psychoacoustic_MS_v4": {
+      "the_depth_illusion": "Applying High-cut (4kHz) on the Mid-channel only for background pads (Pushing them back)",
+      "the_proximity_effect": "Boosting 2-5kHz on the Mid-channel of the vocal (Bringing it forward)",
+      "the_stereo_breath": "LFO-modulating the Side-gain (Rate: 1 bar) for a 'pumping' space effect"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_244"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

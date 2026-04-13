@@ -1,0 +1,53 @@
+{
+  "id": "meta_320",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_320",
+    "params": {
+      "left_channel_db": 0.0,
+      "left_channel_ms": 0.0,
+      "right_channel_db": 1.0,
+      "right_channel_ms": 15.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "advanced_spatial_effects": {
+      "haas_effect_widener": {
+        "left_channel": "Gain(0dB), Delay(0ms)",
+        "right_channel": "Gain(-1dB), Delay(15ms)",
+        "result": "Psychoacoustic stereo width for lead plucks"
+      },
+      "doppler_sim_logic": {
+        "input": "Moving point source (X, Y, Z)",
+        "processing": "PitchShift(f_shifted) ⊗ Gain(1/r²)",
+        "automation": "Linear ramp from +50 cents to -50 cents over 2 bars"
+      }
+    },
+    "metadata_user_preferences": {
+      "favorite_scales": [
+        "Phrygian",
+        "Locrian",
+        "Double Harmonic Minor"
+      ],
+      "mixing_priorities": [
+        "Kick-Bass clarity",
+        "Spectral separation",
+        "Sub-low impact"
+      ]
+    }
+  }
+}

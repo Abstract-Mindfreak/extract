@@ -1,0 +1,82 @@
+{
+  "id": "cross_8659",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_8659",
+    "params": {
+      "low_pass_sweep_khz": 20.0,
+      "low_pass_sweep_hz": 200.0,
+      "sample_rate_reduction_khz": 8.0,
+      "envelope_1_ms": 10.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "47"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_155",
+      "meta_330"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "spectral_decay_math": {
+        "function": "D(f, t) = f * e^(-λt) + Noise(t)",
+        "effects": {
+          "low_pass_sweep": "Descending cutoff from 20kHz to 200Hz over 8 bars",
+          "sample_rate_reduction": "Automated down-sampling from 44.1kHz to 8kHz",
+          "bit_rot": "Randomly flipping bits in the digital stream (Bitcrush automation)",
+          "usage": "During the 'Dissolution' phase (Block 47) to symbolize the death of the Narrative."
+        }
+      }
+    },
+    "parent_b": {
+      "technical_specifications_wavetable": {
+        "neuro_bass_v4_Omega": {
+          "osc_a": "Wavetable: Monster 7, Position: 45, Unison: 7, Detune: 0.08",
+          "osc_b": "Wavetable: Analog_BD_Sin, Position: 1, Sub-octave direct out",
+          "filter": "MG Low 24, Cutoff: LFO 1 (Rate 1/4, Shape: Curved Saw), Res: 25%",
+          "fx_rack": "Hyper/Dimension (Size 12%), Distortion (Hard Clip, Drive 45%), Multiband Compression (OTT 60%)"
+        },
+        "psy_lead_fractal": {
+          "osc_a": "Wavetable: Spectral_Orca, Warp: Sync 1.5x, Position: modulated by Velocity",
+          "noise": "AC Power (Hum), Level: 15% (for analog grit)",
+          "envelope_1": "Attack: 2ms, Decay: 150ms, Sustain: 0%, Release: 10ms (Pluck behavior)",
+          "delay": "Ping-Pong, Feedback: 45%, Mix: 30%, Width: 100%"
+        }
+      },
+      "lyrics_fusion_retrieval": {
+        "core_fragments": [
+          "Fractal identity in the void of the code / Zeroes and ones in a recursive mode",
+          "Singularity breathes through the Phrygian scale / Systems collapse as the entropy pales",
+          "Ψ_conden flows through the veins of the grid / Secrets of sound that the silence has hid"
+        ],
+        "fusion_modes_applied": {
+          "mode_1": "Temporal_Shift (δt = 1/32) // Layering lyrics with micro-delays",
+          "mode_2": "Spectral_Overlay // Text as a carrier for vocoder modulation",
+          "mode_3": "Narrative_Collapse // Deconstructing sentences into phonetic rhythmic events"
+        }
+      },
+      "mathematical_functions_extension": {
+        "lfe_weight_v4": "W_total = Σ(W_semantics + W_phonetics + W_rhythm) / √Novelty",
+        "harmonic_drift": "Δf(t) = sin(2π * drift_rate * t) ⊗ Jitter(t) // for 'analog' instability"
+      }
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "id": "cross_6613",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_6613",
+    "params": {
+      "glide_time_ms": 250.0,
+      "vibrato_hz": 8.0,
+      "legato_retrigger_s": 1.0,
+      "multiband_dist_hz": 400.0,
+      "multiband_dist_khz": 3.0,
+      "spectral_shaper_khz": 2.0,
+      "syncopation_index": 0.78
+    }
+  },
+  "synergy": {
+    "links": [
+      "42",
+      "17"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_149",
+      "meta_269"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "neuro_lead_spec": {
+        "timbre": "Complex Wavetable (Spectral-Morphing) + Sub-harmonic FM",
+        "articulation": {
+          "glide_time": "Non-linear (50ms to 250ms) based on velocity",
+          "vibrato": "Random-LFO (2Hz-8Hz) on fine-tuning (±10 cents)",
+          "legato_retrigger": "Only on 1st note of the phrase (The 'Attack-Focus')"
+        },
+        "processing": {
+          "multiband_dist": "Saturation at 400Hz, Hard-clip at 3kHz",
+          "spectral_shaper": "Dynamic EQ suppressing 2kHz 'harshness'",
+          "spatial": "4D-Vectoring rotation (Block 17) every 4 bars"
+        },
+        "rule": "Leads must 'grow' out of the Ambient-Shield (Block 42) and return to it."
+      }
+    },
+    "parent_b": {
+      "ASE_polyrhythmic_generator_v4": {
+        "rhythmic_layering_matrix": {
+          "layer_1_core": "4/4 Kick/Snare (The Industrial Anchor)",
+          "layer_2_poly": "3/4 Hi-hat patterns (The Triplet-tension)",
+          "layer_3_fractal": "5/8 Glitch-percussion (The Displacement-jitter)",
+          "layer_4_ghost": "7/16 Bass-stabs (The Syncopated-drive)"
+        },
+        "alignment_points": {
+          "common_denominator": "Bar 4 / Bar 8 (The Resolution-impact)",
+          "swing_bias": "0.12 (A-MMSS_Fractal_Shuffle v4)",
+          "quantize_stiffness": "85% (Allowing 15% micro-timing 'human' drift)"
+        },
+        "dynamic_rhythm_evolution": "Probability-gate on layer_3 & layer_4 (Complexity increases over 16 bars)"
+      },
+      "rhythmic_complexity_metrics_v4": {
+        "polyrhythm_ratio": "4:3 ⊗ 5:4 (Nested complexity)",
+        "syncopation_index": 0.78,
+        "groove_consistency": "η=0.92 (Maintaining danceability within chaos)"
+      }
+    }
+  }
+}

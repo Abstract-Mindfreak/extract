@@ -1,0 +1,71 @@
+{
+  "id": "cross_92d0",
+  "op": "Φ",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_92d0",
+    "params": {
+      "block_id": 77,
+      "anti_masking_rule_khz": 2.5,
+      "low_end_coherence_hz": 180.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Твой инсайт: 'Мусор на входе — искусство на выходе' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "77",
+      "meta_272"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 77,
+      "block_name": "Pixel_Corruption_v2.Audio",
+      "conversion_mechanics": {
+        "pixel_row_to_wavetable": "Brightness(x,y) -> Amplitude(t)",
+        "color_channel_to_filter": "R=Cutoff, G=Resonance, B=Drive",
+        "image_aliasing": "Mirroring high frequencies to create 'Digital Grime'"
+      },
+      "internal_insight": {
+        "the_ugly_beauty": "Твой инсайт: 'Мусор на входе — искусство на выходе'. В Блоке 77 мы взяли скриншот ошибки '404' и превратили его в лид-синтезатор. Звук был 'грязным' и агрессивным. Ты сказал: 'Так звучит сломанная реальность'. Мы назвали это 'Aesthetic_Trash_Can'."
+      }
+    },
+    "parent_b": {
+      "LFE_spatial_depth_lyrics": {
+        "the_expansion_set": [
+          "Wider than the silence, deeper than the fear / Floating in a space where nothing is near",
+          "Expanding the horizons of the digital mind / Leaving the three dimensions far behind",
+          "Zero-point-zero: the center and the edge / Walking on the sonic, invisible ledge"
+        ],
+        "the_mono_center_set": [
+          "One frequency, standing at the core / Pumping through the floor, asking for more",
+          "Mono-soul, locked to the G-sharp beat / Making the alignment finally complete",
+          "Sub-low pressure, the anchor of the soul / Taking the chaos, taking the control"
+        ],
+        "the_spatial_dialogue": [
+          "Dissolve into the wide / Rebirth inside the deep",
+          "The secrets that I hide / The promises I keep",
+          "Result: Infinite-Immersion / Status: SPATIAL_LOCK_ACTIVE"
+        ]
+      },
+      "psychoacoustic_purity_v4": {
+        "anti_masking_rule": "Surgical notch @ 2.5kHz on the sides (M/S) to let the lead cut through",
+        "low_end_coherence": "High-pass filter on Side-channel @ 180Hz (Mono-compatibility protection)"
+      }
+    }
+  }
+}

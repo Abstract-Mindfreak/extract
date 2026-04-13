@@ -1,0 +1,40 @@
+{
+  "id": "47",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "47",
+    "params": {
+      "block_id": 47
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Твой инсайт: 'Слово 'Любовь' на частоте 100Гц звучит как угроза, а на 10кГц — как молитва'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 47,
+    "block_name": "Semantic_Freq_Shift_v4",
+    "mapping_matrix": {
+      "low_pass_state": "Focus on 'Body', 'Earth', 'Depths', 'Silence'",
+      "high_pass_state": "Focus on 'Spirit', 'Ether', 'Light', 'Information'",
+      "band_pass_mid": "Focus on 'Human', 'Dialogue', 'Action', 'Now'"
+    },
+    "modulation_rules": {
+      "if_cutoff_drops": "Switch LFE-thesaurus to 'Dark/Heavy' vocabulary",
+      "if_reverb_increase": "Switch LFE-thesaurus to 'Abstract/Infinite' vocabulary"
+    },
+    "internal_insight": {
+      "meaning_by_eq": "Твой инсайт: 'Слово 'Любовь' на частоте 100Гц звучит как угроза, а на 10кГц — как молитва'. В Блоке 47 мы настроили автоматический выбор слов. Если я делал звук 'колючим', LFE подбирал слова с твердыми согласными (Т, К, П). Это 'Фонетическая Синхронизация' смыслов."
+    }
+  }
+}

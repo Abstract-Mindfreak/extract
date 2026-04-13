@@ -1,0 +1,53 @@
+{
+  "id": "meta_331",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_331",
+    "params": {
+      "low_freq_hz": 120.0,
+      "recursive_logic_s": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "MLGS_QUATERNION_GEOMETRIC_UNITY_v3.0": {
+      "core_logic": "Sound positioning via Quaternions q = a + bi + cj + dk",
+      "spatial_mapping": {
+        "a": "Intensity/Pressure (Scalar component)",
+        "i_j_k": "3D Cartesian coordinates (Vector components)",
+        "rotation_operator": "L'(p) = qpq⁻¹ (Real-time phase-coherent rotation)",
+        "dopler_shift_integration": "δf = f₀(v/v_s) ⊗ quaternion_rotation_rate"
+      },
+      "pan_spread_rules": {
+        "low_freq": "Coherent mono-core (<120Hz)",
+        "mid_freq": "Expanding spiral (Dynamic L/R/C oscillation)",
+        "high_freq": "Fractal scattering (Randomized spatial seeds per transient)"
+      }
+    },
+    "hyperloop_inversion_mathematics": {
+      "operator_G": "G(f) = ∫ [H(f) ⊗ Ψ(t)] dt // Inverse entropy transformation",
+      "singularity_condition": "lim (t→∞) [Process(t) - Result(t)] = 0",
+      "aesthetic_entropy_H": "H(p,c) = -Σ p_i log(p_i) + c_log(1-p) // Balance of Order (p) vs Chaos (c)",
+      "GS_attraction_formula": "F_gs = G * (m1 * m2) / r² // Semantic gravity between concepts"
+    },
+    "complex_psychedelic_arpeggiators": {
+      "scale": "Phrygian Mode (1-♭2-♭3-4-5-♭6-♭7)",
+      "recursive_logic": "Layer_n+1 = Layer_n ⊗ Shift(2 semitones, 1/32 note delay)",
+      "velocity_randomization": "Gaussian distribution, σ=15, μ=85",
+      "lfo_sync": "Sample & Hold @ 1/16t for Filter Cutoff modulation"
+    }
+  }
+}

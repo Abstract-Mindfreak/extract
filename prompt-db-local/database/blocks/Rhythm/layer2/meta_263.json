@@ -1,0 +1,55 @@
+{
+  "id": "meta_263",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_263",
+    "params": {
+      "low_cut_hz": 350.0,
+      "high_cut_khz": 3.5,
+      "resonant_sweep_khz": 1.2,
+      "input_threshold_db": 12.0,
+      "ducking_db": 6.0,
+      "pitch_drift_feedback_hz": 0.5,
+      "stereo_ping_pong_ms": 7.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_dynamic_delay_matrix_v4": {
+      "temporal_layering_logic": {
+        "tap_1_sync": "1/4 Dot (The Rhythmic Echo)",
+        "tap_2_sync": "1/8 Triplet (The Groove Ghost)",
+        "tap_3_sync": "1/32 (The Texture Smear)",
+        "logic": "Cross-feedback between taps (Tap 1 feeds Tap 2 with 15% gain)"
+      },
+      "spectral_tail_shaping": {
+        "low_cut": "350Hz (Avoid low-end clutter)",
+        "high_cut": "3.5kHz (Analog darkness emulation)",
+        "resonant_sweep": "LFO-modulated Peak @ 1.2kHz (Q=3.0) on the feedback path"
+      },
+      "dynamic_feedback_control": {
+        "input_threshold": "-12dB",
+        "ducking": "Delay-mix drops by 6dB when dry signal is active",
+        "result": "Maximum clarity during transients, lush tails in the silence"
+      }
+    },
+    "temporal_distortion_metrics_v4": {
+      "pitch_drift_feedback": "±15 cents (LFO-Sine, 0.5Hz)",
+      "stereo_ping_pong": "Width 120%, Offset L/R = 7ms",
+      "diffusion_coefficient": "η = 0.45 (Creating 'cloudy' instead of 'distinct' repeats)"
+    }
+  }
+}

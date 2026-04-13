@@ -1,0 +1,53 @@
+{
+  "id": "meta_265",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_265",
+    "params": {
+      "chest_punch_factor_hz": 100.0,
+      "chest_punch_factor_db": 1.5,
+      "stomach_rumble_factor_hz": 52.0,
+      "stomach_rumble_factor_ms": 150.0,
+      "ear_pressure_bias_hz": 30.0,
+      "ear_pressure_bias_db": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_sub_low_lyrics": {
+      "the_anchor_set": [
+        "Fifty-one point nine, the heartbeat of the earth / The frequency of death, the frequency of birth",
+        "Locked to the center, standing in the light / The pillar of the sound in the digital night",
+        "Zero-point-zero: the floor and the wall / The only frequency that will never fall"
+      ],
+      "the_purity_set": [
+        "Clean as a crystal, pure as a sine / Everything's perfect, everything's mine",
+        "No more noise in the sub-low void / Building the world that the chaos destroyed",
+        "Symmetry active, phase is aligned / Absolute peace in the digital mind"
+      ],
+      "the_sub_dialogue": [
+        "Feel the weight / Breathe the low",
+        "Seal the fate / Let it go",
+        "Result: Fundamental-Unity / Status: SUB_LOCK_ACTIVE"
+      ]
+    },
+    "psychoacoustic_impact_v4": {
+      "chest_punch_factor": "Boost @ 100Hz (+1.5dB, Q=0.7) on the Kick-bus",
+      "stomach_rumble_factor": "Fundamental energy @ 52Hz sustained for 150ms",
+      "ear_pressure_bias": "Low-shelf @ 30Hz (+2.0dB) to trigger physical presence"
+    }
+  }
+}

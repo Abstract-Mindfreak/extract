@@ -1,0 +1,48 @@
+{
+  "id": "cross_213e",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_213e",
+    "params": {
+      "freq": 250,
+      "gain": -1.8,
+      "q": 8,
+      "aliasing_to_signal_ratio_khz": 5.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_291",
+      "meta_234"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "freq": 250,
+      "gain": -1.8,
+      "q": 8,
+      "type": "Peak_Anti-mud"
+    },
+    "parent_b": {
+      "aliasing_to_signal_ratio": "Target 0.12 in the 5kHz+ band",
+      "quantization_purity": "η = 0.68 (High-texture density)",
+      "spectral_roughness_index": "1.45 x Original_Timbre"
+    }
+  }
+}

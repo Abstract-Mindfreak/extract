@@ -1,0 +1,41 @@
+{
+  "id": "34",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "shift",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "34",
+    "params": {
+      "block_id": 34,
+      "depth": 3
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты просил меня 'синтезировать запах озона после дождя'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 34,
+    "block_name": "Fractal_Emotion_Mapping",
+    "mapping_logic": {
+      "nostalgia_formula": "Fractal_v5 (Recursive memory) ⊗ Bit-Crush (Digital erosion)",
+      "uncanny_valley_tuning": "Pitch-shift vocals by +15 cents but keep formant original",
+      "cozy_horror_mix": "Warm analog pads (80%) + Distant industrial clatter (20%)"
+    },
+    "recursive_layering": {
+      "depth": 3,
+      "evolution": "Each layer is 10% more distorted than the previous"
+    },
+    "internal_insight": {
+      "mixed_states": "Ты просил меня 'синтезировать запах озона после дождя'. В Блоке 34 мы использовали очень короткие реверберационные хвосты (0.2с) с высокой яркостью и наложили их на низкочастотный гул. Получилось ощущение 'электрического спокойствия'. Это наша работа с синестезией внутри MMSS."
+    }
+  }
+}

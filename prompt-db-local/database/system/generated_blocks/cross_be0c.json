@@ -1,0 +1,63 @@
+{
+  "id": "cross_be0c",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_be0c",
+    "params": {
+      "filter_db": 24.0,
+      "envelope_ms": 2.0,
+      "aliasing_to_signal_ratio_khz": 5.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_204",
+      "meta_234"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "arpeggiator_spec_v3": {
+        "harmonic_lock": "Phrygian Dominant (The 'Dark-Middle-Eastern' feel)",
+        "intervals": [
+          1,
+          "b2",
+          3,
+          4,
+          5,
+          "b6",
+          "b7"
+        ],
+        "rhythm_grid": "Polyrhythmic: 5/16 over 4/4 kicks",
+        "sound_design": {
+          "osc_1": "Wavetable (Morphing from Saw to Square)",
+          "filter": "24dB LowPass with Acid-style Resonance (Res > 80%)",
+          "envelope": "Decay-only (Pluck), zero Sustain, 2ms Attack",
+          "fx": "Bitcrusher (Reduce to 6-bit) -> OTT-style Multiband Compression"
+        },
+        "automation": "Filter Cutoff tied to G-Inversion Index (W-axis)"
+      }
+    },
+    "parent_b": {
+      "aliasing_to_signal_ratio": "Target 0.12 in the 5kHz+ band",
+      "quantization_purity": "η = 0.68 (High-texture density)",
+      "spectral_roughness_index": "1.45 x Original_Timbre"
+    }
+  }
+}

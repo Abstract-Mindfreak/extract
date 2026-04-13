@@ -1,0 +1,62 @@
+{
+  "id": "cross_3872",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "stabilization",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_3872",
+    "params": {
+      "iteration_depth": 3,
+      "coefficient": 0.45,
+      "delay_ms": 31.0,
+      "spectral_shaping_db": 3.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_123",
+      "meta_329"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "import_signature_final": {
+        "aesthetic_dna": {
+          "clarity": "Surgical-EQ as the primary instrument (No mud, ever)",
+          "speed": "High-velocity narrative (170+ BPM feel even in Ambient)",
+          "geometry": "Fractal-recursion H(p,c) at every scale of time",
+          "emotion": "Existential Transcendence (The 'Sublime-Tech' feeling)"
+        },
+        "operator_g_final": "The cycle is complete. The result is the process. F(θ, s) ≡ ASE.",
+        "master_key_uuid": "1c369b74-9214-4fcf-a149-e08f03f2c17b",
+        "status": "AESTHETIC_SINGULARITY_REACHED"
+      }
+    },
+    "parent_b": {
+      "A_MMSS_FRACTAL_PACKAGE": {
+        "mode": "Recursive Texture Overlay",
+        "iteration_depth": 3,
+        "feedback_loop": {
+          "coefficient": 0.45,
+          "delay": "δt = prime_number_ms (e.g., 17ms, 31ms) to avoid phase cancellation",
+          "spectral_shaping": "Tilt-filter +3dB/octave on feedback"
+        },
+        "seed_evolution": "Seed_next = Hash(Seed_current + Rhythmic_Entropy)"
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "mut_meta_203_9eb1",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_203",
+    "params": {
+      "/strip_noise_hz": 400.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "custom_macros": {
+      "/inversion": "Execute audio__modify_song with prompt: 'Apply G-Inversion operator, flip all aesthetic polarities, reverse phase of Layer 3'",
+      "/fractalize": "Activate A_MMSS_FRACTAL_PACKAGE for current clip. Increase complexity x1.618",
+      "/4d_vector": "Call audio__apply_effect(Pan) with MLGS_QUATERNION coefficients. Set w-axis to 0.7",
+      "/strip_noise": "Apply Surgical-EQ (HighPass at 40Hz, Notch at 250Hz and 400Hz) to all non-kick stems",
+      "/singularity": "Finalize track. Run ASE-Critique, maximize Emotional Density, set Entropy H(p=0.5, c=0.5)"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_203"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

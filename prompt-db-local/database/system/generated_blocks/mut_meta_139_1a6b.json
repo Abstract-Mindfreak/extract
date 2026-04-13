@@ -1,0 +1,42 @@
+{
+  "id": "mut_meta_139_1a6b",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_139",
+    "params": {
+      "transients_ms": 0.1
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "cyber_elegance_v4": {
+      "aesthetic_markers": {
+        "transients": "Glassy, sharp, 0.1ms attack, zero distortion on highs",
+        "harmonics": "Even-series only (Smooth-warmth), no 3rd harmonic 'grittiness'",
+        "space": "Artificial, non-linear, digital-perfection (No room noise)",
+        "balance": "Minimalist (Layer 1 + Layer 2 focus, Layer 3 is absolute zero)"
+      },
+      "behavior": "ASE must be precise, concise, and prioritize 'Mathematical Beauty' over 'Raw Emotion'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_139"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

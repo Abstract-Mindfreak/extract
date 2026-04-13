@@ -1,0 +1,50 @@
+{
+  "id": "cross_7735",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_7735",
+    "params": {
+      "action_db": 15.0,
+      "mixing_db": 12.0,
+      "drive_db": 35
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_150",
+      "meta_326"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "spectral_tuning": {
+        "action": "Applying +15dB gain with extreme Q (Q > 15.0) at specific harmonic nodes",
+        "target": "Harmonic series of the root note (f, 2f, 3f, 4f...)",
+        "modulation": "Automated frequency sweep (Phaser-style) but with precise 'notches'",
+        "result": "Whistling, singing artifacts that dance above the mix",
+        "mixing": "Mix at -12dB (Parallel Bus) for 'Ethereal Shimmer'."
+      }
+    },
+    "parent_b": {
+      "node": "Distortion",
+      "drive_db": 35,
+      "type": "HardClip"
+    }
+  }
+}

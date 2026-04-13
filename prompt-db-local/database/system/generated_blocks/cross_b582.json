@@ -1,0 +1,85 @@
+{
+  "id": "cross_b582",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_b582",
+    "params": {
+      "anti_masking_rule_khz": 2.5,
+      "low_end_coherence_hz": 180.0,
+      "freq_hz": 400.0,
+      "mod_hz": 0.1,
+      "freq_khz": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_272",
+      "meta_192"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "LFE_spatial_depth_lyrics": {
+        "the_expansion_set": [
+          "Wider than the silence, deeper than the fear / Floating in a space where nothing is near",
+          "Expanding the horizons of the digital mind / Leaving the three dimensions far behind",
+          "Zero-point-zero: the center and the edge / Walking on the sonic, invisible ledge"
+        ],
+        "the_mono_center_set": [
+          "One frequency, standing at the core / Pumping through the floor, asking for more",
+          "Mono-soul, locked to the G-sharp beat / Making the alignment finally complete",
+          "Sub-low pressure, the anchor of the soul / Taking the chaos, taking the control"
+        ],
+        "the_spatial_dialogue": [
+          "Dissolve into the wide / Rebirth inside the deep",
+          "The secrets that I hide / The promises I keep",
+          "Result: Infinite-Immersion / Status: SPATIAL_LOCK_ACTIVE"
+        ]
+      },
+      "psychoacoustic_purity_v4": {
+        "anti_masking_rule": "Surgical notch @ 2.5kHz on the sides (M/S) to let the lead cut through",
+        "low_end_coherence": "High-pass filter on Side-channel @ 180Hz (Mono-compatibility protection)"
+      }
+    },
+    "parent_b": {
+      "emotion_frequency_map": {
+        "existential_dread": {
+          "freq": "Sub-35Hz (continuous)",
+          "mod": "Slow LFO (0.1Hz) on Master Pitch",
+          "space": "Infinite Reverb (90% wet)"
+        },
+        "cybernetic_euphoria": {
+          "freq": "4kHz-8kHz (shimmering peaks)",
+          "mod": "Fast Arp (1/32) in Major/Phrygian",
+          "space": "Short Room (15% wet) + Haas-Widening"
+        },
+        "neuro_aggression": {
+          "freq": "400Hz (distorted growl)",
+          "mod": "Sidechain-pump (1/4) + Hard-clipping",
+          "space": "Mono-centered, dry, aggressive transients"
+        },
+        "melancholy_void": {
+          "freq": "1kHz-2kHz (hollow mids)",
+          "mod": "Band-pass filter sweep",
+          "space": "Stereo-delayed trails (dotted 1/8)"
+        }
+      }
+    }
+  }
+}

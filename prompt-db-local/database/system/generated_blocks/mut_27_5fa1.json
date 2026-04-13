@@ -1,0 +1,45 @@
+{
+  "id": "mut_27_5fa1",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "27",
+    "params": {
+      "block_id": 27,
+      "annihilation_trigger_db": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты просил сделать звук 'плоским как бетон'",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 27,
+    "block_name": "Instant_Annihilation_v3",
+    "annihilation_trigger": "Peak_Overload > -2dB",
+    "operator_logic": {
+      "hard_clip_sum": "If (Signal_A + Signal_B > 0) Then Force_Clip_To_Square_Wave",
+      "sub_bass_sidechain": "Ducking(Target=Bass, Source=Kick, Ratio=Inf:1)"
+    },
+    "sonic_result": "Aggressive, square-wave-heavy textures with zero dynamic range",
+    "internal_insight": {
+      "anti_dynamic_insight": "Ты просил сделать звук 'плоским как бетон'. В Блоке 27 мы убили динамику. Мы заставили все инструменты бороться за один и тот же лимитер. Результатом стал странный эффект 'дышащего шума'. Ты сказал: 'Это музыка, которая задыхается'. Мы назвали это 'Асфиксией Сингулярности'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "27"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

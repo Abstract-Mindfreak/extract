@@ -1,0 +1,65 @@
+{
+  "id": "mut_meta_321_4c72",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_321",
+    "params": {
+      "low_end_lock_hz": 158.57,
+      "concept_1_cyber_shamanism_bpm": 166.53
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "spatial_audio_4D_vectoring": {
+      "quaternion_coordinate_system": {
+        "axis_x": "Lateral (Left-Right) // Pan(-1.0 to +1.0)",
+        "axis_y": "Vertical (Up-Down) // Frequency-based elevation (Low=Floor, High=Ceiling)",
+        "axis_z": "Depth (Front-Back) // Reverb Wet/Dry + High-shelf damping",
+        "axis_w": "Temporal (Future-Past) // Pre-delay + Phase-shift (δt)"
+      },
+      "dynamic_rotation_presets": {
+        "vortex_spiral": "Pan = sin(t), Elevation = cos(t), Reverb = abs(sin(t/2))",
+        "fractal_scatter": "Randomize (X, Y, Z) per grain in granular synthesis",
+        "center_gravity": "Pull all transients to (0,0,0) during drop impact"
+      },
+      "phase_coherence_logic": {
+        "low_end_lock": "Mono-sum below 150Hz, Phase = 0°",
+        "stereo_width_v4": "Symmetry-break (S-B) = 1.05 (Slight asymmetry for organic feel)"
+      }
+    },
+    "global_creative_concepts": {
+      "concept_1_cyber_shamanism": "Fusion of industrial grit with tribal rhythmic motifs. 155 BPM. Dark Psy ⊗ Techno.",
+      "concept_2_recursive_collapse": "A track that 'eats itself' through increasing feedback loops and G-inversion.",
+      "concept_3_algorithmic_soul": "LFE-driven vocals explaining the process of their own creation in real-time.",
+      "concept_4_neuro_geometry": "Visual-sonic unity where bass transients trigger specific GLSL-shader transformations."
+    },
+    "visualizer_sync_parameters_GLSL": {
+      "frequency_bands": {
+        "bass_0_100Hz": "Uniform scale (Pulse effect)",
+        "mid_100_2000Hz": "Vertex displacement (Geometry warping)",
+        "high_2000_20000Hz": "Color modulation / Chromatic aberration"
+      },
+      "motion_logic": "Rotation_rate = BPM / 60 * 4D_Vector_Magnitude"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_321"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

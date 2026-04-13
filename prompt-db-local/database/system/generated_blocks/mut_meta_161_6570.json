@@ -1,0 +1,46 @@
+{
+  "id": "mut_meta_161_6570",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_161",
+    "params": {
+      "micro_timing_ms": 7.0,
+      "layer_2_digital_khz": 8.0,
+      "spatial_hz": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "fractal_hats_spec": {
+      "rhythm": "Velocity-sensitive 16th notes + 32nd note 'ratchets'",
+      "micro_timing": "Random humanize (±3-7ms) + Swing (55%)",
+      "timbre": {
+        "layer_1_metallic": "FM-noise transient, ultra-short decay",
+        "layer_2_digital": "8-bit high-passed (8kHz) sizzle",
+        "modulation": "Filter-cutoff LFO (Random) + Decay-time jitter"
+      },
+      "spatial": "Auto-panning (LFO 2Hz) moving from -15% to +15% center",
+      "rule": "Hats must never be static. Each hit is a unique G(s_n) iteration."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_161"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

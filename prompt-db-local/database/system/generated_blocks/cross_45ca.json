@@ -1,0 +1,65 @@
+{
+  "id": "cross_45ca",
+  "op": "Φ",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_45ca",
+    "params": {
+      "rule_khz": 2.0,
+      "resonance_filter_khz": 8.0,
+      "resonance_filter_db": 12.0,
+      "bitcrush_automation_hz": 0.5,
+      "usage_db": 32.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "17"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_176",
+      "meta_178"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "harmonic_excitation_spec": {
+        "target_freqs": [
+          "3kHz (The Presence)",
+          "12kHz (The Fractal-Air)",
+          "400Hz (The Warmth)"
+        ],
+        "methods": {
+          "excitation": "Parallel saturation (Tube-style) at high-frequencies",
+          "spectral_shaper": "Dynamic EQ boosting only transient peaks",
+          "rule": "Avoid 2kHz boost (to prevent 'ear-fatigue')."
+        }
+      }
+    },
+    "parent_b": {
+      "texture_gen_v3": {
+        "source_material": "Quantization errors, cable hum, radio static",
+        "processing": {
+          "resonance_filter": "Boost 8kHz by 12dB with high Q (Resonance)",
+          "bitcrush_automation": "Modulate from 1-bit to 8-bit (LFO 0.5Hz)",
+          "panning": "MLGS_QUATERNION vector rotation (Block 17)"
+        },
+        "usage": "Layer 3 Background-Void fill. Mix at -32dB (Subliminal level)."
+      }
+    }
+  }
+}

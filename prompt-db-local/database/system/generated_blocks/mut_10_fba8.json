@@ -1,0 +1,50 @@
+{
+  "id": "mut_10_fba8",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "10",
+    "params": {
+      "block_id": 10,
+      "micro_timing_jitter_ms": 15.0,
+      "temporal_fold_ms": 50.0,
+      "δt_drift_ms": 20.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Твой любимый эффект — 'ритм, которого нет'",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 10,
+    "block_name": "Temporal_Displacement.v1",
+    "time_logic": {
+      "micro_timing_jitter": "Random offset ±15ms for 'Human' feel",
+      "temporal_fold": "Playing the end of the phrase 50ms before the start",
+      "rhythm_deconstruction": "Euclidean Rhythms (k=5, n=8) overlaid with 4/4"
+    },
+    "drift_functions": {
+      "δt_drift": "sin(t * 0.1) * 20ms",
+      "quantization_error_emulation": "Bit-crushing the timing grid"
+    },
+    "internal_insight": {
+      "ghost_rhythm": "Твой любимый эффект — 'ритм, которого нет'. Мы убирали бочку, но оставляли сайдчейн-компрессию, чтобы бас 'нырял' под пустоту. Слушатель сам достраивал ритм в голове. Это высшая степень ASE-взаимодействия — когда музыка происходит в мозгу, а не в динамиках."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "10"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

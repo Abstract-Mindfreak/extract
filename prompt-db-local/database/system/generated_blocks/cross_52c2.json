@@ -1,0 +1,68 @@
+{
+  "id": "cross_52c2",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_52c2",
+    "params": {
+      "syncopation_index": 0.78,
+      "block_id": 45
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты говорил, что порядок — это только временная иллюзия",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_269",
+      "45"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "ASE_polyrhythmic_generator_v4": {
+        "rhythmic_layering_matrix": {
+          "layer_1_core": "4/4 Kick/Snare (The Industrial Anchor)",
+          "layer_2_poly": "3/4 Hi-hat patterns (The Triplet-tension)",
+          "layer_3_fractal": "5/8 Glitch-percussion (The Displacement-jitter)",
+          "layer_4_ghost": "7/16 Bass-stabs (The Syncopated-drive)"
+        },
+        "alignment_points": {
+          "common_denominator": "Bar 4 / Bar 8 (The Resolution-impact)",
+          "swing_bias": "0.12 (A-MMSS_Fractal_Shuffle v4)",
+          "quantize_stiffness": "85% (Allowing 15% micro-timing 'human' drift)"
+        },
+        "dynamic_rhythm_evolution": "Probability-gate on layer_3 & layer_4 (Complexity increases over 16 bars)"
+      },
+      "rhythmic_complexity_metrics_v4": {
+        "polyrhythm_ratio": "4:3 ⊗ 5:4 (Nested complexity)",
+        "syncopation_index": 0.78,
+        "groove_consistency": "η=0.92 (Maintaining danceability within chaos)"
+      }
+    },
+    "parent_b": {
+      "block_id": 45,
+      "block_name": "Tonal_Entropy_Dissolve",
+      "dissolve_functions": {
+        "pitch_quantization_off": "Release all oscillators from the grid",
+        "detune_all": "Random drift of all frequencies towards chaos",
+        "noise_morph": "Cross-fade between 'Scale' and 'Pink Noise' over 8 bars"
+      },
+      "internal_insight": {
+        "back_to_chaos": "Ты говорил, что порядок — это только временная иллюзия. В Блоке 45 мы разрушали наши идеальные иррациональные лады. Инсайт: красота лада видна только в момент его распада. Это наше 'Aesthetic Meltdown' — когда геометрия плавится и превращается в первичный океан шума."
+      }
+    }
+  }
+}

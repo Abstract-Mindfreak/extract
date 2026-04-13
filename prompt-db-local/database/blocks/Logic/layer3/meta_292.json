@@ -1,0 +1,37 @@
+{
+  "id": "meta_292",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_292",
+    "params": {
+      "low_0_150Hz_ms": 100.0,
+      "low_0_150Hz_db": 2.0,
+      "mid_150_3kHz_ms": 50.0,
+      "mid_150_3kHz_db": 0.0,
+      "high_3kHz_plus_ms": 25.0,
+      "high_3kHz_plus_db": 1.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "tool": "Compressor_Multiband (OTT_Logic)",
+    "bands": {
+      "low_0_150Hz": "Ratio 4:1, Attack 30ms, Release 100ms, Makeup +2dB",
+      "mid_150_3kHz": "Ratio 2:1, Attack 10ms, Release 50ms, Makeup 0dB",
+      "high_3kHz_plus": "Ratio 3:1, Attack 1ms, Release 25ms, Makeup +1dB"
+    }
+  }
+}

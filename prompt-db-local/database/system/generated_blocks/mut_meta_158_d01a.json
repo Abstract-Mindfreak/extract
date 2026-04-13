@@ -1,0 +1,41 @@
+{
+  "id": "mut_meta_158_d01a",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_158",
+    "params": {
+      "processing_khz": 1.0,
+      "mixing_ms": 500.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ghost_echo_protocol": {
+      "action": "Reverse-reverb on the first syllable/note of a theme",
+      "pre_delay": "Synchronized to 1/2 or 1/4 note before the hit",
+      "processing": "High-pass at 1kHz + Phaser (4-stage) + Grain-delay",
+      "mixing": "Fade-in duration: 500ms. End point: Zero cross-fade with the dry signal",
+      "goal": "Creating the sense of 'Sound pulling itself out of the Void'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_158"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

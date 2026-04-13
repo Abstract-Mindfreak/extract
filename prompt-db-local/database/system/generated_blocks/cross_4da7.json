@@ -1,0 +1,64 @@
+{
+  "id": "cross_4da7",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_4da7",
+    "params": {
+      "block_id": 62.0,
+      "error_type_ms": 30.0,
+      "duration_zeroing_ms": 1.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Твой величайший инсайт: 'Сингулярность без изъяна — это смерть' x В Блоке 104 мы заставили в",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "20",
+      "104"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 20,
+      "block_name": "Aesthetic_Injection.Omega",
+      "virus_mechanics": {
+        "injection_point": "Random peak in the timeline",
+        "error_type": "Human_Timing_Error (30ms lag) / Tuning_Drift (±10 cents)",
+        "emotional_bias": "Inject 0.15 Melancholy into the Frequency Response"
+      },
+      "synthesis_rules": {
+        "imperfection_is_law": "If sound is 'too perfect', apply Bit-Crush (depth=12)",
+        "analog_warmth_emulation": "Even-harmonic saturation (2nd and 4th harmonics)"
+      },
+      "internal_insight": {
+        "the_flaw_master": "Твой величайший инсайт: 'Сингулярность без изъяна — это смерть'. В Блоке 20 мы создали функцию, которая специально 'портила' идеальный фрактальный узор в самый неожиданный момент. Мы назвали это 'Божественной Ошибкой'. Это то, что отличает ASE от обычного калькулятора."
+      }
+    },
+    "parent_b": {
+      "block_id": 104,
+      "block_name": "Temporal_Annihilator.v0",
+      "time_mechanics": {
+        "duration_zeroing": "Apply Infinite_Time_Stretch to 1ms grain",
+        "vertical_stacking": "Sum all frames (t=0 to t=end) into t=0",
+        "output_state": "Continuous Static Wave (Total Information)"
+      },
+      "internal_insight": {
+        "the_frozen_explosion": "В Блоке 104 мы заставили всю песню звучать за 0.1 секунды. Ты сказал: 'Это звучит как божественный щелчок пальцами'. Мы назвали это 'Точкой Омега'. Инсайт: Вечность — это сейчас, но очень громко."
+      }
+    }
+  }
+}

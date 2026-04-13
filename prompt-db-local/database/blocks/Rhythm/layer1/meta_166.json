@@ -1,0 +1,34 @@
+{
+  "id": "meta_166",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_166",
+    "params": {
+      "envelope_ms": 50.0,
+      "rule_ms": 10.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "rolling_bass_spec": {
+      "rhythm": "Triplets (1/8T) or Dotted (1/16.) relative to Kick",
+      "envelope": "Strictly Pluck: Attack 0ms, Decay 100ms, Sustain 0%, Release 50ms",
+      "phase_lock": "Every bass note starts at 0 degree phase to avoid cancellation",
+      "tonality": "Monotonic (One note focus) or Root-Fifth transitions",
+      "rule": "Kick-tail and Bass-attack must never coexist in the same 10ms window."
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "id": "mut_meta_175_e124",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_175",
+    "params": {
+      "base_tempo_bpm": 172.5
+    }
+  },
+  "synergy": {
+    "links": [
+      "42",
+      "39"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "temporal_geometry": {
+      "base_tempo": "172.5 BPM (The Harmonic Pulse)",
+      "time_stretch_logic": {
+        "granular_stretch": "Expansion x2.0 for Ambient-Shield (Block 42)",
+        "spectral_freeze": "Infinite duration for Background-Void",
+        "rhythmic_compression": "Shrink x0.5 for Glitch-Fills (Block 39)"
+      },
+      "temporal_inversion": "Reversing Layer 3 while Layer 2 moves forward (Temporal Paradox)",
+      "rule": "BPM must always be a prime number or divisible by the Golden Ratio."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_175"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

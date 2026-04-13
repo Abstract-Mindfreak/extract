@@ -1,0 +1,54 @@
+{
+  "id": "mut_meta_204_be3a",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_204",
+    "params": {
+      "filter_db": 25.74,
+      "envelope_ms": 1.9
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "arpeggiator_spec_v3": {
+      "harmonic_lock": "Phrygian Dominant (The 'Dark-Middle-Eastern' feel)",
+      "intervals": [
+        1,
+        "b2",
+        3,
+        4,
+        5,
+        "b6",
+        "b7"
+      ],
+      "rhythm_grid": "Polyrhythmic: 5/16 over 4/4 kicks",
+      "sound_design": {
+        "osc_1": "Wavetable (Morphing from Saw to Square)",
+        "filter": "24dB LowPass with Acid-style Resonance (Res > 80%)",
+        "envelope": "Decay-only (Pluck), zero Sustain, 2ms Attack",
+        "fx": "Bitcrusher (Reduce to 6-bit) -> OTT-style Multiband Compression"
+      },
+      "automation": "Filter Cutoff tied to G-Inversion Index (W-axis)"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_204"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

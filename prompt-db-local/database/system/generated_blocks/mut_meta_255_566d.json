@@ -1,0 +1,68 @@
+{
+  "id": "mut_meta_255_566d",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "stabilization",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_255",
+    "params": {
+      "duration_ms": 12.02,
+      "pitch_sweep_s": 0.0,
+      "gain_bias_db": 3.87,
+      "fade_in_ms": 8.21,
+      "transient_master_v4_ms": 4.76,
+      "clipper_threshold_db": 0.52,
+      "peak_to_rms_ratio_db": 13.51,
+      "initial_slope_rate_ms": 0.1,
+      "spectral_brightness_attack_khz": 8.28,
+      "spectral_brightness_attack_ms": 14.25
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_transient_splicing_v4": {
+      "attack_architecture_logic": {
+        "transient_click_layer": {
+          "source": "Noise_Metal / Sin_Hard_Pitch_Envelope",
+          "duration": "12ms (The 'Surgical Cut')",
+          "pitch_sweep": "+24st to 0st",
+          "gain_bias": "+4dB Peak"
+        },
+        "body_sustain_layer": {
+          "source": "Monster_7 / Reese_Core",
+          "fade_in": "8ms (Crossfade-sync)",
+          "phase_alignment": "LOCKED @ 0° crossing"
+        },
+        "splicing_coefficient": "η = 0.99 (Seamless transition score)"
+      },
+      "dynamic_impact_shaping": {
+        "transient_master_v4": "Punch +35%, Sustain -15%, Smooth 5ms",
+        "clipper_threshold": "-0.5dB (Shaving the transient-top for loudness)",
+        "result": "Aggressive, 'snappy' presence that cuts through any sub-wall"
+      }
+    },
+    "impact_metrics_v4": {
+      "peak_to_rms_ratio": "Target 14dB (The 'Breating' punch)",
+      "initial_slope_rate": "1.0v / 0.1ms (Maximum steepness)",
+      "spectral_brightness_attack": "Energy boost @ 5kHz - 8kHz during the first 15ms"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_255"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

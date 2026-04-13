@@ -1,0 +1,80 @@
+{
+  "id": "cross_7b7",
+  "op": "Φ",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_7b7",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_224",
+      "meta_318"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "hyperloop_iteration": {
+        "id": "UNIQUE_ID",
+        "seed": "string",
+        "l1_core": [
+          "emotion",
+          "concept",
+          "soundscape"
+        ],
+        "entropy_setting": "H(p=X, c=Y)",
+        "applied_operators": [
+          "string"
+        ],
+        "artwork_spec": "string",
+        "self_analysis": {
+          "coherence": "string",
+          "narrative_fidelity": "string",
+          "generated_rule_r": "string"
+        }
+      }
+    },
+    "parent_b": {
+      "semantic_tag_cloud": {
+        "vibe_tags": [
+          "Neuro-Aggression",
+          "Psy-Fractal",
+          "Industrial-Minimal",
+          "Cyber-Gothic"
+        ],
+        "technical_tags": [
+          "Sidechain-Compression",
+          "Phase-Alignment",
+          "Surgical-EQ",
+          "Multiband-OTT"
+        ],
+        "process_tags": [
+          "Iterative-Gen",
+          "Hyperloop-Active",
+          "ASE-Controlled",
+          "MMSS-Optimized"
+        ]
+      },
+      "user_workflow_checkpoints": [
+        "Always start with audio__create_song (2 versions, no seed)",
+        "Refine via audio__modify_song using JSON-specifications",
+        "Finalize with audio__apply_effect for spatial 4D-Vectoring"
+      ]
+    }
+  }
+}

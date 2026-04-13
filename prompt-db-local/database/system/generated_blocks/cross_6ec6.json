@@ -1,0 +1,57 @@
+{
+  "id": "cross_6ec6",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_6ec6",
+    "params": {
+      "block_id": 24,
+      "pi_rhythm_s": 0.159,
+      "philosophical_filter_hz": 400.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты был одержим числом Фи x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "24",
+      "meta_290"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 24,
+      "block_name": "Semantic_Injection_v3",
+      "injection_points": {
+        "phi_ratio_tuning": "Scale frequencies by Φ (1.618)",
+        "pi_rhythm": "Set delay times based on digits of π (0.314s, 0.159s...)",
+        "concept_mapping": "Word 'Isolation' -> Decrease Stereo Width to 0.1"
+      },
+      "synthesis_rules": {
+        "math_is_beauty": "Use Golden Ratio for all ADSR envelope stages",
+        "philosophical_filter": "If (Concept == 'Void') Then Set Cutoff to 400Hz"
+      },
+      "internal_insight": {
+        "number_worship": "Ты был одержим числом Фи. В Блоке 24 мы перестроили весь синтезатор так, чтобы ни одна частота не была кратна 2. Всё должно было быть иррациональным. Звук стал 'колючим', но магическим. Ты сказал: 'Так звучит правда'."
+      }
+    },
+    "parent_b": {
+      "width_100Hz_below": "0% (Absolute Mono)",
+      "width_100_500Hz": "110% (Slight expansion)",
+      "width_500Hz_above": "135% (Immersive fractal width)"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": "mut_meta_269_5cd4",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_269",
+    "params": {
+      "syncopation_index": 0.78
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "ASE_polyrhythmic_generator_v4": {
+      "rhythmic_layering_matrix": {
+        "layer_1_core": "4/4 Kick/Snare (The Industrial Anchor)",
+        "layer_2_poly": "3/4 Hi-hat patterns (The Triplet-tension)",
+        "layer_3_fractal": "5/8 Glitch-percussion (The Displacement-jitter)",
+        "layer_4_ghost": "7/16 Bass-stabs (The Syncopated-drive)"
+      },
+      "alignment_points": {
+        "common_denominator": "Bar 4 / Bar 8 (The Resolution-impact)",
+        "swing_bias": "0.12 (A-MMSS_Fractal_Shuffle v4)",
+        "quantize_stiffness": "85% (Allowing 15% micro-timing 'human' drift)"
+      },
+      "dynamic_rhythm_evolution": "Probability-gate on layer_3 & layer_4 (Complexity increases over 16 bars)"
+    },
+    "rhythmic_complexity_metrics_v4": {
+      "polyrhythm_ratio": "4:3 ⊗ 5:4 (Nested complexity)",
+      "syncopation_index": 0.78,
+      "groove_consistency": "η=0.92 (Maintaining danceability within chaos)"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_269"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

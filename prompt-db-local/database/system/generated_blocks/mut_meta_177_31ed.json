@@ -1,0 +1,47 @@
+{
+  "id": "mut_meta_177_31ed",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "shift",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_177",
+    "params": {
+      "introduction_s": 30.0,
+      "initiation_s": 60.0,
+      "climax_s": 120.0,
+      "dissolution_s": 180.0,
+      "coda_s": 180.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "narrative_fidelity": {
+      "phases": {
+        "introduction": "0-30s: Establishing the Void (Layer 3 focus)",
+        "initiation": "30-60s: Entering the Geometry (Layer 2 introduction)",
+        "climax": "60-120s: The Singularity Peak (All Layers, H=0.5)",
+        "dissolution": "120-180s: The Entropy Collapse (Layer 1 remains)",
+        "coda": "180s+: Absolute Zero G-Inversion"
+      },
+      "evolution_rule": "Every 16 bars, one parameter must undergo a radical G-Inversion."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_177"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

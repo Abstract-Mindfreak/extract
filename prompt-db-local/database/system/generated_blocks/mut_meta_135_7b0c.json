@@ -1,0 +1,43 @@
+{
+  "id": "mut_meta_135_7b0c",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_135",
+    "params": {
+      "pass_3_spectral_color_db": 63.4
+    }
+  },
+  "synergy": {
+    "links": [
+      "43",
+      "50"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "recursive_mastering": {
+      "pass_1_leveling": "Standard Peak-Normalization + Mid-Side Balance (Block 50)",
+      "pass_2_compression": "Multiband-Compression (OTT) + Soft-Clipping (The 'Density-Injection')",
+      "pass_3_spectral_color": "Applying 'Analog-Hiss' at -60dB + Static-Saturation (Block 43)",
+      "logic": "The second pass 'glues' the fractal layers into a single coherent Vector.",
+      "safety": "Check for Inter-Sample-Peaks (ISP) after Pass 3."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_135"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

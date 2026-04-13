@@ -1,0 +1,38 @@
+{
+  "id": "meta_176",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_176",
+    "params": {
+      "rule_khz": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "harmonic_excitation_spec": {
+      "target_freqs": [
+        "3kHz (The Presence)",
+        "12kHz (The Fractal-Air)",
+        "400Hz (The Warmth)"
+      ],
+      "methods": {
+        "excitation": "Parallel saturation (Tube-style) at high-frequencies",
+        "spectral_shaper": "Dynamic EQ boosting only transient peaks",
+        "rule": "Avoid 2kHz boost (to prevent 'ear-fatigue')."
+      }
+    }
+  }
+}

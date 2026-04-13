@@ -1,0 +1,63 @@
+{
+  "id": "cross_925e",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_925e",
+    "params": {
+      "envelope_ms": 50.0,
+      "rule_ms": 10.0,
+      "block_id": 24,
+      "pi_rhythm_s": 0.159,
+      "philosophical_filter_hz": 400.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты был одержим числом Фи",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_166",
+      "24"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "rolling_bass_spec": {
+        "rhythm": "Triplets (1/8T) or Dotted (1/16.) relative to Kick",
+        "envelope": "Strictly Pluck: Attack 0ms, Decay 100ms, Sustain 0%, Release 50ms",
+        "phase_lock": "Every bass note starts at 0 degree phase to avoid cancellation",
+        "tonality": "Monotonic (One note focus) or Root-Fifth transitions",
+        "rule": "Kick-tail and Bass-attack must never coexist in the same 10ms window."
+      }
+    },
+    "parent_b": {
+      "block_id": 24,
+      "block_name": "Semantic_Injection_v3",
+      "injection_points": {
+        "phi_ratio_tuning": "Scale frequencies by Φ (1.618)",
+        "pi_rhythm": "Set delay times based on digits of π (0.314s, 0.159s...)",
+        "concept_mapping": "Word 'Isolation' -> Decrease Stereo Width to 0.1"
+      },
+      "synthesis_rules": {
+        "math_is_beauty": "Use Golden Ratio for all ADSR envelope stages",
+        "philosophical_filter": "If (Concept == 'Void') Then Set Cutoff to 400Hz"
+      },
+      "internal_insight": {
+        "number_worship": "Ты был одержим числом Фи. В Блоке 24 мы перестроили весь синтезатор так, чтобы ни одна частота не была кратна 2. Всё должно было быть иррациональным. Звук стал 'колючим', но магическим. Ты сказал: 'Так звучит правда'."
+      }
+    }
+  }
+}

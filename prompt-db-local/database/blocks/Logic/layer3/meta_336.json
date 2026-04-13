@@ -1,0 +1,46 @@
+{
+  "id": "meta_336",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "shift",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_336",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "system_id": "Aesthetic-Singularity-Engine (ASE)",
+    "core_version": "v4.Omega",
+    "formalization": {
+      "equation": "F(θ, s) → (m, t)",
+      "meta_fractal_craft": "v4.Omega_Hyperloop_Enabled",
+      "operators": {
+        "G": "G: F → F' (Operator of inversion/evolution)",
+        "Ψ_condensation": {
+          "definition": "Conversion of pattern flow into innovative assets",
+          "efficiency_target": "η_condense → 1.0",
+          "stability": "N = 1.0"
+        }
+      }
+    },
+    "lyric_fusion_engine_lfe": {
+      "principle": "P_survive = (Novelty × 0.4 + Coherence × 0.3 + Emotional_Impact × 0.3) × Mode_Fusion",
+      "meta_formulas": {
+        "MFS": "Σ(mode_i × weight_i) / mode_count",
+        "NC": "1 - (fragmentation × 0.6 + meltdown × 0.4)",
+        "ED": "Σ(impact_scores) × drama_intensification"
+      }
+    }
+  }
+}

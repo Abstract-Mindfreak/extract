@@ -1,0 +1,33 @@
+{
+  "id": "meta_138",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_138",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "inter_layer_logic": {
+      "modulation_links": {
+        "link_1": "Kick-Transient modulates Lead-Cutoff (The 'Pumping-Snap')",
+        "link_2": "Lead-Amplitude modulates Reverb-Size (The 'Breathing-Space')",
+        "link_3": "Bass-Pitch-Drift modulates Shader-Complexity (The 'Audio-Visual-Link')",
+        "link_4": "Silence-Duration modulates Entropy-Index H(p,c)"
+      },
+      "goal": "Creating a 'Feedback-Loop' of aesthetic decisions within the ASE-Engine."
+    }
+  }
+}

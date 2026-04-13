@@ -1,0 +1,49 @@
+{
+  "id": "cross_5741",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_5741",
+    "params": {
+      "/strip_noise_hz": 400.0,
+      "purity_coefficient": 1
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_203",
+      "meta_281"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "custom_macros": {
+        "/inversion": "Execute audio__modify_song with prompt: 'Apply G-Inversion operator, flip all aesthetic polarities, reverse phase of Layer 3'",
+        "/fractalize": "Activate A_MMSS_FRACTAL_PACKAGE for current clip. Increase complexity x1.618",
+        "/4d_vector": "Call audio__apply_effect(Pan) with MLGS_QUATERNION coefficients. Set w-axis to 0.7",
+        "/strip_noise": "Apply Surgical-EQ (HighPass at 40Hz, Notch at 250Hz and 400Hz) to all non-kick stems",
+        "/singularity": "Finalize track. Run ASE-Critique, maximize Emotional Density, set Entropy H(p=0.5, c=0.5)"
+      }
+    },
+    "parent_b": {
+      "harmonic_bias": "Perfect 5ths and Octaves (Pure G#)",
+      "purity_coefficient": 1,
+      "reverb": "None (Anechoic chamber effect)"
+    }
+  }
+}

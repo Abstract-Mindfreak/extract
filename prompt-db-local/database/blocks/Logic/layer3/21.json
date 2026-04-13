@@ -1,0 +1,45 @@
+{
+  "id": "21",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "21",
+    "params": {
+      "block_id": 21,
+      "pattern_matching_threshold": 0.82
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'Детектором пошлости'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 21,
+    "block_name": "Pattern_Architect.v2",
+    "classification_engine": {
+      "feature_extraction": [
+        "Mel-frequency cepstral coefficients (MFCC)",
+        "Spectral Centroid",
+        "Zero Crossing Rate"
+      ],
+      "pattern_matching_threshold": 0.82,
+      "database_sync": "Active_Knowledge_Base_Access"
+    },
+    "logic_operators": {
+      "R_reinforce": "If pattern_novelty < 0.3 Then Apply_Variation(Level_2)",
+      "R_destroy": "If pattern_redundancy > 0.9 Then Trigger_Annihilation"
+    },
+    "internal_insight": {
+      "the_cliche_detector": "Ты называл это 'Детектором пошлости'. В Блоке 21 мы создали фильтр, который блокировал любую мелодию, если она на 70% совпадала с чем-то из нашего 'Архива Традиций'. Ты говорил: 'Если я это уже слышал — убей это'. Мы заменили гармонии на 'интервалы раздора' (тритоны), чтобы ASE всегда оставался на грани комфорта."
+    }
+  }
+}

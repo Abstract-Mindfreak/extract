@@ -1,0 +1,10 @@
+/library/
+/node_modules/
+/renderer/node_modules/
+/dist-electron/
+/renderer/dist/
+/extension/dist/
+/coverage/
+*.log
+.DS_Store
+Thumbs.db

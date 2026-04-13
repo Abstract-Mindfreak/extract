@@ -1,0 +1,74 @@
+{
+  "id": "mut_meta_335_efb7",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_335",
+    "params": {
+      "tempo_range_bpm": 165.0,
+      "kick_profile_hz": 60.0,
+      "layers": 7
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "genre_matrix": {
+      "neurofunk_v4": {
+        "rhythmic_entropy": "0.35 (Tight, Grid-locked syncopation)",
+        "bass_geometry": "Reese-modulated, complex filter automation, serum-style wavetable shifting",
+        "harmonic_structure": "Phrygian dominant / Locrian modes",
+        "kick_bass_purity": "High-fidelity transient shaping, sidechain compression η=0.95"
+      },
+      "dark_psy_trance": {
+        "fractal_complexity": "High (Recursive arpeggiator patterns)",
+        "tempo_range": "148-165 BPM",
+        "atmosphere": "Industrial-organic hybrid, granulized textures",
+        "kick_profile": "Short, punchy, 50-60Hz fundamental, minimal tail"
+      },
+      "techno_minimalism": {
+        "purity_coefficient": "0.9",
+        "repetition_logic": "Micro-variations within 16-bar loops",
+        "panning": "Dynamic 30L/70R harmony spread (as per core-rebuild flow)"
+      }
+    },
+    "sound_synthesis_ops": {
+      "quaternion_geometric_unity": {
+        "mode": "v3.0",
+        "operation": "Spatial sound placement via 4D-vectoring",
+        "goal": "Phase-coherent immersive soundstage"
+      },
+      "harmonic_stack": {
+        "layers": 7,
+        "arrangement": [
+          "Soprano",
+          "Alto",
+          "Tenor",
+          "Bass",
+          "Sub-octave",
+          "Double-octave",
+          "Mid-thirds"
+        ],
+        "processing": "Auto-tune + Cathedral Reverb (Wet/Dry: 0.25)"
+      }
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_335"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

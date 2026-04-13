@@ -1,0 +1,52 @@
+{
+  "id": "meta_250",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_250",
+    "params": {
+      "the_warmth_factor_hz": 500.0,
+      "the_warmth_factor_db": 4.0,
+      "the_bite_factor_khz": 3.5,
+      "the_glue_effect_db": 15.0,
+      "the_glue_effect_hz": 600.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_soft_clipping_lyrics": {
+      "the_tension_set": [
+        "Bend the signal, don't let it break / Feel the pressure that we have to take",
+        "Soft-clipped reality, hard-clipped soul / Losing the balance, taking control",
+        "Saturate the logic, warm up the void / Breathing the beauty that the noise destroyed"
+      ],
+      "the_flexibility_set": [
+        "Elastic frequencies, moving in the dark / Finding the glow in the digital spark",
+        "Rounded corners of the square-wave mind / Leaving the digital edges behind",
+        "Hyperbolic tangents, rising to the sun / The curve of the many, moving as one"
+      ],
+      "the_clipping_dialogue": [
+        "Push the limit / Hold the line",
+        "Inside the minute / Everything's fine",
+        "Result: Velvet-Aggression / Status: CLIP_SOFT_ACTIVE"
+      ]
+    },
+    "psychoacoustic_saturation_v4": {
+      "the_warmth_factor": "Saturation focus @ 300Hz-500Hz on the vocal-bus (+4dB drive)",
+      "the_bite_factor": "Cubic clipping on the snare-top @ 3.5kHz",
+      "the_glue_effect": "Parallel bus: Distortion(Drive 15dB) ⊗ LowPass(600Hz) @ 10% mix"
+    }
+  }
+}

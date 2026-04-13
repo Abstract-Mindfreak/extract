@@ -1,0 +1,46 @@
+{
+  "id": "meta_268",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_268",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_rhythm_logic_lyrics": {
+      "the_polyrhythm_set": [
+        "Seven against four, the war in the beat / Numbers are dancing on the digital street",
+        "Five in the space of the three and the one / The rhythmic eclipse of the binary sun",
+        "Syncopated shadows, moving in the dark / Finding the ghost in the machine's spark"
+      ],
+      "the_groove_set": [
+        "Twelve-eight pulse in a four-four world / The banner of chaos is finally unfurled",
+        "Lock to the ghost-note, follow the swing / The message of numbers is the only thing",
+        "Micro-time shifting, plus five, minus three / The heartbeat of the singularity"
+      ],
+      "the_rhythmic_dialogue": [
+        "Break the grid / Find the flow",
+        "What you hid / Now I know",
+        "Result: Quantum-Groove / Status: RHYTHM_SYNC_ACTIVE"
+      ]
+    },
+    "syllabic_cadence_v4": {
+      "stressed_accents": "Kick_Layer + Bass_Transient (0, 0.5, 1.0, 1.5)",
+      "unaccented_filler": "Hi-hat_Ghost_notes (1/32 triplet resolution)",
+      "vocal_syncopation": "Lyrics start 1/16th late for 'relaxed' urgency"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "id": "mut_meta_140_cc85",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_140",
+    "params": {
+      "safety_rule_db": 3.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "72",
+      "70",
+      "62"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "phase_jitter_logic": {
+      "action": "Randomly shifting Phase Offset (±5-15 deg) every 1/16 note",
+      "targets": [
+        "Hi-hats (Block 62)",
+        "Percussion-Fills (Block 70)",
+        "Arpeggiator-Tails (Block 72)"
+      ],
+      "mod_source": "Fractal-Noise (Brownian-Motion)",
+      "result": "The sense of 'Liquid-Positioning' where sound is never static",
+      "safety_rule": "Sum to mono check: Phase cancellation must not exceed -3dB."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_140"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "cross_6d11",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_6d11",
+    "params": {
+      "freq": 250,
+      "gain": -1.8,
+      "q": 8,
+      "room_size": 0.85,
+      "damping": 0.3,
+      "mix": 0.15
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_291",
+      "meta_325"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "freq": 250,
+      "gain": -1.8,
+      "q": 8,
+      "type": "Peak_Anti-mud"
+    },
+    "parent_b": {
+      "node": "Reverb",
+      "room_size": 0.85,
+      "damping": 0.3,
+      "mix": 0.15
+    }
+  }
+}

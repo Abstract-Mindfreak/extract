@@ -1,0 +1,52 @@
+{
+  "id": "mut_67_352a",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "67",
+    "params": {
+      "block_id": 67,
+      "ambiguity_index": 0.95
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Твой инсайт: 'Слово должно быть пулей с двумя наконечниками'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 67,
+    "block_name": "Quantum_Lyrics_v2.LFE",
+    "superposition_logic": {
+      "ambiguity_index": 0.95,
+      "semantic_pairing": [
+        "Love/Void",
+        "Birth/Static",
+        "Home/Distance"
+      ],
+      "wave_function_collapse": "Determined by Master_Filter_Cutoff"
+    },
+    "logic_operators": {
+      "if_cutoff_low": "Meaning = 'Internal/Safety/Dark'",
+      "if_cutoff_high": "Meaning = 'External/Exposure/Light'"
+    },
+    "internal_insight": {
+      "the_dual_word": "Твой инсайт: 'Слово должно быть пулей с двумя наконечниками'. В Блоке 67 мы использовали фразу 'I am here'. В низком регистре она звучала как обещание защиты, в высоком — как крик о помощи из пустоты. Мы создали текст, который меняется вместе со слушателем."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "67"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

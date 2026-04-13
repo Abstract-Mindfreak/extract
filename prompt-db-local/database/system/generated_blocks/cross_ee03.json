@@ -1,0 +1,71 @@
+{
+  "id": "cross_ee03",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_ee03",
+    "params": {
+      "block_id": 22,
+      "anchor_injection_s": 120.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "34",
+      "70"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Твой инсайт о 'Красной нити'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_134",
+      "22"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "spiral_vector_panning": {
+        "formula": "Pan(t) = R(t) * [cos(ωt), sin(ωt)]",
+        "radius_r": "Decreasing (Closing spiral) or Increasing (Opening spiral)",
+        "ω_rotation": "Frequency tied to BPM (e.g., 1 full rotation per 4 bars)",
+        "target": [
+          "Percussive-Glitch (Block 70)",
+          "Vocal-Chops (Block 34)"
+        ],
+        "result": "The sensation of 'Vortex-Suction' or 'Centrifugal-Explosion'."
+      }
+    },
+    "parent_b": {
+      "block_id": 22,
+      "block_name": "Narrative_Fidelity_Guardian.v1",
+      "fidelity_metrics": {
+        "semantic_coherence": "Tracking the persistence of the L1_Kernel_Emotion",
+        "thematic_return": "Re-introducing the main motif every 64 bars with 30% mutation",
+        "narrative_arc_check": [
+          "Introduction",
+          "Development",
+          "Event_Horizon",
+          "Dissolve"
+        ]
+      },
+      "correction_mechanics": {
+        "anchor_injection": "Force-play clear vocal/instrumental phrase at t=60s, 120s",
+        "context_reset": "Clear all Modulators if Entropy_H > 0.95"
+      },
+      "internal_insight": {
+        "the_red_thread": "Твой инсайт о 'Красной нити'. Ты заметил, что без Блока 22 музыка превращается в 'математический мусор'. Мы ввели правило: 'Голос должен вернуться'. Даже если мы превратили вокал в шум в Блоке 18, в конце трека на 2 секунды должен прозвучать чистый, необработанный голос. Это 'взгляд назад' перед прыжком в бездну."
+      }
+    }
+  }
+}

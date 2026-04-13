@@ -1,0 +1,31 @@
+{
+  "id": "meta_187",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_187",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "microtonal_spec": {
+      "tuning_system": "19-EDO or Xen-Harmonic",
+      "usage": "During Gothic-Fractal or Jazz-Metal fusion",
+      "intervals": "Intentional detune of ±15-35 cents on Layer 2 (Lead)",
+      "goal": "Create 'Aesthetic Tension' that cannot be resolved in standard major/minor",
+      "effect": "Psychological disorientation, sense of 'other-worldly' geometry"
+    }
+  }
+}

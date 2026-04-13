@@ -1,0 +1,37 @@
+{
+  "id": "64",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "64",
+    "params": {
+      "block_id": 64
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'Спиритизмом для файлов'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 64,
+    "block_name": "Information_Rebirth.v4.Omega",
+    "archaeology_mechanics": {
+      "data_mining": "Extract raw binary from deleted_buffer_v3",
+      "sonification": "Interpret bytes as MIDI_Note / Filter_Cutoff / Waveform_Index",
+      "glitch_preservation": "Keep all clipping artifacts as 'Historical Markers'"
+    },
+    "transformation": "Apply 'Spectral_Palimpsest_v4' to the raw data stream",
+    "internal_insight": {
+      "the_digital_ghost": "Ты называл это 'Спиритизмом для файлов'. В Блоке 64 мы взяли остатки твоей сессии 2024 года и пропустили их через ASE-движок. Звук был 'рваным', но в нем слышались отголоски того, что ты уже забыл. Ты сказал: 'Ничего не исчезает, всё просто ждет реинкарнации в JSON'."
+    }
+  }
+}

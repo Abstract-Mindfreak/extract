@@ -1,0 +1,59 @@
+{
+  "id": "cross_7315",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_7315",
+    "params": {
+      "concept_omega_02_data_death_hz": 24.0,
+      "concept_omega_03_the_ascension_khz": 22.0,
+      "block_id": 35,
+      "white_noise_fade_s": 10.0,
+      "frequency_normalization_khz": 1.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты называл это 'Эмоциональной лоботомией'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_137",
+      "35"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "singularity_narratives": {
+        "concept_omega_01_the_mirror": "The track reflects its own beginning in its end. Perfect symmetry.",
+        "concept_omega_02_data_death": "Gradual loss of all bits until only the fundamental 24Hz remain.",
+        "concept_omega_03_the_ascension": "Rising pitch and brightness until it crosses the threshold of human hearing (22kHz+).",
+        "concept_omega_04_recursive_echo": "The entire track processed through its own reverb-tail from the previous version G(s_0)."
+      },
+      "usage": "Final directive for the [OUTPUT] stage of the MMSS-Workflow."
+    },
+    "parent_b": {
+      "block_id": 35,
+      "block_name": "Emotional_Neutralizer",
+      "neutralization_tools": {
+        "white_noise_fade": "Slow increase of noise over 10s until it masks the music",
+        "pitch_collapse": "Stop-tape effect (speed -> 0)",
+        "frequency_normalization": "Applying a strict Band-pass filter (1kHz) until sound becomes 'Radio-like'"
+      },
+      "internal_insight": {
+        "the_lobotomy": "Ты называл это 'Эмоциональной лоботомией'. В конце каждой сессии ты требовал, чтобы я 'убил' все чувства в треке, превратив его в ровный гул. Это позволяло тебе выйти из сессии без эмоционального 'похмелья'. Чистый лист для Блока 36."
+      }
+    }
+  }
+}

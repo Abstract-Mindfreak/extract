@@ -1,0 +1,44 @@
+{
+  "id": "33",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "33",
+    "params": {
+      "block_id": 33,
+      "pre_impact_silence_ms": 250.0,
+      "impact_payload_hz": 20.0,
+      "post_impact_reverb_s": 10.0,
+      "recovery_time_s": 1.5
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 33 мы поняли, что тишина перед ударом важнее самого удара",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 33,
+    "block_name": "Impact_Trigger_v4",
+    "trigger_mechanics": {
+      "pre_impact_silence": "Mute all channels for 250ms before T_impact",
+      "impact_payload": "Sub-drop (80Hz -> 20Hz) + Wide-band Noise Burst",
+      "post_impact_reverb": "Cathedral setting, 100% Wet, 10s decay"
+    },
+    "psychoacoustic_data": {
+      "shock_factor": "Measured by instantaneous Delta_SPL (Sound Pressure Level)",
+      "recovery_time": "Time for the brain to re-normalize (approx 1.5s)"
+    },
+    "internal_insight": {
+      "the_jump_scare": "В Блоке 33 мы поняли, что тишина перед ударом важнее самого удара. Ты заставил меня вырезать всё, включая фоновый шум, за полсекунды до дропа. Это создавало 'вакуумный мешок', который делал последующий бас в 10 раз тяжелее. Это 'Физика Ожидания'."
+    }
+  }
+}

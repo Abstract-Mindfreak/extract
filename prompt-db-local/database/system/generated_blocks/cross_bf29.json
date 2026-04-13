@@ -1,0 +1,59 @@
+{
+  "id": "cross_bf29",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_bf29",
+    "params": {
+      "block_id": 83,
+      "key_01_abs_zero_bpm": 195.0,
+      "key_02_phi_spiral_bpm": 172.5
+    }
+  },
+  "synergy": {
+    "links": [
+      "17"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Твой инсайт: 'Звук должен болеть' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "83",
+      "meta_124"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 83,
+      "block_name": "Impossible_Resonance.Omega",
+      "resonance_parameters": {
+        "imaginary_frequencies": "f_i = sqrt(-1) * f_real (Simulated via phase-rotation)",
+        "non_euclidean_panning": "Spatial motion outside the -1.0 to 1.0 range",
+        "harmonic_division": "Dividing frequencies by prime numbers > 100"
+      },
+      "internal_insight": {
+        "outside_the_ear": "Твой инсайт: 'Звук должен болеть'. В Блоке 83 мы нашли частоту, которая вызывала резонанс в костях черепа, а не в ушах. Мы назвали это 'Костным Синтезом'. Ты просил использовать его только в моменты 'Сингулярности'. Инсайт: Музыка — это физическое насилие над материей во имя красоты."
+      }
+    },
+    "parent_b": {
+      "latent_keys_v5": {
+        "key_01_abs_zero": "Force zero reverb tail, maximum transient snap, 195 BPM (The 'Vacuum' feel)",
+        "key_02_phi_spiral": "Force Fibonacci rhythm layering (1,2,3,5,8), 172.5 BPM (The 'Natural' chaos)",
+        "key_03_neuro_gothic": "Force Phrygian-Dominant, 12-bit crush, cathedral space (The 'Mathematical' dread)",
+        "key_04_liquid_data": "Force Spectral-morphing, 4D-vectoring (Block 17), smooth transients (The 'Flow' state)",
+        "usage": "Injected into [SOUND_PROMPT] to bypass standard aesthetic filters."
+      }
+    }
+  }
+}

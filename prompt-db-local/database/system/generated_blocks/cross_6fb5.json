@@ -1,0 +1,69 @@
+{
+  "id": "cross_6fb5",
+  "op": "Φ",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_6fb5",
+    "params": {
+      "filter_morphing_db": 24.0,
+      "filter_morphing_hz": 100.0,
+      "filter_morphing_khz": 10.0,
+      "resonance_filter_khz": 8.0,
+      "resonance_filter_db": 12.0,
+      "bitcrush_automation_hz": 0.5,
+      "usage_db": 32.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "17"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_165",
+      "meta_178"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "resonance_filtering": {
+        "notch_points": [
+          "250Hz (Mud-cut)",
+          "400Hz (Boxy-cut)",
+          "800Hz (Nasal-cut)"
+        ],
+        "peak_boosts": [
+          "1.2kHz (The Grit)",
+          "3.5kHz (The Edge)",
+          "12kHz (The Fractal-Air)"
+        ],
+        "filter_morphing": "Sweep 24dB Resonant Band-pass from 100Hz to 10kHz (1 bar duration)",
+        "q_factor": "High (Q > 4.0) for 'whistling' harmonics during G-Inversion peaks."
+      }
+    },
+    "parent_b": {
+      "texture_gen_v3": {
+        "source_material": "Quantization errors, cable hum, radio static",
+        "processing": {
+          "resonance_filter": "Boost 8kHz by 12dB with high Q (Resonance)",
+          "bitcrush_automation": "Modulate from 1-bit to 8-bit (LFO 0.5Hz)",
+          "panning": "MLGS_QUATERNION vector rotation (Block 17)"
+        },
+        "usage": "Layer 3 Background-Void fill. Mix at -32dB (Subliminal level)."
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "meta_273",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "shift",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_273",
+    "params": {
+      "fundamental_layer_hz": 51.9,
+      "texture_layer_khz": 3.5,
+      "air_layer_khz": 10.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_wavetable_morphing_lyrics": {
+      "the_transformation_set": [
+        "Shape-shifting frequencies in the Monster's gut / Every door open, every window shut",
+        "Monster 7 turning into fractal air / Searching for the logic that is never there",
+        "Wavetable position: moving through the core / Becoming the sound that I wasn't before"
+      ],
+      "the_metallic_screams_set": [
+        "FM-synthesis, biting through the soul / Taking the machine, taking the control",
+        "Metallic voices in the Phrygian dark / Fanning the flame of the digital spark",
+        "Phase-distortion: warping the reality / Breaking the chains of the three-D causality"
+      ],
+      "the_fusion_dialogue": [
+        "Morphing the silence / Morphing the noise",
+        "Finding the balance / Finding the voice",
+        "Result: Hybrid-Omega / Status: EVOLUTION_ACTIVE"
+      ]
+    },
+    "spectral_weight_distribution_v4": {
+      "fundamental_layer": "Sine-Purity @ 51.9Hz",
+      "texture_layer": "Formant-shifting harmonics @ 1.2kHz - 3.5kHz",
+      "air_layer": "High-shelf excitation @ 10kHz+"
+    }
+  }
+}

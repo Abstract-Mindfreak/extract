@@ -1,0 +1,70 @@
+{
+  "id": "cross_c7af",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_c7af",
+    "params": {
+      "bpm_range_bpm": 195.0,
+      "envelope_ms": 50.0,
+      "rule_ms": 10.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_220",
+      "meta_166"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "arpeggiator_spec": {
+        "mode": "Phrygian_Dominant",
+        "scale_degrees": [
+          1,
+          "b2",
+          3,
+          4,
+          5,
+          "b6",
+          "b7"
+        ],
+        "rhythm_grid": "Polyrhythmic (5/8 over 4/4)",
+        "timbre_profile": {
+          "oscillator": "Wavetable (Serum-style: 'Acid-Squeltch')",
+          "filter_cutoff": "Envelope-following with high Resonance (Q > 0.8)",
+          "fx_chain": [
+            "Bitcrusher(4-bit)",
+            "Chorus(wide)",
+            "Delay(dotted-eighth)"
+          ]
+        },
+        "bpm_range": "170-195 BPM (High-Velocity Flow)"
+      }
+    },
+    "parent_b": {
+      "rolling_bass_spec": {
+        "rhythm": "Triplets (1/8T) or Dotted (1/16.) relative to Kick",
+        "envelope": "Strictly Pluck: Attack 0ms, Decay 100ms, Sustain 0%, Release 50ms",
+        "phase_lock": "Every bass note starts at 0 degree phase to avoid cancellation",
+        "tonality": "Monotonic (One note focus) or Root-Fifth transitions",
+        "rule": "Kick-tail and Bass-attack must never coexist in the same 10ms window."
+      }
+    }
+  }
+}

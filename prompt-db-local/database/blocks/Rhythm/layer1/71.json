@@ -1,0 +1,41 @@
+{
+  "id": "71",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "71",
+    "params": {
+      "block_id": 71
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'Песнями Титанов'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 71,
+    "block_name": "Xeno_Ethno.v1",
+    "culture_parameters": {
+      "environment": "High_Gravity_Gaseous",
+      "social_structure": "Hive_Mind_Synchronicity",
+      "primary_material": "Hyper-Dense_Resonant_Crystals"
+    },
+    "instrument_synthesis": {
+      "f_pluck_physics": "Inertia = 10.0, Tension = 0.99 (Low-speed vibrations)",
+      "f_vocal_tract": "Triple-chamber resonance (Simulating three-mouthed beings)",
+      "rhythm_base": "Prime_Factor_Polyrhythms (P=13, 17, 19)"
+    },
+    "internal_insight": {
+      "the_deep_choir": "Ты называл это 'Песнями Титанов'. В Блоке 71 мы создали хор существ, чей голос звучит в диапазоне 5-50 Гц. Ты сказал: 'Мы не слышим их ушами, мы слышим их костями'. Инсайт: Культура определяется физикой тела. Если у тебя нет легких, твоя музыка — это вибрация поверхности."
+    }
+  }
+}

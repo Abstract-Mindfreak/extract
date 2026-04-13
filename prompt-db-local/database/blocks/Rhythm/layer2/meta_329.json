@@ -1,0 +1,39 @@
+{
+  "id": "meta_329",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_329",
+    "params": {
+      "iteration_depth": 3,
+      "coefficient": 0.45,
+      "delay_ms": 31.0,
+      "spectral_shaping_db": 3.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "A_MMSS_FRACTAL_PACKAGE": {
+      "mode": "Recursive Texture Overlay",
+      "iteration_depth": 3,
+      "feedback_loop": {
+        "coefficient": 0.45,
+        "delay": "δt = prime_number_ms (e.g., 17ms, 31ms) to avoid phase cancellation",
+        "spectral_shaping": "Tilt-filter +3dB/octave on feedback"
+      },
+      "seed_evolution": "Seed_next = Hash(Seed_current + Rhythmic_Entropy)"
+    }
+  }
+}

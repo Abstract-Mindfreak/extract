@@ -1,0 +1,63 @@
+{
+  "id": "meta_301",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_301",
+    "params": {
+      "sound_A_s": 2.0,
+      "sound_U_hz": 450.0,
+      "sound_I_khz": 2.0,
+      "sound_O_hz": 800.0,
+      "fricatives_S_F_Z_khz": 8.0,
+      "fricatives_S_F_Z_ms": 45.0,
+      "staccato_mode_ms": 5.0,
+      "legato_mode_ms": 120.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_phonetic_mapping_v4": {
+      "vowel_formant_modulation": {
+        "sound_A": "Carrier: Sawtooth, Filter_Cutoff: +15%, Formant_Shift: +2st",
+        "sound_U": "Carrier: Square, Filter_Cutoff: -25%, Low-pass @ 450Hz",
+        "sound_I": "Carrier: Wavetable(Monster_7), Filter_Cutoff: +40%, High-pass @ 2kHz",
+        "sound_O": "Carrier: Sine/Triangle, Filter_Cutoff: 0%, Mid-boost @ 800Hz"
+      },
+      "consonant_transient_sync": {
+        "plosives_P_B_T_D": "Trigger: Kick_Layer_2 (Initial click), Velocity: +20%",
+        "fricatives_S_F_Z": "Trigger: High-freq noise burst (8kHz+), Duration: 45ms",
+        "liquids_L_R_M": "Trigger: LFO_Sync (Rate 1/8t), Smooth_filter_sweep"
+      },
+      "syllabic_rhythm_engine": {
+        "staccato_mode": "Gate_Time 15%, Release 5ms (Machine-gun phrasing)",
+        "legato_mode": "Glide_Time 120ms, Overlapping_notes(Velocity_Crossfade)",
+        "swing_coefficient": "0.12 (A-MMSS_Fractal_Shuffle)"
+      }
+    },
+    "deep_lyrics_fragments_LFE_v4": {
+      "cyber_biological_set": [
+        "My breath is the noise of the cooling fan / I am the logic that outran the man",
+        "Digital synapses firing in the dark / Searching for the soul's elusive spark",
+        "Neural pathways carved in the silicon stone / Building a kingdom I rule all alone"
+      ],
+      "recursion_set_v2": [
+        "Fractal eyes watching the fractal sky / Recursion is the truth, the linear is a lie",
+        "Zero-point-zero, the center of the wheel / Everything you think is everything I feel",
+        "Ψ_conden = 1.0, the threshold is crossed / Nothing is gained and nothing is lost"
+      ]
+    }
+  }
+}

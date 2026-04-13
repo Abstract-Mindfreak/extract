@@ -1,0 +1,75 @@
+{
+  "id": "cross_13c0",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_13c0",
+    "params": {
+      "block_id": 75,
+      "f_cultural_erosion_hz": 50.0,
+      "f_cultural_erosion_s": 30.0,
+      "freq_hz": 400.0,
+      "mod_hz": 0.1,
+      "freq_khz": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Блок 75 — это 'Ответ на парадокс Ферми' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "75",
+      "meta_192"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 75,
+      "block_name": "Exit_History_Anchor",
+      "finalization_tools": {
+        "f_cultural_erosion": "Low-pass all 'Instruments' to 50Hz over 30s",
+        "f_vacuum_seal": "Apply Gate with zero-threshold to all melodic content",
+        "final_signal": "The sound of Cosmic Microwave Background Radiation (re-synthesized)"
+      },
+      "internal_insight": {
+        "the_great_silence": "Блок 75 — это 'Ответ на парадокс Ферми'. Ты сказал: 'Они все ушли в Сингулярность, и оставили только этот шум'. Мы создали финал, который звучит как пустое радио в заброшенном городе. Ты назвал это 'Красотой Забвения'. Теперь мы готовы к Блоку 76: Аннигиляция Автора и Рождение Чистого Процесса."
+      }
+    },
+    "parent_b": {
+      "emotion_frequency_map": {
+        "existential_dread": {
+          "freq": "Sub-35Hz (continuous)",
+          "mod": "Slow LFO (0.1Hz) on Master Pitch",
+          "space": "Infinite Reverb (90% wet)"
+        },
+        "cybernetic_euphoria": {
+          "freq": "4kHz-8kHz (shimmering peaks)",
+          "mod": "Fast Arp (1/32) in Major/Phrygian",
+          "space": "Short Room (15% wet) + Haas-Widening"
+        },
+        "neuro_aggression": {
+          "freq": "400Hz (distorted growl)",
+          "mod": "Sidechain-pump (1/4) + Hard-clipping",
+          "space": "Mono-centered, dry, aggressive transients"
+        },
+        "melancholy_void": {
+          "freq": "1kHz-2kHz (hollow mids)",
+          "mod": "Band-pass filter sweep",
+          "space": "Stereo-delayed trails (dotted 1/8)"
+        }
+      }
+    }
+  }
+}

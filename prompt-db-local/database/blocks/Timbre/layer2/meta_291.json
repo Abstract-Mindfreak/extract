@@ -1,0 +1,32 @@
+{
+  "id": "meta_291",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_291",
+    "params": {
+      "freq": 250,
+      "gain": -1.8,
+      "q": 8
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "freq": 250,
+    "gain": -1.8,
+    "q": 8,
+    "type": "Peak_Anti-mud"
+  }
+}

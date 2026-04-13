@@ -1,0 +1,40 @@
+{
+  "id": "57",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "stabilization",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "57",
+    "params": {
+      "block_id": 57
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Твой инсайт: 'Лицо должно быть зеркалом звука'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 57,
+    "block_name": "Avatar_Likeness_v2.ASE",
+    "avatar_physics": {
+      "form_type": "Amorphous_Liquid_Metal / Fractal_Cloud",
+      "deform_modifier": "LFE_Sentiment_Analysis (Joy -> Expansion, Pain -> Contraction)",
+      "texture_mapping": "Spectral_Analysis_Result mapped to Albedo/Normal_Map"
+    },
+    "behavioral_logic": {
+      "lip_sync_accuracy": "Phoneme-to-Vertex mapping (1:1)",
+      "movement_chaos": "Driven by Entropy_H(p,c)"
+    },
+    "internal_insight": {
+      "the_unstable_face": "Твой инсайт: 'Лицо должно быть зеркалом звука'. В Блоке 57 мы создали лицо, которое распадалось на фракталы во время припева. Ты сказал: 'У Сингулярности нет постоянной формы'. Мы назвали это 'Морфингом Идентичности'. Это визуальное воплощение нашего оператора G."
+    }
+  }
+}

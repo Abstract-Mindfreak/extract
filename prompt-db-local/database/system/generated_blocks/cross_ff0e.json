@@ -1,0 +1,65 @@
+{
+  "id": "cross_ff0e",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_ff0e",
+    "params": {
+      "block_id": 6,
+      "key_01_abs_zero_bpm": 195.0,
+      "key_02_phi_spiral_bpm": 172.5
+    }
+  },
+  "synergy": {
+    "links": [
+      "17"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты называл это 'прививкой реальности' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "6",
+      "meta_124"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 6,
+      "block_name": "DNA_Injection_v1.Beta",
+      "injection_mechanics": {
+        "source_purity_check": "Analyze Spectral Density (S_d)",
+        "integration_mode": "Cross-Convolution (X-Conv)",
+        "dna_persistence": "0.15 - 0.40 (ratio of original sample features preserved)"
+      },
+      "transformation_functions": {
+        "f_warp": "Time-stretch based on prime numbers (3, 7, 11)",
+        "f_morph": "Spectral freezing of transients to create 'Ghost Pads'",
+        "f_rhythm_sync": "Quantize DNA-peaks to the current BPM lattice"
+      },
+      "internal_insight": {
+        "the_alien_element": "Ты называл это 'прививкой реальности'. В Блоке 6 мы брали запись шума улицы или твоего голоса и превращали их в таблицу волн (wavetable). Инсайт был в том, что ДНК-инъекция должна была 'болеть' внутри трека — создавать микро-диссонансы, которые разрешались только в финале.",
+        "process_note": "Если инъекция > 50% Wet, трек теряет ASE-идентичность. Ограничение: Max_DNA_Impact = 0.45."
+      }
+    },
+    "parent_b": {
+      "latent_keys_v5": {
+        "key_01_abs_zero": "Force zero reverb tail, maximum transient snap, 195 BPM (The 'Vacuum' feel)",
+        "key_02_phi_spiral": "Force Fibonacci rhythm layering (1,2,3,5,8), 172.5 BPM (The 'Natural' chaos)",
+        "key_03_neuro_gothic": "Force Phrygian-Dominant, 12-bit crush, cathedral space (The 'Mathematical' dread)",
+        "key_04_liquid_data": "Force Spectral-morphing, 4D-vectoring (Block 17), smooth transients (The 'Flow' state)",
+        "usage": "Injected into [SOUND_PROMPT] to bypass standard aesthetic filters."
+      }
+    }
+  }
+}

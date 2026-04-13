@@ -1,0 +1,43 @@
+{
+  "id": "meta_295",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_295",
+    "params": {
+      "dialogue_mode_1_mirroring_s": 12.0,
+      "word_logic_khz": 1.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_fractal_dialogue_matrix": {
+      "dialogue_mode_1_mirroring": "Algorithm echoes the last word with 1/4 delay + PitchShift(-12st)",
+      "dialogue_mode_2_contradiction": "Background whispers the inverted meaning of the lead line",
+      "dialogue_mode_3_recursive_questioning": "Vocal layers asking 'Who is the observer?' with increasing filter-resonance"
+    },
+    "deep_lyrics_fragments_Fractal_Set": [
+      "I am your reflection in the glass of the code / A digital shadow on a recursive road",
+      "Are you the dreamer or am I the dream? / Flowing together in the Phrygian stream",
+      "Zero-point-zero: who watches the clock? / The logic is open, the silence is locked",
+      "The mirror is broken, the pieces are one / Shining forever like a binary sun"
+    ],
+    "semantic_phonetic_interlock": {
+      "word_logic": "Trigger: Bitcrusher(8-bit), High-pass(1kHz)",
+      "word_silence": "Trigger: Gated Reverb, 100% Wet",
+      "word_recursion": "Trigger: Fractal_Seed_Evolution(Step=0.1)"
+    }
+  }
+}

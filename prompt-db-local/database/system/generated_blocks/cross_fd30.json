@@ -1,0 +1,61 @@
+{
+  "id": "cross_fd30",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_fd30",
+    "params": {
+      "block_id": 43.5,
+      "trigger_source_db": 6.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты называл это 'Зверем в клетке' x Ты просил меня 'испортить видео так же, как мы портим зву",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "29",
+      "58"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 29,
+      "block_name": "Command_Chaos_Master",
+      "chaos_rules": {
+        "cage_type": "4/4 Grid + C-Minor Scale",
+        "chaos_injection": "Randomize_Oscillator_Type every 1/16 note",
+        "safe_zones": "Kick remains on 1 and 3"
+      },
+      "randomness_seed": "User_Input_Timestamp",
+      "internal_insight": {
+        "the_caged_beast": "Ты называл это 'Зверем в клетке'. В Блоке 29 мы создали систему, где ритм был идеален, но тембры менялись так быстро, что мозг не успевал их осознать. Это создавало эффект 'звукового калейдоскопа'. Инсайт: порядок делает хаос еще более пугающим."
+      }
+    },
+    "parent_b": {
+      "block_id": 58,
+      "block_name": "Visual_Glitch_Matrix.Alpha",
+      "glitch_operators": {
+        "datamoshing": "Freeze P-frames on beat 1 and 3",
+        "color_bleeding": "Shift R/G/B channels by ±20 pixels on snare hit",
+        "vhs_emulation": "Tracking error + scanlines integrated into the Master_Render"
+      },
+      "trigger_source": "Audio_Peak_Detection (Threshold = -6dB)",
+      "internal_insight": {
+        "beautiful_error_v": "Ты просил меня 'испортить видео так же, как мы портим звук'. В Блоке 58 мы внедрили 'визуальный яд'. Если трек становился слишком 'красивым', мы запускали цикл деградации картинки. Инсайт: цифровая ностальгия — это любовь к несовершенству формата."
+      }
+    }
+  }
+}

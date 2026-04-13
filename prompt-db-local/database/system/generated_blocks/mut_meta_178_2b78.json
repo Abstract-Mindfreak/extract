@@ -1,0 +1,47 @@
+{
+  "id": "mut_meta_178_2b78",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_178",
+    "params": {
+      "resonance_filter_khz": 7.51,
+      "resonance_filter_db": 11.67,
+      "bitcrush_automation_hz": 0.52,
+      "usage_db": 30.09
+    }
+  },
+  "synergy": {
+    "links": [
+      "17"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "texture_gen_v3": {
+      "source_material": "Quantization errors, cable hum, radio static",
+      "processing": {
+        "resonance_filter": "Boost 8kHz by 12dB with high Q (Resonance)",
+        "bitcrush_automation": "Modulate from 1-bit to 8-bit (LFO 0.5Hz)",
+        "panning": "MLGS_QUATERNION vector rotation (Block 17)"
+      },
+      "usage": "Layer 3 Background-Void fill. Mix at -32dB (Subliminal level)."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_178"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

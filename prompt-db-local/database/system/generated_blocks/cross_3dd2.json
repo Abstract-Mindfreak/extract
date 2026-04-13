@@ -1,0 +1,53 @@
+{
+  "id": "cross_3dd2",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_3dd2",
+    "params": {
+      "action_db": 52.0,
+      "processing_khz": 2.0,
+      "action_ms": 10.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_125",
+      "meta_129"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "spectral_reincarnation": {
+        "action": "Mixing back G(s_0) elements at -52dB during the final Coda",
+        "processing": "Band-pass (1kHz-2kHz) + 100% Wet Reverb + Reverse playback",
+        "psycho_goal": "Creating the sense of 'Eternal Recurrence' (Nietzschean-Recursion)",
+        "rule": "The ghost must be unrecognizable but emotionally resonant."
+      }
+    },
+    "parent_b": {
+      "glitch_trail_spec": {
+        "trigger": "Applied to Reverb/Delay returns after the Main-Theme stops",
+        "action": "Stutter-freeze Δt=10ms + Pitch-shift (+1 octave) + Bitcrush (2-bit)",
+        "rhythm": "Follows Fibonacci sequence (1, 1, 2, 3, 5, 8...) in 1/64 note units",
+        "panning": "Hard-switch Left/Right every 4 hits",
+        "rule": "Trails must represent the 'Decomposed Data' of the original sound."
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "id": "mut_meta_169_a3da",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_169",
+    "params": {
+      "stage_1_leveling_ms": 300.0,
+      "stage_2_punch_ms": 50.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "dynamic_breathing_v2": {
+      "technique": "Two-stage Compression (Slow/Fast)",
+      "stage_1_leveling": "Slow attack (30ms), auto-release (300ms), 2:1 ratio (Smoothing)",
+      "stage_2_punch": "Fast attack (1ms), fast release (50ms), 4:1 ratio (Transient control)",
+      "parallel_bus": "Heavy compression (10:1 ratio) mixed at 20% dry/wet for 'density'",
+      "goal": "Loudness without flattening the transients. Peak-to-RMS ratio of 8."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_169"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

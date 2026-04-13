@@ -1,0 +1,55 @@
+{
+  "id": "cross_73ff",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_73ff",
+    "params": {
+      "freq": 20,
+      "gain": -24,
+      "type_db": 48.0,
+      "grain_size_ms": 200.0,
+      "mixing_db": 24.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "35",
+      "1"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_289",
+      "meta_145"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "freq": 20,
+      "gain": -24,
+      "type": "HighPass_48dB/oct"
+    },
+    "parent_b": {
+      "granular_cloud_spec": {
+        "grain_size": "Ultra-small (10ms-30ms) for 'shimmer' or Large (200ms) for 'rhythm'",
+        "density": "Stochastic distribution (Random intervals)",
+        "pitch_jitter": "±1 octave variance (The 'Spectral-Smear')",
+        "position_drift": "Moving through the source file via Golden Ratio (Block 1)",
+        "mixing": "Mix at -24dB with 100% wet reverb return (Block 35)."
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "id": "cross_6f6b",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_6f6b",
+    "params": {
+      "drive_db": 35
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_326",
+      "meta_224"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "node": "Distortion",
+      "drive_db": 35,
+      "type": "HardClip"
+    },
+    "parent_b": {
+      "hyperloop_iteration": {
+        "id": "UNIQUE_ID",
+        "seed": "string",
+        "l1_core": [
+          "emotion",
+          "concept",
+          "soundscape"
+        ],
+        "entropy_setting": "H(p=X, c=Y)",
+        "applied_operators": [
+          "string"
+        ],
+        "artwork_spec": "string",
+        "self_analysis": {
+          "coherence": "string",
+          "narrative_fidelity": "string",
+          "generated_rule_r": "string"
+        }
+      }
+    }
+  }
+}

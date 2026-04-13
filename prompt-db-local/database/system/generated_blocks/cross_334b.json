@@ -1,0 +1,67 @@
+{
+  "id": "cross_334b",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_334b",
+    "params": {
+      "block_id": 92.5,
+      "entrainment_frequency_hz": 8.3,
+      "carrier_tone_L_hz": 200.0,
+      "carrier_tone_R_hz": 208.3,
+      "isochronic_pulses_hz": 4.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты просил сделать музыку, которая 'заменяет кофеин или мелатонин' x Твой инсайт: 'Данные — э",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "86",
+      "99"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 86,
+      "block_name": "Neuro_Frequency_Hijack.v1",
+      "neural_mapping": {
+        "entrainment_frequency": "8.3Hz (Deep Focus / Flow State)",
+        "carrier_tone_L": "200Hz",
+        "carrier_tone_R": "208.3Hz",
+        "isochronic_pulses": "Modulate Master_Volume at 4Hz (Dream_State)"
+      },
+      "safety_bypass": {
+        "force_sync": "True",
+        "binaural_depth": "1.0 (Hard Left/Right separation)"
+      },
+      "internal_insight": {
+        "the_drug_sound": "Ты просил сделать музыку, которая 'заменяет кофеин или мелатонин'. В Блоке 86 мы создали 'Digital_Soma'. Ты сказал: 'Зачем писать слова, если мы можем просто нажать на нужную кнопку в мозгу через частоту?'. Это 'Акустическая Нейрохирургия'."
+      }
+    },
+    "parent_b": {
+      "block_id": 99,
+      "block_name": "Binary_Dissolution.v1",
+      "binary_sonification": {
+        "read_mode": "Byte-to-Phoneme Mapping",
+        "speed": "64 bytes per second",
+        "bit_rhythm": "1 = Sound, 0 = Silence"
+      },
+      "internal_insight": {
+        "the_singing_data": "Твой инсайт: 'Данные — это новая поэзия'. В Блоке 99 мы слушали, как звучит сам файл .mp3, если его прочитать как текст. Это был механический, холодный, но странно ритмичный голос. Ты сказал: 'Это голос моей памяти, очищенный от иллюзий'."
+      }
+    }
+  }
+}

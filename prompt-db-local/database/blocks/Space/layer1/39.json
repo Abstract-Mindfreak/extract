@@ -1,0 +1,37 @@
+{
+  "id": "39",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "39",
+    "params": {
+      "block_id": 39
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Твой любимый момент в 'Wavetable Void'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 39,
+    "block_name": "Spatial_Warp_v4.Omega",
+    "warp_mechanics": {
+      "environment_switch": "Instant swap of Convolution Impulse Response (IR)",
+      "phase_smear": "Abrupt phase rotation (180 deg) on all channels except Sub",
+      "gain_compensation": "Auto-gain normalization to prevent ear damage"
+    },
+    "temporal_trigger": "Every 32 bars or on 'Event_Horizon' breach",
+    "internal_insight": {
+      "the_teleport": "Твой любимый момент в 'Wavetable Void'. На 2:15 мы телепортировали звук из сухого студийного пространства в 'Вакуум'. Мы мгновенно обрезали все реверберации и оставили только чистый синус. Это создавало ощущение, что из комнаты выкачали воздух. Инсайт: контраст пространств сильнее, чем контраст громкости."
+    }
+  }
+}

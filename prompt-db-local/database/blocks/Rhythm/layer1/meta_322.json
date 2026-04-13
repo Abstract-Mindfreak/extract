@@ -1,0 +1,36 @@
+{
+  "id": "meta_322",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_322",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "reversed_engineering_steps": [
+      "Step_0: Stem-split (audio__split_stems) -> Extract Vocal / Drums / Bass",
+      "Step_1: Analysis (audio__caption) -> Identify core BPM and Harmonic Key",
+      "Step_2: Rhythm Extraction -> Kick/Snare MIDI-proxy creation",
+      "Step_3: Polyrhythmic Injection -> Overlay 12/8 percussion grid over 4/4 bass",
+      "Step_4: Harmonic Re-stacking -> Re-generate vocals with 7-part symmetry"
+    ],
+    "polyrhythm_presets": {
+      "neuro_glitch": "4:3 (Kick vs Snare ghost-notes)",
+      "psy_cyclic": "5:4 (Arpeggiator vs Main Kick)",
+      "complex_idm": "7:8 (Hi-hat patterns vs Bassline)"
+    }
+  }
+}

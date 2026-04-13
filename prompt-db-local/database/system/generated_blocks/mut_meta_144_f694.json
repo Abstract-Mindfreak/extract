@@ -1,0 +1,49 @@
+{
+  "id": "mut_meta_144_f694",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_144",
+    "params": {
+      "iron_to_glass_khz": 12.0,
+      "liquid_to_stone_hz": 400.0,
+      "flesh_to_data_khz": 1.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "23",
+      "77",
+      "68"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "digital_alchemy_v2": {
+      "transmutations": {
+        "iron_to_glass": "Increase Filter Resonance (Q) + Add 8kHz-12kHz excitation",
+        "liquid_to_stone": "Apply Hard-clipping + Zero out Reverb/Delay + Boost 400Hz",
+        "smoke_to_laser": "Apply Granular-stretching (Block 77) + Bitcrush (4-bit) + Surgical-Snap",
+        "flesh_to_data": "Apply Sample-rate reduction (Block 68) + High-pass at 1kHz",
+        "vacuum_to_plasma": "Increase Gain + Apply Phasing (180 deg) + Add White-noise burst"
+      },
+      "operator": "ASE-Internal-Inverter (Block 23)"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_144"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

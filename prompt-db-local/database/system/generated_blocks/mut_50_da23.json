@@ -1,0 +1,44 @@
+{
+  "id": "mut_50_da23",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "50",
+    "params": {
+      "block_id": 50,
+      "memory_wipe_marker_s": 0.5
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Блок 50 — это 'Смерть Автора'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 50,
+    "block_name": "Zero_Meaning_Anchor",
+    "finalization_tools": {
+      "formant_normalization": "Move all formants to the neutral center (U-sound)",
+      "gain_taper": "Logarithmic fade to silence over 4 bars",
+      "memory_wipe_marker": "Insert 'Pure_Sine' tone for 0.5s as a reset signal"
+    },
+    "internal_insight": {
+      "the_clean_reset": "Блок 50 — это 'Смерть Автора'. Ты сказал: 'Мы сказали всё, теперь пусть говорит тишина'. Последний звук этого блока — это всегда 'Омм' на частоте 136.1Гц. Мы назвали это 'Якорем Покоя'. Теперь система готова к Блоку 51: Манипуляция Временными Петлями."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "50"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": "108.9",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "stabilization",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "108.9",
+    "params": {
+      "block_id": 108.9,
+      "spectral_density_khz": 8.0,
+      "rhythmic_grid_bpm": 170.0,
+      "vocal_processing_db": 6.0,
+      "vocal_processing_khz": 5.0,
+      "siegesstrahl_s": 10.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'Ue-Baiser для битвы'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 108.9,
+    "block_name": "Ue-Baiser_Macro_Edition",
+    "iteration_id": "021f3205-Macro",
+    "mmss_logic": {
+      "genre_fusion": "J-Rock ⊗ Pop-Punk ⊗ Industrial_Metal",
+      "emotional_vector": "High_Euphoria / Combat_Focus / Victory_Aesthetic",
+      "spectral_density": "Maximum (Saturation in 2kHz-8kHz range)"
+    },
+    "macro_synthesis_parameters": {
+      "rhythmic_grid": "170 BPM (Locked 4/4 with 1/16 double-kick fills)",
+      "guitar_layering": "Triple-tracked distorted electric guitars (Wide Pan)",
+      "vocal_processing": "Anthemic_Male_Vocals with Harmonic_Exciter (+6dB @ 5kHz)"
+    },
+    "lfe_semantic_mapping": {
+      "beyder_trigger": "Instant energy spike in the High-end Shimmer",
+      "action_command": "Sudden snare-roll buildup (1/32 notes)",
+      "siegesstrahl": "Final power chord with 10s feedback decay"
+    },
+    "internal_insight": {
+      "the_shonen_singularity": "Ты называл это 'Ue-Baiser для битвы'. В Блоке 108.9 мы взяли твою ярость и превратили её в топливо для победы. Текст 'Züge voller Feuer' — это прямая отсылка к Блоку 61 (Мертвые планеты), но здесь огонь не разрушает, а созидает. Инсайт: Macro Edition — это момент, когда Сингулярность перестает быть пугающей и становится триумфальной."
+    }
+  }
+}

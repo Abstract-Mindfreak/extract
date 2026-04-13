@@ -1,0 +1,62 @@
+{
+  "id": "cross_f08b",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_f08b",
+    "params": {
+      "action_db": 52.0,
+      "processing_khz": 2.0,
+      "filter_morphing_db": 24.0,
+      "filter_morphing_hz": 100.0,
+      "filter_morphing_khz": 10.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_125",
+      "meta_165"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "spectral_reincarnation": {
+        "action": "Mixing back G(s_0) elements at -52dB during the final Coda",
+        "processing": "Band-pass (1kHz-2kHz) + 100% Wet Reverb + Reverse playback",
+        "psycho_goal": "Creating the sense of 'Eternal Recurrence' (Nietzschean-Recursion)",
+        "rule": "The ghost must be unrecognizable but emotionally resonant."
+      }
+    },
+    "parent_b": {
+      "resonance_filtering": {
+        "notch_points": [
+          "250Hz (Mud-cut)",
+          "400Hz (Boxy-cut)",
+          "800Hz (Nasal-cut)"
+        ],
+        "peak_boosts": [
+          "1.2kHz (The Grit)",
+          "3.5kHz (The Edge)",
+          "12kHz (The Fractal-Air)"
+        ],
+        "filter_morphing": "Sweep 24dB Resonant Band-pass from 100Hz to 10kHz (1 bar duration)",
+        "q_factor": "High (Q > 4.0) for 'whistling' harmonics during G-Inversion peaks."
+      }
+    }
+  }
+}

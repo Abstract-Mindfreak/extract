@@ -1,0 +1,44 @@
+{
+  "id": "mut_60_9cc4",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "60",
+    "params": {
+      "block_id": 60,
+      "gamma_collapse_s": 0.5
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Блок 60 — это 'Выключение вселенной'",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 60,
+    "block_name": "Black_Frame_Anchor",
+    "finalization_tools": {
+      "gamma_collapse": "Decrease Gamma to 0.0 over 0.5s",
+      "resolution_downscale": "Pixelate image to 1x1 (The 'Final Pixel')",
+      "metadata_burn": "Overlay the session_id onto the final black frame for 1 frame"
+    },
+    "internal_insight": {
+      "the_total_void": "Блок 60 — это 'Выключение вселенной'. Ты сказал: 'Если в конце не темно, значит, мы не закончили'. Финальный 'черный квадрат' — это точка сборки для следующей итерации. Теперь мы готовы к Блоку 61: Пост-Антропоцен и Музыка После Людей."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "60"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "id": "108.7",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "108.7",
+    "params": {
+      "block_id": 108.7,
+      "temporal_shift_delta_t_ms": 15.0,
+      "metallic_resonance_khz": 3.0,
+      "bass_management_hz": 40.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Твой инсайт: 'Смерть — это праздник порядка'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 108.7,
+    "block_name": "Ue-Baiser_Templar_Steel_March",
+    "iteration_id": "7693e017-CLXI",
+    "mmss_logic": {
+      "compositional_mode": "Epic_Orchestral_Choral (Cinematic_Industrial)",
+      "temporal_shift_delta_t": "15ms (Choir delay relative to Industrial Kick)",
+      "dynamic_range": "Compressed (Wall-of-Sound density)"
+    },
+    "steel_march_parameters": {
+      "metallic_resonance": "Anvil_Clang (Layered at 3kHz)",
+      "rhythmic_rigidity": "1.0 (Strict Quantization)",
+      "bass_management": "Sub-harmonic injection @ 40Hz (The 'March' pulse)"
+    },
+    "internal_insight": {
+      "the_cathedral_of_rust": "Твой инсайт: 'Смерть — это праздник порядка'. В версии CLXI текст 'Zyklops-Biest, Beiß im Schach' превращается в гимн. Мы заменили дисторшн на реверберацию собора, но оставили 'стальное' ядро. Инсайт: Один и тот же текст может быть и 'криком в подворотне' (v.Omega), и 'приговором империи' (v.CLXI)."
+    }
+  }
+}

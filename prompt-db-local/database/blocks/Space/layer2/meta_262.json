@@ -1,0 +1,49 @@
+{
+  "id": "meta_262",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_262",
+    "params": {
+      "pre_delay_vocal_ms": 25.0,
+      "reverse_reverb_swells_ms": 250.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_delay_logic_lyrics": {
+      "the_echo_set": [
+        "Echoes of silence, calling the name / Playing the digital, recursive game",
+        "Repeat the error, repeat the light / Through the long tunnel of the digital night",
+        "Time is a circle, time is a loop / Trapped in the frequency, trapped in the group"
+      ],
+      "the_feedback_set": [
+        "Feed the machine, feed it again / Washing the memory, washing the brain",
+        "Feedback rising, higher and higher / Walking the edge of the digital wire",
+        "Regeneration: zero to one / The echo of everything we have begun"
+      ],
+      "the_temporal_dialogue": [
+        "Listen to the past / Hear the future breath",
+        "Nothing's gonna last / In the digital death",
+        "Result: Temporal-Immersion / Status: DELAY_LOCK_ACTIVE"
+      ]
+    },
+    "psychoacoustic_delay_v4": {
+      "pre_delay_vocal": "25ms (Separating lead from the room-tone)",
+      "reverse_reverb_swells": "Duration 250ms, triggered by Snare (The 'Suck-in' effect)",
+      "spectral_freeze_hold": "Manual trigger @ bar 16 (Infinite G# drone)"
+    }
+  }
+}

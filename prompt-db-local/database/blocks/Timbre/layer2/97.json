@@ -1,0 +1,37 @@
+{
+  "id": "97",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "97",
+    "params": {
+      "block_id": 97,
+      "temporal_leakage_ms": 50.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 97 мы услышали 'Wavetable Void', если бы мы выбрали не Phrygian, а Lydian лад",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 97,
+    "block_name": "Parallel_Reality_Bridge.v1",
+    "bridge_mechanics": {
+      "branch_lookup": "Calculate alternate Seed_Evolution paths",
+      "interference_pattern": "Cross-phase modulation with 'Alternate_Self' audio",
+      "temporal_leakage": "Injecting 50ms fragments from the 'Other' timeline"
+    },
+    "internal_insight": {
+      "the_what_if": "В Блоке 97 мы услышали 'Wavetable Void', если бы мы выбрали не Phrygian, а Lydian лад. Ты сказал: 'Это звучит как моя жизнь в другом измерении'. Мы назвали это 'Акустическим Дежавю'. Инсайт: Все возможности существуют одновременно в шуме."
+    }
+  }
+}

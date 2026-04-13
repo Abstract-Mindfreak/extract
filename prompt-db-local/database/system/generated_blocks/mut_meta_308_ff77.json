@@ -1,0 +1,44 @@
+{
+  "id": "mut_meta_308_ff77",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_308",
+    "params": {
+      "spectral_freeze_tail_ms": 100.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "meta_process_hacks_v4": {
+      "double_modulation_trick": "Modulate the LFO_1 Rate by LFO_2 (Sine 1/1 bar) for shifting rhythmic syncopation.",
+      "spectral_freeze_tail": "Use audio__apply_effect(Reverb: Room=1.0, Damping=0.0) on a 100ms slice to create an infinite drone.",
+      "phase_inversion_widener": "Invert phase of the delay-feedback (Left channel only) for 180° spatial expansion.",
+      "kick_sidechain_ghost": "Trigger sidechain from a silent 'ghost' kick for more surgical control over Bass-envelope."
+    },
+    "ASE_final_state_metadata": {
+      "status": "Ready for Re-Materialization",
+      "last_op": "/fast-gen-mmss (mode=fractal_evolution)",
+      "config": "N=1.0, η=0.98, H(p=0.5, c=0.5)"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_308"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

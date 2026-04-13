@@ -1,0 +1,57 @@
+{
+  "id": "cross_6a2e",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_6a2e",
+    "params": {
+      "spectral_carving_khz": 2.0,
+      "movement_hz": 0.2,
+      "envelope_s": 5.0,
+      "mixing_rule_db": 12.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_190",
+      "meta_182"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "timbral_contrast_matrix": {
+        "pairings": [
+          "Smooth_Sine_Bass vs Gritty_Noise_Lead",
+          "Dry_Percussion vs Wet_Atmospheric_Pads",
+          "Analog_Warmth vs Digital_Cold_Artifacts",
+          "Fast_Arpeggios vs Slow_Drone_Foundations"
+        ],
+        "rule_of_opposition": "If Layer 2 is complex and fast, Layer 3 must be simple and slow to maintain Narrative Fidelity."
+      }
+    },
+    "parent_b": {
+      "pad_architecture_v2": {
+        "timbre": "Evolving Granular / Spectral-Freeze / Slow-Attack Strings",
+        "spectral_carving": "Notch-cut at 1kHz-2kHz (to let the Lead breathe)",
+        "movement": "Auto-panning (LFO 0.2Hz) + Phase-shifting (180 deg offset)",
+        "envelope": "Attack: 2s-5s, Decay: 10s, Sustain: 50%, Release: 5s (Tail infinity)",
+        "mixing_rule": "Mix at -12dB. Must occupy the 'Sides' (Mid-Side processing: Side 100%, Mid 0%)."
+      }
+    }
+  }
+}

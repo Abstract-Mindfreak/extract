@@ -1,0 +1,51 @@
+{
+  "id": "meta_264",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_264",
+    "params": {
+      "mid_range_growl_hz": 800.0,
+      "mid_range_growl_db": 4.0,
+      "high_end_sizzle_khz": 10.0,
+      "high_end_sizzle_db": 6.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_distortion_lyrics": {
+      "the_bitcrush_set": [
+        "Eight bits of memory, a lifetime of pain / Crushing the logic inside of the brain",
+        "Digital static, the voice of the machine / Painting the spaces that no one has seen",
+        "Lower the sample-rate, higher the soul / Taking the fragments, taking control"
+      ],
+      "the_overdrive_set": [
+        "Tube-heat rising in the cold of the code / Burning the path on the fractal road",
+        "Saturate the signal, feed the fire / Higher and higher, through the digital wire",
+        "Asymmetric shadows, warping the sound / Echoes of metal on the digital ground"
+      ],
+      "the_texture_dialogue": [
+        "Beautiful error / Perfect mistake",
+        "Digital mirror / Ready to break",
+        "Result: Industrial-Organic / Status: TEXTURE_LOCK_ACTIVE"
+      ]
+    },
+    "psychoacoustic_grit_v4": {
+      "mid_range_growl": "Peak @ 800Hz (+4dB, Q=2.0) with Hard-Clipping",
+      "high_end_sizzle": "High-shelf @ 10kHz (+6dB) with Bitcrush modulation",
+      "dynamic_damping": "Dampen highs during heavy bass-hits to maintain spectral focus"
+    }
+  }
+}

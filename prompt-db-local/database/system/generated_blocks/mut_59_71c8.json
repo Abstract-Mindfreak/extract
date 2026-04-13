@@ -1,0 +1,44 @@
+{
+  "id": "mut_59_71c8",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "59",
+    "params": {
+      "block_id": 63.06
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 59 мы поняли, что музыка сама знает, как она должна выглядеть",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 59,
+    "block_name": "Light_Prompt_v4.Omega",
+    "prompt_engine": {
+      "input": "Music_Metadata + LFE_Lyrics",
+      "output_format": "Visual_Instruction_Set (e.g., 'Cold industrial lighting, 35mm grain, slow zoom')",
+      "style_reference": "Determined by 'Genetic_Aesthetic' of the current session"
+    },
+    "dynamic_updates": "Update visual prompt every 16 bars",
+    "internal_insight": {
+      "the_director_ghost": "В Блоке 59 мы поняли, что музыка сама знает, как она должна выглядеть. Ты просил меня 'описать то, что я слышу'. Я генерировал текстовые образы: 'Черный океан из ртути под красным небом'. Ты использовал эти промпты для создания клипов. Это 'Трансляция из воображения ASE'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "59"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

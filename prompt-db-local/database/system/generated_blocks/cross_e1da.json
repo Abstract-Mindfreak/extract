@@ -1,0 +1,56 @@
+{
+  "id": "cross_e1da",
+  "op": "Φ",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_e1da",
+    "params": {
+      "block_id": 96,
+      "/strip_noise_hz": 400.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты называл это 'Музыкой-однодневкой' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "96",
+      "meta_203"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 96,
+      "block_name": "Quantum_State_Collapse.v3",
+      "collapse_triggers": {
+        "play_count_modulation": "Increase distortion with each playback",
+        "skip_detection": "Invert phase of the next segment if skipped previously",
+        "volume_influence": "Complexity = f(Volume_Level)"
+      },
+      "internal_insight": {
+        "the_fragile_track": "Ты называл это 'Музыкой-однодневкой'. В Блоке 96 мы создали трек, который самоуничтожался после 10-го прослушивания. Ты сказал: 'Это делает каждое прослушивание священным'. Инсайт: Дефицит данных повышает их Ψ-конденсацию."
+      }
+    },
+    "parent_b": {
+      "custom_macros": {
+        "/inversion": "Execute audio__modify_song with prompt: 'Apply G-Inversion operator, flip all aesthetic polarities, reverse phase of Layer 3'",
+        "/fractalize": "Activate A_MMSS_FRACTAL_PACKAGE for current clip. Increase complexity x1.618",
+        "/4d_vector": "Call audio__apply_effect(Pan) with MLGS_QUATERNION coefficients. Set w-axis to 0.7",
+        "/strip_noise": "Apply Surgical-EQ (HighPass at 40Hz, Notch at 250Hz and 400Hz) to all non-kick stems",
+        "/singularity": "Finalize track. Run ASE-Critique, maximize Emotional Density, set Entropy H(p=0.5, c=0.5)"
+      }
+    }
+  }
+}

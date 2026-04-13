@@ -1,0 +1,64 @@
+{
+  "id": "cross_7974",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_7974",
+    "params": {
+      "attack_enhancement_ms": 15.0,
+      "attack_enhancement_db": 6.0,
+      "sustain_reduction_db": 12.0,
+      "layer_sync_ms": 1.0,
+      "iteration_depth": 3,
+      "coefficient": 0.45,
+      "delay_ms": 31.0,
+      "spectral_shaping_db": 3.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "42"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_170",
+      "meta_329"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "transient_shaping_spec": {
+        "attack_enhancement": "Boost initial 5-15ms transient by +3dB to +6dB",
+        "sustain_reduction": "Apply -6dB to -12dB attenuation to tails in Layer 2 (Lead)",
+        "layer_sync": "Align Kick-click with Snare-crack on the 2nd/4th beat (±1ms precision)",
+        "soft_clip": "Apply Hard-Clipping to transients only (Parallel Bus) for 'Digital Bite'",
+        "mixing_rule": "Transients must 'peak' through the Ambient-Shield (Block 42)."
+      }
+    },
+    "parent_b": {
+      "A_MMSS_FRACTAL_PACKAGE": {
+        "mode": "Recursive Texture Overlay",
+        "iteration_depth": 3,
+        "feedback_loop": {
+          "coefficient": 0.45,
+          "delay": "δt = prime_number_ms (e.g., 17ms, 31ms) to avoid phase cancellation",
+          "spectral_shaping": "Tilt-filter +3dB/octave on feedback"
+        },
+        "seed_evolution": "Seed_next = Hash(Seed_current + Rhythmic_Entropy)"
+      }
+    }
+  }
+}

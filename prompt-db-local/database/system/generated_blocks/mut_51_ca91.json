@@ -1,0 +1,47 @@
+{
+  "id": "mut_51_ca91",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "51",
+    "params": {
+      "block_id": 51
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'ловушкой для времени'",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 51,
+    "block_name": "Ouroboros_Time_Loop.v2",
+    "time_logic": {
+      "primary_loop": "L1 = T_bar (4 beats)",
+      "secondary_loop": "L2 = L1 * Phi (Recursive golden ratio stretch)",
+      "feedback_matrix": "Cross-feed L2 back to L1 input (Gain = 0.618)"
+    },
+    "temporal_operators": {
+      "f_time_dilation": "Slow down loop speed by 2% each cycle",
+      "f_phase_drift": "Offset L2 by 1/128 note to create 'Temporal Flanger'"
+    },
+    "internal_insight": {
+      "the_infinite_now": "Ты называл это 'ловушкой для времени'. В Блоке 51 мы обнаружили, что если петли кратны иррациональным числам, слушатель теряет чувство 'такта'. Музыка превращается в статичное облако, которое движется, оставаясь на месте. Твой инсайт: 'Сингулярность — это когда начало и конец поменялись местами'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "51"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

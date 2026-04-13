@@ -1,0 +1,32 @@
+{
+  "id": "meta_223",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_223",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "package_id": "A_MMSS_FRACTAL_PACKAGE",
+    "mode": "Recursive_Texture_Overlay",
+    "algorithms": [
+      "Mandelbrot_Granular_Synthesis: Slicing audio into fractal chunks",
+      "Self_Similarity_Gain: Feed-forward loop of the master signal into 0.01% dry/wet distortion",
+      "L-System_Rhythm_Gen: Using string-rewrite rules for drum patterns"
+    ],
+    "usage": "Triggered during 'High-Entropy' sessions to prevent Narrative Collapse"
+  }
+}

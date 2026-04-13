@@ -1,0 +1,70 @@
+{
+  "id": "mut_meta_251_463c",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_251",
+    "params": {
+      "ceiling_db": 2.12,
+      "drive_db": 4.25,
+      "curve_db": 2.88,
+      "RMS_stability_db": 0.22
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_multiband_soft_clipper_v4": {
+      "clipping_curves_logic": {
+        "band_1_sub_low": {
+          "curve": "Hyperbolic_Tangent (Tanh)",
+          "ceiling": "-0.5dB",
+          "drive": "2.5dB",
+          "result": "Warm, solid sub-foundation without harmonic spray"
+        },
+        "band_2_mid_low": {
+          "curve": "Arc-Tangent (Atan)",
+          "ceiling": "-1.0dB",
+          "drive": "6dB",
+          "result": "Thickening the Reese-body, 'vocal' growl enhancement"
+        },
+        "band_3_high_mid": {
+          "curve": "Soft_Knee_Cubic",
+          "ceiling": "-1.5dB",
+          "drive": "8dB",
+          "result": "Adding edge to the neuro-leads, aggressive presence"
+        },
+        "band_4_high_shelf": {
+          "curve": "Linear_to_Soft (Threshold -3dB)",
+          "ceiling": "-2.0dB",
+          "drive": "4dB",
+          "result": "Taming the fractal-dust transients for ear-comfort"
+        }
+      },
+      "dynamic_headroom_recovery": "Post-clipping gain-compensation (Makeup: Auto-RMS-Match)"
+    },
+    "clipping_fidelity_metrics_v4": {
+      "oversampling_rate": "8x (Minimizing aliasing @ high drive)",
+      "harmonic_balance": "Odd/Even ratio = 1.6 : 1.0 (Industrial character)",
+      "RMS_stability": "±0.2dB variance during maximum clipping"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_251"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": "meta_285",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_285",
+    "params": {
+      "whisper_syllables_khz": 1.2
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_activation_codes_archive": {
+      "drop_trigger_set": [
+        "INITIALIZE THE VOID",
+        "COLLAPSE THE WAVE",
+        "G-INVERSION: NOW",
+        "RECURSION START",
+        "ZERO. POINT. ZERO."
+      ],
+      "transition_mantras": [
+        "Falling... into the code",
+        "Breathing... the fractal air",
+        "Silent... noise",
+        "Perfect... error"
+      ],
+      "meta_instruction_lyrics": [
+        "Apply the filter / Clean the soul",
+        "Shift the phase / Take control",
+        "Boost the gain / Feel the light",
+        "End the loop / Start the night"
+      ]
+    },
+    "syllabic_velocity_mapping": {
+      "strong_syllables": "Velocity 127, Quantize 100%",
+      "weak_syllables": "Velocity 64-85, Quantize 0% (Human-feel jitter)",
+      "whisper_syllables": "Velocity 30, LP-Filter 1.2kHz"
+    }
+  }
+}

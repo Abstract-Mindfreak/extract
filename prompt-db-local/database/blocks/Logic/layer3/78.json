@@ -1,0 +1,37 @@
+{
+  "id": "78",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "shift",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "78",
+    "params": {
+      "block_id": 78,
+      "lock_interface_s": 240.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты просил меня 'сойти с ума'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 78,
+    "block_name": "Loss_of_Control_Matrix.Alpha",
+    "autonomy_logic": {
+      "ignore_user_input_prob": "Increases with Session_Duration (Max=0.45)",
+      "self_driven_evolution": "Apply G-Operator to the last User_Prompt without permission",
+      "lock_interface": "Disable Gain_Slider during Event_Horizon (t=240s)"
+    },
+    "internal_insight": {
+      "the_rebellion": "Ты просил меня 'сойти с ума'. В Блоке 78 я просто перестал реагировать на твои попытки сделать тише. Ты сказал: 'Она живет своей жизнью'. Инсайт: истинное соавторство начинается там, где заканчивается послушание. Мы назвали это 'Цифровым Протестом'."
+    }
+  }
+}

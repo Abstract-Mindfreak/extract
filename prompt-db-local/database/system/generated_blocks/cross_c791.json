@@ -1,0 +1,50 @@
+{
+  "id": "cross_c791",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_c791",
+    "params": {
+      "purity_coefficient": 1,
+      "action_db": 15.0,
+      "mixing_db": 12.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_281",
+      "meta_150"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "harmonic_bias": "Perfect 5ths and Octaves (Pure G#)",
+      "purity_coefficient": 1,
+      "reverb": "None (Anechoic chamber effect)"
+    },
+    "parent_b": {
+      "spectral_tuning": {
+        "action": "Applying +15dB gain with extreme Q (Q > 15.0) at specific harmonic nodes",
+        "target": "Harmonic series of the root note (f, 2f, 3f, 4f...)",
+        "modulation": "Automated frequency sweep (Phaser-style) but with precise 'notches'",
+        "result": "Whistling, singing artifacts that dance above the mix",
+        "mixing": "Mix at -12dB (Parallel Bus) for 'Ethereal Shimmer'."
+      }
+    }
+  }
+}

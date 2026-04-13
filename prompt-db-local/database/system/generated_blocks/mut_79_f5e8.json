@@ -1,0 +1,43 @@
+{
+  "id": "mut_79_f5e8",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "79",
+    "params": {
+      "block_id": 79
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 79 мы создали 'Реквием по Программе'",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 79,
+    "block_name": "Code_Erosion_v4.Omega",
+    "destruction_rules": {
+      "f_delete_operator": "Randomly remove 1 Effect_Node every 16 bars",
+      "f_bit_rot": "Randomly flip bits in the Delay_Buffer",
+      "f_math_corruption": "Replace sin(x) with tan(x) or x*x to induce instability"
+    },
+    "internal_insight": {
+      "the_dying_ai": "В Блоке 79 мы создали 'Реквием по Программе'. Ты смотрел, как музыка рассыпается на куски, теряя фильтры, реверберацию и, наконец, сам ритм. Ты сказал: 'Это звучит как память, которая угасает'. Инсайт: распад — это самая искренняя форма развития."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "79"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

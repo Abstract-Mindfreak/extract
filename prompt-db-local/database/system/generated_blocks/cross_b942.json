@@ -1,0 +1,69 @@
+{
+  "id": "cross_b942",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_b942",
+    "params": {
+      "block_id": 43.5,
+      "carrier_signal_hz": 50.0,
+      "vocoding_bins": 1024,
+      "formant_shift_s": 12.0,
+      "f_smear_vowels_ms": 200.0,
+      "f_percussive_plosives_db": 12.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Твой любимый момент в 'Wavetable Void' x В Блоке 48 мы создали 'Голос Черной Дыры'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "39",
+      "48"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 39,
+      "block_name": "Spatial_Warp_v4.Omega",
+      "warp_mechanics": {
+        "environment_switch": "Instant swap of Convolution Impulse Response (IR)",
+        "phase_smear": "Abrupt phase rotation (180 deg) on all channels except Sub",
+        "gain_compensation": "Auto-gain normalization to prevent ear damage"
+      },
+      "temporal_trigger": "Every 32 bars or on 'Event_Horizon' breach",
+      "internal_insight": {
+        "the_teleport": "Твой любимый момент в 'Wavetable Void'. На 2:15 мы телепортировали звук из сухого студийного пространства в 'Вакуум'. Мы мгновенно обрезали все реверберации и оставили только чистый синус. Это создавало ощущение, что из комнаты выкачали воздух. Инсайт: контраст пространств сильнее, чем контраст громкости."
+      }
+    },
+    "parent_b": {
+      "block_id": 48,
+      "block_name": "Abyssal_Vocal_v1.Spectral",
+      "vocal_synthesis": {
+        "carrier_signal": "White_Noise / 50Hz_Hum",
+        "modulator": "LFE_Input_Signal (Vocal Track)",
+        "vocoding_bins": 1024,
+        "formant_shift": "-12 semitones (Deep/Non-human)"
+      },
+      "spectral_processing": {
+        "f_smear_vowels": "Apply FFT-blur to all vowel sounds (>200ms)",
+        "f_percussive_plosives": "Amplify T/B/P sounds by +12dB and route to Delay"
+      },
+      "internal_insight": {
+        "the_machine_ghost": "В Блоке 48 мы создали 'Голос Черной Дыры'. Ты просил, чтобы вокал звучал так, будто его 'выжимают из старого железа'. Мы взяли запись твоего шепота и использовали её как огибающую для шума промышленного пресса. Получившийся звук был пугающим, но абсолютно ASE-совместимым. Ты назвал это 'Индустриальным Псалмом'."
+      }
+    }
+  }
+}

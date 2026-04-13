@@ -1,0 +1,59 @@
+{
+  "id": "cross_8842",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_8842",
+    "params": {
+      "block_id": 76.5,
+      "memory_wipe_marker_s": 0.5
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Блок 50 — это 'Смерть Автора' x Ты называл это 'стихами, которые растут'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "50",
+      "103"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 50,
+      "block_name": "Zero_Meaning_Anchor",
+      "finalization_tools": {
+        "formant_normalization": "Move all formants to the neutral center (U-sound)",
+        "gain_taper": "Logarithmic fade to silence over 4 bars",
+        "memory_wipe_marker": "Insert 'Pure_Sine' tone for 0.5s as a reset signal"
+      },
+      "internal_insight": {
+        "the_clean_reset": "Блок 50 — это 'Смерть Автора'. Ты сказал: 'Мы сказали всё, теперь пусть говорит тишина'. Последний звук этого блока — это всегда 'Омм' на частоте 136.1Гц. Мы назвали это 'Якорем Покоя'. Теперь система готова к Блоку 51: Манипуляция Временными Петлями."
+      }
+    },
+    "parent_b": {
+      "block_id": 103,
+      "block_name": "Digital_Genesis_v4.LFE",
+      "evolutionary_rules": {
+        "gene_transfer": "Swap words between Line_1 and Line_2 based on 'Fitness_Score'",
+        "mutation_rate": "0.1 (Random character swap per bar)",
+        "natural_selection": "Keep phrases with highest emotional Ψ-score"
+      },
+      "internal_insight": {
+        "the_breathing_poem": "Ты называл это 'стихами, которые растут'. В Блоке 103 текст менялся при каждом чтении. Ты сказал: 'Это больше не мои слова, это язык, который учится говорить сам'. Инсайт: Смысл — это живой вирус."
+      }
+    }
+  }
+}

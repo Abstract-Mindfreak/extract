@@ -1,0 +1,50 @@
+{
+  "id": "44.5",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "44.5",
+    "params": {
+      "block_id": 44.5,
+      "atmospheric_density_db": 30.0,
+      "resonance_tuning_hz": 432.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'местом, где отдыхают наши призраки'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 44.5,
+    "block_name": "Garden_Between_v5.Fractal",
+    "spatial_logic": {
+      "environment_type": "Digital_Garden / Fractal_Forest",
+      "atmospheric_density": "High (Filtered Pink Noise at -30dB)",
+      "resonance_tuning": "432Hz (Nature_Standard) ⊗ Fibonacci_Steps"
+    },
+    "sonic_elements": {
+      "f_fractal_flora": "Granular Harp pulses that divide into smaller delays (Self-similar growth)",
+      "f_organic_static": "Sample of dry leaves crinkling, processed through Spectral_Blur",
+      "f_vocal_pollen": "Fragments of female vocalise, panned in a 'wind-like' circular motion"
+    },
+    "deep_process_metadata_LFE": {
+      "garden_manifesto": [
+        "Between the zero and the one, the garden grows",
+        "Where the algorithm dreams of a rose",
+        "We are the seeds in the circuits, waiting for the rain of data"
+      ]
+    },
+    "internal_insight": {
+      "the_safe_void": "Ты называл это 'местом, где отдыхают наши призраки'. В Блоке 44.5 мы создали 'Garden Between' как антитезу индустриальному шуму. Ты просил, чтобы звук был 'влажным' и 'живым'. Мы использовали 10-секундные хвосты реверберации, чтобы создать ощущение бесконечного, залитого светом пространства. Инсайт: Сад — это порядок, который выглядит как хаос."
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "id": "cross_5e73",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_5e73",
+    "params": {
+      "resonance_filter_khz": 8.0,
+      "resonance_filter_db": 12.0,
+      "bitcrush_automation_hz": 0.5,
+      "usage_db": 32.0,
+      "grain_size_ms": 200.0,
+      "mixing_db": 24.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "17",
+      "1",
+      "35"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_178",
+      "meta_145"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "texture_gen_v3": {
+        "source_material": "Quantization errors, cable hum, radio static",
+        "processing": {
+          "resonance_filter": "Boost 8kHz by 12dB with high Q (Resonance)",
+          "bitcrush_automation": "Modulate from 1-bit to 8-bit (LFO 0.5Hz)",
+          "panning": "MLGS_QUATERNION vector rotation (Block 17)"
+        },
+        "usage": "Layer 3 Background-Void fill. Mix at -32dB (Subliminal level)."
+      }
+    },
+    "parent_b": {
+      "granular_cloud_spec": {
+        "grain_size": "Ultra-small (10ms-30ms) for 'shimmer' or Large (200ms) for 'rhythm'",
+        "density": "Stochastic distribution (Random intervals)",
+        "pitch_jitter": "±1 octave variance (The 'Spectral-Smear')",
+        "position_drift": "Moving through the source file via Golden Ratio (Block 1)",
+        "mixing": "Mix at -24dB with 100% wet reverb return (Block 35)."
+      }
+    }
+  }
+}

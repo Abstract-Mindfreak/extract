@@ -1,0 +1,59 @@
+{
+  "id": "mut_meta_237_3a68",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_237",
+    "params": {
+      "method_hz": 54.65,
+      "logic_ms": 0.1
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_multiband_phase_aligner_v4": {
+      "coherence_logic_v4": {
+        "sub_alignment_0_120Hz": {
+          "method": "Zero-latency phase-lock @ G#1 (51.9Hz)",
+          "logic": "Micro-delay adjustment (δt = 0.1ms steps) for constructive interference",
+          "result": "Maximum low-end impact, 100% mono-compatibility"
+        },
+        "mid_crossover_120_600Hz": {
+          "method": "All-pass filter rotation (Φ = 180° sweep)",
+          "target": "Reese-bass harmonics vs Snare-body harmonics",
+          "result": "Transparent mid-range, 'glued' punch"
+        },
+        "high_fractal_alignment": {
+          "method": "Spectral-correlation maximization",
+          "logic": "Ensuring transients of cymbals/percussion are phase-coherent with the kick-click",
+          "result": "Surgical 'snap' that feels like a single point of origin"
+        }
+      },
+      "dynamic_phase_correction": "Real-time correction for pitch-shifted or morphed wavetables (Adaptive Φ-reset)."
+    },
+    "coherence_metrics_v4": {
+      "correlation_coefficient": "ρ > 0.95 (In the sub-band)",
+      "phase_drift_tolerance": "±1.5° (Absolute precision)",
+      "spectral_focus_index": "η = 0.98 (The 'Laser-cut' sound)"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_237"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

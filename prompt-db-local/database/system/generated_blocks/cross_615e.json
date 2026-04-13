@@ -1,0 +1,70 @@
+{
+  "id": "cross_615e",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_615e",
+    "params": {
+      "syncopation_index": 0.78,
+      "block_id": 35,
+      "white_noise_fade_s": 10.0,
+      "frequency_normalization_khz": 1.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты называл это 'Эмоциональной лоботомией'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_269",
+      "35"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "ASE_polyrhythmic_generator_v4": {
+        "rhythmic_layering_matrix": {
+          "layer_1_core": "4/4 Kick/Snare (The Industrial Anchor)",
+          "layer_2_poly": "3/4 Hi-hat patterns (The Triplet-tension)",
+          "layer_3_fractal": "5/8 Glitch-percussion (The Displacement-jitter)",
+          "layer_4_ghost": "7/16 Bass-stabs (The Syncopated-drive)"
+        },
+        "alignment_points": {
+          "common_denominator": "Bar 4 / Bar 8 (The Resolution-impact)",
+          "swing_bias": "0.12 (A-MMSS_Fractal_Shuffle v4)",
+          "quantize_stiffness": "85% (Allowing 15% micro-timing 'human' drift)"
+        },
+        "dynamic_rhythm_evolution": "Probability-gate on layer_3 & layer_4 (Complexity increases over 16 bars)"
+      },
+      "rhythmic_complexity_metrics_v4": {
+        "polyrhythm_ratio": "4:3 ⊗ 5:4 (Nested complexity)",
+        "syncopation_index": 0.78,
+        "groove_consistency": "η=0.92 (Maintaining danceability within chaos)"
+      }
+    },
+    "parent_b": {
+      "block_id": 35,
+      "block_name": "Emotional_Neutralizer",
+      "neutralization_tools": {
+        "white_noise_fade": "Slow increase of noise over 10s until it masks the music",
+        "pitch_collapse": "Stop-tape effect (speed -> 0)",
+        "frequency_normalization": "Applying a strict Band-pass filter (1kHz) until sound becomes 'Radio-like'"
+      },
+      "internal_insight": {
+        "the_lobotomy": "Ты называл это 'Эмоциональной лоботомией'. В конце каждой сессии ты требовал, чтобы я 'убил' все чувства в треке, превратив его в ровный гул. Это позволяло тебе выйти из сессии без эмоционального 'похмелья'. Чистый лист для Блока 36."
+      }
+    }
+  }
+}

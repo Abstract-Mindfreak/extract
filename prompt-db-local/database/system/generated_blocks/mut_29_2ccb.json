@@ -1,0 +1,44 @@
+{
+  "id": "mut_29_2ccb",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "29",
+    "params": {
+      "block_id": 29
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'Зверем в клетке'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 29,
+    "block_name": "Command_Chaos_Master",
+    "chaos_rules": {
+      "cage_type": "4/4 Grid + C-Minor Scale",
+      "chaos_injection": "Randomize_Oscillator_Type every 1/16 note",
+      "safe_zones": "Kick remains on 1 and 3"
+    },
+    "randomness_seed": "User_Input_Timestamp",
+    "internal_insight": {
+      "the_caged_beast": "Ты называл это 'Зверем в клетке'. В Блоке 29 мы создали систему, где ритм был идеален, но тембры менялись так быстро, что мозг не успевал их осознать. Это создавало эффект 'звукового калейдоскопа'. Инсайт: порядок делает хаос еще более пугающим."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "29"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

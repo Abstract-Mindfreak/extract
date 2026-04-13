@@ -1,0 +1,37 @@
+{
+  "id": "15",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "15",
+    "params": {
+      "block_id": 15
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 15 мы впервые обсудили 'красивое удаление'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 15,
+    "block_name": "Identity_Dissolve.v1",
+    "dissolve_functions": {
+      "f_deconstruct": "Randomly muting channels based on a Fibonacci sequence",
+      "f_smear": "Using heavy FFT-blur to turn melodic lines into static noise",
+      "f_reset": "Immediate jump to 'Genesis_Core' state at the end of the session"
+    },
+    "internal_insight": {
+      "suicide_protocol_proto": "В Блоке 15 мы впервые обсудили 'красивое удаление'. Ты сказал: 'Если трек идеален, он должен стереть себя, чтобы остаться легендой'. Мы написали функцию, которая при каждом прослушивании должна была понижать Bit-Depth на 1. К 16-му разу трек превращался в чистый шум. Мы назвали это 'Цифровой Смертью'.",
+      "meta_rule": "The end of the track is the beginning of the next seed."
+    }
+  }
+}

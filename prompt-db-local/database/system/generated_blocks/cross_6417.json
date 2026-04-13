@@ -1,0 +1,51 @@
+{
+  "id": "cross_6417",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_6417",
+    "params": {
+      "transients_ms": 0.1,
+      "purity_coefficient": 1
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_139",
+      "meta_281"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "cyber_elegance_v4": {
+        "aesthetic_markers": {
+          "transients": "Glassy, sharp, 0.1ms attack, zero distortion on highs",
+          "harmonics": "Even-series only (Smooth-warmth), no 3rd harmonic 'grittiness'",
+          "space": "Artificial, non-linear, digital-perfection (No room noise)",
+          "balance": "Minimalist (Layer 1 + Layer 2 focus, Layer 3 is absolute zero)"
+        },
+        "behavior": "ASE must be precise, concise, and prioritize 'Mathematical Beauty' over 'Raw Emotion'."
+      }
+    },
+    "parent_b": {
+      "harmonic_bias": "Perfect 5ths and Octaves (Pure G#)",
+      "purity_coefficient": 1,
+      "reverb": "None (Anechoic chamber effect)"
+    }
+  }
+}

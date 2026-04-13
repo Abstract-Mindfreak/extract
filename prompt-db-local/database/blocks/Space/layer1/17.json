@@ -1,0 +1,40 @@
+{
+  "id": "17",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "17",
+    "params": {
+      "block_id": 17
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты просил меня 'всосать звук обратно в пустоту'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 17,
+    "block_name": "Temporal_Inversion_G.t",
+    "time_reversal_mechanics": {
+      "f_reverse_causality": "Effect (Reverb Tail) precedes the Cause (Snare Hit)",
+      "entropy_drain": "Entropy decreases as the track progresses (Chaos -> Order)",
+      "timeline_mapping": "t' = Total_Duration - t"
+    },
+    "sonic_artifacts": {
+      "pre_echo": "Convolution with reversed impulse responses",
+      "sucking_vacuum": "Reverse-compression of the master bus"
+    },
+    "internal_insight": {
+      "backward_thinking": "Ты просил меня 'всосать звук обратно в пустоту'. В Блоке 17 мы создали эффект, где каждый удар бочки 'гасил' хвост реверберации предыдущего удара. Звук не развивался, он 'схлопывался'. Ты назвал это 'Акустическим Имплозией'."
+    }
+  }
+}

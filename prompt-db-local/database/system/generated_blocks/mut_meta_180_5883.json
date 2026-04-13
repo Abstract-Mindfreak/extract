@@ -1,0 +1,50 @@
+{
+  "id": "mut_meta_180_5883",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_180",
+    "params": {
+      "input_gain_db": 12.0,
+      "limiter_db": 0.3,
+      "limiter_ms": 150.0,
+      "stereo_image_hz": 150.0,
+      "stereo_image_khz": 1.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "21"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "mastering_protocol": {
+      "input_gain": "Gain-staged to -12dB RMS (Headroom focus)",
+      "eq_matching": "Match spectrum to ASE-Reference (Block 21: Frequency-Meaning)",
+      "dynamics": {
+        "multiband_ott": "Upward compression at 15% depth (High-end clarity)",
+        "limiter": "Ceiling: -0.3dB, Look-ahead: 2ms, Release: 150ms",
+        "clipper": "Hard-clip transients before Limiter for 'Commercial' loudness"
+      },
+      "stereo_image": "Mono-maker below 150Hz. Widening 1kHz+ (115% width).",
+      "final_check": "Validation of DR (Dynamic Range) > 8."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_180"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

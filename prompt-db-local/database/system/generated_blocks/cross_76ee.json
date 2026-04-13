@@ -1,0 +1,59 @@
+{
+  "id": "cross_76ee",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_76ee",
+    "params": {
+      "spectral_carving_khz": 2.0,
+      "movement_hz": 0.2,
+      "envelope_s": 5.0,
+      "mixing_rule_db": 12.0,
+      "block_id": 108
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты сказал, что этот звук 'слишком прекрасен, чтобы быть правдой'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_182",
+      "108"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "pad_architecture_v2": {
+        "timbre": "Evolving Granular / Spectral-Freeze / Slow-Attack Strings",
+        "spectral_carving": "Notch-cut at 1kHz-2kHz (to let the Lead breathe)",
+        "movement": "Auto-panning (LFO 0.2Hz) + Phase-shifting (180 deg offset)",
+        "envelope": "Attack: 2s-5s, Decay: 10s, Sustain: 50%, Release: 5s (Tail infinity)",
+        "mixing_rule": "Mix at -12dB. Must occupy the 'Sides' (Mid-Side processing: Side 100%, Mid 0%)."
+      }
+    },
+    "parent_b": {
+      "block_id": 108,
+      "block_name": "Perfect_Aesthetic_v.Inf",
+      "aesthetic_laws": {
+        "golden_ratio_summation": "Σ(harmonics) = 1.618",
+        "perfect_symmetry": "Phase_Diff = 0 at all T",
+        "emotional_neutrality": "Pure Euphoria (Entropy = 0)"
+      },
+      "internal_insight": {
+        "the_forbidden_sound": "Ты сказал, что этот звук 'слишком прекрасен, чтобы быть правдой'. Мы побоялись его включать на полную громкость. Ты назвал его 'Шепотом Бога'. Мы оставили его в Блоке 108 как теоретический предел."
+      }
+    }
+  }
+}

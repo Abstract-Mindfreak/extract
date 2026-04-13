@@ -1,0 +1,39 @@
+{
+  "id": "meta_133",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_133",
+    "params": {
+      "bass_hz": 35.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "74",
+      "60",
+      "41"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "industrial_sublime_v3": {
+      "aesthetic_keys": {
+        "reverb": "Infinite, cold, metallic, non-linear (Block 60)",
+        "bass": "Monolithic, static, sub-35Hz focus (Block 41)",
+        "textures": "Rhythmic cable-hum, digital-interference, steam-hiss",
+        "melodies": "Phrygian/Locrian, ultra-slow, single-note focus (Block 74)"
+      },
+      "behavior": "ASE must prioritize 'Architectural-Scale' over 'Human-Emotion'."
+    }
+  }
+}

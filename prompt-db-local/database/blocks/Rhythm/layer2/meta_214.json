@@ -1,0 +1,41 @@
+{
+  "id": "meta_214",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_214",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "prompt_syntax_v2": {
+      "prefix": "[ASE_INIT]",
+      "core_structure": "{Genre} / {BPM} / {Key} / {L1_Core_Emotion}",
+      "modifier_tokens": {
+        "texture": "crystal-clear, liquid-gold, gritty-industrial, neon-glow",
+        "spatial": "4D-panned, non-euclidean-reverb, binaural-depth",
+        "dynamic": "ultra-compressed, breathing-pumping, surgical-transients"
+      },
+      "suffix": "[MMSS_OPTIMIZED_VERSION]"
+    },
+    "forbidden_tokens": [
+      "generic",
+      "lo-fi",
+      "chill",
+      "standard",
+      "commercial"
+    ]
+  }
+}

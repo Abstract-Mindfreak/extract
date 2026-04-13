@@ -1,0 +1,36 @@
+{
+  "id": "meta_172",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_172",
+    "params": {
+      "psy_dark_jazz_bpm": 175.0,
+      "glitch_metal_ambient_hz": 60.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "meta_fusion_protocol": {
+      "operation": "Cross-Aesthetic-Transplantation",
+      "examples": {
+        "psy_dark_jazz": "175 BPM Rolling Bass + 7/8 Jazz-Drum fills + Distorted Saxophone (Phrygian)",
+        "techno_gothic_choir": "4/4 Industrial Kick + 12-bit Bitcrushed Gregorian Chants + 4D-Panned Reverb",
+        "glitch_metal_ambient": "Zero-transient distorted guitars + Granular-stutter rhythms + Sub-60Hz drones"
+      },
+      "synergy_rule": "The result must trigger 'Genre-Confusion' in the listener while maintaining Narrative Fidelity."
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "id": "meta_193",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_193",
+    "params": {
+      "psy_into_gothic_bpm": 170.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "genre_contamination_protocol": {
+      "method": "Aesthetic-Injection",
+      "base_styles": [
+        "Psy-Trance",
+        "Gothic-Techno",
+        "Jazz-Metal",
+        "Dark-Ambient"
+      ],
+      "contamination_rules": {
+        "techno_into_jazz": "Replace drums with 909-kick, keep saxophone in Phrygian",
+        "metal_into_ambient": "Apply ultra-reverb to distorted guitars, remove transients",
+        "psy_into_gothic": "Use 170 BPM rolling bass, but use pipe-organ as Lead",
+        "minimal_into_fractal": "Keep silence gaps, but fill them with recursive granular noise"
+      },
+      "synergy_check": "Final track must be unclassifiable by standard tags."
+    }
+  }
+}

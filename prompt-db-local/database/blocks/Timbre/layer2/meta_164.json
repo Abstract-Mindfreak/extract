@@ -1,0 +1,34 @@
+{
+  "id": "meta_164",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_164",
+    "params": {}
+  },
+  "synergy": {
+    "links": [
+      "47"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "timbral_mutations": {
+      "crystallization": "Smooth sine morphing into sharp, 8-bit saw waves",
+      "liquefaction": "Sharp transients melting into filtered, resonant smears",
+      "vaporization": "Solid leads breaking into granular, high-freq noise clouds",
+      "solidification": "Whispering textures hardening into distorted, mid-range growls",
+      "inversion_morph": "Flipping all filter and resonance parameters to their opposites"
+    },
+    "trigger": "Applied during 'Narrative-Evolution' (Block 47) every 32 bars."
+  }
+}

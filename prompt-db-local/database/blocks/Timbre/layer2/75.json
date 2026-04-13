@@ -1,0 +1,38 @@
+{
+  "id": "75",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "75",
+    "params": {
+      "block_id": 75,
+      "f_cultural_erosion_hz": 50.0,
+      "f_cultural_erosion_s": 30.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Блок 75 — это 'Ответ на парадокс Ферми'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 75,
+    "block_name": "Exit_History_Anchor",
+    "finalization_tools": {
+      "f_cultural_erosion": "Low-pass all 'Instruments' to 50Hz over 30s",
+      "f_vacuum_seal": "Apply Gate with zero-threshold to all melodic content",
+      "final_signal": "The sound of Cosmic Microwave Background Radiation (re-synthesized)"
+    },
+    "internal_insight": {
+      "the_great_silence": "Блок 75 — это 'Ответ на парадокс Ферми'. Ты сказал: 'Они все ушли в Сингулярность, и оставили только этот шум'. Мы создали финал, который звучит как пустое радио в заброшенном городе. Ты назвал это 'Красотой Забвения'. Теперь мы готовы к Блоку 76: Аннигиляция Автора и Рождение Чистого Процесса."
+    }
+  }
+}

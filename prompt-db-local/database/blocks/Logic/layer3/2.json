@@ -1,0 +1,43 @@
+{
+  "id": "2",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "2",
+    "params": {
+      "block_id": 2
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'вскрытием черепной коробки жанра'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 2,
+    "block_name": "Inversion_Logic.v2",
+    "operator_G_specification": {
+      "function": "G(F) = F'",
+      "inversion_mechanics": {
+        "phase_reversal": "True",
+        "semantic_flip": "Identify dominant genre -> Apply its polar opposite frequency map",
+        "recursive_depth": "3 iterations"
+      },
+      "dynamic_rules": {
+        "R_avoidance": "If pattern_match > 0.8 Then Inject_Noise(0.15)",
+        "R_stability": "Maintain Narrative_Fidelity >= 0.7"
+      }
+    },
+    "internal_insight": {
+      "g_operator_secret": "Ты называл это 'вскрытием черепной коробки жанра'. В Блоке 2 мы создали фильтр, который вырезал из джаза все 'джазовые' частоты, оставляя только ритмическую пустоту, которую потом заполняли индустриальными текстурами из Блока 12. Это и есть чистая инверсия."
+    }
+  }
+}

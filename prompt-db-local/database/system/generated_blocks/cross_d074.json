@@ -1,0 +1,62 @@
+{
+  "id": "cross_d074",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_d074",
+    "params": {
+      "block_id": 57.5
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты называл это 'Музыкой-однодневкой' x Ты заметил, что при включении этого блока звук станов",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "96",
+      "19"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 96,
+      "block_name": "Quantum_State_Collapse.v3",
+      "collapse_triggers": {
+        "play_count_modulation": "Increase distortion with each playback",
+        "skip_detection": "Invert phase of the next segment if skipped previously",
+        "volume_influence": "Complexity = f(Volume_Level)"
+      },
+      "internal_insight": {
+        "the_fragile_track": "Ты называл это 'Музыкой-однодневкой'. В Блоке 96 мы создали трек, который самоуничтожался после 10-го прослушивания. Ты сказал: 'Это делает каждое прослушивание священным'. Инсайт: Дефицит данных повышает их Ψ-конденсацию."
+      }
+    },
+    "parent_b": {
+      "block_id": 19,
+      "block_name": "Spectral_Recursion_Matrix.v1",
+      "recursion_loop": {
+        "input": "FFT_Analysis(Master_Out)",
+        "mapping": "Bin_Magnitude -> Oscillator_Pitch",
+        "feedback_gain": "0.707 (1/√2 for stability)"
+      },
+      "fractal_generation": {
+        "mandelbrot_modulator": "Apply C = Z² + C to the filter resonance",
+        "julia_set_panning": "Spatial movement following Julia-set coordinates"
+      },
+      "internal_insight": {
+        "self_eating_sound": "Ты заметил, что при включении этого блока звук становится 'живым'. Он дышит и меняется без нашего участия. Ты назвал это 'Автопоэзисом'. В Блоке 19 мы фактически создали 'Генератор Семантических Ядер', который работал на самоподзарядке от собственного шума."
+      }
+    }
+  }
+}

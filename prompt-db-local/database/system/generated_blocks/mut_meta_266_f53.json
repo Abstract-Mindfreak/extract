@@ -1,0 +1,53 @@
+{
+  "id": "mut_meta_266_f53",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_266",
+    "params": {
+      "band_2_low_mid_100_400Hz_db": 3.0,
+      "harmonic_exciter_v4_khz": 5.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_multiband_distortion_v4": {
+      "spectral_degradation_logic": {
+        "band_1_sub_20_100Hz": "Zero Distortion (Absolute Sine Purity)",
+        "band_2_low_mid_100_400Hz": "Transformer Saturation (Odd Harmonics), Drive: 15%, Warmth: +3dB",
+        "band_3_mid_400_3kHz": "Tube Overdrive (Asymmetric Clipping), Drive: 22%, Mix: 45% (Parallel)",
+        "band_4_high_3kHz_plus": "Bitcrusher (12-bit / 8-bit dynamic), Sample-Rate Reduction: 0.15x"
+      },
+      "dynamic_texture_morphing": {
+        "trigger": "LFO_1_Random_Sample_and_Hold (Rate: 1/16t)",
+        "action": "Jittering Bit-depth from 16 to 8 bits only on the high-shelf",
+        "result": "Digital 'static' dust that pulses with the neuro-rhythm"
+      },
+      "harmonic_exciter_v4": "Parallel exciter @ 5kHz+ for 'shimmering' industrial air"
+    },
+    "texture_metrics_v4": {
+      "noise_to_signal_ratio": "Target 0.08 in the high-frequency band",
+      "aliasing_v4": "Controlled aliasing used as a percussive texture (Anti-aliasing disabled on Band 4)",
+      "spectral_grit_index": "η = 0.65 (High-texture density)"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_266"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

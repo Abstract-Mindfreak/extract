@@ -1,0 +1,40 @@
+{
+  "id": "meta_152",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_152",
+    "params": {}
+  },
+  "synergy": {
+    "links": [
+      "17"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "psy_arp_architecture_v4": {
+      "scale_lock": "Phrygian Dominant or Locrian (The 'Forbidden' intervals)",
+      "geometric_sequencing": {
+        "mode": "Fractal-Iteration: The sequence A-B-A-C-A-B-A-D",
+        "gate": "Randomly alternating between 10% and 90% (Staccato vs Legato)",
+        "velocity": "Modulated by Fibonacci sequence (1, 2, 3, 5, 8, 13...)"
+      },
+      "timbre_modulation": {
+        "filter_cutoff": "Synced to 1/8 note LFO (Saw-shape)",
+        "resonance": "High (Q=0.85) for 'Squelch' effect",
+        "wavetable_pos": "Moving with W-axis (Block 17)"
+      },
+      "rule": "If the Arp is fast (1/32), the Bass must be monolithic (1/4)."
+    }
+  }
+}

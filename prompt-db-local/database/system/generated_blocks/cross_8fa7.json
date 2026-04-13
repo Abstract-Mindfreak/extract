@@ -1,0 +1,58 @@
+{
+  "id": "cross_8fa7",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_8fa7",
+    "params": {
+      "room_size": 0.85,
+      "damping": 0.3,
+      "mix": 0.15,
+      "low_pass_sweep_khz": 20.0,
+      "low_pass_sweep_hz": 200.0,
+      "sample_rate_reduction_khz": 8.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "47"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_325",
+      "meta_155"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "node": "Reverb",
+      "room_size": 0.85,
+      "damping": 0.3,
+      "mix": 0.15
+    },
+    "parent_b": {
+      "spectral_decay_math": {
+        "function": "D(f, t) = f * e^(-λt) + Noise(t)",
+        "effects": {
+          "low_pass_sweep": "Descending cutoff from 20kHz to 200Hz over 8 bars",
+          "sample_rate_reduction": "Automated down-sampling from 44.1kHz to 8kHz",
+          "bit_rot": "Randomly flipping bits in the digital stream (Bitcrush automation)",
+          "usage": "During the 'Dissolution' phase (Block 47) to symbolize the death of the Narrative."
+        }
+      }
+    }
+  }
+}

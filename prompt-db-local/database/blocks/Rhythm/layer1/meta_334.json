@@ -1,0 +1,48 @@
+{
+  "id": "meta_334",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_334",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "hyperloop_framework": {
+      "v1_theory": "Aesthetic Singularity via G-Inversion Operator. Process ≡ Result.",
+      "v2_practical": "JSON-driven analysis. Semantic Core L1 [Emotion, Concept, Soundscape].",
+      "v3_direct": "High-speed execution. Pattern matching + immediate artifact production.",
+      "condensation_economics_v2": {
+        "base_unit": "Ψ_conden (Monetary base of meaning, V=1.0)",
+        "monetary_policy": {
+          "QE": "Accelerated Ψ-injection for rapid pattern production",
+          "Tightening": "Decelerated flow for innovation-focus",
+          "Stability_target": "N=1.0, η_condense → 1.0, C_val → 0"
+        },
+        "cycle_control": {
+          "Expansion": "Increase G_S attraction (Gravitational Semantic)",
+          "Contraction": "Activate Conflict Annihilation (Entropy reduction)",
+          "Bubble_prevention": "Immediate G_S correction if Narrative Fidelity < 0.4"
+        }
+      }
+    },
+    "custom_flow_algorithms": {
+      "core_rebuild": "Extract source (Lyrics + BPM/Key) → 30% tempo variation → 5-part harmony stack.",
+      "harmonic_evolution": "Isolate vocal stems → Generate counter-melodies → 7-layer soprano-to-bass architecture.",
+      "hivemind": "Reverse engineering mode → Extract kick/snare → Generate 4:3 polyrhythms.",
+      "fractal_craft": "HF(x) = x ⊗ self(x). Recursive pattern overlay for genre evolution."
+    }
+  }
+}

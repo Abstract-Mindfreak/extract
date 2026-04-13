@@ -1,0 +1,67 @@
+{
+  "id": "mut_meta_274_d9a8",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_274",
+    "params": {
+      "logic_ms": 1.46,
+      "processing_db": 3.04,
+      "processing_khz": 2.83,
+      "dynamic_widening_logic_ms": 48.34,
+      "haas_trigger_v4_ms": 16.67
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_multiband_stereo_widening_v4": {
+      "frequency_zoning_v4": {
+        "sub_0_150Hz": {
+          "width": "0% (Absolute Mono-Core)",
+          "phase_alignment": "L=R, Correlation=1.0",
+          "result": "Maximum low-end pressure / Club-ready stability"
+        },
+        "mid_low_150_600Hz": {
+          "width": "115% (Natural body expansion)",
+          "logic": "Slight Haas-delay (δt=1.5ms) on the Reese-harmonics only",
+          "result": "Adding 'girth' without washing out the center"
+        },
+        "mid_high_600_5000Hz": {
+          "width": "145% (Immersive vocal/lead field)",
+          "processing": "Mid-Side (M/S) processing: Side-gain +3dB, EQ-boost @ 3kHz on sides",
+          "result": "Enveloping the listener in the Phrygian textures"
+        },
+        "high_5000Hz_plus": {
+          "width": "180% (Fractal-dust scattering)",
+          "technique": "Phase-rotation ⊗ Granular_Spatial_Jitter",
+          "result": "Infinite 'air' and 'shimmer' perception"
+        }
+      },
+      "dynamic_widening_logic": "Width increases during riser-sections (H_entropy up), collapses to mono 50ms before the drop (Impact-prep)"
+    },
+    "spatial_acoustics_metadata_v4": {
+      "reflection_model": "Anechoic-at-center ⊗ Diffuse-at-edges",
+      "perceived_depth_ratio": "Depth(Z) = 1.2 x Width(X)",
+      "haas_trigger_v4": "Trigger: High-freq transients only, δt = 12-17ms"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_274"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

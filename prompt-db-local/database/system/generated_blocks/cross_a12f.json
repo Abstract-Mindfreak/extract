@@ -1,0 +1,58 @@
+{
+  "id": "cross_a12f",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_a12f",
+    "params": {
+      "action_ms": 10.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_129",
+      "meta_225"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "glitch_trail_spec": {
+        "trigger": "Applied to Reverb/Delay returns after the Main-Theme stops",
+        "action": "Stutter-freeze Δt=10ms + Pitch-shift (+1 octave) + Bitcrush (2-bit)",
+        "rhythm": "Follows Fibonacci sequence (1, 1, 2, 3, 5, 8...) in 1/64 note units",
+        "panning": "Hard-switch Left/Right every 4 hits",
+        "rule": "Trails must represent the 'Decomposed Data' of the original sound."
+      }
+    },
+    "parent_b": {
+      "macro_name": "MLGS_QUATERNION_GEOMETRIC_UNITY_v3.0",
+      "engine_type": "4D_Vector_Spatializer",
+      "coordinates": {
+        "x_axis": "Frequency_Distribution",
+        "y_axis": "Amplitude_Modulation",
+        "z_axis": "Temporal_Phase_Shift",
+        "w_axis": "Aesthetic_Singularity_Index"
+      },
+      "processing_rules": {
+        "rotation_matrix": "Apply Quaternion rotation to audio__apply_effect(Pan) at δt intervals",
+        "phase_coherence": "Maintain > 0.95 during 4D-translations",
+        "spatial_fractal": "Recursive delay lines at Golden Ratio intervals (1.618)"
+      }
+    }
+  }
+}

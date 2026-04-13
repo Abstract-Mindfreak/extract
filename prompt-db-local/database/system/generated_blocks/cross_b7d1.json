@@ -1,0 +1,59 @@
+{
+  "id": "cross_b7d1",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_b7d1",
+    "params": {
+      "attack_enhancement_ms": 15.0,
+      "attack_enhancement_db": 6.0,
+      "sustain_reduction_db": 12.0,
+      "layer_sync_ms": 1.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "42"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_170",
+      "meta_219"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "transient_shaping_spec": {
+        "attack_enhancement": "Boost initial 5-15ms transient by +3dB to +6dB",
+        "sustain_reduction": "Apply -6dB to -12dB attenuation to tails in Layer 2 (Lead)",
+        "layer_sync": "Align Kick-click with Snare-crack on the 2nd/4th beat (±1ms precision)",
+        "soft_clip": "Apply Hard-Clipping to transients only (Parallel Bus) for 'Digital Bite'",
+        "mixing_rule": "Transients must 'peak' through the Ambient-Shield (Block 42)."
+      }
+    },
+    "parent_b": {
+      "semantic_core_l1": {
+        "components": {
+          "emotion": "The visceral trigger (e.g., Neuro-Dread, Ecstatic-Void)",
+          "concept": "The intellectual anchor (e.g., 4D-Geometry, Fractal-Biology)",
+          "soundscape": "The physical environment (e.g., Sub-Arctic Industrial, Deep-Space Void)"
+        },
+        "interaction_rule": "E x C x S = Narrative_Fidelity",
+        "stability_index": "Must be > 0.85 for successful Hyperloop execution"
+      }
+    }
+  }
+}

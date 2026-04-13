@@ -1,0 +1,43 @@
+{
+  "id": "mut_meta_131_dd2f",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_131",
+    "params": {
+      "sub_focus_hz": 45.0,
+      "sub_focus_db": 3.0,
+      "compression_pump_ms": 500.0,
+      "psycho_trick_db": 3.0,
+      "psycho_trick_hz": 300.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "physical_weight_spec": {
+      "sub_focus": "35Hz - 45Hz boost (+3dB) with wide Q",
+      "compression_pump": "Slow Release (500ms+) on the Master Bus to create 'breathing' pressure",
+      "psycho_trick": "Subtracting 3dB at 300Hz (the mud) to make the Sub feel 'cleaner' and 'heavier'",
+      "mixing_rule": "The Foundation must feel like it's 'bending' the space around the Narrative Layers."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_131"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

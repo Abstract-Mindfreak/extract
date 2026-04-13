@@ -1,0 +1,56 @@
+{
+  "id": "cross_82d2",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_82d2",
+    "params": {
+      "action_ms": 10.0,
+      "block_id": 77
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Твой инсайт: 'Мусор на входе — искусство на выходе'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_129",
+      "77"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "glitch_trail_spec": {
+        "trigger": "Applied to Reverb/Delay returns after the Main-Theme stops",
+        "action": "Stutter-freeze Δt=10ms + Pitch-shift (+1 octave) + Bitcrush (2-bit)",
+        "rhythm": "Follows Fibonacci sequence (1, 1, 2, 3, 5, 8...) in 1/64 note units",
+        "panning": "Hard-switch Left/Right every 4 hits",
+        "rule": "Trails must represent the 'Decomposed Data' of the original sound."
+      }
+    },
+    "parent_b": {
+      "block_id": 77,
+      "block_name": "Pixel_Corruption_v2.Audio",
+      "conversion_mechanics": {
+        "pixel_row_to_wavetable": "Brightness(x,y) -> Amplitude(t)",
+        "color_channel_to_filter": "R=Cutoff, G=Resonance, B=Drive",
+        "image_aliasing": "Mirroring high frequencies to create 'Digital Grime'"
+      },
+      "internal_insight": {
+        "the_ugly_beauty": "Твой инсайт: 'Мусор на входе — искусство на выходе'. В Блоке 77 мы взяли скриншот ошибки '404' и превратили его в лид-синтезатор. Звук был 'грязным' и агрессивным. Ты сказал: 'Так звучит сломанная реальность'. Мы назвали это 'Aesthetic_Trash_Can'."
+      }
+    }
+  }
+}

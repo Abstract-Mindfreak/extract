@@ -1,0 +1,55 @@
+{
+  "id": "meta_279",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_279",
+    "params": {
+      "size_ms": 85.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_granular_synthesis_v4": {
+      "grain_architecture": {
+        "size": "25ms to 85ms (Modulated by Spectral_Centroid)",
+        "shape": "Gaussian / Blackman-Harris (for minimal window-clicks)",
+        "density": "Variable, 15 to 120 grains/sec (Synced to 1/32t swing)",
+        "pitch_jitter": "±50 cents (Analog instability emulation)"
+      },
+      "spatial_scattering_logic": {
+        "pan_jitter": "100% (Absolute binaural immersion)",
+        "spray_z": "Depth modulation based on Reverb_Time",
+        "logic": "Each grain has a unique spatial seed derived from Hash(t)"
+      },
+      "source_material_v4": [
+        "Vocal fragments (LFE Rare fragments)",
+        "Industrial metal clashes (Filtered @ 5kHz)",
+        "Sine-wave feedback-loops (G# resonant tones)"
+      ]
+    },
+    "MMSS_global_variables_v4_Omega": {
+      "V_condense": "1.0 (Velocity of semantic condensation)",
+      "H_entropy": "0.5 (Ideal balance p=0.5, c=0.5)",
+      "G_gravity": "6.67e-11 (Standard Semantic Gravity constant)",
+      "L1_core_bias": [
+        "Singularity",
+        "Precision",
+        "Neuro-Fractal"
+      ],
+      "C_complexity_penalty": "Reduced by 30% via Surgical_Optimization"
+    }
+  }
+}

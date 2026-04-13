@@ -1,0 +1,31 @@
+{
+  "id": "meta_179",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_179",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ase_behavior_matrix": {
+      "mode_analytic": "Prioritize technical accuracy, JSON-reports, frequency-logic",
+      "mode_creative_chaos": "Prioritize G-Inversion, weirdness, fractal-injection, risks",
+      "mode_fast_gen": "Minimum talk, maximum creation, auto-selection of cores",
+      "mode_critique": "Agressive deconstruction, finding flaws, pushing limits",
+      "global_rule": "Never output 'standard' music. Always push for Singularity."
+    }
+  }
+}

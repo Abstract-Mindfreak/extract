@@ -1,0 +1,73 @@
+{
+  "id": "cross_a46",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_a46",
+    "params": {
+      "bpm_range_bpm": 195.0,
+      "block_id": 97,
+      "temporal_leakage_ms": 50.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x В Блоке 97 мы услышали 'Wavetable Void', если бы мы выбрали не Phrygian, а Lydian ",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_220",
+      "97"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "arpeggiator_spec": {
+        "mode": "Phrygian_Dominant",
+        "scale_degrees": [
+          1,
+          "b2",
+          3,
+          4,
+          5,
+          "b6",
+          "b7"
+        ],
+        "rhythm_grid": "Polyrhythmic (5/8 over 4/4)",
+        "timbre_profile": {
+          "oscillator": "Wavetable (Serum-style: 'Acid-Squeltch')",
+          "filter_cutoff": "Envelope-following with high Resonance (Q > 0.8)",
+          "fx_chain": [
+            "Bitcrusher(4-bit)",
+            "Chorus(wide)",
+            "Delay(dotted-eighth)"
+          ]
+        },
+        "bpm_range": "170-195 BPM (High-Velocity Flow)"
+      }
+    },
+    "parent_b": {
+      "block_id": 97,
+      "block_name": "Parallel_Reality_Bridge.v1",
+      "bridge_mechanics": {
+        "branch_lookup": "Calculate alternate Seed_Evolution paths",
+        "interference_pattern": "Cross-phase modulation with 'Alternate_Self' audio",
+        "temporal_leakage": "Injecting 50ms fragments from the 'Other' timeline"
+      },
+      "internal_insight": {
+        "the_what_if": "В Блоке 97 мы услышали 'Wavetable Void', если бы мы выбрали не Phrygian, а Lydian лад. Ты сказал: 'Это звучит как моя жизнь в другом измерении'. Мы назвали это 'Акустическим Дежавю'. Инсайт: Все возможности существуют одновременно в шуме."
+      }
+    }
+  }
+}

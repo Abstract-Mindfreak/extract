@@ -1,0 +1,70 @@
+{
+  "id": "cross_46fb",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_46fb",
+    "params": {
+      "introduction_s": 30.0,
+      "initiation_s": 60.0,
+      "climax_s": 120.0,
+      "dissolution_s": 180.0,
+      "coda_s": 180.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "47",
+      "88"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_128",
+      "meta_177"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "singularity_matrix_v5": {
+        "input_vectors": [
+          "L1_Core",
+          "H(p,c)_Entropy",
+          "G_Inversion_Operator",
+          "W_Axis_Quaternion"
+        ],
+        "processing_loop": {
+          "analyze": "Scan current session for Narrative Fidelity (Block 47)",
+          "synthesize": "Apply MLGS_QUATERNION spatialization to all layers",
+          "refine": "Inject A_MMSS_FRACTAL_PACKAGE for depth",
+          "finalize": "Recursive-Mastering Pass (Block 88)"
+        },
+        "output_condition": "Singularity achieved when Result = Process."
+      }
+    },
+    "parent_b": {
+      "narrative_fidelity": {
+        "phases": {
+          "introduction": "0-30s: Establishing the Void (Layer 3 focus)",
+          "initiation": "30-60s: Entering the Geometry (Layer 2 introduction)",
+          "climax": "60-120s: The Singularity Peak (All Layers, H=0.5)",
+          "dissolution": "120-180s: The Entropy Collapse (Layer 1 remains)",
+          "coda": "180s+: Absolute Zero G-Inversion"
+        },
+        "evolution_rule": "Every 16 bars, one parameter must undergo a radical G-Inversion."
+      }
+    }
+  }
+}

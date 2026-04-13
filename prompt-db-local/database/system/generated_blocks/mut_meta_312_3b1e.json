@@ -1,0 +1,56 @@
+{
+  "id": "mut_meta_312_3b1e",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_312",
+    "params": {
+      "left_ms": 7.0,
+      "right_ms": 13.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "temporal_distortion_v4": {
+      "time_stretching_logic": {
+        "mode": "Granular / Spectral_Freeze",
+        "ratio": "Variable (100% to 1000% over 4 bars)",
+        "pitch_compensation": "Enabled (Formant preserved)"
+      },
+      "rhythmic_condensation_macro": {
+        "input": "16 bars of patterns",
+        "output": "4 bars of high-density neuro-glitch",
+        "method": "Overlapping window-splicing ⊗ Exponential volume-ramp"
+      },
+      "micro_delay_stereo_matrix": {
+        "left": "7ms",
+        "right": "13ms",
+        "feedback": "None (For Haas-effect width only)"
+      }
+    },
+    "ASE_final_metadata_summary": {
+      "last_known_bpm": "174 (Neurofunk standard)",
+      "last_known_key": "G# Minor / Phrygian",
+      "primary_mode": "Hyperloop v3 (Direct Execution)"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_312"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

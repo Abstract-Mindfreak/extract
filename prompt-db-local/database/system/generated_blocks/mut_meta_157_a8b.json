@@ -1,0 +1,46 @@
+{
+  "id": "mut_meta_157_a8b",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_157",
+    "params": {
+      "fundamental_lock_hz": 247.18,
+      "layer_1_white_ms": 144.67,
+      "spatial_offset_ms": 12.81,
+      "mixing_rule_khz": 3.94
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "fractal_snare_spec": {
+      "fundamental_lock": "200Hz - 250Hz (The Punch)",
+      "noise_geometry": {
+        "layer_1_white": "Gated white noise, 5ms attack, 150ms decay",
+        "layer_2_metallic": "FM-synthesis 'cling', 12-bit crushed",
+        "layer_3_fractal": "Micro-glitch burst (1/128 notes) at the very end of the tail"
+      },
+      "spatial_offset": "Left channel delayed by 5ms, Right channel delayed by 12ms (The 'Widening Crack')",
+      "mixing_rule": "Snare must be the loudest transient in the 1kHz-4kHz range."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_157"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

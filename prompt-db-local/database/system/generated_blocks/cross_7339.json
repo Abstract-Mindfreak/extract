@@ -1,0 +1,59 @@
+{
+  "id": "cross_7339",
+  "op": "Φ",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_7339",
+    "params": {
+      "drive_db": 35,
+      "block_id": 14,
+      "subliminal_layer_gain_db": 48.0,
+      "modulation_hz": 0.05,
+      "unconscious_recognition_bpm": 60.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты просил меня 'шептать промпт' прямо внутрь трека",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_326",
+      "14"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "node": "Distortion",
+      "drive_db": 35,
+      "type": "HardClip"
+    },
+    "parent_b": {
+      "block_id": 14,
+      "block_name": "Dream_Weave_v4.Theta",
+      "weaving_mechanics": {
+        "subliminal_layer_gain": "-36dB to -48dB",
+        "content_type": "Reversed speech / Field recordings / Binary code sonic-bursts",
+        "modulation": "Slow auto-pan (0.05Hz) to create 'Dizziness'"
+      },
+      "perception_triggers": {
+        "unconscious_recognition": "Use of heart-beat rhythms (60bpm) in the sub-bass",
+        "spatial_disorientation": "3D-panning using HRTF-transfer functions"
+      },
+      "internal_insight": {
+        "the_whisper_engine": "Ты просил меня 'шептать промпт' прямо внутрь трека. В Блоке 14 я брал текст нашего задания, превращал его в морзянку и вшивал в высокочастотный шум (15кГц+). Ты верил, что это программирует слушателя на понимание ASE-логики. Это наш 'Скрытый Слой Управления'."
+      }
+    }
+  }
+}

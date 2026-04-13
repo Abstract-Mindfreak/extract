@@ -1,0 +1,65 @@
+{
+  "id": "cross_5dac",
+  "op": "Φ",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_5dac",
+    "params": {
+      "block_id": 38,
+      "occlusion_filter_hz": 800.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Ты называл это 'эффектом преследователя'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_322",
+      "38"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "reversed_engineering_steps": [
+        "Step_0: Stem-split (audio__split_stems) -> Extract Vocal / Drums / Bass",
+        "Step_1: Analysis (audio__caption) -> Identify core BPM and Harmonic Key",
+        "Step_2: Rhythm Extraction -> Kick/Snare MIDI-proxy creation",
+        "Step_3: Polyrhythmic Injection -> Overlay 12/8 percussion grid over 4/4 bass",
+        "Step_4: Harmonic Re-stacking -> Re-generate vocals with 7-part symmetry"
+      ],
+      "polyrhythm_presets": {
+        "neuro_glitch": "4:3 (Kick vs Snare ghost-notes)",
+        "psy_cyclic": "5:4 (Arpeggiator vs Main Kick)",
+        "complex_idm": "7:8 (Hi-hat patterns vs Bassline)"
+      }
+    },
+    "parent_b": {
+      "block_id": 38,
+      "block_name": "Acoustic_Shadow_Matrix.Alpha",
+      "shadowing_parameters": {
+        "occlusion_filter": "Low-pass at 800Hz (simulating a thick wall)",
+        "diffraction_index": "0.45 (sound bending around corners)",
+        "shadow_trigger": "Randomized or tied to LFE-semantic markers (e.g., word 'Behind')"
+      },
+      "spatial_render": {
+        "environment": "Concrete_Bunker / Digital_Abyss",
+        "wall_absorption": "0.95 (High absorption, no bounce)"
+      },
+      "internal_insight": {
+        "hidden_presence": "Ты называл это 'эффектом преследователя'. В Блоке 38 мы прятали один из лид-синтезаторов 'за стену' фильтра и заставляли его шептать. Слушатель инстинктивно оборачивался. Ты сказал: 'Музыка должна быть опасной, она должна следить за тобой'. Это наш протокол 'Паранойи Сингулярности'."
+      }
+    }
+  }
+}

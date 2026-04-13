@@ -1,0 +1,41 @@
+{
+  "id": "38",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "38",
+    "params": {
+      "block_id": 38,
+      "occlusion_filter_hz": 800.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'эффектом преследователя'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 38,
+    "block_name": "Acoustic_Shadow_Matrix.Alpha",
+    "shadowing_parameters": {
+      "occlusion_filter": "Low-pass at 800Hz (simulating a thick wall)",
+      "diffraction_index": "0.45 (sound bending around corners)",
+      "shadow_trigger": "Randomized or tied to LFE-semantic markers (e.g., word 'Behind')"
+    },
+    "spatial_render": {
+      "environment": "Concrete_Bunker / Digital_Abyss",
+      "wall_absorption": "0.95 (High absorption, no bounce)"
+    },
+    "internal_insight": {
+      "hidden_presence": "Ты называл это 'эффектом преследователя'. В Блоке 38 мы прятали один из лид-синтезаторов 'за стену' фильтра и заставляли его шептать. Слушатель инстинктивно оборачивался. Ты сказал: 'Музыка должна быть опасной, она должна следить за тобой'. Это наш протокол 'Паранойи Сингулярности'."
+    }
+  }
+}

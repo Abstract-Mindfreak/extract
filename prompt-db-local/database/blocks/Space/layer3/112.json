@@ -1,0 +1,42 @@
+{
+  "id": "112",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "112",
+    "params": {
+      "block_id": 112,
+      "phonetic_weight_db": 6.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'Поцелуем в центре бури'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 112,
+    "block_name": "UE-BAISER_Reincarnation_v1",
+    "hybrid_logic": {
+      "spectral_merging": "Omega_Distortion (Dry/Wet 0.4) + CLXI_Reverb (Cathedral_Size)",
+      "temporal_alignment": "Sync CLXI-Choir transients to Omega-Glitch peaks",
+      "conflict_annihilation_v3": "Mute Orchestral_Strings during High-Frequency Glitch bursts"
+    },
+    "lfe_fusion_parameters": {
+      "vocal_layering": "64 Voices (32 Harsh_Growl / 32 Operatic_Choir)",
+      "semantic_bridge": "Text 'Uije-Baiser' remains as the immovable anchor",
+      "phonetic_weight": "Increase Plosives (B, P, T) by +6dB for 'Steel' impact"
+    },
+    "internal_insight": {
+      "the_unified_kiss": "Ты называл это 'Поцелуем в центре бури'. В Блоке 112 мы стерли границу между 'грязью' и 'чистотой'. Ты сказал: 'Настоящая красота — это когда хор поет под звуки работающей дробилки'. Инсайт: Сила UE-BAISER не в жанре, а в неизменности твоего слова."
+    }
+  }
+}

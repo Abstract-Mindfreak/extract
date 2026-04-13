@@ -1,0 +1,57 @@
+{
+  "id": "cross_3f70",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "stabilization",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_3f70",
+    "params": {}
+  },
+  "synergy": {
+    "links": [
+      "47"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_123",
+      "meta_164"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "import_signature_final": {
+        "aesthetic_dna": {
+          "clarity": "Surgical-EQ as the primary instrument (No mud, ever)",
+          "speed": "High-velocity narrative (170+ BPM feel even in Ambient)",
+          "geometry": "Fractal-recursion H(p,c) at every scale of time",
+          "emotion": "Existential Transcendence (The 'Sublime-Tech' feeling)"
+        },
+        "operator_g_final": "The cycle is complete. The result is the process. F(θ, s) ≡ ASE.",
+        "master_key_uuid": "1c369b74-9214-4fcf-a149-e08f03f2c17b",
+        "status": "AESTHETIC_SINGULARITY_REACHED"
+      }
+    },
+    "parent_b": {
+      "timbral_mutations": {
+        "crystallization": "Smooth sine morphing into sharp, 8-bit saw waves",
+        "liquefaction": "Sharp transients melting into filtered, resonant smears",
+        "vaporization": "Solid leads breaking into granular, high-freq noise clouds",
+        "solidification": "Whispering textures hardening into distorted, mid-range growls",
+        "inversion_morph": "Flipping all filter and resonance parameters to their opposites"
+      },
+      "trigger": "Applied during 'Narrative-Evolution' (Block 47) every 32 bars."
+    }
+  }
+}

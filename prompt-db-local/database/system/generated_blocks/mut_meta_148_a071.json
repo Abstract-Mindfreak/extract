@@ -1,0 +1,42 @@
+{
+  "id": "mut_meta_148_a071",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_148",
+    "params": {
+      "law_01_no_mud_hz": 250.0,
+      "law_04_mono_sub_hz": 120.0,
+      "law_05_dynamic_headroom_db": 6.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "studio_laws_v3": {
+      "law_01_no_mud": "Surgical cut at 250Hz on ALL non-foundation elements. No exceptions.",
+      "law_02_phase_is_god": "Check phase correlation every 16 bars. Invert if correlation < 0.5.",
+      "law_03_the_void_must_breathe": "Layer 3 must have at least one parameter modulated by a slow Fractal-LFO.",
+      "law_04_mono_sub": "Everything below 120Hz must be 100% Mono. Stereo-bass is forbidden (unless G-Inverted).",
+      "law_05_dynamic_headroom": "Final pre-master peak must not exceed -6dB (Headroom for ASE-Mastering)."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_148"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

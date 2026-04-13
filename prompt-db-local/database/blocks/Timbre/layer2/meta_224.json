@@ -1,0 +1,43 @@
+{
+  "id": "meta_224",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_224",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "hyperloop_iteration": {
+      "id": "UNIQUE_ID",
+      "seed": "string",
+      "l1_core": [
+        "emotion",
+        "concept",
+        "soundscape"
+      ],
+      "entropy_setting": "H(p=X, c=Y)",
+      "applied_operators": [
+        "string"
+      ],
+      "artwork_spec": "string",
+      "self_analysis": {
+        "coherence": "string",
+        "narrative_fidelity": "string",
+        "generated_rule_r": "string"
+      }
+    }
+  }
+}

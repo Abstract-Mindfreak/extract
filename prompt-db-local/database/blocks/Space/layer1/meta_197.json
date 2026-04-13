@@ -1,0 +1,36 @@
+{
+  "id": "meta_197",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_197",
+    "params": {
+      "industrial_dirt_hz": 400.0,
+      "injection_rule_db": 24.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "noise_library_v2": {
+      "categories": {
+        "void_noise": "High-shelf filtered white noise + fractal reverb (Spatial emptiness)",
+        "glitch_organic": "Recording of ice cracking / paper tearing + granular delay (Bio-mechanic focus)",
+        "industrial_dirt": "Bitcrushed vinyl crackle + low-mids distortion at 400Hz (Gritty texture)",
+        "digital_plasma": "High-speed FM-chirps + phasing (Neon/High-tech vibe)"
+      },
+      "injection_rule": "Mix at -18dB to -24dB relative to Layer 2. Apply sidechain from Layer 1 Foundation."
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "id": "36",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "36",
+    "params": {
+      "block_id": 36,
+      "dynamic_panning_hz": 0.1
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты просил сделать комнату, которая 'больше внутри, чем снаружи'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 36,
+    "block_name": "Sonic_Labyrinth_v1.HRTF",
+    "spatial_coordinates": {
+      "x_axis": "Azimuth (-180 to 180 deg)",
+      "y_axis": "Elevation (-90 to 90 deg)",
+      "z_axis": "Distance (R_distance = 1 / sqrt(Power))"
+    },
+    "labyrinth_logic": {
+      "dynamic_panning": "Circular motion at 0.1Hz with random Z-axis jumps",
+      "doppler_shift": "Active for moving sound sources (v_max = 340m/s)",
+      "early_reflections": "Calculated for a 'Non-Euclidean' geometry"
+    },
+    "internal_insight": {
+      "geometry_paradox": "Ты просил сделать комнату, которая 'больше внутри, чем снаружи'. В Блоке 36 мы настроили реверберацию так, чтобы ранние отражения соответствовали тесной коробке (1x1м), а хвост затухания — огромному собору (100x100м). Ты назвал это 'Клаустрофобическим Величием'.",
+      "sensory_note": "Слушатель должен чувствовать, как стены 'дышат' в ритме баса."
+    }
+  }
+}

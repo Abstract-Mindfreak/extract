@@ -1,0 +1,80 @@
+{
+  "id": "cross_7248",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_7248",
+    "params": {
+      "freq_hz": 400.0,
+      "mod_hz": 0.1,
+      "freq_khz": 2.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "47",
+      "88"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_128",
+      "meta_192"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "singularity_matrix_v5": {
+        "input_vectors": [
+          "L1_Core",
+          "H(p,c)_Entropy",
+          "G_Inversion_Operator",
+          "W_Axis_Quaternion"
+        ],
+        "processing_loop": {
+          "analyze": "Scan current session for Narrative Fidelity (Block 47)",
+          "synthesize": "Apply MLGS_QUATERNION spatialization to all layers",
+          "refine": "Inject A_MMSS_FRACTAL_PACKAGE for depth",
+          "finalize": "Recursive-Mastering Pass (Block 88)"
+        },
+        "output_condition": "Singularity achieved when Result = Process."
+      }
+    },
+    "parent_b": {
+      "emotion_frequency_map": {
+        "existential_dread": {
+          "freq": "Sub-35Hz (continuous)",
+          "mod": "Slow LFO (0.1Hz) on Master Pitch",
+          "space": "Infinite Reverb (90% wet)"
+        },
+        "cybernetic_euphoria": {
+          "freq": "4kHz-8kHz (shimmering peaks)",
+          "mod": "Fast Arp (1/32) in Major/Phrygian",
+          "space": "Short Room (15% wet) + Haas-Widening"
+        },
+        "neuro_aggression": {
+          "freq": "400Hz (distorted growl)",
+          "mod": "Sidechain-pump (1/4) + Hard-clipping",
+          "space": "Mono-centered, dry, aggressive transients"
+        },
+        "melancholy_void": {
+          "freq": "1kHz-2kHz (hollow mids)",
+          "mod": "Band-pass filter sweep",
+          "space": "Stereo-delayed trails (dotted 1/8)"
+        }
+      }
+    }
+  }
+}

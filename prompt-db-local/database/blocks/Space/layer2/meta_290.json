@@ -1,0 +1,27 @@
+{
+  "id": "meta_290",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_290",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "width_100Hz_below": "0% (Absolute Mono)",
+    "width_100_500Hz": "110% (Slight expansion)",
+    "width_500Hz_above": "135% (Immersive fractal width)"
+  }
+}

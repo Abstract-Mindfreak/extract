@@ -1,0 +1,33 @@
+{
+  "id": "meta_219",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_219",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "semantic_core_l1": {
+      "components": {
+        "emotion": "The visceral trigger (e.g., Neuro-Dread, Ecstatic-Void)",
+        "concept": "The intellectual anchor (e.g., 4D-Geometry, Fractal-Biology)",
+        "soundscape": "The physical environment (e.g., Sub-Arctic Industrial, Deep-Space Void)"
+      },
+      "interaction_rule": "E x C x S = Narrative_Fidelity",
+      "stability_index": "Must be > 0.85 for successful Hyperloop execution"
+    }
+  }
+}

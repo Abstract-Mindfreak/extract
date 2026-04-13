@@ -1,0 +1,45 @@
+{
+  "id": "81",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "81",
+    "params": {
+      "block_id": 81,
+      "under_layer_hiss_db": 40.0,
+      "spectral_remnance_s": 300.0,
+      "imperfect_wipe_hz": 500.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'прививкой истории'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 81,
+    "block_name": "Spectral_Palimpsest_v4.Omega",
+    "spectral_logic": {
+      "layer_ghosting": {
+        "under_layer_hiss": "Reversed DNA-Injections from Block_34 (-40dB)",
+        "spectral_remnance": "FFT-bins from T-300s preserved in Convolution engine",
+        "semantic_shadows": "Whispers of LFE-lyrics from Session_03 appearing in Layer_3"
+      },
+      "erasure_operators": {
+        "imperfect_wipe": "HPF @ 500Hz for all 'Ghost' artifacts",
+        "artifact_memory": "Glitch-triggers based on transient-peaks of the 'Hidden' track"
+      }
+    },
+    "internal_insight": {
+      "memory_stain_v4": "Ты называл это 'прививкой истории'. Если трек был слишком чистым, ты заставлял меня внедрить 20-секундный фрагмент самого первого удаленного проекта с искажением 90% Wet. Это 'Память Генезиса'."
+    }
+  }
+}

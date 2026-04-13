@@ -1,0 +1,48 @@
+{
+  "id": "meta_185",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_185",
+    "params": {
+      "layer_1_sub_hz": 20.0,
+      "layer_2_click_khz": 1.0,
+      "processing_db": 3.0,
+      "fundamental_hz": 400.0,
+      "texture_ms": 15.0,
+      "tail_s": 0.4
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "drum_architecture_v4": {
+      "kick_spec": {
+        "layer_1_sub": "Sine-drop (60Hz to 20Hz), zero tail",
+        "layer_2_click": "High-passed (1kHz) transient, phase-aligned",
+        "processing": "Hard-clip at -3dB, no compression on main bus"
+      },
+      "snare_spec": {
+        "fundamental": "200Hz punch, 400Hz dip",
+        "texture": "Fractal-noise overlay, 15ms pre-delay",
+        "tail": "Non-linear reverb (0.4s), gated"
+      },
+      "percussion_logic": {
+        "hi_hats": "32nd note rolls with velocity-jitter",
+        "glitch_percs": "Generated via code__create_audio_visualizer sync-pulses",
+        "spatial": "Random-pan (±30%) for every 2nd hit"
+      }
+    }
+  }
+}

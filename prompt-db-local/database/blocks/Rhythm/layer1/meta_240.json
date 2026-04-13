@@ -1,0 +1,58 @@
+{
+  "id": "meta_240",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_240",
+    "params": {
+      "hold_time_ms": 15.0,
+      "release_ms": 45.0,
+      "release_bpm": 174.0,
+      "gain_modulation_db": 3.0,
+      "gate_threshold_db": 32.0,
+      "gate_hysteresis_db": 6.0,
+      "silence_depth_db": 96.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_transient_sustain_matrix_v4": {
+      "inertia_management_logic": {
+        "kick_sustain_control": {
+          "hold_time": "15ms (Maximum initial pressure)",
+          "decay_slope": "Logarithmic (Smooth energy dissipation)",
+          "release": "Synced to 1/16 note (45ms @ 174 BPM)",
+          "result": "Heavy punch without bleeding into the next beat"
+        },
+        "reese_sustain_swelling": {
+          "source": "LFO_Curved_Triangle (Rate 1/2 bar)",
+          "gain_modulation": "+3dB expansion during the sustain phase",
+          "result": "The 'Growing Bass' effect - sound gets louder as it stays"
+        },
+        "snare_ghost_tails": {
+          "gate_threshold": "-32dB",
+          "gate_hysteresis": "6dB (Avoiding chatter)",
+          "result": "Absolute silence between snare-crack and its reverb-cloud"
+        }
+      },
+      "dynamic_inertia_v4": "Increase sustain-time by 25% during 'breakdown' sections (H_entropy up), reduce to 10% in the 'drop' (Maximum precision)."
+    },
+    "inertia_metrics_v4": {
+      "energy_retention_index": "η = 0.82 (High-impact density)",
+      "perceived_mass_coefficient": "1.25 x Original_Transient",
+      "silence_depth": "-96dB (Noise-floor cleaning via digital gating)"
+    }
+  }
+}

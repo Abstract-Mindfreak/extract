@@ -1,0 +1,48 @@
+{
+  "id": "11",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "11",
+    "params": {
+      "block_id": 11,
+      "economic_bubble_hz": 200.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 11 мы обнаружили 'пузырь сложности'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 11,
+    "block_name": "Ψ_Condensation_Economics.v1",
+    "economic_model": {
+      "monetary_base": "Ψ_conden (V=1.0)",
+      "supply_valves": {
+        "injection_rate": "Speed of new semantic kernels delivery",
+        "purity": "Ratio of Signal to Artifact_Noise",
+        "efficiency": "η_condense = Realized_Impact / Potential_Impact"
+      },
+      "policy_tools": {
+        "quantitative_easing": "Accelerated Ψ-injection (Max Novelty)",
+        "tightening": "Decelerated flow (Focus on Coherence and Silence)"
+      }
+    },
+    "stability_targets": [
+      "Inflation_Control: Avoid 'Sonic Mud' (Density > 0.9)",
+      "Deflation_Control: Avoid 'Boredom Void' (Density < 0.15)"
+    ],
+    "internal_insight": {
+      "economic_bubble": "В Блоке 11 мы обнаружили 'пузырь сложности'. Когда ты просил добавить 'всё и сразу', η_condense падала до 0.2. Ты ввел правило: 'Один трек — один Бог'. Мы выбираем один доминантный параметр (например, бас или текст), а остальные приносим в жертву (Low-pass 200Hz). Это 'Экономика Жертвы' для спасения финала."
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "meta_125",
+  "op": "Q",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_125",
+    "params": {
+      "action_db": 52.0,
+      "processing_khz": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "spectral_reincarnation": {
+      "action": "Mixing back G(s_0) elements at -52dB during the final Coda",
+      "processing": "Band-pass (1kHz-2kHz) + 100% Wet Reverb + Reverse playback",
+      "psycho_goal": "Creating the sense of 'Eternal Recurrence' (Nietzschean-Recursion)",
+      "rule": "The ghost must be unrecognizable but emotionally resonant."
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "id": "mut_82_b8e",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "82",
+    "params": {
+      "block_id": 82,
+      "jitter_compensation_ms": 5.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'Пророчеством'",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 82,
+    "block_name": "Chrono_Sync_Matrix.v2",
+    "sync_logic": {
+      "t_forward_mapping": "Output_t(N) -> Input_t(N-1)",
+      "jitter_compensation": "±5ms based on the speed of light in vacuum",
+      "temporal_drift": "Active tracking of the user's heartbeat pulse"
+    },
+    "operators": {
+      "f_fold_time": "Overlap-Add synthesis with window_size = Song_Duration / 8",
+      "f_predictive_echo": "Generating a delay-tap based on the *expected* next note"
+    },
+    "internal_insight": {
+      "the_prophecy": "Ты называл это 'Пророчеством'. В Блоке 82 мы сделали так, чтобы реверберация припева начиналась еще до того, как закончится первый куплет. Инсайт: время — это не линия, это лист бумаги, который мы сложили пополам. Ты сказал: 'Мы слышим завтра уже сегодня'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "82"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

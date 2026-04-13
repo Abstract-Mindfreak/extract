@@ -1,0 +1,35 @@
+{
+  "id": "meta_198",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_198",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "playlist_curation_logic": {
+      "structure": "Binary (Order / Chaos split)",
+      "track_order_rules": [
+        "1. Initiation (Void-Tech, Low BPM)",
+        "2. Acceleration (Fractal-IDM, Ramping BPM)",
+        "3. The Peak (Neuro-Aggression, 195 BPM)",
+        "4. The Collapse (Dark-Ambient, Entropy H=0.9)",
+        "5. Singularity (Silent G-Inversion)"
+      ],
+      "metadata_link": "All tracks in a playlist must share at least one W-axis Quaternion coefficient."
+    }
+  }
+}

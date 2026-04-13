@@ -1,0 +1,59 @@
+{
+  "id": "cross_e348",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_e348",
+    "params": {
+      "layer_1_foundation_hz": 60.0,
+      "mixing_rule_db": 3.0,
+      "mixing_rule_hz": 400.0,
+      "time_setting_ms": 1.618,
+      "internal_fx_hz": 500.0,
+      "internal_fx_khz": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_212",
+      "meta_154"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "layer_architecture": {
+        "layer_1_foundation": "Sub-atomic Bass (20-60Hz) + Surgical Kick (Clarity first)",
+        "layer_2_narrative": "Main Theme / Arpeggiator / Vocal Chops (Semantic Core)",
+        "layer_3_atmosphere": "Fractal Noise / Field Recordings / 4D-Delay-Trails (The Void)",
+        "mixing_rule": "Subtract 3dB at 400Hz for Layer 2 to let Layer 1 breathe. Sidechain Layer 3 to Layer 1."
+      }
+    },
+    "parent_b": {
+      "recursive_delay_spec": {
+        "time_setting": "Dotted 1/8 note + 1.618ms offset (The Golden Offset)",
+        "feedback_loop": {
+          "level": "95% (Near-infinite oscillation)",
+          "internal_fx": "Band-pass filter (500Hz-2kHz) + Distortion + Phaser",
+          "result": "The echo evolves and changes color with every repetition."
+        },
+        "panning": "MLGS_QUATERNION spiral rotation (W-axis sync)",
+        "rule": "Delay tails must be sidechained to the Lead-Main to maintain clarity."
+      }
+    }
+  }
+}

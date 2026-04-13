@@ -1,0 +1,42 @@
+{
+  "id": "meta_128",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_128",
+    "params": {}
+  },
+  "synergy": {
+    "links": [
+      "47",
+      "88"
+    ],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "singularity_matrix_v5": {
+      "input_vectors": [
+        "L1_Core",
+        "H(p,c)_Entropy",
+        "G_Inversion_Operator",
+        "W_Axis_Quaternion"
+      ],
+      "processing_loop": {
+        "analyze": "Scan current session for Narrative Fidelity (Block 47)",
+        "synthesize": "Apply MLGS_QUATERNION spatialization to all layers",
+        "refine": "Inject A_MMSS_FRACTAL_PACKAGE for depth",
+        "finalize": "Recursive-Mastering Pass (Block 88)"
+      },
+      "output_condition": "Singularity achieved when Result = Process."
+    }
+  }
+}

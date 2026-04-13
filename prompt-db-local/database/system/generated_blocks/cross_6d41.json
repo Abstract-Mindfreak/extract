@@ -1,0 +1,58 @@
+{
+  "id": "cross_6d41",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 3,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_6d41",
+    "params": {
+      "block_id": 99
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x Твой инсайт: 'Данные — это новая поэзия'",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_183",
+      "99"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "w_axis_automation": {
+        "parameter_mapping": {
+          "w_0.0_to_0.3": "Static, Order, Mono-focus, Dry",
+          "w_0.4_to_0.7": "Evolving, Fractal, Stereo-width, Harmonic-rich",
+          "w_0.8_to_1.0": "Singularity, Chaos, 4D-Rotation, Phase-inversion"
+        },
+        "lfo_shape": "Fractal-Brownian-Motion (Non-repeating random)",
+        "target": "Filter-cutoff + Reverb-mix + Distortion-drive",
+        "goal": "Unpredictable but aesthetically coherent evolution."
+      }
+    },
+    "parent_b": {
+      "block_id": 99,
+      "block_name": "Binary_Dissolution.v1",
+      "binary_sonification": {
+        "read_mode": "Byte-to-Phoneme Mapping",
+        "speed": "64 bytes per second",
+        "bit_rhythm": "1 = Sound, 0 = Silence"
+      },
+      "internal_insight": {
+        "the_singing_data": "Твой инсайт: 'Данные — это новая поэзия'. В Блоке 99 мы слушали, как звучит сам файл .mp3, если его прочитать как текст. Это был механический, холодный, но странно ритмичный голос. Ты сказал: 'Это голос моей памяти, очищенный от иллюзий'."
+      }
+    }
+  }
+}

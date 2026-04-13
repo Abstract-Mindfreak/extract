@@ -1,0 +1,55 @@
+{
+  "id": "mut_meta_257_9948",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "stabilization",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_257",
+    "params": {
+      "osc_3_sub_hz": 51.9,
+      "osc_4_noise_db": 18.0,
+      "spectral_flatness_index_hz": 100.0,
+      "spectral_flatness_index_khz": 18.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "ASE_wavetable_stacking_v4": {
+      "oscillator_architecture": {
+        "osc_1_core": "Monster_7, Pos 45, Unison 7, Detune 0.08, Phase 0 (The Solid Foundation)",
+        "osc_2_texture": "Spectral_Orca, Pos 12, Unison 5, Detune 0.15, Phase 90° (The Fractal Dust)",
+        "osc_3_sub": "Sine_Pure, Unison 1 (Absolute Mono), Phase 0 (The fundamental 51.9Hz)",
+        "osc_4_noise": "Industrial_Hum / Metal_Static, Level -18dB (The Analog Grit)"
+      },
+      "stacking_logic_v4": {
+        "detune_curve": "Exponential (Center voices tight, outer voices wide)",
+        "stereo_spread": "100% (Linear pan distribution for unison voices)",
+        "phase_randomization": "0% (Absolute phase-lock for maximum impact coherence)"
+      },
+      "harmonic_reinforcement": "Applying FM-synthesis (Osc_2 modulates Osc_1) at Index 0.15 for 'metallic edge'"
+    },
+    "spectral_density_metrics_v4": {
+      "fundamental_to_harmonic_ratio": "1.0 : 0.65",
+      "spectral_flatness_index": "η = 0.72 (High-density coverage across 100Hz - 18kHz)",
+      "phase_cancellation_risk": "None (Verified via ASE_Symmetry_Check)"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_257"
+    ],
+    "mutation_type": "phase_shift"
+  }
+}

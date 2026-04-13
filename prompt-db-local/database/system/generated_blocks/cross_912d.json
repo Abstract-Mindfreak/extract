@@ -1,0 +1,60 @@
+{
+  "id": "cross_912d",
+  "op": "G",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_912d",
+    "params": {
+      "block_id": 71,
+      "room_size": 0.85,
+      "damping": 0.3,
+      "mix": 0.15
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты называл это 'Песнями Титанов' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "71",
+      "meta_325"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 71,
+      "block_name": "Xeno_Ethno.v1",
+      "culture_parameters": {
+        "environment": "High_Gravity_Gaseous",
+        "social_structure": "Hive_Mind_Synchronicity",
+        "primary_material": "Hyper-Dense_Resonant_Crystals"
+      },
+      "instrument_synthesis": {
+        "f_pluck_physics": "Inertia = 10.0, Tension = 0.99 (Low-speed vibrations)",
+        "f_vocal_tract": "Triple-chamber resonance (Simulating three-mouthed beings)",
+        "rhythm_base": "Prime_Factor_Polyrhythms (P=13, 17, 19)"
+      },
+      "internal_insight": {
+        "the_deep_choir": "Ты называл это 'Песнями Титанов'. В Блоке 71 мы создали хор существ, чей голос звучит в диапазоне 5-50 Гц. Ты сказал: 'Мы не слышим их ушами, мы слышим их костями'. Инсайт: Культура определяется физикой тела. Если у тебя нет легких, твоя музыка — это вибрация поверхности."
+      }
+    },
+    "parent_b": {
+      "node": "Reverb",
+      "room_size": 0.85,
+      "damping": 0.3,
+      "mix": 0.15
+    }
+  }
+}

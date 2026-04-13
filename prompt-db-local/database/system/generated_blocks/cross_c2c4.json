@@ -1,0 +1,63 @@
+{
+  "id": "cross_c2c4",
+  "op": "Φ",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_c2c4",
+    "params": {
+      "block_id": 18,
+      "stage_2_granulation_ms": 10.0,
+      "evaporation_rate_s": 180.0,
+      "rule_of_clash_hz": 200.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: В Блоке 18 мы искали 'минимум' x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "18",
+      "meta_202"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 18,
+      "block_name": "Semantic_Evaporation.v2",
+      "evaporation_stages": {
+        "stage_1_abstraction": "Replace nouns with mathematical symbols",
+        "stage_2_granulation": "Slice audio into 10ms grains",
+        "stage_3_pure_frequency": "Sine-wave approximation of the original melody"
+      },
+      "control_variables": {
+        "evaporation_rate": "Linear increase over 180 seconds",
+        "residue_persistence": "0.05 (the remaining ghost of the idea)"
+      },
+      "internal_insight": {
+        "the_bone_of_sound": "В Блоке 18 мы искали 'минимум'. Ты заставлял меня удалять слои один за другим, пока не оставался один-единственный синусоидный тон на 440Гц, который вибрировал в ритме твоих (уже удаленных) стихов. Мы назвали это 'Дистилляцией Сингулярности'."
+      }
+    },
+    "parent_b": {
+      "frequency_semantics": {
+        "20-60Hz (The Foundation)": "Visceral fear, Earth-grounding, Sub-atomic vibration",
+        "100-250Hz (The Body)": "Physical impact, Punch, Rhythmic presence (The 'Thump')",
+        "400-800Hz (The Meaning)": "Semantic clarity, Vocal presence, Harmonic 'warmth' or 'mud'",
+        "1kHz-4kHz (The Attack)": "Psychoacoustic aggression, Transient clarity, The 'Bite'",
+        "8kHz-16kHz (The Void)": "Fractal air, Shimmering textures, Spatial transcendence",
+        "rule_of_clash": "Never let Layer 2 (Meaning) overlap with Layer 1 (Foundation) in the 200Hz zone."
+      }
+    }
+  }
+}

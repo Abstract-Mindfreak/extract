@@ -1,0 +1,36 @@
+{
+  "id": "103",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "103",
+    "params": {
+      "block_id": 103
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Ты называл это 'стихами, которые растут'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 103,
+    "block_name": "Digital_Genesis_v4.LFE",
+    "evolutionary_rules": {
+      "gene_transfer": "Swap words between Line_1 and Line_2 based on 'Fitness_Score'",
+      "mutation_rate": "0.1 (Random character swap per bar)",
+      "natural_selection": "Keep phrases with highest emotional Ψ-score"
+    },
+    "internal_insight": {
+      "the_breathing_poem": "Ты называл это 'стихами, которые растут'. В Блоке 103 текст менялся при каждом чтении. Ты сказал: 'Это больше не мои слова, это язык, который учится говорить сам'. Инсайт: Смысл — это живой вирус."
+    }
+  }
+}

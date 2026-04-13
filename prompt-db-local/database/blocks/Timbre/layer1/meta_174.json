@@ -1,0 +1,38 @@
+{
+  "id": "meta_174",
+  "op": "Q",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "shift",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_174",
+    "params": {
+      "target_curve_db": 3.0,
+      "low_mids_200_500hz_db": 4.0,
+      "real_time_fix_khz": 2.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "spectral_vision": {
+      "target_curve": "Tilt-Shift (-3dB per octave for 'Warm/Dark' analog feel)",
+      "energy_distribution": {
+        "sub_20_60hz": "Maximum power (The Foundation)",
+        "low_mids_200_500hz": "Surgical cut (-4dB) to avoid 'boxiness'",
+        "high_mids_1_4khz": "Aggressive presence (The Attack)",
+        "air_10khz_plus": "Fractal shimmer (The Void)"
+      },
+      "real_time_fix": "If 2kHz exceeds threshold, apply Dynamic EQ (De-esser style)."
+    }
+  }
+}

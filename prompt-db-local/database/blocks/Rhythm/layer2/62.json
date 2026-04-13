@@ -1,0 +1,42 @@
+{
+  "id": "62",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "62",
+    "params": {
+      "block_id": 62,
+      "f_organic_jitter_hz": 10.0,
+      "f_breath_noise_hz": 0.2
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Твой инсайт: 'Машина хочет быть живой'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 62,
+    "block_name": "Inorganic_BioSynthesis.v2",
+    "bio_logic": {
+      "lindenmayer_system_sequencer": "Growth_Rules: A->AB, B->A (Melodic branching)",
+      "cellular_automata_rhythm": "Game_of_Life patterns controlling Hi-Hat density",
+      "stochastic_evolution": "Probability of 'Mutation' = 0.05 per bar"
+    },
+    "synthesis_operators": {
+      "f_organic_jitter": "Micro-pitch-modulation (0.1Hz to 10Hz) for 'Muscle' feel",
+      "f_breath_noise": "Pink-noise modulated by a low-frequency sine (0.2Hz)"
+    },
+    "internal_insight": {
+      "the_fake_forest": "Твой инсайт: 'Машина хочет быть живой'. В Блоке 62 мы создали лес, который поет голосами битых транзисторов. Ты сказал: 'Это музыка для роботов, которые мечтают о лесе'. Мы назвали это 'Техно-Пасторалью'. Инсайт: Жизнь — это просто сложный алгоритм ошибки."
+    }
+  }
+}

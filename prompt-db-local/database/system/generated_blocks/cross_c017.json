@@ -1,0 +1,49 @@
+{
+  "id": "cross_c017",
+  "op": "Φ",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_c017",
+    "params": {
+      "freq": 250,
+      "gain": -1.8,
+      "q": 8,
+      "dissonance_ratio": 0.35
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_291",
+      "meta_282"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "freq": 250,
+      "gain": -1.8,
+      "q": 8,
+      "type": "Peak_Anti-mud"
+    },
+    "parent_b": {
+      "harmonic_bias": "Locrian Mode (♭2, ♭5)",
+      "dissonance_ratio": 0.35,
+      "panning": "Asymmetric, randomized jitter",
+      "reverb": "Large, cold, 80% damping"
+    }
+  }
+}

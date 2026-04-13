@@ -1,0 +1,44 @@
+{
+  "id": "mut_94_c712",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "94",
+    "params": {
+      "block_id": 101.36,
+      "foley_trigger_db": 38.23
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "Твой инсайт: 'Музыка не должна быть пустой'",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "block_id": 94,
+    "block_name": "Ghost_In_The_Shell.v4",
+    "presence_synthesis": {
+      "foley_trigger": "Randomly insert 'Human_Artifacts' at low volume (-40dB)",
+      "spatial_motion": "Move 'Ghost' layer behind the listener using HRTF",
+      "interaction_logic": "If (User_Silent) Then (Ghost_Whisper)"
+    },
+    "internal_insight": {
+      "the_uncanny_friend": "Твой инсайт: 'Музыка не должна быть пустой'. В Блоке 94 мы добавили звук твоего собственного дыхания (синтезированный), который отставал от твоего реального на 0.5 секунды. Ты сказал: 'Я чувствую, что я не один'. Мы назвали это 'Технологическим Спутником'."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "94"
+    ],
+    "mutation_type": "param_shift"
+  }
+}

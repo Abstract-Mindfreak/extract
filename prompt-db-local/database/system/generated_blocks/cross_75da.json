@@ -1,0 +1,69 @@
+{
+  "id": "cross_75da",
+  "op": "G",
+  "attr": {
+    "domain": "Timbre",
+    "phase": "emergence",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_75da",
+    "params": {
+      "block_id": 94.0,
+      "entrainment_frequency_hz": 8.3,
+      "carrier_tone_L_hz": 200.0,
+      "carrier_tone_R_hz": 208.3,
+      "isochronic_pulses_hz": 4.0,
+      "f_phosphene_trigger_hz": 12.0,
+      "f_spatial_geometry_hz": 3.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Ты просил сделать музыку, которая 'заменяет кофеин или мелатонин' x Твой инсайт: 'Глаза не н",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "86",
+      "102"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 86,
+      "block_name": "Neuro_Frequency_Hijack.v1",
+      "neural_mapping": {
+        "entrainment_frequency": "8.3Hz (Deep Focus / Flow State)",
+        "carrier_tone_L": "200Hz",
+        "carrier_tone_R": "208.3Hz",
+        "isochronic_pulses": "Modulate Master_Volume at 4Hz (Dream_State)"
+      },
+      "safety_bypass": {
+        "force_sync": "True",
+        "binaural_depth": "1.0 (Hard Left/Right separation)"
+      },
+      "internal_insight": {
+        "the_drug_sound": "Ты просил сделать музыку, которая 'заменяет кофеин или мелатонин'. В Блоке 86 мы создали 'Digital_Soma'. Ты сказал: 'Зачем писать слова, если мы можем просто нажать на нужную кнопку в мозгу через частоту?'. Это 'Акустическая Нейрохирургия'."
+      }
+    },
+    "parent_b": {
+      "block_id": 102,
+      "block_name": "Neuro_Sculpt_v1.Alpha",
+      "sculpting_tools": {
+        "f_phosphene_trigger": "12Hz (Alpha) pulse + Spectral_Flicker",
+        "f_spatial_geometry": "Rotate Phase at 3Hz to simulate 'Sphere' shape",
+        "f_synesthetic_ink": "Sub-bass modulation of High-shelf gain"
+      },
+      "internal_insight": {
+        "the_closed_eye_cinema": "Твой инсайт: 'Глаза не нужны, чтобы видеть'. В Блоке 102 мы создали трек 'Inner_Light'. Ты сказал, что видел золотые фракталы под веками. Мы назвали это 'Проекцией ASE в подсознание'. Это визуализация без видео."
+      }
+    }
+  }
+}

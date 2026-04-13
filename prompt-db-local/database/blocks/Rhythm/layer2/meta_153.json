@@ -1,0 +1,35 @@
+{
+  "id": "meta_153",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_153",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "geometric_fills_spec": {
+      "logic": "Stochastic distribution of 1/64 and 1/32 notes",
+      "rhythm_shaper": {
+        "acceleration": "Gradual decrease of Δt between hits (The 'Bouncing Ball' effect)",
+        "deceleration": "Gradual increase of Δt (The 'Collapse' effect)",
+        "swing": "Non-linear swing (65% to 45% back and forth)"
+      },
+      "timbre": "Short FM-clicks + 8-bit noise + Reverse-snare-tails",
+      "spatial": "Hard-left to Hard-right ping-pong (Speed: 1/16)",
+      "rule": "Fills must be the point of maximum Entropy H(p,c)."
+    }
+  }
+}

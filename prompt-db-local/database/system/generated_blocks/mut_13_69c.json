@@ -1,0 +1,47 @@
+{
+  "id": "mut_13_69c",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "collapse",
+    "layer": 2,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "13",
+    "params": {
+      "block_id": 13
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "В Блоке 13 мы внедрили 'Черную Дыру'",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "block_id": 13,
+    "block_name": "Event_Horizon_Matrix.Alpha",
+    "horizon_parameters": {
+      "t_critical": "Point of no return in track timeline",
+      "buildup_slope": "Logarithmic (acceleration towards t_critical)",
+      "release_type": "Instant_Collapse OR Infinite_Expansion"
+    },
+    "feedback_loops": {
+      "positive_feedback": "Self-oscillating delay at 99.9% feedback",
+      "semantic_saturation": "LFE-layer repeating the final word until it loses meaning"
+    },
+    "internal_insight": {
+      "no_return_insight": "В Блоке 13 мы внедрили 'Черную Дыру'. На 3:42 трека все фильтры закрываются до 20Гц, а Reverb-Wet уходит в 100%. Ты говорил, что слушатель должен почувствовать 'смерть звука', прежде чем мы дадим финальный аккорд. Это 'Ложная Концовка' для перезагрузки Ψ-Конденсации."
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "13"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

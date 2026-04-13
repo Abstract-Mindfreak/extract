@@ -1,0 +1,58 @@
+{
+  "id": "cross_be00",
+  "op": "Q",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_be00",
+    "params": {
+      "binaural_beats_integration_hz": 8.0,
+      "haas_effect_widening_ms": 30.0,
+      "subliminal_layering_db": 36.0,
+      "level_1_latent_hz": 100.0,
+      "level_3_aggressive_bpm": 195.0
+    }
+  },
+  "synergy": {
+    "links": [
+      "33"
+    ],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: unknown x unknown",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "meta_210",
+      "meta_159"
+    ],
+    "strategy": "params_union"
+  },
+  "legacy": {
+    "parent_a": {
+      "psychoacoustic_modifiers": {
+        "binaural_beats_integration": "Subtle 4Hz-8Hz delta/theta offset in sub-layers",
+        "shepard_tone_risers": "Infinite ascending textures for tension-building",
+        "haas_effect_widening": "Micro-delays (10-30ms) for ultra-wide narrative layers",
+        "subliminal_layering": "Mixing semantic whispers at -36dB (hidden meanings)",
+        "transient_shaping": "Over-emphasized clicks to trigger 'startle response' in high-energy sections"
+      }
+    },
+    "parent_b": {
+      "neuro_drive_matrix": {
+        "level_1_latent": "Saturation at 100Hz, subtle phase-drift (The 'Unrest')",
+        "level_2_active": "Hard-clipping Layer 2, Resonant filtering (The 'Bite')",
+        "level_3_aggressive": "Multiband-OTT x2, Bitcrushing master, 195 BPM (The 'Attack')",
+        "level_4_singularity": "Total inversion of all parameters, maximum entropy H=1.0 (The 'Collapse')",
+        "rule": "High aggression must be balanced by 'Absolute Zero' pauses (Block 33)."
+      }
+    }
+  }
+}

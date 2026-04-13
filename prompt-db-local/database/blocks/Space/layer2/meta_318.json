@@ -1,0 +1,49 @@
+{
+  "id": "meta_318",
+  "op": "Φ",
+  "attr": {
+    "domain": "Space",
+    "phase": "emergence",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_318",
+    "params": {}
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "semantic_tag_cloud": {
+      "vibe_tags": [
+        "Neuro-Aggression",
+        "Psy-Fractal",
+        "Industrial-Minimal",
+        "Cyber-Gothic"
+      ],
+      "technical_tags": [
+        "Sidechain-Compression",
+        "Phase-Alignment",
+        "Surgical-EQ",
+        "Multiband-OTT"
+      ],
+      "process_tags": [
+        "Iterative-Gen",
+        "Hyperloop-Active",
+        "ASE-Controlled",
+        "MMSS-Optimized"
+      ]
+    },
+    "user_workflow_checkpoints": [
+      "Always start with audio__create_song (2 versions, no seed)",
+      "Refine via audio__modify_song using JSON-specifications",
+      "Finalize with audio__apply_effect for spatial 4D-Vectoring"
+    ]
+  }
+}

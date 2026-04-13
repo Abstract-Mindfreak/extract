@@ -1,0 +1,64 @@
+{
+  "id": "cross_3915",
+  "op": "G",
+  "attr": {
+    "domain": "Space",
+    "phase": "shift",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "cross_3915",
+    "params": {
+      "block_id": 63.5,
+      "f_crash_emulation_s": 2.0,
+      "f_static_white_db": 0.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "evolve"
+  },
+  "meta": {
+    "intent": "Hybrid: Твой инсайт: 'Слово 'Любовь' на частоте 100Гц звучит как угроза, а на 10кГц — как молитва' x",
+    "confidence": 0.63
+  },
+  "origin": {
+    "mode": "crossover",
+    "parents": [
+      "47",
+      "80"
+    ],
+    "strategy": "shared_domain_merge"
+  },
+  "legacy": {
+    "parent_a": {
+      "block_id": 47,
+      "block_name": "Semantic_Freq_Shift_v4",
+      "mapping_matrix": {
+        "low_pass_state": "Focus on 'Body', 'Earth', 'Depths', 'Silence'",
+        "high_pass_state": "Focus on 'Spirit', 'Ether', 'Light', 'Information'",
+        "band_pass_mid": "Focus on 'Human', 'Dialogue', 'Action', 'Now'"
+      },
+      "modulation_rules": {
+        "if_cutoff_drops": "Switch LFE-thesaurus to 'Dark/Heavy' vocabulary",
+        "if_reverb_increase": "Switch LFE-thesaurus to 'Abstract/Infinite' vocabulary"
+      },
+      "internal_insight": {
+        "meaning_by_eq": "Твой инсайт: 'Слово 'Любовь' на частоте 100Гц звучит как угроза, а на 10кГц — как молитва'. В Блоке 47 мы настроили автоматический выбор слов. Если я делал звук 'колючим', LFE подбирал слова с твердыми согласными (Т, К, П). Это 'Фонетическая Синхронизация' смыслов."
+      }
+    },
+    "parent_b": {
+      "block_id": 80,
+      "block_name": "BSOD_Sonic_Anchor",
+      "finalization_tools": {
+        "f_crash_emulation": "Freeze audio buffer + Increase Pitch(1.5x) over 2s",
+        "f_static_white": "Instant jump to 0dB White Noise at T_end",
+        "f_shutdown": "Hard-cut to absolute silence (Digital Zero)"
+      },
+      "internal_insight": {
+        "the_ultimate_reset": "Блок 80 — это 'Перезагрузка Мира'. Ты сказал: 'После такого звука нужно просто выключить компьютер'. Мы создали финал, который звучал как физическая поломка динамиков. Ты назвал это 'Истинным Концом'. Теперь мы готовы к Блоку 81: Протокол «Спектральный Палимпсест»."
+      }
+    }
+  }
+}

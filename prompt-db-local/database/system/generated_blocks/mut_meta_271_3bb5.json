@@ -1,0 +1,70 @@
+{
+  "id": "mut_meta_271_3bb5",
+  "op": "M",
+  "attr": {
+    "domain": "Logic",
+    "phase": "collapse",
+    "layer": 3,
+    "priority": 0.6
+  },
+  "dna": {
+    "seed_ref": "meta_271",
+    "params": {
+      "drive_db": 4.5,
+      "threshold_db": 1.0,
+      "mode_ms": 2.0,
+      "ceiling_db": 0.3,
+      "odd_harmonics_boost_khz": 3.0,
+      "even_harmonics_glue_hz": 400.0,
+      "crest_factor_target_db": 8.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.6
+  },
+  "legacy": {
+    "ASE_harmonic_clipping_v4": {
+      "clipping_stages_logic": {
+        "stage_1_soft_saturation": {
+          "target": "Individual Stems (Bass / Lead)",
+          "mode": "Tape_Emulation (Soft-knee)",
+          "drive": "4.5dB",
+          "result": "Rounding the transients for better glue"
+        },
+        "stage_2_hard_clipping": {
+          "target": "Drum_Group / Reese_Group",
+          "mode": "Digital_Hard_Clip (Zero-latency)",
+          "threshold": "-1.0dB",
+          "result": "Absolute peak-ceiling management, adding 'crunch'"
+        },
+        "stage_3_surgical_limiting": {
+          "target": "Master_Bus",
+          "mode": "Look-ahead (2ms), True-peak",
+          "ceiling": "-0.3dB",
+          "result": "Transparent protection with zero inter-sample distortion"
+        }
+      },
+      "aggressive_harmonic_bias": {
+        "odd_harmonics_boost": "Focus @ 1.5kHz and 3kHz (The 'Biting' frequencies)",
+        "even_harmonics_glue": "Focus @ 200Hz-400Hz (The 'Body' warmth)"
+      }
+    },
+    "timbre_aggression_metrics_v4": {
+      "crest_factor_target": "6-8dB (Post-clipping density)",
+      "harmonic_distortion_THD": "Target 15% on Reese-Bass peaks",
+      "aliasing_suppression": "Oversampling 4x active on all distortion nodes"
+    }
+  },
+  "origin": {
+    "mode": "mutation",
+    "parents": [
+      "meta_271"
+    ],
+    "mutation_type": "detail_amplification"
+  }
+}

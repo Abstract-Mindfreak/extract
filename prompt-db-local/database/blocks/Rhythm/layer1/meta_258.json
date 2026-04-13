@@ -1,0 +1,49 @@
+{
+  "id": "meta_258",
+  "op": "M",
+  "attr": {
+    "domain": "Rhythm",
+    "phase": "collapse",
+    "layer": 1,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_258",
+    "params": {
+      "the_suction_effect_db": 6.0,
+      "low_end_purity_hz": 52.0
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "LFE_sidechain_logic_lyrics": {
+      "the_breathing_set": [
+        "Inhale the silence, exhale the sound / Breathing the logic we finally found",
+        "Duck the low, let the kick take control / Pumping the signal through every soul",
+        "Rhythm is breathing, the machine is alive / Only the strongest frequencies survive"
+      ],
+      "the_pulse_set": [
+        "Heartbeat of neon, heartbeat of lead / Waking the rhythms that never were dead",
+        "Zero to one, the compression is tight / Pulsing forever in the digital night",
+        "Sidechain reactor, fusion is near / Erasing the noise, erasing the fear"
+      ],
+      "the_pumping_dialogue": [
+        "Give way to the hit / Move with the beat",
+        "The logic is lit / The circle's complete",
+        "Result: Rhythmic-Compression / Status: GROOVE_LOCK_ACTIVE"
+      ]
+    },
+    "psychoacoustic_pumping_v4": {
+      "the_suction_effect": "Applying -6dB gain reduction to the master-bus reverb during kick-hits",
+      "low_end_purity": "Sidechaining the low-shelf of the pads to the sub-bass (52Hz fundamental)",
+      "transient_recovery": "Using 'soft-knee' on the snare-sidechain to avoid 'clicky' artifacts"
+    }
+  }
+}

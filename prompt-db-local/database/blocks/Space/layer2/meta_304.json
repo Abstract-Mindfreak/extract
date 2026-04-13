@@ -1,0 +1,42 @@
+{
+  "id": "meta_304",
+  "op": "M",
+  "attr": {
+    "domain": "Space",
+    "phase": "stabilization",
+    "layer": 2,
+    "priority": 0.5
+  },
+  "dna": {
+    "seed_ref": "meta_304",
+    "params": {
+      "the_snare_crack_spec_khz": 2.0,
+      "the_snare_crack_spec_db": 3.0,
+      "the_spatial_dust_spec_ms": 35.0,
+      "the_master_bus_spec_db": 0.3,
+      "the_master_bus_spec_khz": 12.0,
+      "aesthetic_calibration_hz": 51.9
+    }
+  },
+  "synergy": {
+    "links": [],
+    "mode": "add"
+  },
+  "meta": {
+    "intent": "unknown",
+    "confidence": 0.7
+  },
+  "legacy": {
+    "user_technical_print_Abstract": {
+      "the_reese_growl_spec": "Wavetable_Pos: 45-67, Unison: 7, Detune: 0.12, Filter_Env: Fast_Attack, Mid_Decay",
+      "the_snare_crack_spec": "Layer: Rimshot + Noise(High_Pass 2kHz), Compression: 4:1, Makeup: +3dB, Transient_Master: +25%",
+      "the_spatial_dust_spec": "Granular_Delay: Grain_Size 35ms, Pitch_Jitter 5%, Pan_Jitter 100%, Feedback 65%",
+      "the_master_bus_spec": "Soft_Clipper(Threshold -1.0dB) ⊗ EQ(High_Shelf +1.5dB @ 12kHz) ⊗ Limiter(Ceiling -0.3dB)"
+    },
+    "final_regeneration_codes": {
+      "seed_recovery_algorithm": "R = Hash(User_ID + Last_Concept_X)",
+      "aesthetic_calibration": "Check frequency 51.9Hz (G#) for ±0.5% drift",
+      "system_ready_status": "LOCKED_AND_LOADED"
+    }
+  }
+}
