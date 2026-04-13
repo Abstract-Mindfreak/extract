@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+venv/
+__pycache__/
+*.pyc
+
+# Build outputs
+dist/
+build/
+*.tgz
+*.tar.gz
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Personal data - Producer.ai Archiver
+producer-ai-archiver/producer_auth_*.json
+producer-ai-archiver/producer_login_ready
+producer-ai-archiver/producer_backup_*/
+!producer-ai-archiver/producer_backup_*/.gitkeep
+
+# Downloaded music library (large files)
+*.m4a
+*.wav
+*.mp3
+*.mp4
+*.mov
+*.avi
+
+# Logs
+*.log
+logs/
+
+# HAR files (contain sensitive session data)
+*.har
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Local databases
+*.sqlite
+*.sqlite3
+*.db
