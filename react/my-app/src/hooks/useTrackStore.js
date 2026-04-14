@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import mockDataService from '../services/MockDataService';
+import localDataImporter from '../services/LocalDataImporter';
 import { APP_CONFIG } from '../constants/app';
 
 export const useTrackStore = create((set, get) => ({
@@ -382,5 +383,35 @@ export const useTrackStore = create((set, get) => ({
   getTotalPages: () => {
     const { pagination } = get();
     return Math.ceil(pagination.total / pagination.pageSize);
+  },
+
+  /**
+   * Import data from local-data (real archive)
+   */
+  importLocalData: async (onProgress) => {
+    set({ isLoading: true, error: null });
+    
+    try {
+      const result = await localDataImporter.importFromLocalData(onProgress);
+      
+      if (!result.success) {
+        throw new Error(result.errors.join(', '));
+      }
+      
+      // Reload tracks after import
+      await get().loadTracks();
+      
+      return result;
+    } catch (error) {
+      set({ error: error.message, isLoading: false });
+      throw error;
+    }
+  },
+
+  /**
+   * Check if local data has been imported
+   */
+  hasLocalData: async () => {
+    return await localDataImporter.hasImportedData();
   }
 }));

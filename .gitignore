@@ -31,6 +31,13 @@ producer-ai-archiver/producer_auth_*.json
 producer-ai-archiver/producer_login_ready
 producer-ai-archiver/producer_backup_*/
 !producer-ai-archiver/producer_backup_*/.gitkeep
+
+# Archive files
+*.rar
+*.zip
+*.7z
+*.tar
+
 output/
 new-layer/
 source/
@@ -42,6 +49,9 @@ source/
 *.mp4
 *.mov
 *.avi
+
+# React local data (imported tracks)
+react/my-app/public/local-data/
 
 # Logs
 *.log

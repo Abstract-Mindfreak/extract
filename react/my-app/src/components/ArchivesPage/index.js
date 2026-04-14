@@ -16,7 +16,8 @@ export default function ArchivesPage() {
     filteredTracks, 
     selectedTracks,
     initMockData,
-    loadTracks
+    loadTracks,
+    importLocalData
   } = useTrackStore();
 
   const handleSessionClick = (track) => {
@@ -33,6 +34,18 @@ export default function ArchivesPage() {
     await initMockData((loaded, total, entity) => {
       console.log(`Loading ${entity}: ${loaded}/${total}`);
     });
+  };
+
+  const handleImportLocalData = async () => {
+    try {
+      const result = await importLocalData((progress) => {
+        console.log(`[${progress.stage}] ${progress.message} (${progress.current}/${progress.total})`);
+      });
+      
+      alert(`Импорт завершен!\nТреков: ${result.tracksImported}\nСессий: ${result.sessionsImported}`);
+    } catch (error) {
+      alert(`Ошибка импорта: ${error.message}`);
+    }
   };
 
   // Load data on mount only
@@ -68,8 +81,12 @@ export default function ArchivesPage() {
           >
             📦 Загрузить моки
           </button>
-          <button className="btn-primary">
-            ➕ Импорт данных
+          <button 
+            className="btn-primary"
+            onClick={handleImportLocalData}
+            disabled={isLoading}
+          >
+            ➕ Импорт из local-data
           </button>
         </div>
       </header>

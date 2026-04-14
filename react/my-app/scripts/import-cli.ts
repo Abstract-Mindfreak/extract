@@ -95,7 +95,8 @@ function formatSize(bytes: number): string {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-// Scan directory recursively
+// Scan directory recursively for producer-ai-archiver structure
+// Structure: producer_backup_N/XX/uuid_title/meta.json
 async function scanDirectory(
   dirPath: string,
   accountIds: string[],
@@ -110,74 +111,155 @@ async function scanDirectory(
   };
 
   for (const accountId of accountIds) {
-    const accountDir = path.join(dirPath, `account_${accountId}`);
+    // Real structure uses producer_backup_N instead of account_N
+    const backupDir = path.join(dirPath, `producer_backup_${accountId}`);
     
     try {
-      const stat = await fs.stat(accountDir);
-      if (!stat.isDirectory()) continue;
+      const stat = await fs.stat(backupDir);
+      if (!stat.isDirectory()) {
+        // Fallback to old structure account_N
+        const oldAccountDir = path.join(dirPath, `account_${accountId}`);
+        const oldStat = await fs.stat(oldAccountDir);
+        if (!oldStat.isDirectory()) continue;
+        
+        result.accountIds.push(accountId);
+        await scanAccountDir(oldAccountDir, accountId, outputPath, result, `account_${accountId}`);
+        continue;
+      }
       
       result.accountIds.push(accountId);
-      logger.verbose(`Сканирование account_${accountId}...`);
+      logger.verbose(`Сканирование producer_backup_${accountId}...`);
 
-      // Scan track directories
-      const entries = await fs.readdir(accountDir, { withFileTypes: true });
+      // Scan hex subdirectories (00, 01, 02, ...)
+      const hexDirs = await fs.readdir(backupDir, { withFileTypes: true });
       
-      for (const entry of entries) {
-        if (!entry.isDirectory()) continue;
+      for (const hexDir of hexDirs) {
+        if (!hexDir.isDirectory()) continue;
+        if (hexDir.name.endsWith('.json')) continue; // Skip json files at root
 
-        const trackId = entry.name;
-        const trackDir = path.join(accountDir, trackId);
-        const relativeBase = `account_${accountId}/${trackId}`;
+        const hexPath = path.join(backupDir, hexDir.name);
+        
+        // Scan track directories inside hex directory
+        const trackDirs = await fs.readdir(hexPath, { withFileTypes: true });
+        
+        for (const trackDir of trackDirs) {
+          if (!trackDir.isDirectory()) continue;
 
-        try {
-          const trackFiles = await fs.readdir(trackDir);
-          let hasMeta = false;
+          const trackPath = path.join(hexPath, trackDir.name);
+          // Extract UUID from track directory name (first 36 chars)
+          const trackId = trackDir.name.slice(0, 36);
+          const relativeBase = `account_${accountId}/${trackId}`;
 
-          for (const file of trackFiles) {
-            const filePath = path.join(trackDir, file);
-            const fileStat = await fs.stat(filePath);
-            
-            if (!fileStat.isFile()) continue;
+          try {
+            const trackFiles = await fs.readdir(trackPath);
+            let hasMeta = false;
 
-            let type: ImportFile['type'] = 'session';
-            if (file === 'meta.json') {
-              type = 'meta';
-              hasMeta = true;
-            } else if (file.endsWith('.m4a') || file.endsWith('.mp3')) {
-              type = 'audio';
-            } else if (file.endsWith('.jpg') || file.endsWith('.png') || file.endsWith('.webp')) {
-              type = 'image';
-            } else {
-              continue; // Skip other files
+            for (const file of trackFiles) {
+              const filePath = path.join(trackPath, file);
+              const fileStat = await fs.stat(filePath);
+              
+              if (!fileStat.isFile()) continue;
+
+              let type: ImportFile['type'] = 'session';
+              if (file === 'meta.json') {
+                type = 'meta';
+                hasMeta = true;
+              } else if (file.endsWith('.m4a') || file.endsWith('.mp3')) {
+                type = 'audio';
+              } else if (file.endsWith('.jpg') || file.endsWith('.png') || file.endsWith('.webp')) {
+                type = 'image';
+              } else {
+                continue; // Skip other files
+              }
+
+              const importFile: ImportFile = {
+                sourcePath: filePath,
+                targetPath: path.join(outputPath, relativeBase, file),
+                relativePath: `${relativeBase}/${file}`,
+                type,
+                size: fileStat.size
+              };
+
+              result.files.push(importFile);
+              result.totalSize += fileStat.size;
             }
 
-            const importFile: ImportFile = {
-              sourcePath: filePath,
-              targetPath: path.join(outputPath, relativeBase, file),
-              relativePath: `${relativeBase}/${file}`,
-              type,
-              size: fileStat.size
-            };
-
-            result.files.push(importFile);
-            result.totalSize += fileStat.size;
+            if (hasMeta) {
+              result.trackCount++;
+            }
+          } catch (err) {
+            result.errors.push(`Ошибка чтения трека ${trackDir.name}: ${(err as Error).message}`);
           }
-
-          if (hasMeta) {
-            result.trackCount++;
-          }
-        } catch (err) {
-          result.errors.push(`Ошибка чтения трека ${trackId}: ${(err as Error).message}`);
         }
       }
     } catch (err) {
       if ((err as NodeJS.ErrnoException).code !== 'ENOENT') {
-        result.errors.push(`Ошибка account_${accountId}: ${(err as Error).message}`);
+        result.errors.push(`Ошибка producer_backup_${accountId}: ${(err as Error).message}`);
       }
     }
   }
 
   return result;
+}
+
+// Scan old-style account directory (account_N/track_id/)
+async function scanAccountDir(
+  accountDir: string,
+  accountId: string,
+  outputPath: string,
+  result: ScanResult,
+  accountName: string
+): Promise<void> {
+  logger.verbose(`Сканирование ${accountName} (old structure)...`);
+
+  const entries = await fs.readdir(accountDir, { withFileTypes: true });
+  
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+
+    const trackId = entry.name;
+    const trackDir = path.join(accountDir, trackId);
+    const relativeBase = `${accountName}/${trackId}`;
+
+    try {
+      const trackFiles = await fs.readdir(trackDir);
+      let hasMeta = false;
+
+      for (const file of trackFiles) {
+        const filePath = path.join(trackDir, file);
+        const fileStat = await fs.stat(filePath);
+        
+        if (!fileStat.isFile()) continue;
+
+        let type: ImportFile['type'] = 'session';
+        if (file === 'meta.json') {
+          type = 'meta';
+          hasMeta = true;
+        } else if (file.endsWith('.m4a') || file.endsWith('.mp3')) {
+          type = 'audio';
+        } else if (file.endsWith('.jpg') || file.endsWith('.png') || file.endsWith('.webp')) {
+          type = 'image';
+        } else {
+          continue;
+        }
+
+        result.files.push({
+          sourcePath: filePath,
+          targetPath: path.join(outputPath, relativeBase, file),
+          relativePath: `${relativeBase}/${file}`,
+          type,
+          size: fileStat.size
+        });
+        result.totalSize += fileStat.size;
+      }
+
+      if (hasMeta) {
+        result.trackCount++;
+      }
+    } catch (err) {
+      result.errors.push(`Ошибка чтения трека ${trackId}: ${(err as Error).message}`);
+    }
+  }
 }
 
 // Copy file with directory creation
