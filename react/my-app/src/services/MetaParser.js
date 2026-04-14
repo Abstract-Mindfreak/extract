@@ -2,67 +2,8 @@
  * MetaParser — парсинг meta.json файлов треков Producer.ai
  */
 
-import type { Track, TrackRawData } from '../types/Track';
-
-export interface IMetaParser {
-  /** Парсить meta.json в Track */
-  parseMetaJson(rawJson: string, accountId: string, metaFilePath: string): Track;
-  
-  /** Валидировать структуру meta.json */
-  validateMetaJson(raw: unknown): asserts raw is MetaJsonStructure;
-  
-  /** Извлечь длительность из метаданных */
-  extractDuration(raw: MetaJsonStructure): number | undefined;
-  
-  /** Извлечь sound_prompt */
-  extractSoundPrompt(raw: MetaJsonStructure): string;
-  
-  /** Извлечь lyrics */
-  extractLyrics(raw: MetaJsonStructure): string;
-  
-  /** Извлечь conversation_id */
-  extractConversationId(raw: MetaJsonStructure): string | undefined;
-  
-  /** Извлечь source_url */
-  extractSourceUrl(raw: MetaJsonStructure): string | undefined;
-  
-  /** Конвертировать относительный путь в публичный URL */
-  toPublicUrl(relativePath: string, baseUrl?: string): string;
-}
-
-// Структура meta.json от Producer.ai
-interface MetaJsonStructure {
-  id: string;
-  title?: string;
-  created_at?: string;
-  operation?: {
-    sound_prompt?: string;
-    lyrics?: string;
-    [key: string]: unknown;
-  };
-  conversation_id?: string;
-  source_url?: string;
-  source?: string;
-  audio_url?: string;
-  image_url?: string;
-  image_large_url?: string;
-  tags?: string[];
-  duration?: number;
-  [key: string]: unknown;
-}
-
-// Типы
-export interface ParseOptions {
-  /** Базовый URL для публичных данных (например, '/local-data/') */
-  basePublicUrl?: string;
-  /** Сохранить raw_data для отладки */
-  preserveRawData?: boolean;
-}
-
-class MetaParser implements IMetaParser {
-  private options: ParseOptions;
-
-  constructor(options: ParseOptions = {}) {
+class MetaParser {
+  constructor(options = {}) {
     this.options = {
       basePublicUrl: '/local-data/',
       preserveRawData: true,
@@ -72,31 +13,31 @@ class MetaParser implements IMetaParser {
 
   /**
    * Парсить meta.json в объект Track
+   * @param {string} rawJson
+   * @param {string} accountId
+   * @param {string} metaFilePath
+   * @returns {Object} Track
    */
-  parseMetaJson(
-    rawJson: string,
-    accountId: string,
-    metaFilePath: string
-  ): Track {
-    let raw: unknown;
+  parseMetaJson(rawJson, accountId, metaFilePath) {
+    let raw;
     
     try {
       raw = JSON.parse(rawJson);
     } catch (err) {
-      throw new Error(`Невалидный JSON: ${(err as Error).message}`);
+      throw new Error(`Невалидный JSON: ${err?.message || err}`);
     }
 
     // Валидируем структуру
     this.validateMetaJson(raw);
 
-    const meta = raw as MetaJsonStructure;
+    const meta = raw;
 
     // Определяем пути к медиафайлам
     const dirPath = metaFilePath.replace(/\/meta\.json$/, '').replace(/\\meta\.json$/, '');
     const audioPath = this.findAudioPath(dirPath, meta);
     const imagePath = this.findImagePath(dirPath, meta);
 
-    const track: Track = {
+    const track = {
       id: meta.id,
       title: meta.title || 'Untitled',
       accountId: parseInt(accountId, 10) || 0,
@@ -124,7 +65,7 @@ class MetaParser implements IMetaParser {
       tags: meta.tags || [],
       
       // Raw data для отладки
-      rawData: this.options.preserveRawData ? (raw as TrackRawData) : undefined
+      rawData: this.options.preserveRawData ? raw : undefined
     };
 
     return track;
@@ -132,22 +73,21 @@ class MetaParser implements IMetaParser {
 
   /**
    * Валидировать структуру meta.json
+   * @param {*} raw
    */
-  validateMetaJson(raw: unknown): asserts raw is MetaJsonStructure {
+  validateMetaJson(raw) {
     if (typeof raw !== 'object' || raw === null) {
       throw new Error('meta.json должен быть объектом');
     }
 
-    const obj = raw as Record<string, unknown>;
-
     // Обязательное поле: id
-    if (!obj.id || typeof obj.id !== 'string') {
+    if (!raw.id || typeof raw.id !== 'string') {
       throw new Error('meta.json должен содержать поле "id" типа string');
     }
 
     // Проверяем operation если есть
-    if (obj.operation !== undefined) {
-      if (typeof obj.operation !== 'object' || obj.operation === null) {
+    if (raw.operation !== undefined) {
+      if (typeof raw.operation !== 'object' || raw.operation === null) {
         throw new Error('Поле "operation" должно быть объектом');
       }
     }
@@ -155,11 +95,21 @@ class MetaParser implements IMetaParser {
 
   /**
    * Извлечь длительность из метаданных
+   * @param {Object} raw
+   * @returns {number|undefined}
    */
-  extractDuration(raw: MetaJsonStructure): number | undefined {
-    // Прямое поле duration
+  extractDuration(raw) {
+    // Прямое поле duration (число)
     if (typeof raw.duration === 'number' && raw.duration > 0) {
       return Math.floor(raw.duration);
+    }
+
+    // Ищем в raw_data (где duration обычно хранится как объект со status/value)
+    if (raw.raw_data?.duration?.value) {
+      const val = parseFloat(raw.raw_data.duration.value);
+      if (!isNaN(val) && val > 0) {
+        return Math.floor(val);
+      }
     }
 
     // Ищем в operation
@@ -173,6 +123,13 @@ class MetaParser implements IMetaParser {
         if (typeof val === 'number' && val > 0) {
           return Math.floor(val);
         }
+        // Пробуем парсить строку
+        if (typeof val === 'string') {
+          const parsed = parseFloat(val);
+          if (!isNaN(parsed) && parsed > 0) {
+            return Math.floor(parsed);
+          }
+        }
       }
     }
 
@@ -181,8 +138,10 @@ class MetaParser implements IMetaParser {
 
   /**
    * Извлечь sound_prompt из operation
+   * @param {Object} raw
+   * @returns {string}
    */
-  extractSoundPrompt(raw: MetaJsonStructure): string {
+  extractSoundPrompt(raw) {
     const prompt = raw.operation?.sound_prompt;
     
     if (typeof prompt === 'string') {
@@ -203,9 +162,36 @@ class MetaParser implements IMetaParser {
 
   /**
    * Извлечь lyrics
+   * @param {Object} raw
+   * @returns {string}
    */
-  extractLyrics(raw: MetaJsonStructure): string {
-    const lyrics = raw.operation?.lyrics;
+  extractLyrics(raw) {
+    // Пробуем разные пути к lyrics
+    let lyrics = null;
+    
+    // 1. Прямое поле lyrics (строка или объект)
+    if (raw.lyrics) {
+      lyrics = raw.lyrics;
+    }
+    // 2. В operation.lyrics (строка или объект)
+    else if (raw.operation?.lyrics) {
+      lyrics = raw.operation.lyrics;
+    }
+    // 3. В raw_data.lyrics.value
+    else if (raw.raw_data?.lyrics?.value) {
+      const val = raw.raw_data.lyrics.value;
+      if (typeof val === 'string') {
+        lyrics = val;
+      } else if (val?.text) {
+        lyrics = val.text;
+      }
+    }
+    
+    // Если lyrics - объект с value/text
+    if (typeof lyrics === 'object' && lyrics !== null) {
+      if (lyrics.text) lyrics = lyrics.text;
+      else if (lyrics.value) lyrics = lyrics.value;
+    }
     
     if (typeof lyrics === 'string') {
       const trimmed = lyrics.trim();
@@ -217,8 +203,10 @@ class MetaParser implements IMetaParser {
 
   /**
    * Извлечь conversation_id
+   * @param {Object} raw
+   * @returns {string|undefined}
    */
-  extractConversationId(raw: MetaJsonStructure): string | undefined {
+  extractConversationId(raw) {
     // Прямое поле
     if (raw.conversation_id) {
       return String(raw.conversation_id);
@@ -243,15 +231,20 @@ class MetaParser implements IMetaParser {
 
   /**
    * Извлечь source_url
+   * @param {Object} raw
+   * @returns {string|undefined}
    */
-  extractSourceUrl(raw: MetaJsonStructure): string | undefined {
+  extractSourceUrl(raw) {
     return raw.source_url || raw.source || undefined;
   }
 
   /**
    * Конвертировать относительный путь в публичный URL
+   * @param {string} relativePath
+   * @param {string} [baseUrl]
+   * @returns {string}
    */
-  toPublicUrl(relativePath: string, baseUrl?: string): string {
+  toPublicUrl(relativePath, baseUrl) {
     const base = baseUrl || this.options.basePublicUrl || '/local-data/';
     
     // Нормализуем путь
@@ -267,8 +260,11 @@ class MetaParser implements IMetaParser {
 
   /**
    * Найти путь к аудио файлу
+   * @param {string} dirPath
+   * @param {Object} meta
+   * @returns {string|undefined}
    */
-  private findAudioPath(dirPath: string, meta: MetaJsonStructure): string | undefined {
+  findAudioPath(dirPath, meta) {
     // Если есть прямой URL
     if (meta.audio_url) {
       return undefined; // Используем audio_url напрямую
@@ -294,8 +290,11 @@ class MetaParser implements IMetaParser {
 
   /**
    * Найти путь к изображению
+   * @param {string} dirPath
+   * @param {Object} meta
+   * @returns {string|undefined}
    */
-  private findImagePath(dirPath: string, meta: MetaJsonStructure): string | undefined {
+  findImagePath(dirPath, meta) {
     // Если есть прямой URL
     if (meta.image_url || meta.image_large_url) {
       return undefined;
@@ -317,8 +316,9 @@ class MetaParser implements IMetaParser {
 
   /**
    * Обновить опции парсера
+   * @param {Object} options
    */
-  setOptions(options: ParseOptions): void {
+  setOptions(options) {
     this.options = { ...this.options, ...options };
   }
 }

@@ -152,6 +152,50 @@
 }
 
 /* Account Badge */
+.track-account {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.track-account .account-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #f3f4f6;
+}
+
+.track-account .account-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.track-account .account-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.track-account .account-name {
+  font-weight: 500;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-account .account-email {
+  font-size: 11px;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
 .track-account .account-badge {
   display: inline-block;
   padding: 4px 8px;

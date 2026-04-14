@@ -2,41 +2,16 @@
  * SessionExtractor — извлечение сессий из треков по conversation_id
  */
 
-import type { Track, Session, SessionMessage, TextFragment } from '../types/Track';
-
-export interface ISessionExtractor {
-  /** Извлечь сессии из треков */
-  extractSessions(tracks: Track[]): Session[];
-  
-  /** Реконструировать сообщения из трека */
-  reconstructMessagesFromTrack(track: Track): SessionMessage[];
-  
-  /** Объединить дублирующиеся сессии */
-  mergeDuplicateSessions(sessions: Session[]): Session[];
-  
-  /** Авто-привязка треков к сообщениям */
-  autoLinkTracksToMessages(session: Session, tracks: Track[]): Session;
-  
-  /** Найти треки по conversation_id */
-  findTracksByConversationId(tracks: Track[], conversationId: string): Track[];
-}
-
-/** Результат извлечения сессий */
-export interface ExtractionResult {
-  sessions: Session[];
-  linkedTracks: number;
-  unlinkedTracks: number;
-  duplicatesMerged: number;
-}
-
-class SessionExtractor implements ISessionExtractor {
+class SessionExtractor {
   /**
    * Извлечь сессии из треков
    * Группирует треки по conversation_id
+   * @param {Array} tracks
+   * @returns {Array} sessions
    */
-  extractSessions(tracks: Track[]): Session[] {
+  extractSessions(tracks) {
     // Группируем треки по conversation_id
-    const conversationGroups = new Map<string, Track[]>();
+    const conversationGroups = new Map();
     
     for (const track of tracks) {
       if (!track.conversationId) continue;
@@ -44,11 +19,11 @@ class SessionExtractor implements ISessionExtractor {
       if (!conversationGroups.has(track.conversationId)) {
         conversationGroups.set(track.conversationId, []);
       }
-      conversationGroups.get(track.conversationId)!.push(track);
+      conversationGroups.get(track.conversationId).push(track);
     }
 
     // Создаем сессии из групп
-    const sessions: Session[] = [];
+    const sessions = [];
     
     for (const [conversationId, groupTracks] of conversationGroups) {
       // Сортируем по дате создания
@@ -57,8 +32,8 @@ class SessionExtractor implements ISessionExtractor {
       );
 
       // Реконструируем сообщения из всех треков группы
-      const allMessages: SessionMessage[] = [];
-      const linkedTrackIds: string[] = [];
+      const allMessages = [];
+      const linkedTrackIds = [];
 
       for (const track of groupTracks) {
         const messages = this.reconstructMessagesFromTrack(track);
@@ -69,7 +44,7 @@ class SessionExtractor implements ISessionExtractor {
       // Дедупликация сообщений по контенту и времени
       const uniqueMessages = this.deduplicateMessages(allMessages);
 
-      const session: Session = {
+      const session = {
         conversationId,
         accountId: groupTracks[0]?.accountId,
         title: this.generateSessionTitle(groupTracks),
@@ -92,9 +67,11 @@ class SessionExtractor implements ISessionExtractor {
   /**
    * Реконструировать сообщения из трека
    * Создает пару сообщений: user (prompt) и assistant (результат)
+   * @param {Object} track
+   * @returns {Array} messages
    */
-  reconstructMessagesFromTrack(track: Track): SessionMessage[] {
-    const messages: SessionMessage[] = [];
+  reconstructMessagesFromTrack(track) {
+    const messages = [];
     const timestamp = track.createdAt || new Date().toISOString();
 
     // Сообщение пользователя — sound_prompt
@@ -126,9 +103,11 @@ class SessionExtractor implements ISessionExtractor {
 
   /**
    * Построить контент сообщения ассистента
+   * @param {Object} track
+   * @returns {string}
    */
-  private buildAssistantContent(track: Track): string {
-    const parts: string[] = [];
+  buildAssistantContent(track) {
+    const parts = [];
 
     if (track.title && track.title !== 'Untitled') {
       parts.push(`**Название:** ${track.title}`);
@@ -153,9 +132,11 @@ class SessionExtractor implements ISessionExtractor {
 
   /**
    * Извлечь текстовые фрагменты для привязки
+   * @param {Object} track
+   * @returns {Array}
    */
-  private extractTextFragments(track: Track): TextFragment[] {
-    const fragments: TextFragment[] = [];
+  extractTextFragments(track) {
+    const fragments = [];
 
     // Фрагмент из sound_prompt
     if (track.soundPrompt) {
@@ -176,10 +157,12 @@ class SessionExtractor implements ISessionExtractor {
 
   /**
    * Дедупликация сообщений
+   * @param {Array} messages
+   * @returns {Array}
    */
-  private deduplicateMessages(messages: SessionMessage[]): SessionMessage[] {
-    const seen = new Set<string>();
-    const unique: SessionMessage[] = [];
+  deduplicateMessages(messages) {
+    const seen = new Set();
+    const unique = [];
 
     for (const msg of messages) {
       // Ключ: роль + первые 100 символов контента
@@ -197,9 +180,11 @@ class SessionExtractor implements ISessionExtractor {
   /**
    * Объединить дублирующиеся сессии
    * Сессии считаются дубликатами, если имеют одинаковый conversationId
+   * @param {Array} sessions
+   * @returns {Array}
    */
-  mergeDuplicateSessions(sessions: Session[]): Session[] {
-    const merged = new Map<string, Session>();
+  mergeDuplicateSessions(sessions) {
+    const merged = new Map();
 
     for (const session of sessions) {
       const existing = merged.get(session.conversationId);
@@ -230,8 +215,11 @@ class SessionExtractor implements ISessionExtractor {
   /**
    * Авто-привязка треков к сообщениям в сессии
    * Ищет совпадения sound_prompt с контентом сообщений
+   * @param {Object} session
+   * @param {Array} tracks
+   * @returns {Object} updatedSession
    */
-  autoLinkTracksToMessages(session: Session, tracks: Track[]): Session {
+  autoLinkTracksToMessages(session, tracks) {
     const updatedSession = { ...session };
 
     for (const track of tracks) {
@@ -273,15 +261,20 @@ class SessionExtractor implements ISessionExtractor {
 
   /**
    * Найти треки по conversation_id
+   * @param {Array} tracks
+   * @param {string} conversationId
+   * @returns {Array}
    */
-  findTracksByConversationId(tracks: Track[], conversationId: string): Track[] {
+  findTracksByConversationId(tracks, conversationId) {
     return tracks.filter(t => t.conversationId === conversationId);
   }
 
   /**
    * Сгенерировать заголовок сессии
+   * @param {Array} tracks
+   * @returns {string}
    */
-  private generateSessionTitle(tracks: Track[]): string {
+  generateSessionTitle(tracks) {
     if (tracks.length === 0) return 'Без названия';
     
     if (tracks.length === 1) {
@@ -293,12 +286,14 @@ class SessionExtractor implements ISessionExtractor {
 
   /**
    * Полный пайплайн извлечения
+   * @param {Array} tracks
+   * @returns {Object} ExtractionResult
    */
-  extract(tracks: Track[]): ExtractionResult {
+  extract(tracks) {
     const sessions = this.extractSessions(tracks);
     
     // Считаем статистику
-    const linkedTracks = new Set<string>();
+    const linkedTracks = new Set();
     for (const session of sessions) {
       for (const trackId of session.linkedTrackIds) {
         linkedTracks.add(trackId);

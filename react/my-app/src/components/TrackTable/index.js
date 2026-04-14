@@ -92,9 +92,21 @@ export default function TrackTable({ onSessionClick }) {
         const account = ACCOUNTS.find(a => a.id === track.accountId);
         return (
           <div className="track-account">
-            <span className="account-badge" style={{ backgroundColor: account?.color }}>
-              {account?.name || `Аккаунт ${track.accountId}`}
-            </span>
+            <div className="account-avatar">
+              <img 
+                src={account?.avatarUrl || `/avatars/default.png`} 
+                alt={account?.name}
+                onError={(e) => { e.target.src = '/avatars/default.png'; }}
+              />
+            </div>
+            <div className="account-info">
+              <span className="account-name" style={{ color: account?.color }}>
+                {account?.name || `Аккаунт ${track.accountId}`}
+              </span>
+              <span className="account-email" title={account?.email}>
+                {account?.email}
+              </span>
+            </div>
           </div>
         );
 

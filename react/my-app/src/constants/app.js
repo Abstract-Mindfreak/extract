@@ -1,10 +1,10 @@
 // App Constants
 
 export const ACCOUNTS = [
-  { id: 1, name: 'Аккаунт 1', email: 'account1@example.com', color: '#3b82f6' },
-  { id: 2, name: 'Аккаунт 2', email: 'account2@example.com', color: '#10b981' },
-  { id: 3, name: 'Аккаунт 3', email: 'account3@example.com', color: '#f59e0b' },
-  { id: 4, name: 'Аккаунт 4', email: 'account4@example.com', color: '#ef4444' }
+  { id: 1, name: 'Аккаунт 1', email: 'synth.master@yahoo.com', color: '#3b82f6', avatarUrl: '/avatars/account1.svg' },
+  { id: 2, name: 'Аккаунт 2', email: 'beat.creator@gmail.com', color: '#10b981', avatarUrl: '/avatars/account2.svg' },
+  { id: 3, name: 'Аккаунт 3', email: 'audio.lab@outlook.com', color: '#f59e0b', avatarUrl: '/avatars/account3.svg' },
+  { id: 4, name: 'Аккаунт 4', email: 'music.pro@icloud.com', color: '#ef4444', avatarUrl: '/avatars/account4.svg' }
 ];
 
 export const RATING_OPTIONS = [
