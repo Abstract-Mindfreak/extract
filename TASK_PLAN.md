@@ -22,30 +22,27 @@
 ## 📋 ЭТАП 0: ПОДГОТОВКА И АНАЛИЗ
 
 ### 0.1 Инициализация проекта
-- [ ] **TO_DO** Проверить текущую конфигурацию react/my-app
+- [x] **DONE** Проверить текущую конфигурацию react/my-app (React 19, Vite, работает)
   - React 18 + TypeScript
   - Vite в качестве сборщика
   - ESLint + Prettier
-- [ ] **TO_DO** Установить базовые зависимости
-  ```bash
-  npm install zustand react-window @tanstack/react-table react-markdown remark-gfm howler date-fns uuid idb
-  npm install -D @types/howler @types/uuid @types/react-window
-  ```
+- [x] **DONE** Установлены базовые зависимости: zustand, idb (остальные по мере необходимости)
 
 ### 0.2 Настройка моковых данных
-- [ ] **TO_DO** Создать `public/mock-data/tracks.json` (10-15 примеров треков)
-- [ ] **TO_DO** Создать `public/mock-data/sessions.json` (3-5 примеров сессий)
-- [ ] **TO_DO** Реализовать `src/services/MockDataService.ts`
+- [x] **DONE** Создан `public/mock-data/tracks.json` (12 треков)
+- [x] **DONE** Создан `public/mock-data/sessions.json` (5 сессий)
+- [x] **DONE** Реализован `src/services/MockDataService.js` (с batch-операциями)
   - `getMockTracks(): Promise<Track[]>`
   - `getMockSessions(): Promise<ParsedSession[]>`
   - `getMockTrackById(id: string): Promise<Track | null>`
 
 ### 0.3 Настройка хранилища
-- [ ] **TO_DO** Реализовать `src/services/StorageService.ts` с адаптерами:
+- [x] **DONE** Реализован `src/services/StorageService.js` с IndexedDB (idb)
   - `IndexedDBAdapter` — основное хранилище
   - `LocalStorageAdapter` — настройки и кэш
   - `MockAdapter` — для разработки
-- [ ] **TO_DO** Определить схемы хранилищ:
+- [x] **DONE** Определены схемы хранилищ:
+  - tracks, sessions, fragments, metadata, accounts
   - `tracks` → объект по `track.id`
   - `sessions` → объект по `session.conversationId`
   - `settings` → `DisplaySettings`
@@ -424,8 +421,8 @@
 ## ✅ ТЕКУЩИЙ СТАТУС
 
 **Последнее обновление:** 2026-04-14  
-**Готовность:** 0%  
-**Следующая задача:** 0.1 Инициализация проекта — проверка конфигурации
+**Готовность:** 15% (Этап 0 завершён, UI базовый работает)  
+**Следующая задача:** 1.1 Модуль FileSystemService — сканирование архива
 
 ---
 
