@@ -55,40 +55,34 @@
 ### 1.1 Модуль: `FileSystemService`
 **Файл:** `src/services/FileSystemService.ts`
 
-- [ ] **TO_DO** Реализовать интерфейс `IFileSystemService`:
+- [x] **DONE** `FileSystemService.ts` — сканирование через File System Access API + fallback
   - `scanArchive(basePath, accountIds): Promise<ScanResult>`
   - `readFile(path): Promise<string>`
   - `writeFile(path, content): Promise<void>`
   - `pathToBlobUrl(filePath, mimeType): Promise<string>`
-- [ ] **TO_DO** Web-версия: File System Access API + фоллбэк на `<input type="file" webkitdirectory>`
-- [ ] **TO_DO** Обработка ошибок: недоступные файлы, неверная структура, повреждённые JSON
+- [x] **DONE** File System Access API + fallback на processFileList
+- [x] **DONE** Обработка ошибок: validateArchiveStructure, try/catch на всех операциях
 
 ### 1.2 Модуль: `MetaParser`
 **Файл:** `src/services/MetaParser.ts`
 
-- [ ] **TO_DO** Реализовать `IMetaParser`:
-  - `parseMetaJson(rawJson, accountId, metaFilePath): Track`
-  - `validateMetaJson(raw): void`
-  - `extractDuration(raw): number | undefined`
-  - `extractSoundPrompt(raw): string`
-- [ ] **TO_DO** Обязательные поля: id, title, created_at, raw_data.operation.sound_prompt
-- [ ] **TO_DO** Опциональные поля: duration → undefined, lyrics → "[Instrumental]"
-- [ ] **TO_DO** Конвертация путей в относительные для `public/local-data/`
+- [x] **DONE** `MetaParser.ts` — валидация и парсинг meta.json
+  - `parseMetaJson()`, `validateMetaJson()`, `extractDuration()`, `extractSoundPrompt()`
+- [x] **DONE** Обязательные поля: id валидируется, title/created_at/sound_prompt извлекаются
+- [x] **DONE** Опциональные поля: duration (undefined если нет), lyrics ('[Instrumental]' по умолчанию)
+- [x] **DONE** `toPublicUrl()` — конвертация путей в публичные URLs
 
 ### 1.3 Модуль: `SessionExtractor`
 **Файл:** `src/services/SessionExtractor.ts`
 
-- [ ] **TO_DO** Реализовать `ISessionExtractor`:
-  - `extractSessions(tracks): ParsedSession[]`
-  - `reconstructMessagesFromTrack(track): SessionMessage[]`
-  - `mergeDuplicateSessions(sessions): ParsedSession[]`
-  - `autoLinkTracksToMessages(session): ParsedSession`
-- [ ] **TO_DO** Алгоритм извлечения:
-  1. Группировка треков по `conversation_id`
+- [x] **DONE** `SessionExtractor.ts` — извлечение сессий из треков
+  - `extractSessions()`, `reconstructMessagesFromTrack()`, `mergeDuplicateSessions()`, `autoLinkTracksToMessages()`
+- [x] **DONE** Алгоритм извлечения:
+  1. Группировка по `conversation_id`
   2. Сортировка по `created_at`
-  3. Создание сообщений user/assistant
-  4. Дедупликация из разных аккаунтов
-  5. Авто-привязка треков к сообщениям
+  3. Создание сообщений (user=prompt, assistant=результат)
+  4. Дедупликация сообщений по контенту
+  5. Авто-привязка треков по совпадению prompt
 
 ### 1.4 Модуль: `FragmentMapper`
 **Файл:** `src/services/FragmentMapper.ts`
@@ -421,8 +415,8 @@
 ## ✅ ТЕКУЩИЙ СТАТУС
 
 **Последнее обновление:** 2026-04-14  
-**Готовность:** 15% (Этап 0 завершён, UI базовый работает)  
-**Следующая задача:** 1.1 Модуль FileSystemService — сканирование архива
+**Готовность:** 30% (Этап 1: FileSystemService, MetaParser, SessionExtractor)  
+**Следующая задача:** 1.4 FragmentMapper или 1.5 ImportOrchestrator
 
 ---
 

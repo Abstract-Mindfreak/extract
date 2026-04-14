@@ -1,0 +1,321 @@
+/**
+ * SessionExtractor — извлечение сессий из треков по conversation_id
+ */
+
+import type { Track, Session, SessionMessage, TextFragment } from '../types/Track';
+
+export interface ISessionExtractor {
+  /** Извлечь сессии из треков */
+  extractSessions(tracks: Track[]): Session[];
+  
+  /** Реконструировать сообщения из трека */
+  reconstructMessagesFromTrack(track: Track): SessionMessage[];
+  
+  /** Объединить дублирующиеся сессии */
+  mergeDuplicateSessions(sessions: Session[]): Session[];
+  
+  /** Авто-привязка треков к сообщениям */
+  autoLinkTracksToMessages(session: Session, tracks: Track[]): Session;
+  
+  /** Найти треки по conversation_id */
+  findTracksByConversationId(tracks: Track[], conversationId: string): Track[];
+}
+
+/** Результат извлечения сессий */
+export interface ExtractionResult {
+  sessions: Session[];
+  linkedTracks: number;
+  unlinkedTracks: number;
+  duplicatesMerged: number;
+}
+
+class SessionExtractor implements ISessionExtractor {
+  /**
+   * Извлечь сессии из треков
+   * Группирует треки по conversation_id
+   */
+  extractSessions(tracks: Track[]): Session[] {
+    // Группируем треки по conversation_id
+    const conversationGroups = new Map<string, Track[]>();
+    
+    for (const track of tracks) {
+      if (!track.conversationId) continue;
+      
+      if (!conversationGroups.has(track.conversationId)) {
+        conversationGroups.set(track.conversationId, []);
+      }
+      conversationGroups.get(track.conversationId)!.push(track);
+    }
+
+    // Создаем сессии из групп
+    const sessions: Session[] = [];
+    
+    for (const [conversationId, groupTracks] of conversationGroups) {
+      // Сортируем по дате создания
+      groupTracks.sort((a, b) => 
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+
+      // Реконструируем сообщения из всех треков группы
+      const allMessages: SessionMessage[] = [];
+      const linkedTrackIds: string[] = [];
+
+      for (const track of groupTracks) {
+        const messages = this.reconstructMessagesFromTrack(track);
+        allMessages.push(...messages);
+        linkedTrackIds.push(track.id);
+      }
+
+      // Дедупликация сообщений по контенту и времени
+      const uniqueMessages = this.deduplicateMessages(allMessages);
+
+      const session: Session = {
+        conversationId,
+        accountId: groupTracks[0]?.accountId,
+        title: this.generateSessionTitle(groupTracks),
+        messages: uniqueMessages,
+        linkedTrackIds,
+        createdAt: groupTracks[0]?.createdAt,
+        updatedAt: new Date().toISOString(),
+        metadata: {
+          trackCount: groupTracks.length,
+          totalDuration: groupTracks.reduce((sum, t) => sum + (t.durationSeconds || 0), 0)
+        }
+      };
+
+      sessions.push(session);
+    }
+
+    return this.mergeDuplicateSessions(sessions);
+  }
+
+  /**
+   * Реконструировать сообщения из трека
+   * Создает пару сообщений: user (prompt) и assistant (результат)
+   */
+  reconstructMessagesFromTrack(track: Track): SessionMessage[] {
+    const messages: SessionMessage[] = [];
+    const timestamp = track.createdAt || new Date().toISOString();
+
+    // Сообщение пользователя — sound_prompt
+    if (track.soundPrompt) {
+      messages.push({
+        id: `msg-${track.id}-user`,
+        role: 'user',
+        content: track.soundPrompt,
+        createdAt: timestamp,
+        linkedTrackId: track.id
+      });
+    }
+
+    // Сообщение ассистента — результат генерации
+    const assistantContent = this.buildAssistantContent(track);
+    if (assistantContent) {
+      messages.push({
+        id: `msg-${track.id}-assistant`,
+        role: 'assistant',
+        content: assistantContent,
+        createdAt: timestamp,
+        linkedTrackId: track.id,
+        textFragments: this.extractTextFragments(track)
+      });
+    }
+
+    return messages;
+  }
+
+  /**
+   * Построить контент сообщения ассистента
+   */
+  private buildAssistantContent(track: Track): string {
+    const parts: string[] = [];
+
+    if (track.title && track.title !== 'Untitled') {
+      parts.push(`**Название:** ${track.title}`);
+    }
+
+    if (track.durationSeconds) {
+      const mins = Math.floor(track.durationSeconds / 60);
+      const secs = track.durationSeconds % 60;
+      parts.push(`**Длительность:** ${mins}:${secs.toString().padStart(2, '0')}`);
+    }
+
+    if (track.lyrics && track.lyrics !== '[Instrumental]') {
+      parts.push(`**Текст:**\n${track.lyrics}`);
+    }
+
+    if (track.sourceUrl) {
+      parts.push(`**Источник:** ${track.sourceUrl}`);
+    }
+
+    return parts.join('\n\n');
+  }
+
+  /**
+   * Извлечь текстовые фрагменты для привязки
+   */
+  private extractTextFragments(track: Track): TextFragment[] {
+    const fragments: TextFragment[] = [];
+
+    // Фрагмент из sound_prompt
+    if (track.soundPrompt) {
+      fragments.push({
+        id: crypto.randomUUID(),
+        messageId: `msg-${track.id}-user`,
+        content: track.soundPrompt,
+        startIndex: 0,
+        endIndex: track.soundPrompt.length,
+        linkedTrackId: track.id,
+        isSelected: true,
+        createdAt: track.createdAt
+      });
+    }
+
+    return fragments;
+  }
+
+  /**
+   * Дедупликация сообщений
+   */
+  private deduplicateMessages(messages: SessionMessage[]): SessionMessage[] {
+    const seen = new Set<string>();
+    const unique: SessionMessage[] = [];
+
+    for (const msg of messages) {
+      // Ключ: роль + первые 100 символов контента
+      const key = `${msg.role}:${msg.content.slice(0, 100)}`;
+      
+      if (!seen.has(key)) {
+        seen.add(key);
+        unique.push(msg);
+      }
+    }
+
+    return unique;
+  }
+
+  /**
+   * Объединить дублирующиеся сессии
+   * Сессии считаются дубликатами, если имеют одинаковый conversationId
+   */
+  mergeDuplicateSessions(sessions: Session[]): Session[] {
+    const merged = new Map<string, Session>();
+
+    for (const session of sessions) {
+      const existing = merged.get(session.conversationId);
+      
+      if (existing) {
+        // Объединяем сообщения
+        const allMessages = [...existing.messages, ...session.messages];
+        existing.messages = this.deduplicateMessages(allMessages);
+        
+        // Объединяем linkedTrackIds
+        const allTrackIds = new Set([...existing.linkedTrackIds, ...session.linkedTrackIds]);
+        existing.linkedTrackIds = Array.from(allTrackIds);
+        
+        // Обновляем метаданные
+        existing.metadata = {
+          ...existing.metadata,
+          trackCount: existing.linkedTrackIds.length,
+          merged: true
+        };
+      } else {
+        merged.set(session.conversationId, { ...session });
+      }
+    }
+
+    return Array.from(merged.values());
+  }
+
+  /**
+   * Авто-привязка треков к сообщениям в сессии
+   * Ищет совпадения sound_prompt с контентом сообщений
+   */
+  autoLinkTracksToMessages(session: Session, tracks: Track[]): Session {
+    const updatedSession = { ...session };
+
+    for (const track of tracks) {
+      if (!track.conversationId || track.conversationId !== session.conversationId) {
+        continue;
+      }
+
+      // Ищем совпадение sound_prompt в сообщениях
+      if (track.soundPrompt) {
+        for (const message of updatedSession.messages) {
+          if (message.role === 'user' && message.content.includes(track.soundPrompt)) {
+            message.linkedTrackId = track.id;
+            
+            // Добавляем фрагмент
+            if (!message.textFragments) {
+              message.textFragments = [];
+            }
+            
+            const startIndex = message.content.indexOf(track.soundPrompt);
+            message.textFragments.push({
+              id: crypto.randomUUID(),
+              messageId: message.id,
+              content: track.soundPrompt,
+              startIndex,
+              endIndex: startIndex + track.soundPrompt.length,
+              linkedTrackId: track.id,
+              isSelected: true,
+              createdAt: track.createdAt
+            });
+            
+            break;
+          }
+        }
+      }
+    }
+
+    return updatedSession;
+  }
+
+  /**
+   * Найти треки по conversation_id
+   */
+  findTracksByConversationId(tracks: Track[], conversationId: string): Track[] {
+    return tracks.filter(t => t.conversationId === conversationId);
+  }
+
+  /**
+   * Сгенерировать заголовок сессии
+   */
+  private generateSessionTitle(tracks: Track[]): string {
+    if (tracks.length === 0) return 'Без названия';
+    
+    if (tracks.length === 1) {
+      return tracks[0].title || 'Сессия без названия';
+    }
+    
+    return `${tracks[0].title || 'Сессия'} (+${tracks.length - 1} треков)`;
+  }
+
+  /**
+   * Полный пайплайн извлечения
+   */
+  extract(tracks: Track[]): ExtractionResult {
+    const sessions = this.extractSessions(tracks);
+    
+    // Считаем статистику
+    const linkedTracks = new Set<string>();
+    for (const session of sessions) {
+      for (const trackId of session.linkedTrackIds) {
+        linkedTracks.add(trackId);
+      }
+    }
+    
+    return {
+      sessions,
+      linkedTracks: linkedTracks.size,
+      unlinkedTracks: tracks.length - linkedTracks.size,
+      duplicatesMerged: 0 // TODO: считать реальное количество
+    };
+  }
+}
+
+// Singleton instance
+const sessionExtractor = new SessionExtractor();
+
+export default sessionExtractor;
+export { SessionExtractor };
