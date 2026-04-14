@@ -98,17 +98,18 @@
 ### 1.5 Модуль: `ImportOrchestrator`
 **Файл:** `src/services/ImportOrchestrator.ts`
 
-- [ ] **TO_DO** Реализовать `IImportOrchestrator`:
-  - `runFullImport(archivePath, accountIds, onProgress?): Promise<ImportResult>`
-- [ ] **TO_DO** Типы: `ImportProgress`, `ImportResult`
-- [ ] **TO_DO** Пайплайн импорта:
-  1. `FileSystemService.scanArchive()`
-  2. `MetaParser.parseMetaJson()` для каждого файла
-  3. Сохранение в `StorageService`
-  4. `SessionExtractor.extractSessions()`
-  5. `FragmentMapper.autoLinkTracksToMessages()`
-  6. Сохранение сессий
-  7. Генерация отчёта
+- [x] **DONE** `ImportOrchestrator.ts` — пайплайн полного импорта
+  - `runFullImport()` — File System Access API
+  - `runFileListImport()` — fallback на file input
+  - `validateBeforeImport()` — проверка перед импортом
+- [x] **DONE** Типы: `ImportStage`, `ImportResult`, `ImportProgressCallback`
+- [x] **DONE** Пайплайн импорта:
+  1. Сканирование через `FileSystemService`
+  2. Парсинг через `MetaParser`
+  3. Создание blob URLs для медиа
+  4. Извлечение сессий через `SessionExtractor`
+  5. Batch-сохранение в IndexedDB
+  6. Сохранение метаданных импорта
 
 ### 1.6 CLI-утилита для импорта
 **Файл:** `scripts/import-cli.ts`
@@ -415,8 +416,8 @@
 ## ✅ ТЕКУЩИЙ СТАТУС
 
 **Последнее обновление:** 2026-04-14  
-**Готовность:** 30% (Этап 1: FileSystemService, MetaParser, SessionExtractor)  
-**Следующая задача:** 1.4 FragmentMapper или 1.5 ImportOrchestrator
+**Готовность:** 40% (Этап 1: Data Layer завершен — можно импортировать архив!)  
+**Следующая задача:** 1.6 CLI-утилита для импорта или Этап 2 (UI улучшения)
 
 ---
 
