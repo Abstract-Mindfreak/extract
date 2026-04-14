@@ -22,7 +22,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "sync:server": "node sync-server/server.js",
-    "archiver:server": "node archiver-server.js"
+    "archiver:server": "node archiver-server.js",
+    "import": "ts-node scripts/import-cli.ts"
   },
   "devDependencies": {
     "cors": "^2.8.5",
