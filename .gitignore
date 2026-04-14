@@ -31,6 +31,9 @@ producer-ai-archiver/producer_auth_*.json
 producer-ai-archiver/producer_login_ready
 producer-ai-archiver/producer_backup_*/
 !producer-ai-archiver/producer_backup_*/.gitkeep
+output/
+new-layer/
+source/
 
 # Downloaded music library (large files)
 *.m4a

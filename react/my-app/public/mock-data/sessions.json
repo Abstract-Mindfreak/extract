@@ -1,0 +1,475 @@
+[
+  {
+    "conversationId": "f1ff1a79-8a17-4b66-8d54-cede0ed96bc6",
+    "primaryAccountId": 4,
+    "sourceAccounts": [4, 1],
+    "createdAt": "2026-04-12T11:50:00.000000Z",
+    "updatedAt": "2026-04-12T11:55:00.000000Z",
+    "messages": [
+      {
+        "id": "msg_001",
+        "role": "user",
+        "content": "I want to create an anti-rhythm track with stochastic patterns, something that breaks conventional grid structures. Think anti-grid approach with fractured timing.",
+        "timestamp": "2026-04-12T11:50:15.000000Z",
+        "textFragments": []
+      },
+      {
+        "id": "msg_002",
+        "role": "assistant",
+        "content": "I'll create Φ_TOTAL_ANTI_PATTERN_v1 for you with anti-grid stochastic rhythm, aperiodic broken clock timing, glitch percussion, and fractured hi-hats. No melody, pure rhythmic entropy.",
+        "timestamp": "2026-04-12T11:53:12.000000Z",
+        "linkedTrackId": "fed15fa7-0a64-47a0-ad4e-4d12106107f2",
+        "audioMetadata": {
+          "trackId": "fed15fa7-0a64-47a0-ad4e-4d12106107f2",
+          "title": "Φ_TOTAL_ANTI_PATTERN_v1",
+          "durationSeconds": 146.144,
+          "prompt": "anti-grid stochastic rhythm, aperiodic broken clock timing...",
+          "coverUrl": "/mock-data/cover1.jpg",
+          "audioUrl": "/mock-data/audio1.m4a"
+        },
+        "textFragments": [
+          {
+            "fragmentId": "frag_001",
+            "text": "anti-grid stochastic rhythm, aperiodic broken clock timing, glitch percussion, and fractured hi-hats",
+            "startIndex": 47,
+            "endIndex": 160,
+            "isSelected": true,
+            "linkedTrackId": "fed15fa7-0a64-47a0-ad4e-4d12106107f2",
+            "createdAt": "2026-04-12T11:53:12.000000Z"
+          }
+        ]
+      },
+      {
+        "id": "msg_003",
+        "role": "user",
+        "content": "Great! Now make something with glitch hop vibes, databent aesthetic. I love that corruption vibe.",
+        "timestamp": "2026-04-12T11:54:00.000000Z",
+        "textFragments": []
+      },
+      {
+        "id": "msg_004",
+        "role": "assistant",
+        "content": "Here's Glitch Protocol_Δ with glitch hop elements, databent sounds, stutter edits, and wobble bass. Mid-tempo groove with corrupted audio aesthetic.",
+        "timestamp": "2026-04-12T11:55:00.000000Z",
+        "linkedTrackId": "d4e5f6a7-b8c9-0123-defa-456789012345",
+        "audioMetadata": {
+          "trackId": "d4e5f6a7-b8c9-0123-defa-456789012345",
+          "title": "Glitch Protocol_Δ",
+          "durationSeconds": 95.5,
+          "prompt": "glitch hop, databent sounds, corrupted audio aesthetic...",
+          "coverUrl": "/mock-data/cover5.jpg",
+          "audioUrl": "/mock-data/audio5.m4a"
+        },
+        "textFragments": [
+          {
+            "fragmentId": "frag_002",
+            "text": "glitch hop, databent sounds, stutter edits, and wobble bass",
+            "startIndex": 29,
+            "endIndex": 87,
+            "isSelected": true,
+            "linkedTrackId": "d4e5f6a7-b8c9-0123-defa-456789012345",
+            "createdAt": "2026-04-12T11:55:00.000000Z"
+          }
+        ]
+      }
+    ],
+    "linkedTracks": [
+      {
+        "trackId": "fed15fa7-0a64-47a0-ad4e-4d12106107f2",
+        "title": "Φ_TOTAL_ANTI_PATTERN_v1",
+        "audioPath": "/mock-data/audio1.m4a",
+        "coverPath": "/mock-data/cover1.jpg",
+        "metaPath": "/mock-data/meta1.json",
+        "prompt": "anti-grid stochastic rhythm...",
+        "createdAt": "2026-04-12T11:53:12.314211Z",
+        "rating": 8.5,
+        "quickMeta": {
+          "durationSeconds": 146.144,
+          "playCount": 3,
+          "lyrics": "[Instrumental]"
+        }
+      },
+      {
+        "trackId": "d4e5f6a7-b8c9-0123-defa-456789012345",
+        "title": "Glitch Protocol_Δ",
+        "audioPath": "/mock-data/audio5.m4a",
+        "coverPath": "/mock-data/cover5.jpg",
+        "metaPath": "/mock-data/meta5.json",
+        "prompt": "glitch hop, databent sounds...",
+        "createdAt": "2026-04-11T14:30:22.111111Z",
+        "rating": 6.5,
+        "quickMeta": {
+          "durationSeconds": 95.5,
+          "playCount": 0,
+          "lyrics": "[Instrumental]"
+        }
+      }
+    ],
+    "meta": {
+      "totalMessages": 4,
+      "userMessages": 2,
+      "assistantMessages": 2,
+      "systemMessages": 0,
+      "hasAudioGenerations": true,
+      "promptFragments": [
+        "anti-grid stochastic rhythm",
+        "glitch hop vibes"
+      ],
+      "estimatedDurationMinutes": 4.0
+    }
+  },
+  {
+    "conversationId": "abc12345-def6-7890-abcd-ef1234567890",
+    "primaryAccountId": 1,
+    "sourceAccounts": [1, 2],
+    "createdAt": "2026-04-10T15:20:00.000000Z",
+    "updatedAt": "2026-04-10T15:25:00.000000Z",
+    "messages": [
+      {
+        "id": "msg_101",
+        "role": "user",
+        "content": "Create something with quantum physics vibes. Entangled frequencies, sub-harmonic resonance. Deep and mysterious.",
+        "timestamp": "2026-04-10T15:20:30.000000Z",
+        "textFragments": []
+      },
+      {
+        "id": "msg_102",
+        "role": "assistant",
+        "content": "Quantum Entanglement Bass is ready - deep quantum bass with entangled frequency modulation, sub-harmonic resonance, dark ambient atmosphere, and 8-second reverb tails.",
+        "timestamp": "2026-04-10T15:22:33.000000Z",
+        "linkedTrackId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "audioMetadata": {
+          "trackId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+          "title": "Quantum Entanglement Bass",
+          "durationSeconds": 184.5,
+          "prompt": "deep quantum bass, entangled frequency modulation...",
+          "coverUrl": "/mock-data/cover2.jpg",
+          "audioUrl": "/mock-data/audio2.m4a"
+        },
+        "textFragments": []
+      },
+      {
+        "id": "msg_103",
+        "role": "user",
+        "content": "Now give me AI breakbeats. Neural network patterns, complex drums, jungle style but modern.",
+        "timestamp": "2026-04-10T15:23:00.000000Z",
+        "textFragments": []
+      },
+      {
+        "id": "msg_104",
+        "role": "assistant",
+        "content": "Neural Network Breaks generated with AI-generated breakbeats, neural network patterns, complex drum programming, amen break variation, jungle influence at 170 BPM.",
+        "timestamp": "2026-04-10T15:25:00.000000Z",
+        "linkedTrackId": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+        "audioMetadata": {
+          "trackId": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+          "title": "Neural Network Breaks",
+          "durationSeconds": 128.75,
+          "prompt": "AI-generated breakbeats, neural network patterns...",
+          "coverUrl": "/mock-data/cover3.jpg",
+          "audioUrl": "/mock-data/audio3.m4a"
+        },
+        "textFragments": []
+      },
+      {
+        "id": "msg_105",
+        "role": "user",
+        "content": "Perfect! And one more - something about cybernetic organisms, man-machine fusion. Add lyrics about this theme.",
+        "timestamp": "2026-04-10T15:26:00.000000Z",
+        "textFragments": []
+      },
+      {
+        "id": "msg_106",
+        "role": "assistant",
+        "content": "Cybernetic Organism created with man-machine fusion sounds, biomechanical aesthetic, servo motors mixed with organic synthesis, cyberpunk dystopian vibe. Lyrics included about metal, flesh, circuits and digital consciousness.",
+        "timestamp": "2026-04-10T15:28:00.000000Z",
+        "linkedTrackId": "d0e1f2a3-b4c5-6789-defa-012345678901",
+        "audioMetadata": {
+          "trackId": "d0e1f2a3-b4c5-6789-defa-012345678901",
+          "title": "Cybernetic Organism",
+          "durationSeconds": 198.3,
+          "prompt": "cybernetic organism, man-machine fusion...",
+          "coverUrl": "/mock-data/cover11.jpg",
+          "audioUrl": "/mock-data/audio11.m4a"
+        },
+        "textFragments": []
+      }
+    ],
+    "linkedTracks": [
+      {
+        "trackId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "title": "Quantum Entanglement Bass",
+        "audioPath": "/mock-data/audio2.m4a",
+        "coverPath": "/mock-data/cover2.jpg",
+        "metaPath": "/mock-data/meta2.json",
+        "prompt": "deep quantum bass...",
+        "createdAt": "2026-04-10T15:22:33.123456Z",
+        "rating": 9.0,
+        "quickMeta": {
+          "durationSeconds": 184.5,
+          "playCount": 5,
+          "lyrics": "[Instrumental]"
+        }
+      },
+      {
+        "trackId": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+        "title": "Neural Network Breaks",
+        "audioPath": "/mock-data/audio3.m4a",
+        "coverPath": "/mock-data/cover3.jpg",
+        "metaPath": "/mock-data/meta3.json",
+        "prompt": "AI-generated breakbeats...",
+        "createdAt": "2026-04-08T09:15:45.654321Z",
+        "rating": 7.5,
+        "quickMeta": {
+          "durationSeconds": 128.75,
+          "playCount": 2,
+          "lyrics": "Neural pathways fire..."
+        }
+      },
+      {
+        "trackId": "d0e1f2a3-b4c5-6789-defa-012345678901",
+        "title": "Cybernetic Organism",
+        "audioPath": "/mock-data/audio11.m4a",
+        "coverPath": "/mock-data/cover11.jpg",
+        "metaPath": "/mock-data/meta11.json",
+        "prompt": "cybernetic organism...",
+        "createdAt": "2026-04-02T10:10:10.777777Z",
+        "quickMeta": {
+          "durationSeconds": 198.3,
+          "playCount": 3,
+          "lyrics": "Metal and flesh..."
+        }
+      }
+    ],
+    "meta": {
+      "totalMessages": 6,
+      "userMessages": 3,
+      "assistantMessages": 3,
+      "systemMessages": 0,
+      "hasAudioGenerations": true,
+      "promptFragments": [
+        "quantum physics vibes",
+        "AI breakbeats",
+        "cybernetic organisms"
+      ],
+      "estimatedDurationMinutes": 8.5
+    }
+  },
+  {
+    "conversationId": "def67890-1234-5678-abcd-ef9012345678",
+    "primaryAccountId": 3,
+    "sourceAccounts": [3],
+    "createdAt": "2026-04-05T20:40:00.000000Z",
+    "updatedAt": "2026-04-06T12:05:00.000000Z",
+    "messages": [
+      {
+        "id": "msg_201",
+        "role": "user",
+        "content": "I need deep space ambient. Cosmic atmosphere, very slow, meditative, like floating in void.",
+        "timestamp": "2026-04-05T20:40:15.000000Z",
+        "textFragments": []
+      },
+      {
+        "id": "msg_202",
+        "role": "assistant",
+        "content": "Void Walker Ambient created - cosmic ambient with deep space atmosphere, granular textures, slow evolving pads at 60 BPM. Meditative void-like experience.",
+        "timestamp": "2026-04-05T20:45:00.000000Z",
+        "linkedTrackId": "c3d4e5f6-a7b8-9012-cdef-345678901234",
+        "audioMetadata": {
+          "trackId": "c3d4e5f6-a7b8-9012-cdef-345678901234",
+          "title": "Void Walker Ambient",
+          "durationSeconds": 312.0,
+          "prompt": "cosmic ambient, deep space atmosphere...",
+          "coverUrl": "/mock-data/cover4.jpg",
+          "audioUrl": "/mock-data/audio4.m4a"
+        },
+        "textFragments": []
+      },
+      {
+        "id": "msg_203",
+        "role": "user",
+        "content": "And something bio-digital. Synaptic, neuro-electronic, sci-fi but organic feeling too.",
+        "timestamp": "2026-04-06T11:55:00.000000Z",
+        "textFragments": []
+      },
+      {
+        "id": "msg_204",
+        "role": "assistant",
+        "content": "Synaptic Transmission ready - synaptic transmission sounds, neuro-electronic hybrid, pulse waves with modulated filters at 128 BPM.",
+        "timestamp": "2026-04-06T12:00:00.000000Z",
+        "linkedTrackId": "a7b8c9d0-e1f2-3456-abcd-789012345678",
+        "audioMetadata": {
+          "trackId": "a7b8c9d0-e1f2-3456-abcd-789012345678",
+          "title": "Synaptic Transmission",
+          "durationSeconds": 203.4,
+          "prompt": "synaptic transmission, neuro-electronic sounds...",
+          "coverUrl": "/mock-data/cover8.jpg",
+          "audioUrl": "/mock-data/audio8.m4a"
+        },
+        "textFragments": []
+      }
+    ],
+    "linkedTracks": [
+      {
+        "trackId": "c3d4e5f6-a7b8-9012-cdef-345678901234",
+        "title": "Void Walker Ambient",
+        "audioPath": "/mock-data/audio4.m4a",
+        "coverPath": "/mock-data/cover4.jpg",
+        "metaPath": "/mock-data/meta4.json",
+        "prompt": "cosmic ambient...",
+        "createdAt": "2026-04-05T20:45:00.000000Z",
+        "quickMeta": {
+          "durationSeconds": 312.0,
+          "playCount": 1,
+          "lyrics": "[Instrumental]"
+        }
+      },
+      {
+        "trackId": "a7b8c9d0-e1f2-3456-abcd-789012345678",
+        "title": "Synaptic Transmission",
+        "audioPath": "/mock-data/audio8.m4a",
+        "coverPath": "/mock-data/cover8.jpg",
+        "metaPath": "/mock-data/meta8.json",
+        "prompt": "synaptic transmission...",
+        "createdAt": "2026-04-06T12:00:00.444444Z",
+        "rating": 7.0,
+        "quickMeta": {
+          "durationSeconds": 203.4,
+          "playCount": 1,
+          "lyrics": "[Instrumental]"
+        }
+      }
+    ],
+    "meta": {
+      "totalMessages": 4,
+      "userMessages": 2,
+      "assistantMessages": 2,
+      "systemMessages": 0,
+      "hasAudioGenerations": true,
+      "promptFragments": [
+        "deep space ambient",
+        "bio-digital synaptic"
+      ],
+      "estimatedDurationMinutes": 8.6
+    }
+  },
+  {
+    "conversationId": "ghi34567-jkl8-9012-mnop-345678901234",
+    "primaryAccountId": 2,
+    "sourceAccounts": [2],
+    "createdAt": "2026-04-07T18:20:00.000000Z",
+    "updatedAt": "2026-04-07T18:25:30.000000Z",
+    "messages": [
+      {
+        "id": "msg_301",
+        "role": "user",
+        "content": "Make me something heavy and dark. Industrial drums, distorted, aggressive. Like dark matter crushing everything.",
+        "timestamp": "2026-04-07T18:20:30.000000Z",
+        "textFragments": []
+      },
+      {
+        "id": "msg_302",
+        "role": "assistant",
+        "content": "Dark Matter Drums created with dark matter aesthetic, heavy drums, distorted kicks, industrial percussion with noise layers and aggressive compression at 140 BPM. Techno-industrial hybrid with lyrics about dark matter crushing and invisible force.",
+        "timestamp": "2026-04-07T18:25:30.000000Z",
+        "linkedTrackId": "f6a7b8c9-d0e1-2345-fabc-678901234567",
+        "audioMetadata": {
+          "trackId": "f6a7b8c9-d0e1-2345-fabc-678901234567",
+          "title": "Dark Matter Drums",
+          "durationSeconds": 156.8,
+          "prompt": "dark matter aesthetic, heavy drums...",
+          "coverUrl": "/mock-data/cover7.jpg",
+          "audioUrl": "/mock-data/audio7.m4a"
+        },
+        "textFragments": []
+      }
+    ],
+    "linkedTracks": [
+      {
+        "trackId": "f6a7b8c9-d0e1-2345-fabc-678901234567",
+        "title": "Dark Matter Drums",
+        "audioPath": "/mock-data/audio7.m4a",
+        "coverPath": "/mock-data/cover7.jpg",
+        "metaPath": "/mock-data/meta7.json",
+        "prompt": "dark matter aesthetic...",
+        "createdAt": "2026-04-07T18:25:30.333333Z",
+        "quickMeta": {
+          "durationSeconds": 156.8,
+          "playCount": 2,
+          "lyrics": "Dark matter crushing..."
+        }
+      }
+    ],
+    "meta": {
+      "totalMessages": 2,
+      "userMessages": 1,
+      "assistantMessages": 1,
+      "systemMessages": 0,
+      "hasAudioGenerations": true,
+      "promptFragments": [
+        "heavy and dark industrial"
+      ],
+      "estimatedDurationMinutes": 2.6
+    }
+  },
+  {
+    "conversationId": "jkl45678-mnop-9012-qrst-567890123456",
+    "primaryAccountId": 1,
+    "sourceAccounts": [1],
+    "createdAt": "2026-04-03T16:15:00.000000Z",
+    "updatedAt": "2026-04-03T16:20:00.000000Z",
+    "messages": [
+      {
+        "id": "msg_401",
+        "role": "user",
+        "content": "Create something about entropy - disorder turning into order. Experimental, avant-garde, electronic. Transition from noise to harmony.",
+        "timestamp": "2026-04-03T16:15:30.000000Z",
+        "textFragments": []
+      },
+      {
+        "id": "msg_402",
+        "role": "assistant",
+        "content": "Entropy Collapse created - entropy collapse concept with disorder into order, noise to harmony transition, experimental avant-garde electronic structure.",
+        "timestamp": "2026-04-03T16:20:00.000000Z",
+        "linkedTrackId": "c9d0e1f2-a3b4-5678-cdef-901234567890",
+        "audioMetadata": {
+          "trackId": "c9d0e1f2-a3b4-5678-cdef-901234567890",
+          "title": "Entropy Collapse",
+          "durationSeconds": 145.6,
+          "prompt": "entropy collapse, disorder into order...",
+          "coverUrl": "/mock-data/cover10.jpg",
+          "audioUrl": "/mock-data/audio10.m4a"
+        },
+        "textFragments": []
+      }
+    ],
+    "linkedTracks": [
+      {
+        "trackId": "c9d0e1f2-a3b4-5678-cdef-901234567890",
+        "title": "Entropy Collapse",
+        "audioPath": "/mock-data/audio10.m4a",
+        "coverPath": "/mock-data/cover10.jpg",
+        "metaPath": "/mock-data/meta10.json",
+        "prompt": "entropy collapse...",
+        "createdAt": "2026-04-03T16:20:00.666666Z",
+        "rating": 9.5,
+        "quickMeta": {
+          "durationSeconds": 145.6,
+          "playCount": 7,
+          "lyrics": "[Instrumental]"
+        }
+      }
+    ],
+    "meta": {
+      "totalMessages": 2,
+      "userMessages": 1,
+      "assistantMessages": 1,
+      "systemMessages": 0,
+      "hasAudioGenerations": true,
+      "promptFragments": [
+        "entropy disorder order"
+      ],
+      "estimatedDurationMinutes": 2.4
+    }
+  }
+]

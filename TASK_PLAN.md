@@ -1,32 +1,435 @@
-# Resolution Plan: MMSS_BLOCK_SYSTEM_RECONSTRUCTION
+# Resolution Plan: Producer.ai Archive Manager — React Application
 
-This plan outlines the steps for converting the `producer-ai-base.json` database into a structured file system as specified in `TASKS.md`.
-
-## Status: DONE
-
-## Steps:
-
-1. **[DONE] Research & Data Mapping:**
-   - Analyzed `producer-ai-base.json` and identified patterns for `op`, `domain`, `phase`, `layer`, and `params`.
-   - Developed mapping logic including unique ID generation for meta-objects.
-
-2. **[DONE] Implementation of Transformation Script:**
-   - Created `transform_blocks.py` with the defined logic.
-   - Handled cases with missing `block_id` by using a combination of key names and indices.
-
-3. **[DONE] Execution & File System Generation:**
-   - Cleared the `prompt-db-local\database\blocks` directory for a clean state.
-   - Ran the transformation on 337 blocks.
-   - Generated 337 unique JSON files in the structured file system.
-
-4. **[DONE] Validation:**
-   - Verified the total file count (337).
-   - Confirmed the distribution across domains (`Logic`, `Rhythm`, `Space`, `Timbre`).
-   - Inspected sample files for correct formatting and data extraction.
-
-5. **[DONE] Final Reporting:**
-   - Updated `TASK_PLAN.md`.
-   - Generated `TASK_REPORT.md`.
+**Статус:** В РАЗРАБОТКЕ  
+**Дата начала:** 2026-04-14  
+**Цель:** Создать React-приложение для управления архивом аудиотреков Producer.ai с 4 аккаунтов
 
 ---
-Completed on: 2026-04-07
+
+## 🎯 ОБЗОР ПРОЕКТА
+
+Приложение для импорта, управления и экспорта аудиотреков из Producer.ai с поддержкой:
+- Импорта meta.json/audio/image из producer-ai-archiver/
+- Извлечения сессий по conversation_id
+- Привязки текстовых фрагментов к трекам
+- UI: таблица треков, фильтры, оценки, диалог сессий
+- Экспорта в JSON/CSV/Markdown
+
+**Приоритет:** Сначала Data Layer (сбор/парсинг), затем UI
+
+---
+
+## 📋 ЭТАП 0: ПОДГОТОВКА И АНАЛИЗ
+
+### 0.1 Инициализация проекта
+- [ ] **TO_DO** Проверить текущую конфигурацию react/my-app
+  - React 18 + TypeScript
+  - Vite в качестве сборщика
+  - ESLint + Prettier
+- [ ] **TO_DO** Установить базовые зависимости
+  ```bash
+  npm install zustand react-window @tanstack/react-table react-markdown remark-gfm howler date-fns uuid idb
+  npm install -D @types/howler @types/uuid @types/react-window
+  ```
+
+### 0.2 Настройка моковых данных
+- [ ] **TO_DO** Создать `public/mock-data/tracks.json` (10-15 примеров треков)
+- [ ] **TO_DO** Создать `public/mock-data/sessions.json` (3-5 примеров сессий)
+- [ ] **TO_DO** Реализовать `src/services/MockDataService.ts`
+  - `getMockTracks(): Promise<Track[]>`
+  - `getMockSessions(): Promise<ParsedSession[]>`
+  - `getMockTrackById(id: string): Promise<Track | null>`
+
+### 0.3 Настройка хранилища
+- [ ] **TO_DO** Реализовать `src/services/StorageService.ts` с адаптерами:
+  - `IndexedDBAdapter` — основное хранилище
+  - `LocalStorageAdapter` — настройки и кэш
+  - `MockAdapter` — для разработки
+- [ ] **TO_DO** Определить схемы хранилищ:
+  - `tracks` → объект по `track.id`
+  - `sessions` → объект по `session.conversationId`
+  - `settings` → `DisplaySettings`
+  - `ratings` → `{ [trackId: string]: number }`
+
+---
+
+## 🔧 ЭТАП 1: DATA LAYER — СБОР И ПАРСИНГ
+
+### 1.1 Модуль: `FileSystemService`
+**Файл:** `src/services/FileSystemService.ts`
+
+- [ ] **TO_DO** Реализовать интерфейс `IFileSystemService`:
+  - `scanArchive(basePath, accountIds): Promise<ScanResult>`
+  - `readFile(path): Promise<string>`
+  - `writeFile(path, content): Promise<void>`
+  - `pathToBlobUrl(filePath, mimeType): Promise<string>`
+- [ ] **TO_DO** Web-версия: File System Access API + фоллбэк на `<input type="file" webkitdirectory>`
+- [ ] **TO_DO** Обработка ошибок: недоступные файлы, неверная структура, повреждённые JSON
+
+### 1.2 Модуль: `MetaParser`
+**Файл:** `src/services/MetaParser.ts`
+
+- [ ] **TO_DO** Реализовать `IMetaParser`:
+  - `parseMetaJson(rawJson, accountId, metaFilePath): Track`
+  - `validateMetaJson(raw): void`
+  - `extractDuration(raw): number | undefined`
+  - `extractSoundPrompt(raw): string`
+- [ ] **TO_DO** Обязательные поля: id, title, created_at, raw_data.operation.sound_prompt
+- [ ] **TO_DO** Опциональные поля: duration → undefined, lyrics → "[Instrumental]"
+- [ ] **TO_DO** Конвертация путей в относительные для `public/local-data/`
+
+### 1.3 Модуль: `SessionExtractor`
+**Файл:** `src/services/SessionExtractor.ts`
+
+- [ ] **TO_DO** Реализовать `ISessionExtractor`:
+  - `extractSessions(tracks): ParsedSession[]`
+  - `reconstructMessagesFromTrack(track): SessionMessage[]`
+  - `mergeDuplicateSessions(sessions): ParsedSession[]`
+  - `autoLinkTracksToMessages(session): ParsedSession`
+- [ ] **TO_DO** Алгоритм извлечения:
+  1. Группировка треков по `conversation_id`
+  2. Сортировка по `created_at`
+  3. Создание сообщений user/assistant
+  4. Дедупликация из разных аккаунтов
+  5. Авто-привязка треков к сообщениям
+
+### 1.4 Модуль: `FragmentMapper`
+**Файл:** `src/services/FragmentMapper.ts`
+
+- [ ] **TO_DO** Реализовать `IFragmentMapper`:
+  - `createFragment(messageId, content, startIndex, endIndex, linkedTrackId?): TextFragment`
+  - `getFragmentsByTrack(trackId, sessions): TextFragment[]`
+  - `toggleFragmentSelection(fragmentId, sessions): void`
+  - `exportSelectedFragments(sessions): Record<string, TextFragment[]>`
+- [ ] **TO_DO** Генерация `fragmentId` через `crypto.randomUUID()`
+- [ ] **TO_DO** Валидация индексов: `startIndex < endIndex`, не выходят за границы
+
+### 1.5 Модуль: `ImportOrchestrator`
+**Файл:** `src/services/ImportOrchestrator.ts`
+
+- [ ] **TO_DO** Реализовать `IImportOrchestrator`:
+  - `runFullImport(archivePath, accountIds, onProgress?): Promise<ImportResult>`
+- [ ] **TO_DO** Типы: `ImportProgress`, `ImportResult`
+- [ ] **TO_DO** Пайплайн импорта:
+  1. `FileSystemService.scanArchive()`
+  2. `MetaParser.parseMetaJson()` для каждого файла
+  3. Сохранение в `StorageService`
+  4. `SessionExtractor.extractSessions()`
+  5. `FragmentMapper.autoLinkTracksToMessages()`
+  6. Сохранение сессий
+  7. Генерация отчёта
+
+### 1.6 CLI-утилита для импорта
+**Файл:** `scripts/import-cli.ts`
+
+- [ ] **TO_DO** Реализовать CLI с `commander`:
+  ```bash
+  npm run import -- --input "./producer-ai-archiver" --accounts "1,2,3,4" --output "./public/local-data" --dry-run --verbose
+  ```
+- [ ] **TO_DO** Поддержка флагов: `--dry-run`, `--verbose`
+- [ ] **TO_DO** Цветной вывод через `chalk`
+- [ ] **TO_DO** Экспорт отчёта в `local-data/import-report.json`
+
+**Критерии готовности Этапа 1:**
+- [ ] `ImportOrchestrator.runFullImport()` успешно обрабатывает реальный архив
+- [ ] Все `meta.json` парсятся в валидные объекты `Track`
+- [ ] Сессии извлекаются по `conversation_id` с точностью ≥95%
+- [ ] Авто-привязка треков к сообщениям работает для ≥90% случаев
+- [ ] Данные сохраняются в IndexedDB и восстанавливаются после перезагрузки
+- [ ] CLI-утилита работает с `--dry-run` и `--verbose`
+- [ ] Написаны юнит-тесты на ключевые функции
+
+---
+
+## 🎨 ЭТАП 2: UI — ТАБЛИЦА ТРЕКОВ И БАЗОВЫЙ ИНТЕРФЕЙС
+
+### 2.1 Компонент: `TrackTable`
+**Файл:** `src/components/tracks/TrackTable.tsx`
+
+- [ ] **TO_DO** Интеграция `@tanstack/react-table`
+- [ ] **TO_DO** Виртуализация через `react-window` при >100 элементов
+- [ ] **TO_DO** Сортировка по клику на заголовок
+- [ ] **TO_DO** Множественная сортировка (Shift+клик)
+- [ ] **TO_DO** Адаптивная ширина колонок
+
+**Конфигурация колонок:** `src/constants/columns.ts`
+- [ ] **TO_DO** Определить `DEFAULT_COLUMNS`: cover, title, duration, createdAt, soundPrompt, lyrics, rating, actions
+
+### 2.2 Компонент: `CoverCell`
+**Файл:** `src/components/tracks/CoverCell.tsx`
+
+- [ ] **TO_DO** Отображение обложки трека
+- [ ] **TO_DO** Обработка hover: показать оверлей с play/pause
+- [ ] **TO_DO** Предпросмотр при наведении (если `displaySettings.hoverPreview`)
+- [ ] **TO_DO** Использовать `useAudioPlayer` хук
+- [ ] **TO_DO** Стили: transition-opacity, иконки по центру, адаптивный размер
+
+### 2.3 Компонент: `PromptCell`
+**Файл:** `src/components/tracks/PromptCell.tsx`
+
+- [ ] **TO_DO** Сворачиваемый текст промпта
+- [ ] **TO_DO** Кнопки: "Развернуть/Свернуть", "Копировать"
+- [ ] **TO_DO** Максимальная длина превью: 100 символов
+
+### 2.4 Компонент: `RatingCell`
+**Файл:** `src/components/tracks/RatingCell.tsx`
+
+- [ ] **TO_DO** Отображение оценки 0-10
+- [ ] **TO_DO** Вариант A: звёзды (10 половинчатых)
+- [ ] **TO_DO** Вариант B: числовой input (min=0, max=10, step=0.5)
+- [ ] **TO_DO** Сохранение при изменении через `StorageService`
+
+### 2.5 Компонент: `ActionsCell`
+**Файл:** `src/components/tracks/ActionsCell.tsx`
+
+- [ ] **TO_DO** Кнопка открытия диалога сессии (если `conversationId`)
+- [ ] **TO_DO** Ссылка на producer.ai (`sourceUrl`)
+- [ ] **TO_DO** Ссылка на профиль аккаунта
+- [ ] **TO_DO** Tooltip для всех кнопок
+
+### 2.6 Пагинация и виртуализация
+**Файлы:** `src/components/controls/Pagination.tsx`, `src/hooks/useTracks.ts`
+
+- [ ] **TO_DO** Хук `useTracks` с фильтрацией, сортировкой, пагинацией
+- [ ] **TO_DO** Компонент `Pagination` с номерами страниц
+- [ ] **TO_DO** Настройка itemsPerPage: 25/50/100
+- [ ] **TO_DO** Виртуализация через `react-window` для >500 треков
+
+### 2.7 Панель фильтров и настроек
+**Файлы:** `src/components/controls/FilterPanel.tsx`, `ColumnToggler.tsx`
+
+- [ ] **TO_DO** `FilterPanel`:
+  - Фильтр по аккаунту (1/2/3/4)
+  - Полнотекстовый поиск
+  - Чекбоксы: hasPrompt, hasLyrics, hasSession
+  - Диапазон дат
+- [ ] **TO_DO** `ColumnToggler`:
+  - Dropdown с чекбоксами видимости колонок
+  - Сохранение в `localStorage`
+
+**Критерии готовности Этапа 2:**
+- [ ] Приложение запускается без ошибок
+- [ ] Таблица отображает ≥100 треков с пагинацией
+- [ ] Работает сортировка по всем колонкам
+- [ ] Фильтры корректно фильтруют данные
+- [ ] Предпросмотр при наведении работает
+- [ ] Оценка сохраняется и отображается после перезагрузки
+- [ ] Настройки колонок сохраняются в `localStorage`
+
+---
+
+## 💬 ЭТАП 3: UI — ДИАЛОГ СЕССИИ
+
+### 3.1 Компонент: `SessionDialog`
+**Файл:** `src/components/sessions/SessionDialog.tsx`
+
+- [ ] **TO_DO** Модальное окно (размер XL)
+- [ ] **TO_DO** Заголовок с `conversationId` и количеством сообщений
+- [ ] **TO_DO** Состояния: loading, error, empty
+- [ ] **TO_DO** Тело: `MessageList` + привязанные треки
+- [ ] **TO_DO** Футер: кнопки "Закрыть", "Экспортировать"
+
+### 3.2 Компоненты: `MessageList`, `MessageBubble`
+**Файлы:** `src/components/sessions/MessageList.tsx`, `MessageBubble.tsx`
+
+- [ ] **TO_DO** `MessageList`: рендеринг списка сообщений
+- [ ] **TO_DO** `MessageBubble`:
+  - Выравнивание: user → вправо, assistant → влево
+  - Рендеринг markdown через `react-markdown`
+  - Показ мини-карточки привязанного трека
+  - `FragmentSelector` если есть фрагменты
+
+### 3.3 Компонент: `MarkdownRenderer`
+**Файл:** `src/components/ui/MarkdownRenderer.tsx`
+
+- [ ] **TO_DO** Интеграция `react-markdown` + `remark-gfm`
+- [ ] **TO_DO** Кастомизация кода: блоки с кнопкой "Копировать"
+- [ ] **TO_DO** Ссылки открываются в новой вкладке
+
+### 3.4 Компонент: `FragmentSelector`
+**Файл:** `src/components/sessions/FragmentSelector.tsx`
+
+- [ ] **TO_DO** Выделение текста мышью
+- [ ] **TO_DO** Тулбар с кнопкой "Привязать к треку"
+- [ ] **TO_DO** Список созданных фрагментов с чекбоксами
+- [ ] **TO_DO** Кнопки: "Перейти к треку", "Удалить"
+
+**Критерии готовности Этапа 3:**
+- [ ] Клик на 💬 открывает модалку с данными сессии
+- [ ] Сообщения выравнены правильно (user/assistant)
+- [ ] Markdown рендерится корректно
+- [ ] Привязанные треки отображаются как кликабельные чипсы
+- [ ] Модалка закрывается по `Esc` и клику вне области
+
+---
+
+## 🔗 ЭТАП 4: ПРИВЯЗКА ФРАГМЕНТОВ И РУЧНОЕ РЕДАКТИРОВАНИЕ
+
+### 4.1 Логика автоматической привязки
+- [ ] **TO_DO** `SessionExtractor.autoLinkTracksToMessages()`
+- [ ] **TO_DO** Эвристика: найти `sound_prompt` в контенте сообщения
+- [ ] **TO_DO** Создание `TextFragment` с позициями startIndex/endIndex
+
+### 4.2 Ручное редактирование привязок
+- [ ] **TO_DO** Выделение текста → кнопка "Привязать к треку"
+- [ ] **TO_DO** Модальный список треков с тем же `conversation_id`
+- [ ] **TO_DO** Редактирование текста фрагмента
+- [ ] **TO_DO** Удаление фрагмента с подтверждением
+- [ ] **TO_DO** Изменение статуса `isSelected` (чекбокс)
+
+### 4.3 Хранение привязок
+**Файл:** `public/local-data/links/fragment_links.json`
+
+- [ ] **TO_DO** Структура: `{ [trackId]: { fragments: [], manualOverrides: {} } }`
+- [ ] **TO_DO** Синхронизация: UI → `StorageService` → IndexedDB
+- [ ] **TO_DO** Загрузка привязок при открытии сессии
+
+**Критерии готовности Этапа 4:**
+- [ ] Выделение текста показывает тулбар "Привязать к треку"
+- [ ] Созданный фрагмент отображается в списке
+- [ ] Изменение `isSelected` сохраняется
+- [ ] "Перейти к треку" скроллит к треку и подсвечивает
+- [ ] Удаление требует подтверждения
+
+---
+
+## 📦 ЭТАП 5: ЭКСПОРТ, АГРЕГАЦИЯ И ДОПОЛНИТЕЛЬНЫЕ ВОЗМОЖНОСТИ
+
+### 5.1 Экспорт данных
+**Файл:** `src/services/ExportService.ts`
+
+- [ ] **TO_DO** `exportTracks(format: 'json' | 'csv'): Promise<Blob>`
+- [ ] **TO_DO** `exportSessionAsMarkdown(conversationId): Promise<string>`
+- [ ] **TO_DO** `exportSelectedFragments(): Promise<Blob>`
+- [ ] **TO_DO** `createBackup(): Promise<Blob>`
+- [ ] **TO_DO** Формат CSV с заголовками
+
+### 5.2 Агрегация сессий
+**Файл:** `src/utils/aggregateSessions.ts`
+
+- [ ] **TO_DO** `aggregateAllSessions(sessions): AggregatedSessionsFile`
+- [ ] **TO_DO** Генерация единого файла `aggregated_sessions.json`
+- [ ] **TO_DO** Индекс сессий с метаданными
+
+### 5.3 Дополнительные возможности (по приоритету)
+- [ ] **TO_DO** Поиск по фрагментам внутри `sound_prompt`
+- [ ] **TO_DO** Теги для треков (ручная категоризация)
+- [ ] **TO_DO** Визуализация: облако тегов, график генераций
+- [ ] **TO_DO** Горячие клавиши:
+  - `Space` — play/pause
+  - `Ctrl+K` — фокус на поиск
+  - `Ctrl+Shift+S` — настройки колонок
+  - `Esc` — закрыть модалку
+- [ ] **TO_DO** Темная/светлая тема с переключателем
+
+**Критерии готовности Этапа 5:**
+- [ ] Экспорт треков в JSON/CSV работает
+- [ ] Экспорт сессии в Markdown сохраняет структуру
+- [ ] Агрегация создаёт валидный `aggregated_sessions.json`
+- [ ] Резервная копия содержит все данные
+
+---
+
+## 🧪 ТЕСТИРОВАНИЕ И ВАЛИДАЦИЯ
+
+### Юнит-тесты (Vitest)
+- [ ] **TO_DO** `MetaParser.test.ts` — парсинг обязательных/опциональных полей
+- [ ] **TO_DO** `SessionExtractor.test.ts` — группировка и дедупликация
+- [ ] **TO_DO** `FragmentMapper.test.ts` — создание и валидация фрагментов
+- [ ] **TO_DO** `StorageService.test.ts` — CRUD операции
+
+### Интеграционные тесты
+- [ ] **TO_DO** Тест пайплайна импорта: моковый `FileSystemService` → `ImportOrchestrator`
+- [ ] **TO_DO** Тест фильтрации: 100 моковых треков → применение фильтров
+- [ ] **TO_DO** Тест привязки фрагментов: создание → сохранение → загрузка
+
+### E2E-тесты (Playwright, опционально)
+- [ ] **TO_DO** Полный импорт архива через UI
+- [ ] **TO_DO** Открытие сессии и привязка фрагмента
+
+### Валидация данных
+**Файл:** `src/utils/validation.ts` (с `zod`)
+
+- [ ] **TO_DO** `TrackSchema` с валидацией UUID, полей
+- [ ] **TO_DO** `validateTrack(data): Track`
+
+---
+
+## 🛠️ ТЕХНИЧЕСКИЙ СТЕК
+
+### Основные зависимости
+```json
+{
+  "react": "^18.2.0",
+  "react-dom": "^18.2.0",
+  "zustand": "^4.5.0",
+  "@tanstack/react-table": "^8.11.0",
+  "react-window": "^1.8.10",
+  "react-markdown": "^9.0.1",
+  "remark-gfm": "^4.0.0",
+  "howler": "^2.2.4",
+  "date-fns": "^3.3.0",
+  "uuid": "^9.0.1",
+  "idb": "^7.1.1",
+  "zod": "^3.22.0"
+}
+```
+
+### Dev Dependencies
+- TypeScript 5.3+
+- Vite 5.0+
+- ESLint + Prettier
+- Vitest (для тестов)
+
+---
+
+## 📅 ПЛАН РАЗРАБОТКИ
+
+| Неделя | Задачи | Результат |
+|--------|--------|-----------|
+| 1 | Этап 0: Подготовка, моки, хранилище | Рабочий dev-сервер, моки, StorageService |
+| 2 | Этап 1: FileSystemService + MetaParser | Парсинг meta.json → Track[] |
+| 3 | Этап 1: SessionExtractor + FragmentMapper | Извлечение сессий, авто-привязка |
+| 4 | Этап 1: ImportOrchestrator + CLI | Полный пайплайн импорта |
+| 5 | Этап 2: TrackTable + базовые компоненты | Таблица с пагинацией и фильтрами |
+| 6 | Этап 3: SessionDialog + MessageList | Модальное окно сессии |
+| 7 | Этап 4: FragmentSelector + ручное редактирование | Привязка фрагментов |
+| 8 | Этап 5: ExportService + агрегация + полировка | Экспорт, хоткеи, темы |
+
+---
+
+## 📝 ИНСТРУКЦИИ ДЛЯ WINDSURF
+
+1. **Начинай с моковых данных** — реализуй весь UI на `public/mock-data/`, чтобы можно было разрабатывать фронтенд параллельно с бэкендом.
+
+2. **Адаптивность** — делай desktop-first, проверяй на ширине ≥1024px.
+
+3. **Производительность** — при >500 треков обязательно используй `react-window`.
+
+4. **Обработка ошибок** — каждый асинхронный вызов должен иметь `try/catch` с логированием.
+
+5. **Локализация** — весь интерфейс на русском, ключи строк в `src/constants/i18n.ts`.
+
+6. **Доступность (a11y)**:
+   - Все интерактивные элементы с `aria-label`
+   - Навигация с клавиатуры (Tab, Enter, Esc)
+   - Контрастность ≥ 4.5:1
+
+7. **Документация**:
+   - JSDoc для публичных API
+   - `CHANGELOG.md` с отметками о версиях
+
+---
+
+## ✅ ТЕКУЩИЙ СТАТУС
+
+**Последнее обновление:** 2026-04-14  
+**Готовность:** 0%  
+**Следующая задача:** 0.1 Инициализация проекта — проверка конфигурации
+
+---
+
+**Примечания:**
+- Приоритет: Этап 1 (Data Layer) критичен для всего остального
+- prompt-db-local отложен — работа только в react/my-app
+- Данные хранятся локально (IndexedDB), без сервера

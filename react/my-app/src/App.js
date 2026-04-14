@@ -44,12 +44,14 @@ import { useAudioEngine } from "./mmss/useAudioEngine";
 import { useHotkeys } from "./mmss/useHotkeys";
 import { useOrbitMotion } from "./mmss/useOrbitMotion";
 import { analyzeImageElement, getThemePalette } from "./mmss/utils";
+import ArchivesPage from "./components/ArchivesPage";
 
 const APP_TABS = [
   { id: "performance", label: "Performance" },
   { id: "advanced", label: "Advanced" },
   { id: "prompt_library", label: "Prompt Library" },
   { id: "ase_console", label: "ASE Console" },
+  { id: "archives", label: "Archives" },
 ];
 
 const ORBIT_SLOT_STORAGE_KEY = "mmss.orbitQuickSlots.v1";
@@ -1163,6 +1165,10 @@ function App() {
               }}
             />
           </div>
+        ) : null}
+
+        {activeTab === "archives" ? (
+          <ArchivesPage />
         ) : null}
       </main>
     </div>
