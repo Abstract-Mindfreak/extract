@@ -45,6 +45,7 @@ import { useHotkeys } from "./mmss/useHotkeys";
 import { useOrbitMotion } from "./mmss/useOrbitMotion";
 import { analyzeImageElement, getThemePalette } from "./mmss/utils";
 import ArchivesPage from "./components/ArchivesPage";
+import storageService from "./services/StorageService";
 
 const APP_TABS = [
   { id: "performance", label: "Performance" },
@@ -195,6 +196,9 @@ function App() {
           imported: 0,
           message: "No valid JSON blocks found",
         };
+      },
+      async importNormalizedSessionAssets() {
+        return handleImportNormalizedPromptAssets();
       },
       async generateBatch(request = {}) {
         if (!libraryReady) {
@@ -556,6 +560,69 @@ function App() {
         ? `Imported ${importedCount} JSON block(s) from ${files.length} file(s).`
         : "No valid JSON blocks found in selected files.",
     });
+  }
+
+  async function handleImportNormalizedPromptAssets() {
+    if (!libraryReady) handleLoadLibrary();
+
+    try {
+      const [storedBlocks, storedSequences] = await Promise.all([
+        storageService.getAllPromptBlocks(),
+        storageService.getAllPromptSequences(),
+      ]);
+
+      const existingBlockSourceIds = new Set(
+        (state.promptLibrary.blocks || [])
+          .map((block) => block?.sourceAssetId || block?.sourceMeta?.sourceAssetId)
+          .filter(Boolean)
+      );
+      const existingSequenceIds = new Set((state.promptLibrary.sequences || []).map((sequence) => sequence.id));
+
+      const blocksToImport = (storedBlocks || []).filter((block) => {
+        if (!block?.id) return false;
+        if (state.promptLibrary.blocks.some((entry) => entry.id === block.id)) return false;
+        if (block.sourceAssetId && existingBlockSourceIds.has(block.sourceAssetId)) return false;
+        return true;
+      });
+
+      const importedBlockIds = new Set(blocksToImport.map((block) => block.id));
+      const sequencesToImport = (storedSequences || []).filter((sequence) => {
+        if (!sequence?.id || existingSequenceIds.has(sequence.id)) return false;
+        const blockIds = Array.isArray(sequence.blocks) ? sequence.blocks.map((entry) => entry.blockId) : [];
+        return blockIds.length > 0 && blockIds.every((blockId) => importedBlockIds.has(blockId) || state.promptLibrary.blocks.some((entry) => entry.id === blockId));
+      });
+
+      if (blocksToImport.length > 0) {
+        dispatch({ type: "PROMPT_IMPORT_BLOCKS", blocks: blocksToImport });
+      }
+
+      if (sequencesToImport.length > 0) {
+        dispatch({ type: "PROMPT_IMPORT_SEQUENCES", sequences: sequencesToImport });
+      }
+
+      const message =
+        blocksToImport.length || sequencesToImport.length
+          ? `Imported ${blocksToImport.length} normalized block(s) and ${sequencesToImport.length} sequence(s) from session storage.`
+          : "No new normalized prompt assets found in session storage.";
+
+      dispatch({ type: "append_log", message });
+
+      return {
+        ok: true,
+        importedBlocks: blocksToImport.length,
+        importedSequences: sequencesToImport.length,
+        message,
+      };
+    } catch (error) {
+      const message = `Normalized prompt import failed: ${error.message}`;
+      dispatch({ type: "append_log", message });
+      return {
+        ok: false,
+        importedBlocks: 0,
+        importedSequences: 0,
+        message,
+      };
+    }
   }
 
   async function handleExportPayload(payload, label) {
@@ -928,6 +995,9 @@ function App() {
                 <div className="row">
                   <button onClick={handleLoadLibrary} disabled={libraryReady}>
                     {libraryReady ? "Library Ready" : "Load Library"}
+                  </button>
+                  <button onClick={handleImportNormalizedPromptAssets}>
+                    Import Session Blocks
                   </button>
                   <button onClick={() => setPromptPanelOrder(PROMPT_PANEL_DEFAULT_ORDER)}>
                     Reset Panel Layout

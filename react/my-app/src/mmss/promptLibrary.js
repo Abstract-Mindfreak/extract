@@ -377,6 +377,16 @@ export function reducePromptLibrary(state, action) {
       });
     }
 
+    case "PROMPT_IMPORT_SEQUENCES": {
+      const imported = Array.isArray(action.sequences) ? action.sequences.map(normalizeSequence) : [];
+      if (!imported.length) return state;
+      return syncPromptLibraryState({
+        ...state,
+        sequences: [...imported, ...state.sequences],
+        selectedSequenceId: imported[0].id,
+      });
+    }
+
     default:
       return state;
   }
