@@ -11,6 +11,7 @@ function JsonBlockList({
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [tagFilter, setTagFilter] = useState("all");
+  const [sourceFilter, setSourceFilter] = useState("all");
 
   const categories = useMemo(
     () => ["all", ...new Set(blocks.map((block) => block.category).filter(Boolean))],
@@ -24,13 +25,15 @@ function JsonBlockList({
 
   const visibleBlocks = useMemo(() => {
     return blocks.filter((block) => {
-      const text = `${block.name} ${block.description} ${block.category} ${(block.tags || []).join(" ")}`.toLowerCase();
+      const source = block.sourceMeta?.source || "manual";
+      const text = `${block.name} ${block.description} ${block.category} ${(block.tags || []).join(" ")} ${source} ${block.conversationId || ""} ${block.linkedTrackId || ""}`.toLowerCase();
       const matchesSearch = text.includes(search.toLowerCase());
       const matchesCategory = categoryFilter === "all" || block.category === categoryFilter;
       const matchesTag = tagFilter === "all" || block.tags?.includes(tagFilter);
-      return matchesSearch && matchesCategory && matchesTag;
+      const matchesSource = sourceFilter === "all" || source === sourceFilter;
+      return matchesSearch && matchesCategory && matchesTag && matchesSource;
     });
-  }, [blocks, categoryFilter, search, tagFilter]);
+  }, [blocks, categoryFilter, search, sourceFilter, tagFilter]);
 
   return (
     <div className="json-block-list">
@@ -54,6 +57,11 @@ function JsonBlockList({
             </option>
           ))}
         </select>
+        <select value={sourceFilter} onChange={(event) => setSourceFilter(event.target.value)}>
+          <option value="all">all sources</option>
+          <option value="producer.ai">producer.ai</option>
+          <option value="manual">manual</option>
+        </select>
       </div>
 
       <div className="library-list-items">
@@ -75,6 +83,20 @@ function JsonBlockList({
               <span className="library-block-category">{block.category}</span>
             </div>
             <p>{block.description}</p>
+            <div className="library-provenance-row">
+              <span className={`library-source-pill source-${normalizeSourceLabel(block.sourceMeta?.source)}`}>
+                {block.sourceMeta?.source || "manual"}
+              </span>
+              {block.conversationId ? (
+                <span className="library-meta-pill">conv {shortId(block.conversationId)}</span>
+              ) : null}
+              {block.linkedTrackId ? (
+                <span className="library-meta-pill">track {shortId(block.linkedTrackId)}</span>
+              ) : null}
+              {block.sourceMeta?.toolName ? (
+                <span className="library-meta-pill">{block.sourceMeta.toolName}</span>
+              ) : null}
+            </div>
             <div className="library-tag-row">
               {(block.tags || []).map((tag) => (
                 <span key={tag} className="library-tag-pill" style={buildTagStyle(tag)}>
@@ -92,6 +114,14 @@ function JsonBlockList({
       </div>
     </div>
   );
+}
+
+function shortId(value) {
+  return String(value || "").slice(0, 8);
+}
+
+function normalizeSourceLabel(value) {
+  return String(value || "manual").replace(/[^a-z0-9]+/gi, "-").toLowerCase();
 }
 
 function buildTagStyle(tag) {

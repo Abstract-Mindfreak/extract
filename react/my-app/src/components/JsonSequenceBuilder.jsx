@@ -25,6 +25,7 @@ function JsonSequenceBuilder({
   const [batchFormula, setBatchFormula] = useState("6x44 random");
   const [batchMode, setBatchMode] = useState("random");
   const [batchTagPreset, setBatchTagPreset] = useState("all");
+  const [sourceFilter, setSourceFilter] = useState("all");
 
   const compositionBlocks = useMemo(
     () =>
@@ -35,19 +36,44 @@ function JsonSequenceBuilder({
     [activeComposition.blockIds, blocks]
   );
 
+  const visibleSequences = useMemo(() => {
+    return sequences.filter((sequence) => {
+      const source = sequence.sourceMeta?.source || "manual";
+      return sourceFilter === "all" || source === sourceFilter;
+    });
+  }, [sequences, sourceFilter]);
+
   return (
     <div className="json-sequence-builder">
       <div className="sequence-builder-top">
         <div>
           <strong>Saved Sequences</strong>
+          <div className="sequence-filter-row">
+            <select value={sourceFilter} onChange={(event) => setSourceFilter(event.target.value)}>
+              <option value="all">all sources</option>
+              <option value="producer.ai">producer.ai</option>
+              <option value="manual">manual</option>
+            </select>
+          </div>
           <div className="saved-sequence-list">
-            {sequences.map((sequence) => (
+            {visibleSequences.map((sequence) => (
               <button
                 key={sequence.id}
                 className={`saved-sequence-card ${selectedSequenceId === sequence.id ? "active" : ""}`}
                 onClick={() => onSelectSequence(sequence.id)}
               >
                 <span>{sequence.name}</span>
+                <div className="library-provenance-row">
+                  <span className={`library-source-pill source-${normalizeSourceLabel(sequence.sourceMeta?.source)}`}>
+                    {sequence.sourceMeta?.source || "manual"}
+                  </span>
+                  {sequence.conversationId ? (
+                    <span className="library-meta-pill">conv {shortId(sequence.conversationId)}</span>
+                  ) : null}
+                  {Array.isArray(sequence.linkedTrackIds) && sequence.linkedTrackIds.length ? (
+                    <span className="library-meta-pill">{sequence.linkedTrackIds.length} tracks</span>
+                  ) : null}
+                </div>
                 <small>{sequence.mergeStrategy}</small>
               </button>
             ))}
@@ -204,6 +230,14 @@ function JsonSequenceBuilder({
       ) : null}
     </div>
   );
+}
+
+function shortId(value) {
+  return String(value || "").slice(0, 8);
+}
+
+function normalizeSourceLabel(value) {
+  return String(value || "manual").replace(/[^a-z0-9]+/gi, "-").toLowerCase();
 }
 
 export default JsonSequenceBuilder;

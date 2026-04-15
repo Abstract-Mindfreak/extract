@@ -574,7 +574,7 @@
 }
 
 .library-filters {
-  grid-template-columns: 1.3fr repeat(2, minmax(0, 0.7fr));
+  grid-template-columns: 1.3fr repeat(3, minmax(0, 0.7fr));
 }
 
 .library-list-items,
@@ -646,6 +646,41 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.library-provenance-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.library-source-pill,
+.library-meta-pill {
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.library-source-pill {
+  background: rgba(96, 165, 250, 0.18);
+  color: #d8ecff;
+}
+
+.library-source-pill.source-manual {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(245, 247, 251, 0.88);
+}
+
+.library-source-pill.source-producer-ai {
+  background: rgba(52, 211, 153, 0.18);
+  color: #d8fff1;
+}
+
+.library-meta-pill {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--muted);
 }
 
 .library-tag-row span {
@@ -733,6 +768,20 @@
 
 .saved-sequence-list {
   margin-top: 8px;
+}
+
+.sequence-filter-row {
+  margin-top: 8px;
+}
+
+.sequence-filter-row select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
 }
 
 .saved-sequence-card {
