@@ -57,6 +57,7 @@ const APP_TABS = [
 
 const ORBIT_SLOT_STORAGE_KEY = "mmss.orbitQuickSlots.v1";
 const PROMPT_PANEL_ORDER_STORAGE_KEY = "mmss.promptPanelOrder.v1";
+const PROMPT_ACTIVE_PANEL_STORAGE_KEY = "mmss.promptActivePanel.v1";
 const ASE_DB_STORAGE_KEY = "mmss.ase.database.v1";
 const PROMPT_PANEL_DEFAULT_ORDER = [
   "json_block_list",
@@ -65,6 +66,33 @@ const PROMPT_PANEL_DEFAULT_ORDER = [
   "json_sequence_builder",
   "json_bindings_panel",
 ];
+const PROMPT_LIBRARY_PANEL_META = {
+  json_block_list: {
+    label: "Block Library",
+    title: "JsonBlockList",
+    subtitle: "Searchable block catalog with filters, tags, and quick actions",
+  },
+  prompt_logic_blockly: {
+    label: "Blockly",
+    title: "PromptLogicBlocklyPanel",
+    subtitle: "Visual DSL for selecting blocks/sequences and merge strategy",
+  },
+  json_block_editor: {
+    label: "Block Editor",
+    title: "JsonBlockEditor",
+    subtitle: "Metadata form plus validated JSON editor with save, format, and export",
+  },
+  json_sequence_builder: {
+    label: "Sequences",
+    title: "JsonSequenceBuilder",
+    subtitle: "Assemble active compositions, preview merge output, and save sequences",
+  },
+  json_bindings_panel: {
+    label: "Bindings",
+    title: "JsonBindingsPanel",
+    subtitle: "4 x 4 trigger matrix for block and sequence bindings with import/export tools",
+  },
+};
 const DEFAULT_ORBIT_SLOTS = [
   {
     id: "calm",
@@ -103,6 +131,7 @@ function App() {
   const [orbitSlots, setOrbitSlots] = useState(loadStoredOrbitSlots);
   const [libraryReady, setLibraryReady] = useState(false);
   const [promptPanelOrder, setPromptPanelOrder] = useState(loadStoredPromptPanelOrder);
+  const [activePromptPanel, setActivePromptPanel] = useState(loadStoredPromptActivePanel);
   const { initializeAudio, analyserNode } = useAudioEngine({
     initialized: state.initialized,
     audio: state.audio,
@@ -132,6 +161,10 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem(PROMPT_PANEL_ORDER_STORAGE_KEY, JSON.stringify(promptPanelOrder));
   }, [promptPanelOrder]);
+
+  useEffect(() => {
+    window.localStorage.setItem(PROMPT_ACTIVE_PANEL_STORAGE_KEY, activePromptPanel);
+  }, [activePromptPanel]);
 
   useEffect(() => {
     if (activeTab !== "prompt_library") return;
@@ -999,7 +1032,12 @@ function App() {
                   <button onClick={handleImportNormalizedPromptAssets}>
                     Import Session Blocks
                   </button>
-                  <button onClick={() => setPromptPanelOrder(PROMPT_PANEL_DEFAULT_ORDER)}>
+                  <button
+                    onClick={() => {
+                      setPromptPanelOrder(PROMPT_PANEL_DEFAULT_ORDER);
+                      setActivePromptPanel(PROMPT_PANEL_DEFAULT_ORDER[0]);
+                    }}
+                  >
                     Reset Panel Layout
                   </button>
                   <button onClick={() => dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_CLEAR" })}>
@@ -1009,7 +1047,33 @@ function App() {
               </div>
 
               {libraryReady ? (
-                <div className="prompt-panel-grid">
+                <div className="prompt-library-workbench">
+                  <aside className="prompt-panel-sidebar">
+                    <div className="prompt-panel-sidebar-head">
+                      <strong>Sections</strong>
+                      <span>
+                        {state.promptLibrary.blocks.length} block(s), {state.promptLibrary.sequences.length} sequence(s)
+                      </span>
+                    </div>
+                    <div className="prompt-panel-sidebar-list">
+                      {promptPanelOrder.map((panelId) => {
+                        const panelMeta = PROMPT_LIBRARY_PANEL_META[panelId];
+                        const isActive = activePromptPanel === panelId;
+                        return (
+                          <button
+                            key={`nav-${panelId}`}
+                            className={`prompt-panel-nav ${isActive ? "active" : ""}`}
+                            onClick={() => setActivePromptPanel(panelId)}
+                          >
+                            <strong>{panelMeta.label}</strong>
+                            <span>{panelMeta.subtitle}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </aside>
+                  <div className="prompt-panel-stage">
+                    <div className="prompt-panel-grid">
                   {promptPanelOrder.map((panelId) => {
                     const panelActions = (
                       <div className="panel-move-actions">
@@ -1039,6 +1103,10 @@ function App() {
                         </button>
                       </div>
                     );
+
+                    if (panelId !== activePromptPanel) {
+                      return null;
+                    }
 
                     if (panelId === "json_block_list") {
                       return (
@@ -1208,6 +1276,8 @@ function App() {
                       </SectionCard>
                     );
                   })}
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <SectionCard
@@ -1570,6 +1640,15 @@ function loadStoredPromptPanelOrder() {
     return valid;
   } catch (error) {
     return PROMPT_PANEL_DEFAULT_ORDER;
+  }
+}
+
+function loadStoredPromptActivePanel() {
+  try {
+    const raw = window.localStorage.getItem(PROMPT_ACTIVE_PANEL_STORAGE_KEY);
+    return PROMPT_PANEL_DEFAULT_ORDER.includes(raw) ? raw : PROMPT_PANEL_DEFAULT_ORDER[0];
+  } catch (error) {
+    return PROMPT_PANEL_DEFAULT_ORDER[0];
   }
 }
 

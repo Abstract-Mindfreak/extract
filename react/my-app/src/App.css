@@ -159,14 +159,89 @@
 
 .prompt-panel-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 12px;
   align-items: start;
 }
 
+.prompt-library-workbench {
+  display: grid;
+  grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.prompt-panel-sidebar {
+  position: sticky;
+  top: 92px;
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  background: rgba(8, 12, 20, 0.76);
+  max-height: calc(100vh - 120px);
+  overflow: auto;
+}
+
+.prompt-panel-sidebar-head {
+  display: grid;
+  gap: 4px;
+}
+
+.prompt-panel-sidebar-head strong {
+  font-size: 0.96rem;
+}
+
+.prompt-panel-sidebar-head span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.prompt-panel-sidebar-list {
+  display: grid;
+  gap: 8px;
+}
+
+.prompt-panel-nav {
+  display: grid;
+  gap: 6px;
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  cursor: pointer;
+}
+
+.prompt-panel-nav strong {
+  font-size: 0.92rem;
+}
+
+.prompt-panel-nav span {
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.4;
+}
+
+.prompt-panel-nav.active {
+  background: linear-gradient(135deg, rgba(155, 224, 255, 0.2), rgba(255, 255, 255, 0.05));
+  border-color: rgba(155, 224, 255, 0.35);
+  box-shadow: inset 0 0 0 1px rgba(155, 224, 255, 0.16);
+}
+
+.prompt-panel-stage {
+  min-width: 0;
+}
+
+.prompt-stage-panel {
+  width: 100%;
+}
+
 .prompt-fixed-panel {
-  min-height: 46vh;
-  max-height: 46vh;
+  min-height: 78vh;
+  max-height: none;
   overflow: auto;
 }
 
@@ -1794,15 +1869,24 @@
 
   .performance-grid,
   .advanced-grid,
-  .prompt-panel-grid,
   .prompt-library-grid,
   .prompt-two-column {
     grid-template-columns: 1fr;
   }
 
+  .prompt-library-workbench,
+  .prompt-panel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .prompt-panel-sidebar {
+    position: static;
+    max-height: none;
+  }
+
   .prompt-fixed-panel {
     min-height: 52vh;
-    max-height: 52vh;
+    max-height: none;
   }
 }
 

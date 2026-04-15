@@ -142,6 +142,32 @@ async function scanDirectory(
       result.accountIds.push(accountId);
       logger.verbose(`Сканирование producer_backup_${accountId}...`);
 
+      const sessionsDir = path.join(backupDir, 'sessions');
+      try {
+        const sessionEntries = await fs.readdir(sessionsDir, { withFileTypes: true });
+
+        for (const sessionEntry of sessionEntries) {
+          if (!sessionEntry.isFile()) continue;
+          if (!/^session_.+\.json$/i.test(sessionEntry.name)) continue;
+
+          const sessionPath = path.join(sessionsDir, sessionEntry.name);
+          const sessionStat = await fs.stat(sessionPath);
+
+          result.files.push({
+            sourcePath: sessionPath,
+            targetPath: path.join(outputPath, `account_${accountId}`, 'sessions', sessionEntry.name),
+            relativePath: `account_${accountId}/sessions/${sessionEntry.name}`,
+            type: 'session',
+            size: sessionStat.size
+          });
+          result.totalSize += sessionStat.size;
+        }
+      } catch (err) {
+        if ((err as NodeJS.ErrnoException).code !== 'ENOENT') {
+          result.errors.push(`Ошибка чтения sessions producer_backup_${accountId}: ${(err as Error).message}`);
+        }
+      }
+
       // Scan hex subdirectories (00, 01, 02, ...)
       const hexDirs = await fs.readdir(backupDir, { withFileTypes: true });
       
@@ -406,13 +432,15 @@ async function runImport(): Promise<void> {
   const byType = {
     meta: scanResult.files.filter(f => f.type === 'meta'),
     audio: scanResult.files.filter(f => f.type === 'audio'),
-    image: scanResult.files.filter(f => f.type === 'image')
+    image: scanResult.files.filter(f => f.type === 'image'),
+    session: scanResult.files.filter(f => f.type === 'session')
   };
 
   logger.header('По типам файлов:');
   logger.stat('meta.json', `${byType.meta.length} (${formatSize(byType.meta.reduce((s, f) => s + f.size, 0))})`);
   logger.stat('Аудио', `${byType.audio.length} (${formatSize(byType.audio.reduce((s, f) => s + f.size, 0))})`);
   logger.stat('Изображения', `${byType.image.length} (${formatSize(byType.image.reduce((s, f) => s + f.size, 0))})`);
+  logger.stat('Сессии', `${byType.session.length} (${formatSize(byType.session.reduce((s, f) => s + f.size, 0))})`);
 
   if (options.dryRun) {
     logger.header('Dry Run — импорт не выполняется');

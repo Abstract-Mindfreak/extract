@@ -423,7 +423,34 @@ class LocalDataImporter {
       }
 
       try {
-        const response = await archiverManager.fetchConversationBatch(accountId, conversationIds);
+        const localResponse = await this.loadLocalConversationBatch(accountId, conversationIds);
+        const missingConversationIds = conversationIds.filter(
+          (conversationId) => !localResponse.loadedIds.includes(conversationId)
+        );
+
+        let response = {
+          conversations: [...localResponse.conversations],
+          failed: [...localResponse.failed]
+        };
+
+        if (missingConversationIds.length > 0) {
+          try {
+            const remoteResponse = await archiverManager.fetchConversationBatch(accountId, missingConversationIds);
+            response = {
+              conversations: [
+                ...response.conversations,
+                ...(remoteResponse.conversations || [])
+              ],
+              failed: [
+                ...response.failed,
+                ...(remoteResponse.failed || [])
+              ]
+            };
+          } catch (error) {
+            enrichmentErrors.push(`${accountId}: remote session fetch skipped (${error?.message || error})`);
+          }
+        }
+
         const parsedSessions = producerSessionParser.parseBatch(
           response.conversations || [],
           tracks.filter((track) => `account_${track.accountId}` === accountId),
@@ -449,6 +476,42 @@ class LocalDataImporter {
     }
 
     return enrichedSessions;
+  }
+
+  async loadLocalConversationBatch(accountId, conversationIds = []) {
+    const conversations = [];
+    const failed = [];
+    const loadedIds = [];
+
+    for (const conversationId of conversationIds) {
+      try {
+        const response = await fetch(`/local-data/${accountId}/sessions/session_${conversationId}.json`);
+
+        if (!response.ok) {
+          failed.push({ conversationId, error: `HTTP ${response.status}` });
+          continue;
+        }
+
+        const payload = await response.json();
+        const conversation = payload?.payload || payload;
+
+        if (!conversation?.id) {
+          failed.push({ conversationId, error: 'Malformed session payload' });
+          continue;
+        }
+
+        conversations.push(conversation);
+        loadedIds.push(conversationId);
+      } catch (error) {
+        failed.push({ conversationId, error: error?.message || String(error) });
+      }
+    }
+
+    return {
+      conversations,
+      failed,
+      loadedIds
+    };
   }
 
   mergeSessions(fallbackSessions = [], enrichedSessions = []) {

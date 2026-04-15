@@ -55,6 +55,7 @@ class ProducerSessionParser {
 
     const pushMessage = (message) => {
       if (!message?.content) return;
+      if (String(message.content).includes('<ui-hidden>Conversation started</ui-hidden>')) return;
 
       messages.push(message);
 
@@ -368,7 +369,9 @@ class ProducerSessionParser {
 
   normalizeText(value) {
     if (typeof value !== 'string') return '';
-    return value.trim();
+    return value
+      .replace(/\r\n/g, '\n')
+      .trim();
   }
 
   generateSessionTitle(linkedTracks) {
