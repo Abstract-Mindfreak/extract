@@ -55,6 +55,18 @@ interface ImportReport {
   errorFiles: number;
 }
 
+interface CatalogAccount {
+  accountId: string;
+  trackCount: number;
+  trackIds: string[];
+}
+
+interface ImportCatalog {
+  generatedAt: string;
+  source: string;
+  accounts: CatalogAccount[];
+}
+
 // CLI Setup
 const program = new Command();
 
@@ -286,6 +298,61 @@ async function generateReport(report: ImportReport): Promise<void> {
   }
 }
 
+function buildCatalog(scanResult: ScanResult): ImportCatalog {
+  const accountMap = new Map<string, Set<string>>();
+
+  for (const file of scanResult.files) {
+    if (file.type !== 'meta') continue;
+
+    const match = file.relativePath.match(/^account_(\d+)\/([^/]+)\/meta\.json$/);
+    if (!match) continue;
+
+    const accountId = match[1];
+    const trackId = match[2];
+
+    if (!accountMap.has(accountId)) {
+      accountMap.set(accountId, new Set());
+    }
+
+    accountMap.get(accountId)?.add(trackId);
+  }
+
+  const accounts = Array.from(accountMap.entries())
+    .sort(([left], [right]) => Number(left) - Number(right))
+    .map(([accountId, trackIds]) => {
+      const sortedTrackIds = Array.from(trackIds).sort();
+
+      return {
+        accountId,
+        trackCount: sortedTrackIds.length,
+        trackIds: sortedTrackIds
+      };
+    });
+
+  return {
+    generatedAt: new Date().toISOString(),
+    source: path.resolve(options.input),
+    accounts
+  };
+}
+
+async function generateCatalog(scanResult: ScanResult): Promise<void> {
+  const catalogPath = path.join(options.output, 'catalog.json');
+  const catalog = buildCatalog(scanResult);
+
+  try {
+    await fs.mkdir(options.output, { recursive: true });
+    await fs.writeFile(
+      catalogPath,
+      JSON.stringify(catalog, null, 2),
+      'utf-8'
+    );
+    logger.verbose(`Catalog saved: ${catalogPath}`);
+  } catch (err) {
+    logger.warning(`Could not save catalog: ${(err as Error).message}`);
+  }
+}
+
 // Main import function
 async function runImport(): Promise<void> {
   const startTime = Date.now();
@@ -418,6 +485,7 @@ async function runImport(): Promise<void> {
   };
 
   await generateReport(report);
+  await generateCatalog(scanResult);
 
   if (errors === 0) {
     logger.success('Импорт завершен успешно!');
