@@ -7,6 +7,7 @@ import metaParser from './MetaParser';
 import sessionExtractor from './SessionExtractor';
 import storageService from './StorageService';
 import producerSessionParser from './ProducerSessionParser';
+import producerPromptNormalizer from './ProducerPromptNormalizer';
 import { archiverManager } from './ProducerArchiverService';
 
 /**
@@ -138,6 +139,12 @@ class LocalDataImporter {
         errors.push(`Session enrichment skipped: ${err?.message || err}`);
       }
 
+      const normalizationResult = producerPromptNormalizer.normalizeSessions(sessions, tracks);
+      sessions = producerPromptNormalizer.attachNormalizationSummary(
+        sessions,
+        normalizationResult.summaryByConversation
+      );
+
       if (onProgress) {
         onProgress({
           stage: 'extracting',
@@ -168,11 +175,26 @@ class LocalDataImporter {
         await storageService.saveFragmentsBatch(allFragments);
       }
 
+      if (normalizationResult.rawPrompts.length > 0) {
+        await storageService.saveRawPromptsBatch(normalizationResult.rawPrompts);
+      }
+
+      if (normalizationResult.promptBlocks.length > 0) {
+        await storageService.savePromptBlocksBatch(normalizationResult.promptBlocks);
+      }
+
+      if (normalizationResult.promptSequences.length > 0) {
+        await storageService.savePromptSequencesBatch(normalizationResult.promptSequences);
+      }
+
       // Update metadata
       await storageService.setMetadataBatch({
         'dataImportedAt': new Date().toISOString(),
         'importedTracks': tracks.length,
         'importedSessions': sessions.length,
+        'importedRawPrompts': normalizationResult.rawPrompts.length,
+        'importedPromptBlocks': normalizationResult.promptBlocks.length,
+        'importedPromptSequences': normalizationResult.promptSequences.length,
         'dataSource': 'local-data'
       });
 

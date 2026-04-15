@@ -73,7 +73,11 @@ class ProducerSessionParser {
             role: 'user',
             content: this.normalizeText(part.content),
             timestamp,
-            createdAt: timestamp
+            createdAt: timestamp,
+            metadata: {
+              partKind: part.part_kind,
+              toolName: null
+            }
           });
           continue;
         }
@@ -84,7 +88,11 @@ class ProducerSessionParser {
             role: 'assistant',
             content: this.formatSection('THOUGHTS', part.content),
             timestamp,
-            createdAt: timestamp
+            createdAt: timestamp,
+            metadata: {
+              partKind: part.part_kind,
+              toolName: null
+            }
           });
           continue;
         }
@@ -95,7 +103,11 @@ class ProducerSessionParser {
             role: 'assistant',
             content: this.normalizeText(part.content),
             timestamp,
-            createdAt: timestamp
+            createdAt: timestamp,
+            metadata: {
+              partKind: part.part_kind,
+              toolName: null
+            }
           });
           continue;
         }
@@ -114,6 +126,11 @@ class ProducerSessionParser {
             timestamp,
             createdAt: timestamp,
             linkedTrackId: linkedTrack?.id,
+            metadata: {
+              partKind: part.part_kind,
+              toolName: part.tool_name,
+              rawPayload: part.args || null
+            },
             textFragments: this.createPromptFragments(
               conversation.id,
               part.args?.sound_prompt,
@@ -156,7 +173,12 @@ class ProducerSessionParser {
             content: this.formatAudioReturn(payload),
             timestamp,
             createdAt: timestamp,
-            linkedTrackId: linkedTrack?.id
+            linkedTrackId: linkedTrack?.id,
+            metadata: {
+              partKind: part.part_kind,
+              toolName: part.tool_name,
+              rawPayload: payload
+            }
           });
           continue;
         }
@@ -167,7 +189,12 @@ class ProducerSessionParser {
             role: 'assistant',
             content: this.formatLyricsReturn(part.content),
             timestamp,
-            createdAt: timestamp
+            createdAt: timestamp,
+            metadata: {
+              partKind: part.part_kind,
+              toolName: part.tool_name,
+              rawPayload: part.content || null
+            }
           });
           continue;
         }
@@ -178,7 +205,12 @@ class ProducerSessionParser {
             role: 'assistant',
             content: this.formatSuggestedActions(part.args),
             timestamp,
-            createdAt: timestamp
+            createdAt: timestamp,
+            metadata: {
+              partKind: part.part_kind,
+              toolName: part.tool_name,
+              rawPayload: part.args || null
+            }
           });
         }
       }

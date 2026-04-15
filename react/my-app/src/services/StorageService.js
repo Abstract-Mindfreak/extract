@@ -1,12 +1,15 @@
 import { openDB } from 'idb';
 
 const DB_NAME = 'producer-ai-archives';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 const STORES = {
   TRACKS: 'tracks',
   SESSIONS: 'sessions',
   FRAGMENTS: 'fragments',
+  RAW_PROMPTS: 'raw_prompts',
+  PROMPT_BLOCKS: 'prompt_blocks',
+  PROMPT_SEQUENCES: 'prompt_sequences',
   METADATA: 'metadata',
   ACCOUNTS: 'accounts'
 };
@@ -50,6 +53,29 @@ class StorageService {
           fragmentStore.createIndex('conversationId', 'conversationId', { unique: false });
           fragmentStore.createIndex('linkedTrackId', 'linkedTrackId', { unique: false });
           fragmentStore.createIndex('isSelected', 'isSelected', { unique: false });
+        }
+
+        if (!db.objectStoreNames.contains(STORES.RAW_PROMPTS)) {
+          const rawPromptStore = db.createObjectStore(STORES.RAW_PROMPTS, { keyPath: 'id' });
+          rawPromptStore.createIndex('conversationId', 'conversationId', { unique: false });
+          rawPromptStore.createIndex('messageId', 'messageId', { unique: false });
+          rawPromptStore.createIndex('linkedTrackId', 'linkedTrackId', { unique: false });
+          rawPromptStore.createIndex('sourceType', 'sourceType', { unique: false });
+        }
+
+        if (!db.objectStoreNames.contains(STORES.PROMPT_BLOCKS)) {
+          const promptBlockStore = db.createObjectStore(STORES.PROMPT_BLOCKS, { keyPath: 'id' });
+          promptBlockStore.createIndex('conversationId', 'conversationId', { unique: false });
+          promptBlockStore.createIndex('sourceAssetId', 'sourceAssetId', { unique: false });
+          promptBlockStore.createIndex('linkedTrackId', 'linkedTrackId', { unique: false });
+          promptBlockStore.createIndex('category', 'category', { unique: false });
+          promptBlockStore.createIndex('tags', 'tags', { unique: false, multiEntry: true });
+        }
+
+        if (!db.objectStoreNames.contains(STORES.PROMPT_SEQUENCES)) {
+          const promptSequenceStore = db.createObjectStore(STORES.PROMPT_SEQUENCES, { keyPath: 'id' });
+          promptSequenceStore.createIndex('conversationId', 'conversationId', { unique: false });
+          promptSequenceStore.createIndex('linkedTrackIds', 'linkedTrackIds', { unique: false, multiEntry: true });
         }
 
         // Metadata store (for app settings, last sync, etc.)
@@ -187,6 +213,69 @@ class StorageService {
     await tx.done;
     
     return normalizedFragments.length;
+  }
+
+  async saveRawPromptsBatch(rawPrompts) {
+    const db = await this.ensureDB();
+    const tx = db.transaction(STORES.RAW_PROMPTS, 'readwrite');
+
+    const now = new Date().toISOString();
+    const normalized = (rawPrompts || [])
+      .filter(Boolean)
+      .map((entry, index) => ({
+        ...entry,
+        id: entry.id || `raw-prompt-${entry.conversationId || 'conversation'}-${entry.messageId || index}-${Date.now()}`,
+        createdAt: entry.createdAt || now,
+        updatedAt: entry.updatedAt || now
+      }));
+
+    const promises = normalized.map((entry) => tx.store.put(entry));
+    await Promise.all(promises);
+    await tx.done;
+
+    return normalized.length;
+  }
+
+  async savePromptBlocksBatch(blocks) {
+    const db = await this.ensureDB();
+    const tx = db.transaction(STORES.PROMPT_BLOCKS, 'readwrite');
+
+    const now = new Date().toISOString();
+    const normalized = (blocks || [])
+      .filter(Boolean)
+      .map((block, index) => ({
+        ...block,
+        id: block.id || `prompt-block-${block.conversationId || 'conversation'}-${index}-${Date.now()}`,
+        createdAt: block.createdAt || now,
+        updatedAt: block.updatedAt || now
+      }));
+
+    const promises = normalized.map((block) => tx.store.put(block));
+    await Promise.all(promises);
+    await tx.done;
+
+    return normalized.length;
+  }
+
+  async savePromptSequencesBatch(sequences) {
+    const db = await this.ensureDB();
+    const tx = db.transaction(STORES.PROMPT_SEQUENCES, 'readwrite');
+
+    const now = new Date().toISOString();
+    const normalized = (sequences || [])
+      .filter(Boolean)
+      .map((sequence, index) => ({
+        ...sequence,
+        id: sequence.id || `prompt-sequence-${sequence.conversationId || index}`,
+        createdAt: sequence.createdAt || now,
+        updatedAt: sequence.updatedAt || now
+      }));
+
+    const promises = normalized.map((sequence) => tx.store.put(sequence));
+    await Promise.all(promises);
+    await tx.done;
+
+    return normalized.length;
   }
 
   /**
@@ -386,6 +475,31 @@ class StorageService {
     return db.getAllFromIndex(STORES.FRAGMENTS, 'linkedTrackId', trackId);
   }
 
+  async getRawPromptsByConversation(conversationId) {
+    const db = await this.ensureDB();
+    return db.getAllFromIndex(STORES.RAW_PROMPTS, 'conversationId', conversationId);
+  }
+
+  async getPromptBlocksByConversation(conversationId) {
+    const db = await this.ensureDB();
+    return db.getAllFromIndex(STORES.PROMPT_BLOCKS, 'conversationId', conversationId);
+  }
+
+  async getAllPromptBlocks() {
+    const db = await this.ensureDB();
+    return db.getAll(STORES.PROMPT_BLOCKS);
+  }
+
+  async getPromptSequencesByConversation(conversationId) {
+    const db = await this.ensureDB();
+    return db.getAllFromIndex(STORES.PROMPT_SEQUENCES, 'conversationId', conversationId);
+  }
+
+  async getAllPromptSequences() {
+    const db = await this.ensureDB();
+    return db.getAll(STORES.PROMPT_SEQUENCES);
+  }
+
   // ==================== METADATA OPERATIONS ====================
 
   /**
@@ -467,6 +581,9 @@ class StorageService {
       db.clear(STORES.TRACKS),
       db.clear(STORES.SESSIONS),
       db.clear(STORES.FRAGMENTS),
+      db.clear(STORES.RAW_PROMPTS),
+      db.clear(STORES.PROMPT_BLOCKS),
+      db.clear(STORES.PROMPT_SEQUENCES),
       db.clear(STORES.METADATA),
       db.clear(STORES.ACCOUNTS)
     ]);
@@ -478,10 +595,13 @@ class StorageService {
    */
   async getStats() {
     const db = await this.ensureDB();
-    const [tracks, sessions, fragments, accounts] = await Promise.all([
+    const [tracks, sessions, fragments, rawPrompts, promptBlocks, promptSequences, accounts] = await Promise.all([
       db.count(STORES.TRACKS),
       db.count(STORES.SESSIONS),
       db.count(STORES.FRAGMENTS),
+      db.count(STORES.RAW_PROMPTS),
+      db.count(STORES.PROMPT_BLOCKS),
+      db.count(STORES.PROMPT_SEQUENCES),
       db.count(STORES.ACCOUNTS)
     ]);
 
@@ -489,8 +609,11 @@ class StorageService {
       tracks,
       sessions,
       fragments,
+      rawPrompts,
+      promptBlocks,
+      promptSequences,
       accounts,
-      totalSize: tracks + sessions + fragments + accounts
+      totalSize: tracks + sessions + fragments + rawPrompts + promptBlocks + promptSequences + accounts
     };
   }
 
@@ -500,10 +623,13 @@ class StorageService {
    */
   async exportAll() {
     const db = await this.ensureDB();
-    const [tracks, sessions, fragments, metadata, accounts] = await Promise.all([
+    const [tracks, sessions, fragments, rawPrompts, promptBlocks, promptSequences, metadata, accounts] = await Promise.all([
       db.getAll(STORES.TRACKS),
       db.getAll(STORES.SESSIONS),
       db.getAll(STORES.FRAGMENTS),
+      db.getAll(STORES.RAW_PROMPTS),
+      db.getAll(STORES.PROMPT_BLOCKS),
+      db.getAll(STORES.PROMPT_SEQUENCES),
       db.getAll(STORES.METADATA),
       db.getAll(STORES.ACCOUNTS)
     ]);
@@ -515,6 +641,9 @@ class StorageService {
         tracks,
         sessions,
         fragments,
+        rawPrompts,
+        promptBlocks,
+        promptSequences,
         metadata,
         accounts
       }
@@ -535,10 +664,10 @@ class StorageService {
       await this.clearAll();
     }
 
-    const stats = { tracks: 0, sessions: 0, fragments: 0, accounts: 0 };
+    const stats = { tracks: 0, sessions: 0, fragments: 0, rawPrompts: 0, promptBlocks: 0, promptSequences: 0, accounts: 0 };
 
     if (exportData.data) {
-      const { tracks, sessions, fragments, accounts } = exportData.data;
+      const { tracks, sessions, fragments, rawPrompts, promptBlocks, promptSequences, accounts } = exportData.data;
 
       if (tracks?.length) {
         await this.saveTracks(tracks);
@@ -555,6 +684,18 @@ class StorageService {
         }
         await tx.done;
         stats.fragments = fragments.length;
+      }
+      if (rawPrompts?.length) {
+        await this.saveRawPromptsBatch(rawPrompts);
+        stats.rawPrompts = rawPrompts.length;
+      }
+      if (promptBlocks?.length) {
+        await this.savePromptBlocksBatch(promptBlocks);
+        stats.promptBlocks = promptBlocks.length;
+      }
+      if (promptSequences?.length) {
+        await this.savePromptSequencesBatch(promptSequences);
+        stats.promptSequences = promptSequences.length;
       }
       if (accounts?.length) {
         const tx = db.transaction(STORES.ACCOUNTS, 'readwrite');
