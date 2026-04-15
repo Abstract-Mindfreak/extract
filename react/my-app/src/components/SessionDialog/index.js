@@ -104,7 +104,7 @@ export default function SessionDialog({ track, onClose }) {
           <button onClick={onClose}>Закрыть</button>
           <button 
             className="primary"
-            onClick={() => window.open(track.sourceUrl, '_blank')}
+            onClick={() => window.open(track.sessionUrl || track.sourceUrl, '_blank')}
           >
             Открыть на сайте
           </button>

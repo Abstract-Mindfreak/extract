@@ -19,6 +19,8 @@ const wss = new WebSocket.Server({ server });
 
 const PORT = process.env.ARCHIVER_PORT || 3456;
 const ARCHIVER_PATH = path.join(__dirname, '..', '..', 'producer-ai-archiver');
+const PRODUCER_BASE_URL = 'https://www.producer.ai';
+const PRODUCER_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36';
 
 // Middleware
 app.use(cors());
@@ -88,6 +90,157 @@ function broadcast(data) {
       client.send(message);
     }
   });
+}
+
+function getPlaywright() {
+  return require(path.join(ARCHIVER_PATH, 'node_modules', 'playwright'));
+}
+
+function extractAccessTokenFromCookies(cookies) {
+  let rawCookieVal = '';
+
+  for (let i = 0; i < 5; i += 1) {
+    const cookie = cookies.find(
+      (item) => item.name === `sb-api-auth-token.${i}` || item.name === `sb-sb-auth-token.${i}`
+    );
+
+    if (cookie) {
+      rawCookieVal += cookie.value;
+    }
+  }
+
+  if (!rawCookieVal.startsWith('base64-')) {
+    return null;
+  }
+
+  let base64Part = rawCookieVal.substring(7);
+
+  try {
+    base64Part = decodeURIComponent(base64Part);
+  } catch {
+    // noop
+  }
+
+  base64Part = base64Part.replace(/-/g, '+').replace(/_/g, '/');
+  while (base64Part.length % 4) {
+    base64Part += '=';
+  }
+
+  const parsed = JSON.parse(Buffer.from(base64Part, 'base64').toString('utf8'));
+  return parsed?.access_token || parsed?.session?.access_token || null;
+}
+
+async function loadProducerAccessToken(page, context) {
+  let token = extractAccessTokenFromCookies(await context.cookies(PRODUCER_BASE_URL));
+
+  if (token) {
+    return token;
+  }
+
+  return page.evaluate(() => {
+    for (let i = 0; i < localStorage.length; i += 1) {
+      const key = localStorage.key(i);
+      if (!key || !key.includes('auth-token')) continue;
+
+      try {
+        const value = JSON.parse(localStorage.getItem(key));
+        if (value?.access_token) return value.access_token;
+        if (value?.session?.access_token) return value.session.access_token;
+      } catch {
+        // noop
+      }
+    }
+
+    return null;
+  });
+}
+
+async function fetchConversationBatch(account, conversationIds) {
+  const authFile = path.join(ARCHIVER_PATH, account.authStateFile);
+  if (!existsSync(authFile)) {
+    throw new Error(`Auth state not found for ${account.id}`);
+  }
+
+  const { chromium } = getPlaywright();
+  const browser = await chromium.launch({
+    headless: true,
+    args: [
+      '--disable-blink-features=AutomationControlled',
+      '--no-sandbox',
+      '--disable-setuid-sandbox'
+    ],
+    ignoreDefaultArgs: ['--enable-automation']
+  });
+
+  try {
+    const context = await browser.newContext({
+      storageState: authFile,
+      userAgent: PRODUCER_USER_AGENT,
+      viewport: { width: 1280, height: 720 }
+    });
+
+    await context.addInitScript(() => {
+      Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+    });
+
+    const page = await context.newPage();
+    await page.goto(PRODUCER_BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await page.waitForTimeout(3000);
+
+    const accessToken = await loadProducerAccessToken(page, context);
+    if (!accessToken) {
+      throw new Error(`Could not extract Producer.ai access token for ${account.id}`);
+    }
+
+    return page.evaluate(async ({ accessToken, conversationIds }) => {
+      const headers = {
+        Accept: 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      };
+
+      const conversations = [];
+      const failed = [];
+
+      for (const conversationId of conversationIds) {
+        try {
+          const response = await fetch(`/__api/conversations/${conversationId}`, {
+            headers,
+            credentials: 'include'
+          });
+
+          const text = await response.text();
+          let data = null;
+
+          try {
+            data = JSON.parse(text);
+          } catch {
+            // noop
+          }
+
+          if (!response.ok) {
+            failed.push({
+              conversationId,
+              status: response.status,
+              error: data?.detail || text.slice(0, 300)
+            });
+            continue;
+          }
+
+          conversations.push(data);
+        } catch (error) {
+          failed.push({
+            conversationId,
+            status: 0,
+            error: error?.message || String(error)
+          });
+        }
+      }
+
+      return { conversations, failed };
+    }, { accessToken, conversationIds });
+  } finally {
+    await browser.close();
+  }
 }
 
 // Get account with status
@@ -315,6 +468,41 @@ app.post('/api/accounts/:accountId/cleanup', async (req, res) => {
   }
 });
 
+// Fetch conversation payloads for one account using saved Producer.ai auth
+app.post('/api/accounts/:accountId/conversations/batch', async (req, res) => {
+  try {
+    const { accountId } = req.params;
+    const { conversationIds = [] } = req.body || {};
+
+    if (!Array.isArray(conversationIds) || conversationIds.length === 0) {
+      return res.json({ accountId, conversations: [], failed: [] });
+    }
+
+    const uniqueConversationIds = Array.from(
+      new Set(
+        conversationIds
+          .filter((value) => typeof value === 'string')
+          .map((value) => value.trim())
+          .filter(Boolean)
+      )
+    );
+
+    const account = DEFAULT_ACCOUNTS.find((item) => item.id === accountId);
+    if (!account) {
+      return res.status(404).json({ error: 'Account not found' });
+    }
+
+    const result = await fetchConversationBatch(account, uniqueConversationIds);
+    res.json({
+      accountId,
+      conversations: result.conversations || [],
+      failed: result.failed || []
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Get all stats
 app.get('/api/stats', async (req, res) => {
   try {
@@ -350,6 +538,7 @@ server.listen(PORT, () => {
   console.log(`  GET  /api/accounts/:id      - Get account status`);
   console.log(`  POST /api/accounts/:id/start - Start archiver`);
   console.log(`  POST /api/accounts/:id/stop  - Stop archiver`);
+  console.log(`  POST /api/accounts/:id/conversations/batch - Fetch conversation payloads`);
   console.log(`  GET  /api/running           - List running processes`);
   console.log(`  POST /api/login-ready       - Trigger login ready`);
   console.log(`  GET  /api/stats             - Get all stats`);

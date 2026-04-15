@@ -140,9 +140,13 @@ class SessionExtractor {
 
     // Фрагмент из sound_prompt
     if (track.soundPrompt) {
+      const fragmentId = crypto.randomUUID();
       fragments.push({
-        id: crypto.randomUUID(),
+        id: fragmentId,
+        fragmentId,
+        conversationId: track.conversationId,
         messageId: `msg-${track.id}-user`,
+        text: track.soundPrompt,
         content: track.soundPrompt,
         startIndex: 0,
         endIndex: track.soundPrompt.length,

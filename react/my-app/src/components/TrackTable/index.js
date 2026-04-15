@@ -169,7 +169,7 @@ export default function TrackTable({ onSessionClick }) {
               title="Открыть на сайте"
               onClick={(e) => {
                 e.stopPropagation();
-                window.open(track.sourceUrl, '_blank');
+                window.open(track.sessionUrl || track.sourceUrl, '_blank');
               }}
             >
               🔗

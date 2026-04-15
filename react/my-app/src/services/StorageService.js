@@ -158,12 +158,35 @@ class StorageService {
   async saveFragmentsBatch(fragments) {
     const db = await this.ensureDB();
     const tx = db.transaction(STORES.FRAGMENTS, 'readwrite');
-    
-    const promises = fragments.map(fragment => tx.store.put(fragment));
+
+    const now = new Date().toISOString();
+    const normalizedFragments = fragments
+      .filter(Boolean)
+      .map((fragment, index) => {
+        const fragmentId =
+          fragment.fragmentId ||
+          fragment.id ||
+          `fragment-${fragment.messageId || 'msg'}-${index}-${Date.now()}`;
+
+        const text = fragment.text || fragment.content || '';
+
+        return {
+          ...fragment,
+          fragmentId,
+          id: fragment.id || fragmentId,
+          text,
+          content: fragment.content || text,
+          createdAt: fragment.createdAt || now,
+          updatedAt: fragment.updatedAt || now
+        };
+      })
+      .filter((fragment) => Boolean(fragment.fragmentId));
+
+    const promises = normalizedFragments.map(fragment => tx.store.put(fragment));
     await Promise.all(promises);
     await tx.done;
     
-    return fragments.length;
+    return normalizedFragments.length;
   }
 
   /**

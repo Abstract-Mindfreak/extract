@@ -6,6 +6,8 @@
 import metaParser from './MetaParser';
 import sessionExtractor from './SessionExtractor';
 import storageService from './StorageService';
+import producerSessionParser from './ProducerSessionParser';
+import { archiverManager } from './ProducerArchiverService';
 
 /**
  * @typedef {Object} ImportProgress
@@ -127,12 +129,19 @@ class LocalDataImporter {
       }
 
       const extractionResult = sessionExtractor.extract(tracks);
-      const sessions = extractionResult.sessions;
+      let sessions = extractionResult.sessions;
+
+      try {
+        const enrichedSessions = await this.enrichSessionsFromProducer(tracks, onProgress);
+        sessions = this.mergeSessions(sessions, enrichedSessions);
+      } catch (err) {
+        errors.push(`Session enrichment skipped: ${err?.message || err}`);
+      }
 
       if (onProgress) {
         onProgress({
           stage: 'extracting',
-          current: 100,
+          current: 55,
           total: 100,
           message: `Извлечено ${sessions.length} сессий`
         });
@@ -334,6 +343,88 @@ class LocalDataImporter {
     const tracks = (await storageService.getMetadata('importedTracks')) || 0;
     const sessions = (await storageService.getMetadata('importedSessions')) || 0;
     return { tracks, sessions };
+  }
+
+  async enrichSessionsFromProducer(tracks, onProgress) {
+    const accountConversationMap = new Map();
+
+    for (const track of tracks) {
+      if (!track?.accountId || !track?.conversationId) continue;
+
+      const accountKey = `account_${track.accountId}`;
+      if (!accountConversationMap.has(accountKey)) {
+        accountConversationMap.set(accountKey, new Set());
+      }
+
+      accountConversationMap.get(accountKey).add(track.conversationId);
+    }
+
+    if (accountConversationMap.size === 0) {
+      return [];
+    }
+
+    const enrichedSessions = [];
+    let processedAccounts = 0;
+    const totalAccounts = accountConversationMap.size;
+    const enrichmentErrors = [];
+
+    for (const [accountId, conversationIdsSet] of accountConversationMap.entries()) {
+      const conversationIds = Array.from(conversationIdsSet);
+
+      if (onProgress) {
+        onProgress({
+          stage: 'extracting',
+          current: 60 + Math.round((processedAccounts / totalAccounts) * 35),
+          total: 100,
+          message: `Producer.ai enrichment: ${accountId}, ${conversationIds.length} conversation(s)`
+        });
+      }
+
+      try {
+        const response = await archiverManager.fetchConversationBatch(accountId, conversationIds);
+        const parsedSessions = producerSessionParser.parseBatch(
+          response.conversations || [],
+          tracks.filter((track) => `account_${track.accountId}` === accountId),
+          Number(accountId.replace('account_', ''))
+        );
+
+        enrichedSessions.push(...parsedSessions);
+
+        if (Array.isArray(response.failed) && response.failed.length > 0) {
+          enrichmentErrors.push(
+            `${accountId}: ${response.failed.length} conversation fetch failure(s)`
+          );
+        }
+      } catch (error) {
+        enrichmentErrors.push(`${accountId}: ${error?.message || error}`);
+      }
+
+      processedAccounts += 1;
+    }
+
+    if (enrichmentErrors.length > 0) {
+      console.warn('Producer.ai session enrichment warnings:', enrichmentErrors);
+    }
+
+    return enrichedSessions;
+  }
+
+  mergeSessions(fallbackSessions = [], enrichedSessions = []) {
+    const merged = new Map();
+
+    for (const session of fallbackSessions) {
+      if (session?.conversationId) {
+        merged.set(session.conversationId, session);
+      }
+    }
+
+    for (const session of enrichedSessions) {
+      if (session?.conversationId) {
+        merged.set(session.conversationId, session);
+      }
+    }
+
+    return Array.from(merged.values());
   }
 }
 

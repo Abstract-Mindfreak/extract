@@ -37,6 +37,9 @@ class MetaParser {
     const audioPath = this.findAudioPath(dirPath, meta);
     const imagePath = this.findImagePath(dirPath, meta);
 
+    const conversationId = this.extractConversationId(meta);
+    const sourceUrl = this.extractSourceUrl(meta);
+
     const track = {
       id: meta.id,
       title: meta.title || 'Untitled',
@@ -52,8 +55,11 @@ class MetaParser {
       lyrics: this.extractLyrics(meta),
       
       // Связи
-      conversationId: this.extractConversationId(meta),
-      sourceUrl: this.extractSourceUrl(meta),
+      conversationId,
+      sourceUrl,
+      sessionUrl: conversationId
+        ? `https://www.producer.ai/session/${conversationId}#song-${meta.id}`
+        : undefined,
       
       // Даты
       createdAt: meta.created_at || new Date().toISOString(),
@@ -142,7 +148,7 @@ class MetaParser {
    * @returns {string}
    */
   extractSoundPrompt(raw) {
-    const prompt = raw.operation?.sound_prompt;
+    const prompt = raw.operation?.sound_prompt || raw.raw_data?.operation?.sound_prompt;
     
     if (typeof prompt === 'string') {
       return prompt.trim();
@@ -151,7 +157,7 @@ class MetaParser {
     // Если нет sound_prompt, пробуем другие поля
     const altFields = ['prompt', 'description', 'text'];
     for (const field of altFields) {
-      const val = raw.operation?.[field];
+      const val = raw.operation?.[field] ?? raw.raw_data?.operation?.[field];
       if (typeof val === 'string') {
         return val.trim();
       }
@@ -215,6 +221,11 @@ class MetaParser {
     // Ищем в operation
     if (raw.operation?.conversation_id) {
       return String(raw.operation.conversation_id);
+    }
+
+    // Реальный архив producer-ai-archiver хранит значение здесь
+    if (raw.raw_data?.operation?.conversation_id) {
+      return String(raw.raw_data.operation.conversation_id);
     }
 
     // Пробуем извлечь из source_url

@@ -52,6 +52,8 @@ const CONCURRENCY = Number(process.env.PRODUCER_CONCURRENCY ?? 8);
 const MANIFEST_PATH = path.join(OUTPUT_DIR, 'producer_manifest.json');
 const COMPLETION_PATH = path.join(OUTPUT_DIR, 'completion.json');
 const LOGIN_READY_FILE = path.resolve('./producer_login_ready');
+const SESSIONS_DIR = path.join(OUTPUT_DIR, 'sessions');
+const SESSION_SUMMARY_PATH = path.join(OUTPUT_DIR, 'session_capture_summary.json');
 
 if (!Number.isFinite(CONCURRENCY) || CONCURRENCY < 1) {
   throw new Error(`Invalid PRODUCER_CONCURRENCY: ${process.env.PRODUCER_CONCURRENCY}`);
@@ -96,6 +98,12 @@ function inferExtension(url, fallback) {
   if (withoutQuery.endsWith('.png')) return 'png';
   if (withoutQuery.endsWith('.webp')) return 'webp';
   return fallback;
+}
+
+async function atomicWriteJson(filePath, data) {
+  const tmpPath = `${filePath}.${Math.random().toString(36).slice(2)}.tmp`;
+  await fs.writeFile(tmpPath, JSON.stringify(data, null, 2));
+  await fs.rename(tmpPath, filePath);
 }
 
 // ---------------------------------------------------------------------------
@@ -487,6 +495,122 @@ class ProducerArchiver {
       missing_audio: expectedAudio - downloadedAudio,
     };
   }
+
+  getConversationIdsFromManifest() {
+    const ids = new Set();
+
+    for (const item of this.manifest.values()) {
+      const conversationId =
+        item?.raw_data?.operation?.conversation_id ??
+        item?.operation?.conversation_id ??
+        null;
+
+      if (conversationId) {
+        ids.add(conversationId);
+      }
+    }
+
+    return Array.from(ids);
+  }
+
+  async fetchConversation(conversationId) {
+    const response = await this.get(`${BASE_URL}/__api/conversations/${conversationId}`);
+
+    if (response.status === 401 || response.status === 403) {
+      throw new Error(`Unauthorized conversation fetch for ${conversationId}`);
+    }
+
+    if (response.status < 200 || response.status >= 300) {
+      throw new Error(`Conversation ${conversationId} returned HTTP ${response.status}`);
+    }
+
+    const body = this.parseResponse(response);
+    if (!body || typeof body !== 'object') {
+      throw new Error(`Conversation ${conversationId} returned invalid JSON`);
+    }
+
+    return body;
+  }
+
+  extractConversationLinks(conversation) {
+    const linkedClipIds = new Set();
+    const linkedOperationIds = new Set();
+
+    for (const message of conversation?.messages ?? []) {
+      for (const part of message?.parts ?? []) {
+        if (part?.tool_name !== 'audio__create_song') continue;
+
+        const payload = part.content ?? part.args ?? {};
+        if (payload.clip_id) linkedClipIds.add(payload.clip_id);
+        if (payload.operation_id) linkedOperationIds.add(payload.operation_id);
+      }
+    }
+
+    return {
+      linked_clip_ids: Array.from(linkedClipIds),
+      linked_operation_ids: Array.from(linkedOperationIds),
+    };
+  }
+
+  async captureSessions() {
+    const conversationIds = this.getConversationIdsFromManifest();
+    if (conversationIds.length === 0) {
+      console.log('No conversation IDs found in manifest. Skipping session capture.');
+      return {
+        attempted: 0,
+        captured: 0,
+        failed: 0,
+        failures: [],
+      };
+    }
+
+    await fs.mkdir(SESSIONS_DIR, { recursive: true });
+    console.log(`Capturing ${conversationIds.length} session payloads...`);
+
+    const failures = [];
+    let captured = 0;
+
+    for (let index = 0; index < conversationIds.length; index += 1) {
+      const conversationId = conversationIds[index];
+
+      try {
+        const conversation = await this.fetchConversation(conversationId);
+        const links = this.extractConversationLinks(conversation);
+        const outPath = path.join(SESSIONS_DIR, `session_${conversationId}.json`);
+
+        await atomicWriteJson(outPath, {
+          captured_at: new Date().toISOString(),
+          conversation_id: conversationId,
+          linked: links,
+          payload: conversation,
+        });
+
+        captured += 1;
+      } catch (error) {
+        failures.push({
+          conversation_id: conversationId,
+          error: error.message,
+        });
+      }
+
+      process.stdout.write(`\r  Sessions: ${captured}/${conversationIds.length} captured (${index + 1} processed)   `);
+    }
+
+    console.log('');
+
+    const summary = {
+      generated_at: new Date().toISOString(),
+      attempted: conversationIds.length,
+      captured,
+      failed: failures.length,
+      failures,
+    };
+
+    await atomicWriteJson(SESSION_SUMMARY_PATH, summary);
+    console.log(`Session capture complete. ${captured}/${conversationIds.length} saved.`);
+
+    return summary;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -749,6 +873,9 @@ async function main() {
       JSON.stringify({ generated_at: new Date().toISOString(), ...verification }, null, 2),
     );
 
+    console.log('Keeping browser context alive for session capture...');
+    const sessionCapture = await archiver.captureSessions();
+
     console.log('\n' + '='.repeat(50));
     console.log('ARCHIVAL COMPLETE');
     console.log('='.repeat(50));
@@ -756,6 +883,8 @@ async function main() {
     console.log(`Successfully saved:  ${verification.completed_items}`);
     console.log(`Audio on disk:       ${verification.downloaded_audio} / ${verification.expected_audio}`);
     console.log(`Missing audio:       ${verification.missing_audio}`);
+    console.log(`Sessions captured:   ${sessionCapture.captured} / ${sessionCapture.attempted}`);
+    console.log(`Session failures:    ${sessionCapture.failed}`);
     console.log(`Output:              ${path.resolve(OUTPUT_DIR)}`);
     console.log('='.repeat(50));
   } finally {

@@ -292,6 +292,16 @@ export class ProducerArchiverManager {
     const result = await apiPost(`/accounts/${accountId}/cleanup`);
     return result.cleaned;
   }
+
+  async fetchConversationBatch(accountId, conversationIds = []) {
+    if (!Array.isArray(conversationIds) || conversationIds.length === 0) {
+      return { conversations: [], failed: [] };
+    }
+
+    return apiPost(`/accounts/${accountId}/conversations/batch`, {
+      conversationIds
+    });
+  }
 }
 
 // Singleton instance
