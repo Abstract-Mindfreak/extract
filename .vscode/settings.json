@@ -1,8 +1,0 @@
-{
-    "folder-color.pathColors": [],
-    "C_Cpp.intelliSenseMemoryLimit": 2048,
-    "intelephense.maxMemory": 1024,
-    "editor.largeFileOptimizations": true,
-    "typescript.tsserver.maxTsServerMemory": 2048,
-    "C_Cpp.workspaceParsingPriority": "medium"
-}

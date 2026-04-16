@@ -1,10 +1,10 @@
 // App Constants
 
 export const ACCOUNTS = [
-  { id: 1, name: 'Аккаунт 1', email: 'synth.master@yahoo.com', color: '#3b82f6', avatarUrl: '/avatars/account1.svg' },
-  { id: 2, name: 'Аккаунт 2', email: 'beat.creator@gmail.com', color: '#10b981', avatarUrl: '/avatars/account2.svg' },
-  { id: 3, name: 'Аккаунт 3', email: 'audio.lab@outlook.com', color: '#f59e0b', avatarUrl: '/avatars/account3.svg' },
-  { id: 4, name: 'Аккаунт 4', email: 'music.pro@icloud.com', color: '#ef4444', avatarUrl: '/avatars/account4.svg' }
+  { id: 1, name: 'abstract', email: 'mungorodnaneve@gmail.com', color: '#bd8b02', avatarUrl: 'https://storage.googleapis.com/producer-app-public/user-metadata/e1719abc-d49a-4095-863f-0ae637f65bf4/profile.jpg' },
+  { id: 2, name: 'abstraction', email: 'kleafrog@gmail.com', color: '#10b981', avatarUrl: 'https://storage.googleapis.com/producer-app-public/user-metadata/bd215e1c-5355-4649-b683-34002f542523/profile.jpg' },
+  { id: 3, name: 'Import', email: 'gimportm@gmail.com', color: '#f59e0b', avatarUrl: 'https://storage.googleapis.com/producer-app-public/user-metadata/1c369b74-9214-4fcf-a149-e08f03f2c17b/profile.jpg?v=1776283318280' },
+  { id: 4, name: 'abstractmind', email: 'tulaqua@gmail.com', color: '#0897a4', avatarUrl: 'https://storage.googleapis.com/producer-app-public/user-metadata/7f0a0aad-f088-470b-8855-84c9537c80af/profile.jpg?v=1776283176758' }
 ];
 
 export const RATING_OPTIONS = [

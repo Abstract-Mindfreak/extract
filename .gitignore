@@ -21,6 +21,11 @@ build/
 *.swp
 *.swo
 *~
+TASKS.md
+TASK_PLAN.md
+TASK_REPORT.md
+TASK_PLAN_GPT.md
+KIMI.md
 
 # OS files
 .DS_Store
