@@ -131,7 +131,7 @@ class ProducerPromptNormalizer {
       category: asset.category || this.inferCategory(asset.payload),
       tags: asset.tags || this.inferTags(asset.payload),
       payload: {
-        type: 'producer.ai_prompt',
+        type: 'flowmusic.app_prompt',
         version: '1.0',
         data: asset.payload
       },
@@ -141,7 +141,7 @@ class ProducerPromptNormalizer {
         boundButtonId: null
       },
       sourceMeta: {
-        source: 'producer.ai',
+        source: 'flowmusic.app',
         sourceType: asset.sourceType,
         toolName: asset.toolName,
         messageId: asset.messageId
@@ -172,7 +172,7 @@ class ProducerPromptNormalizer {
         boundButtonId: null
       },
       sourceMeta: {
-        source: 'producer.ai',
+        source: 'flowmusic.app',
         generatedFromConversation: true
       },
       createdAt: session.createdAt || session.updatedAt || new Date().toISOString(),
@@ -184,7 +184,7 @@ class ProducerPromptNormalizer {
     if (Array.isArray(payload)) return 'array';
     if (!this.isPlainObject(payload)) return 'value';
 
-    if (payload.type === 'producer.ai_prompt') return 'producer_prompt';
+    if (payload.type === 'flowmusic.app_prompt') return 'flowmusic_prompt';
     if ('blockIds' in payload && 'data' in payload) return 'composition';
     return 'json_object';
   }

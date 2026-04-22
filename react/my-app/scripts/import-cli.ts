@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * CLI-утилита для импорта архива producer-ai-archiver
+ * CLI-утилита для импорта архива flowmusic-archiver
  * 
  * Использование:
  *   npx ts-node scripts/import-cli.ts --input "./producer-ai-archiver" --accounts "1,2,3,4"
@@ -72,9 +72,9 @@ const program = new Command();
 
 program
   .name('import-archiver')
-  .description('CLI для импорта архива Producer.ai')
+  .description('CLI для импорта архива FlowMusic.app')
   .version('1.0.0')
-  .requiredOption('-i, --input <path>', 'Путь к директории producer-ai-archiver')
+  .requiredOption('-i, --input <path>', 'Путь к директории flowmusic-archiver')
   .option('-a, --accounts <ids>', 'ID аккаунтов через запятую', '1,2,3,4')
   .option('-o, --output <path>', 'Путь для выходных файлов', './public/local-data')
   .option('--dry-run', 'Только показать что будет импортировано', false)
@@ -383,7 +383,7 @@ async function generateCatalog(scanResult: ScanResult): Promise<void> {
 async function runImport(): Promise<void> {
   const startTime = Date.now();
   
-  logger.header('Producer.ai Archive Importer');
+  logger.header('FlowMusic.app Archive Importer');
   
   // Validate input path
   try {

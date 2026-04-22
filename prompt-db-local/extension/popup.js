@@ -190,7 +190,7 @@ const generateBatch = async () => {
 };
 
 const handleInsertPrompt = async (promptId) => {
-  setStatus('Sending prompt to active producer.ai tab...');
+  setStatus('Sending prompt to active flowmusic.app tab...');
   await sendMessage({
     type: 'INSERT_PROMPT_REQUEST',
     payload: { promptId },

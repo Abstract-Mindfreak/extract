@@ -59,7 +59,7 @@ function JsonBlockList({
         </select>
         <select value={sourceFilter} onChange={(event) => setSourceFilter(event.target.value)}>
           <option value="all">all sources</option>
-          <option value="producer.ai">producer.ai</option>
+          <option value="flowmusic.app">flowmusic.app</option>
           <option value="manual">manual</option>
         </select>
       </div>

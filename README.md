@@ -1,12 +1,12 @@
-# Producer.ai Archiver & MMSS Producer Station
+# FlowMusic.app Archiver & MMSS Producer Station
 
-A comprehensive system for archiving tracks from Producer.ai and managing them through the MMSS (Multi-Modal Synthesis System) Producer Station interface.
+A comprehensive system for archiving tracks from FlowMusic.app and managing them through the MMSS (Multi-Modal Synthesis System) Producer Station interface.
 
 ## 📁 Project Structure
 
 ```
 extract/
-├── producer-ai-archiver/     # Node.js archiver for Producer.ai
+├── producer-ai-archiver/     # Node.js archiver for FlowMusic.app
 │   ├── archiver.mjs           # Main archiver script with Playwright
 │   ├── TECHNICAL_REFERENCE.md   # Technical documentation
 │   └── ...
@@ -23,9 +23,9 @@ extract/
     └── archiver-server.js     # Backend server for archiver API
 ```
 
-## 🎵 Producer.ai Archiver
+## 🎵 FlowMusic.app Archiver
 
-Automated archiving system for Producer.ai tracks using Playwright browser automation.
+Automated archiving system for FlowMusic.app tracks using Playwright browser automation.
 
 ### Features
 - Multi-account support (up to 5 accounts)
@@ -50,7 +50,7 @@ React-based audio workstation for managing and playing archived tracks.
 ### Features
 - **ASE Console**: Autonomous Symbolic Engine for intelligent track management
 - **Producer Archiver Panel**: UI for controlling the archiver from the browser
-- **Multi-account support**: Manage multiple Producer.ai accounts
+- **Multi-account support**: Manage multiple FlowMusic.app accounts
 - **Real-time sync**: WebSocket connection to archiver backend
 - **MMSS Audio Engine**: Advanced audio playback with timeline visualization
 
@@ -106,7 +106,7 @@ The React app communicates with the archiver via:
    npm start
    ```
 
-5. **Log in to Producer.ai** through the archiver panel in the UI
+5. **Log in to FlowMusic.app** through the archiver panel in the UI
 
 ## 📝 Requirements
 
@@ -122,15 +122,15 @@ MIT License - See individual subdirectories for specific licensing.
 
 ---
 
-# 🇷🇺 Producer.ai Архиватор и MMSS Producer Station
+# 🇷🇺 FlowMusic.app Архиватор и MMSS Producer Station
 
-Комплексная система для архивирования треков с Producer.ai и управления ими через интерфейс MMSS (Multi-Modal Synthesis System) Producer Station.
+Комплексная система для архивирования треков с FlowMusic.app и управления ими через интерфейс MMSS (Multi-Modal Synthesis System) Producer Station.
 
 ## 📁 Структура проекта
 
 ```
 extract/
-├── producer-ai-archiver/     # Node.js архиватор для Producer.ai
+├── producer-ai-archiver/     # Node.js архиватор для FlowMusic.app
 │   ├── archiver.mjs           # Основной скрипт архиватора с Playwright
 │   ├── TECHNICAL_REFERENCE.md   # Техническая документация
 │   └── ...
@@ -147,9 +147,9 @@ extract/
     └── archiver-server.js     # Бэкенд сервер для API архиватора
 ```
 
-## 🎵 Архиватор Producer.ai
+## 🎵 Архиватор FlowMusic.app
 
-Система автоматического архивирования треков с Producer.ai с использованием браузерной автоматизации Playwright.
+Система автоматического архивирования треков с FlowMusic.app с использованием браузерной автоматизации Playwright.
 
 ### Возможности
 - Поддержка нескольких аккаунтов (до 5 аккаунтов)
@@ -174,7 +174,7 @@ React-базированная аудио-станция для управлен
 ### Возможности
 - **ASE Console**: Автономный Символический Движок для интеллектуального управления треками
 - **Панель Архиватора Producer**: UI для управления архиватором из браузера
-- **Поддержка нескольких аккаунтов**: Управление несколькими аккаунтами Producer.ai
+- **Поддержка нескольких аккаунтов**: Управление несколькими аккаунтами FlowMusic.app
 - **Синхронизация в реальном времени**: WebSocket соединение с бэкендом архиватора
 - **MMSS Audio Engine**: Продвинутое аудио воспроизведение с визуализацией таймлайна
 
@@ -230,7 +230,7 @@ React приложение коммуницирует с архиватором 
    npm start
    ```
 
-5. **Вход в Producer.ai** через панель архиватора в UI
+5. **Вход в FlowMusic.app** через панель архиватора в UI
 
 ## 📝 Требования
 

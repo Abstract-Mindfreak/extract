@@ -306,6 +306,18 @@ class StorageService {
   }
 
   /**
+   * Update a single track
+   * @param {Object} track - Track object to update
+   * @returns {Promise<void>}
+   */
+  async updateTrack(track) {
+    const db = await this.ensureDB();
+    const tx = db.transaction(STORES.TRACKS, 'readwrite');
+    await tx.store.put(track);
+    await tx.done;
+  }
+
+  /**
    * Get all tracks
    * @returns {Promise<Array<Object>>}
    */

@@ -710,7 +710,7 @@ export const pipelineSteps: PipelineStep[] = [
   {
     stage: 3,
     title: 'Трансформация блоков',
-    description: 'Нормализация producer.ai JSON в MMSS формат',
+    description: 'Нормализация flowmusic.app JSON в MMSS формат',
     actions: [
       'В MMSS Runtime Panel нажмите "Rebuild Blocks"',
       'Дождитесь трансформации всех элементов',

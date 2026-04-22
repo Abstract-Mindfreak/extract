@@ -1,10 +1,10 @@
-# Producer.ai Archiver Integration
+# FlowMusic.app Archiver Integration
 
-Multi-account archiver for Producer.ai integrated into ASE Master Console.
+Multi-account archiver for FlowMusic.app integrated into ASE Master Console.
 
 ## Features
 
-- **4 Account Management** — Manage 4 separate Producer.ai accounts (different Google logins)
+- **4 Account Management** — Manage 4 separate FlowMusic.app accounts (different Google logins)
 - **Browser Automation** — Uses Playwright for reliable Cloudflare bypass
 - **Full Metadata** — Downloads M4A audio, JPG covers, MP4 videos, JSON metadata
 - **Real-time Logs** — Monitor archiver progress in UI
@@ -36,7 +36,7 @@ npm run archiver:server
 
 You should see:
 ```
-Producer.ai Archiver API Server
+FlowMusic.app Archiver API Server
 HTTP API: http://localhost:3456
 WebSocket: ws://localhost:3456
 ```
@@ -53,13 +53,13 @@ npm start
 
 ### 3. Open Archiver Panel
 
-In the browser, open **ASE Master Console** and select **"Producer.ai Archiver"** from the variation switcher.
+In the browser, open **ASE Master Console** and select **"FlowMusic.app Archiver"** from the variation switcher.
 
 ## First Time Setup
 
 ### 1. Configure Accounts
 
-Open **Producer.ai Archiver** panel in ASE Master Console.
+Open **FlowMusic.app Archiver** panel in ASE Master Console.
 
 Each account has:
 - Unique color indicator (Red, Blue, Green, Purple)
@@ -73,7 +73,7 @@ For each of your 4 accounts:
 
 1. Click **"LOGIN & AUTHENTICATE"**
 2. Browser window opens automatically
-3. Log in to Producer.ai with your Google account
+3. Log in to FlowMusic.app with your Google account
 4. Wait until you see your song library
 5. Click **"LOGIN READY"** button in UI
 6. Browser closes and session is saved
@@ -200,7 +200,7 @@ Browser-compatible service that:
 ## Environment Variables
 
 Can be set in `.env` or system:
-- `PRODUCER_BASE_URL` — Default: https://www.producer.ai
+- `PRODUCER_BASE_URL` — Default: https://www.flowmusic.app
 - `PRODUCER_CONCURRENCY` — Default: 8
 - `PRODUCER_AUTH_STATE` — Auth file path
 - `PRODUCER_OUTPUT_DIR` — Output directory

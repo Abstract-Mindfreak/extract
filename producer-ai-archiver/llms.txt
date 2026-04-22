@@ -1,6 +1,6 @@
-# Producer.ai Archiver
+# FlowMusic.app Archiver
 
-> A Node.js backup tool that uses Playwright browser automation to download your entire Producer.ai music library — M4A audio, cover art, lyrics, prompts, and all metadata. Resumes on crash, skips already-downloaded songs, and handles Cloudflare-protected sessions.
+> A Node.js backup tool that uses Playwright browser automation to download your entire FlowMusic.app music library — M4A audio, cover art, lyrics, prompts, and all metadata. Resumes on crash, skips already-downloaded songs, and handles Cloudflare-protected sessions.
 
 - This tool requires Node.js 18+ and runs a real Chromium browser to bypass Cloudflare bot detection
 - Authentication is handled via Supabase chunked cookies (`sb-api-auth-token.0`, `.1`, etc.) which encode a JWT Bearer token

@@ -31,7 +31,7 @@ KIMI.md
 .DS_Store
 Thumbs.db
 
-# Personal data - Producer.ai Archiver
+# Personal data - FlowMusic.app Archiver
 producer-ai-archiver/producer_auth_*.json
 producer-ai-archiver/producer_login_ready
 producer-ai-archiver/producer_backup_*/

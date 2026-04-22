@@ -1,4 +1,4 @@
-# Producer.ai Archiver — Technical Reference
+# FlowMusic.app Archiver — Technical Reference
 
 > Last updated: 2026-02-20  
 > Covers: `scripts/producer_playwright_archiver.mjs`
@@ -18,10 +18,10 @@ The archiver is a standalone Node.js script using **Playwright** to automate a r
 │  Node.js Process                         │
 │   ┌─────────────┐    ┌────────────────┐  │
 │   │ Playwright  │──▶ │ Chromium Tab   │  │
-│   │ Controller  │    │ (producer.ai)  │  │
+│   │ Controller  │    │ (flowmusic.app)  │  │
 │   └──────┬──────┘    │                │  │
 │          │           │ page.evaluate( │  │
-│          │           │   fetch(API)   │──────▶ Producer.ai API
+│          │           │   fetch(API)   │──────▶ FlowMusic.app API
 │          │           │ )              │  │
 │   ┌──────▼──────┐    └────────────────┘  │
 │   │ File I/O    │                        │
@@ -34,13 +34,13 @@ The archiver is a standalone Node.js script using **Playwright** to automate a r
 
 ## Authentication Flow
 
-Producer.ai uses **Supabase Auth** with chunked cookies.
+FlowMusic.app uses **Supabase Auth** with chunked cookies.
 
 ### Cookie Structure
 Session tokens are split across multiple cookies. Cookie names vary by account:
 - `sb-api-auth-token.0` / `sb-api-auth-token.1` — standard pattern
 - `sb-sb-auth-token.0` / `sb-sb-auth-token.1` — alternative pattern (some accounts)
-- Domain: `www.producer.ai`
+- Domain: `www.flowmusic.app`
 
 > **Note**: Cookie prefix varies. The archiver matches any cookie matching `sb-*auth-token.N` pattern.
 
@@ -62,7 +62,7 @@ The `access_token` is a JWT Bearer token used in `Authorization: Bearer <token>`
 
 ### Session Persistence
 - Saved to `producer_auth.json` via Playwright's `context.storageState()`
-- Contains cookies + localStorage for `www.producer.ai`
+- Contains cookies + localStorage for `www.flowmusic.app`
 - **Sensitive**: never commit this file
 
 ---
@@ -153,7 +153,7 @@ The M4A URL pattern (`/audio/{id}.m4a`) does NOT work with `.wav` or `.mp3` exte
 
 ### 4. Songs with No Audio (HTTP 404)
 **Problem**: ~322 songs in the manifest have `audio_url: null`.  
-**Cause**: Songs that failed to generate, were still processing, or had their audio purged by Producer.ai.  
+**Cause**: Songs that failed to generate, were still processing, or had their audio purged by FlowMusic.app.  
 **Verification**: CDN HEAD requests for these IDs return HTTP 404 — the audio genuinely doesn't exist.
 
 ### 5. Session Expiry During Long Runs

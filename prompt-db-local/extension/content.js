@@ -32,7 +32,7 @@ function extractSessionName() {
   // Пробуем найти имя сессии в разных местах страницы
   // Вариант 1: Заголовок страницы (title)
   const pageTitle = document.title;
-  if (pageTitle && pageTitle !== 'Producer' && pageTitle !== 'producer.ai') {
+  if (pageTitle && pageTitle !== 'Producer' && pageTitle !== 'flowmusic.app') {
     cachedSessionName = pageTitle.slice(0, 100);
     sessionCacheTimestamp = now;
     return cachedSessionName;
@@ -357,7 +357,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (!target) {
     sendResponse({
       ok: false,
-      error: 'No visible textarea found on this producer.ai page.',
+      error: 'No visible textarea found on this flowmusic.app page.',
     });
     return false;
   }

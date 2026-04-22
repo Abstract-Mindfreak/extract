@@ -1,5 +1,5 @@
 /**
- * MetaParser — парсинг meta.json файлов треков Producer.ai
+ * MetaParser — парсинг meta.json файлов треков FlowMusic.app
  */
 
 class MetaParser {
@@ -58,7 +58,7 @@ class MetaParser {
       conversationId,
       sourceUrl,
       sessionUrl: conversationId
-        ? `https://www.producer.ai/session/${conversationId}#song-${meta.id}`
+        ? `https://www.flowmusic.app/session/${conversationId}#song-${meta.id}`
         : undefined,
       
       // Даты

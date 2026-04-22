@@ -181,7 +181,7 @@ ipcMain.handle('snapshot:save-prompts', async (_event, payload: PromptSnapshotRe
 
 ipcMain.handle('ws:run-self-test', async () => {
   const payload = JSON.stringify({
-    source: 'producer.ai-extension:self-test',
+    source: 'flowmusic.app-extension:self-test',
     payload: {
       name: 'extension sync self test',
       prompt: 'Confirm websocket pipeline for {{system}}.',

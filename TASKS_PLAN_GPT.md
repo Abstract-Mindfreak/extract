@@ -5,8 +5,8 @@
 1. Починить импорт реальных `meta.json` из `producer-ai-archiver`, чтобы не терялись:
    - `raw_data.operation.sound_prompt`
    - `raw_data.operation.conversation_id`
-   - session-ссылка вида `https://www.producer.ai/session/<conversationId>#song-<trackId>`
-2. Добавить enrichment сессий через живой Producer.ai API по сохранённым auth state аккаунтов.
+   - session-ссылка вида `https://www.flowmusic.app/session/<conversationId>#song-<trackId>`
+2. Добавить enrichment сессий через живой FlowMusic.app API по сохранённым auth state аккаунтов.
 3. Сохранять в IndexedDB не только синтетические сессии из `SessionExtractor`, но и реальные conversation payload.
 
 ## Что уже сделано
@@ -21,9 +21,9 @@
 - `ProducerArchiverService.js`
   - добавлен клиентский метод `fetchConversationBatch()`
 - `ProducerSessionParser.js`
-  - добавлен парсер Producer.ai conversation payload → session model приложения
+  - добавлен парсер FlowMusic.app conversation payload → session model приложения
 - `LocalDataImporter.js`
-  - добавлен enrichment сессий через Producer.ai поверх локального архива
+  - добавлен enrichment сессий через FlowMusic.app поверх локального архива
 - `producer-ai-archiver/archiver.mjs`
   - run стал двухфазным: после harvest/download сохраняет реальные session payloads
   - session JSON пишутся в `producer_backup_N/sessions/session_<conversationId>.json`

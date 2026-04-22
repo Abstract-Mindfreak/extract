@@ -106,7 +106,7 @@ const ASE_VARIATIONS = {
   },
   producer_archiver: {
     id: "producer_archiver",
-    label: "Producer.ai Archiver",
+    label: "FlowMusic.app Archiver",
     description: "Multi-account music library archiver",
     component: ProducerArchiverPanel
   }

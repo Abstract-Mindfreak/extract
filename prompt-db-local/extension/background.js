@@ -453,7 +453,7 @@ async function getActiveProducerTab() {
   });
 
   if (!tab?.id || !PRODUCER_URL_PATTERN.test(tab.url || '')) {
-    throw new Error('Active producer.ai tab not found.');
+    throw new Error('Active flowmusic.app tab not found.');
   }
 
   return tab;

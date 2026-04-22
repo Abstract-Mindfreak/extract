@@ -2,11 +2,11 @@
   "manifest_version": 3,
   "name": "Prompt DB Importer",
   "version": "0.2.0",
-  "description": "Generate prompt batches from the local Electron app and insert them into producer.ai with synced usage status. Φ_total(session) support for multi-account session tracking.",
+  "description": "Generate prompt batches from the local Electron app and insert them into flowmusic.app with synced usage status. Φ_total(session) support for multi-account session tracking.",
   "permissions": ["activeTab", "storage", "tabs", "identity"],
   "host_permissions": [
-    "https://producer.ai/*",
-    "https://*.producer.ai/*",
+    "https://flowmusic.app/*",
+    "https://*.flowmusic.app*",
     "http://127.0.0.1/*",
     "ws://127.0.0.1:3001/*"
   ],
@@ -18,7 +18,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://producer.ai/*", "https://*.producer.ai/*"],
+      "matches": ["https://flowmusic.app/*", "https://*.flowmusic.app*"],
       "js": ["content.js"],
       "run_at": "document_idle"
     }

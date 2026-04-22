@@ -473,7 +473,7 @@ export function combinePromptBlocks(blockIds, blocks, mergeStrategy) {
 function syncPromptLibraryState(state) {
   const mergeStrategy = state.activeComposition?.mergeStrategy || "merge_deep";
   const combinedJson = {
-    type: "producer.ai_prompt",
+    type: "flowmusic.app_prompt",
     version: "1.0",
     data: combinePromptBlocks(state.activeComposition.blockIds, state.blocks, mergeStrategy),
     blockIds: state.activeComposition.blockIds,
@@ -633,7 +633,7 @@ function createBlockFromObject(fragment, index) {
     category: inferCategory(fragment),
     tags: inferTags(fragment),
     payload: {
-      type: "producer.ai_prompt",
+      type: "flowmusic.app_prompt",
       version: "1.0",
       data: fragment,
     },
@@ -744,7 +744,7 @@ function normalizeBlock(block) {
     ...block,
     tags: Array.isArray(block.tags) ? block.tags : [],
     payload: {
-      type: block.payload?.type || "producer.ai_prompt",
+      type: block.payload?.type || "flowmusic.app_prompt",
       version: block.payload?.version || "1.0",
       data: block.payload?.data ?? {},
     },
@@ -778,7 +778,7 @@ function createDefaultPromptLibraryState() {
       category: "scene",
       tags: ["glass", "lab", "cool"],
       payload: {
-        type: "producer.ai_prompt",
+        type: "flowmusic.app_prompt",
         version: "1.0",
         data: {
           prompt: "glass laboratory with soft blue highlights and suspended particles",
@@ -801,7 +801,7 @@ function createDefaultPromptLibraryState() {
       category: "motion",
       tags: ["orbit", "drift", "camera"],
       payload: {
-        type: "producer.ai_prompt",
+        type: "flowmusic.app_prompt",
         version: "1.0",
         data: {
           motion: {
@@ -826,7 +826,7 @@ function createDefaultPromptLibraryState() {
       category: "fx",
       tags: ["prism", "glow", "spectral"],
       payload: {
-        type: "producer.ai_prompt",
+        type: "flowmusic.app_prompt",
         version: "1.0",
         data: {
           effects: {

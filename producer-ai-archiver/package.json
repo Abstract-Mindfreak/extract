@@ -1,7 +1,7 @@
 {
   "name": "producer-ai-archiver",
   "version": "1.0.0",
-  "description": "Standalone Producer.ai music and metadata archiver",
+  "description": "Standalone FlowMusic.app music and metadata archiver",
   "main": "archiver.mjs",
   "type": "module",
   "scripts": {

@@ -1,6 +1,6 @@
 # Prompt DB Local
 
-`Prompt DB Local` — локальное Electron + React приложение для импорта JSON-пакетов с промтами, хранения библиотеки блоков, тегирования, извлечения последовательностей ключей, генерации экспортов и связи с Chrome extension для `producer.ai`.
+`Prompt DB Local` — локальное Electron + React приложение для импорта JSON-пакетов с промтами, хранения библиотеки блоков, тегирования, извлечения последовательностей ключей, генерации экспортов и связи с Chrome extension для `flowmusic.app`.
 
 Этот README описывает:
 
@@ -106,7 +106,7 @@
 ### Слои
 
 1. `extension/`
-   Chrome extension для `producer.ai`, генерации batch, вставки промтов, отслеживания usage и отправки session context.
+   Chrome extension для `flowmusic.app`, генерации batch, вставки промтов, отслеживания usage и отправки session context.
 
 2. `electron/`
    Main process, preload bridge, HTTP API, WebSocket server, работа с файлами и запуск Python.
@@ -122,7 +122,7 @@
 
 ### Фактический pipeline
 
-`producer.ai / file import`  
+`flowmusic.app / file import`  
 → `Electron WebSocket / file dialog`  
 → `renderer store + Dexie`  
 → `tag scan / sequence extraction / export presets`  
@@ -186,7 +186,7 @@
 
 ### 6. Extension завязан на хрупкие DOM-селекторы
 
-Для `producer.ai` это риск: любое изменение DOM на стороне сайта может сломать вставку промтов и extraction flow.
+Для `flowmusic.app` это риск: любое изменение DOM на стороне сайта может сломать вставку промтов и extraction flow.
 
 Что сделать:
 
@@ -577,7 +577,7 @@ npm run build
 - `renderer/src/utils/exportComposer.ts` — локальная логика экспорта
 - `renderer/src/utils/MMSSRuntimeService.ts` — bridge к Python scripts
 - `extension/background.js` — orchestration в extension
-- `extension/content.js` — интеграция с `producer.ai`
+- `extension/content.js` — интеграция с `flowmusic.app`
 - `system/rule_engine.py` — генерация по правилам
 - `system/self_rule_engine.py` — эволюция правил
 - `system/mutation_engine.py` — mutation flow

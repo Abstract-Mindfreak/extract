@@ -182,7 +182,7 @@ export default function ProducerArchiverPanel() {
             <div>
               <h1 className="text-xl font-black tracking-tighter text-white flex items-center gap-2">
                 <Music size={16} className="text-pink-500" />
-                PRODUCER.AI ARCHIVER
+                FLOWMUSIC.APP ARCHIVER
                 <span className="text-pink-500 italic text-sm">v1.0</span>
               </h1>
               <div className="flex gap-3 text-[9px] uppercase tracking-[0.3em] text-cyan-800">

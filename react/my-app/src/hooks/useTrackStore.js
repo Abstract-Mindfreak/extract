@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import mockDataService from '../services/MockDataService';
 import localDataImporter from '../services/LocalDataImporter';
+import storageService from '../services/StorageService';
 import { APP_CONFIG } from '../constants/app';
 
 export const useTrackStore = create((set, get) => ({
@@ -21,6 +22,9 @@ export const useTrackStore = create((set, get) => ({
     dateTo: null,
     hasLyrics: null
   },
+  
+  // Custom text filters (max 15)
+  customFilters: [],
   
   // Sort state
   sortConfig: {
@@ -168,10 +172,79 @@ export const useTrackStore = create((set, get) => ({
   },
   
   /**
+   * Add custom text filter
+   */
+  addCustomFilter: (text) => {
+    const { customFilters } = get();
+    if (customFilters.length >= 15) return;
+    if (customFilters.some(f => f.text === text)) return;
+    
+    const newFilter = {
+      id: `custom-${Date.now()}`,
+      text,
+      enabled: true
+    };
+    
+    set({ customFilters: [...customFilters, newFilter] });
+    get().applyFilters();
+    get().saveCustomFilters();
+  },
+  
+  /**
+   * Remove custom filter
+   */
+  removeCustomFilter: (id) => {
+    set(state => ({
+      customFilters: state.customFilters.filter(f => f.id !== id)
+    }));
+    get().applyFilters();
+    get().saveCustomFilters();
+  },
+  
+  /**
+   * Toggle custom filter enabled state
+   */
+  toggleCustomFilter: (id) => {
+    set(state => ({
+      customFilters: state.customFilters.map(f =>
+        f.id === id ? { ...f, enabled: !f.enabled } : f
+      )
+    }));
+    get().applyFilters();
+    get().saveCustomFilters();
+  },
+  
+  /**
+   * Save custom filters to IndexedDB
+   */
+  saveCustomFilters: async () => {
+    try {
+      const { customFilters } = get();
+      await storageService.setMetadataBatch({ customFilters });
+    } catch (error) {
+      console.error('Failed to save custom filters:', error);
+    }
+  },
+  
+  /**
+   * Load custom filters from IndexedDB
+   */
+  loadCustomFilters: async () => {
+    try {
+      const metadata = await storageService.getMetadata('customFilters');
+      if (metadata?.value && Array.isArray(metadata.value)) {
+        set({ customFilters: metadata.value });
+      }
+    } catch (error) {
+      console.error('Failed to load custom filters:', error);
+    }
+  },
+  
+  /**
    * Apply filters and sorting
    */
   applyFilters: () => {
-    const { tracks, filters, sortConfig } = get();
+    const { tracks, filters, sortConfig, customFilters } = get();
     
     let filtered = [...tracks];
     
@@ -198,6 +271,20 @@ export const useTrackStore = create((set, get) => ({
       filtered = filtered.filter(track => 
         track.rating >= filters.rating
       );
+    }
+    
+    // Custom text filters
+    const enabledCustomFilters = customFilters.filter(f => f.enabled);
+    if (enabledCustomFilters.length > 0) {
+      filtered = filtered.filter(track => {
+        return enabledCustomFilters.every(filter => {
+          const query = filter.text.toLowerCase();
+          return track.title?.toLowerCase().includes(query) ||
+                 track.soundPrompt?.toLowerCase().includes(query) ||
+                 track.lyrics?.toLowerCase().includes(query) ||
+                 track.conversationId?.toLowerCase().includes(query);
+        });
+      });
     }
     
     // Date filters
@@ -329,8 +416,14 @@ export const useTrackStore = create((set, get) => ({
    */
   updateTrackRating: async (trackId, rating) => {
     try {
-      await mockDataService.updateTrackRating(trackId, rating);
+      // Update in IndexedDB for persistence
+      const track = get().tracks.find(t => t.id === trackId);
+      if (track) {
+        const updatedTrack = { ...track, rating };
+        await storageService.updateTrack(updatedTrack);
+      }
       
+      // Update local state
       set(state => {
         const updateTrack = (track) => 
           track.id === trackId ? { ...track, rating } : track;

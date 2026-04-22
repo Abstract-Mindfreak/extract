@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTrackStore } from '../../hooks/useTrackStore';
 import { ACCOUNTS, RATING_OPTIONS } from '../../constants/app';
 import './styles.css';
@@ -6,11 +6,35 @@ import './styles.css';
 export default function FilterPanel() {
   const {
     filters,
+    customFilters,
     setSearchFilter,
     setAccountFilter,
     setRatingFilter,
-    clearFilters
+    clearFilters,
+    addCustomFilter,
+    removeCustomFilter,
+    toggleCustomFilter,
+    loadCustomFilters
   } = useTrackStore();
+  
+  const [newFilterText, setNewFilterText] = useState('');
+  
+  useEffect(() => {
+    loadCustomFilters();
+  }, [loadCustomFilters]);
+  
+  const handleAddFilter = () => {
+    if (newFilterText.trim()) {
+      addCustomFilter(newFilterText.trim());
+      setNewFilterText('');
+    }
+  };
+  
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleAddFilter();
+    }
+  };
 
   const handleAccountToggle = (accountId) => {
     const newAccounts = filters.accounts.includes(accountId)
@@ -22,7 +46,8 @@ export default function FilterPanel() {
   const hasActiveFilters = 
     filters.search || 
     filters.accounts.length > 0 || 
-    filters.rating !== null;
+    filters.rating !== null ||
+    customFilters.some(f => f.enabled);
 
   return (
     <div className="filter-panel">
@@ -89,6 +114,52 @@ export default function FilterPanel() {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Custom Filters */}
+      <div className="filter-section">
+        <label>Текстовые фильтры ({customFilters.length}/15)</label>
+        <div className="custom-filter-input">
+          <input
+            type="text"
+            placeholder="Введите текст фильтра..."
+            value={newFilterText}
+            onChange={(e) => setNewFilterText(e.target.value)}
+            onKeyPress={handleKeyPress}
+            disabled={customFilters.length >= 15}
+            className="filter-text-input"
+          />
+          <button
+            onClick={handleAddFilter}
+            disabled={customFilters.length >= 15 || !newFilterText.trim()}
+            className="add-filter-btn"
+          >
+            +
+          </button>
+        </div>
+        {customFilters.length > 0 && (
+          <div className="custom-filters-list">
+            {customFilters.map(filter => (
+              <div key={filter.id} className="custom-filter-item">
+                <input
+                  type="checkbox"
+                  checked={filter.enabled}
+                  onChange={() => toggleCustomFilter(filter.id)}
+                  className="custom-filter-checkbox"
+                />
+                <span className={`custom-filter-text ${filter.enabled ? 'enabled' : 'disabled'}`}>
+                  {filter.text}
+                </span>
+                <button
+                  onClick={() => removeCustomFilter(filter.id)}
+                  className="remove-filter-btn"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Stats */}

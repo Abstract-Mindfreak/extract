@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Producer.ai archival utility — downloads all songs, covers, and metadata.
+ * FlowMusic.app archival utility — downloads all songs, covers, and metadata.
  *
  * Architecture:
  *   Uses Playwright to run a real Chromium browser. All API calls are made via
@@ -9,7 +9,7 @@
  *   bot detection and ensures proper cookie/CORS handling.
  *
  * Auth:
- *   Producer.ai uses Supabase Auth with chunked cookies (sb-api-auth-token.0,
+ *   FlowMusic.app uses Supabase Auth with chunked cookies (sb-api-auth-token.0,
  *   sb-api-auth-token.1). The access_token JWT is extracted and used as a
  *   Bearer token. Session is persisted to producer_auth.json via Playwright's
  *   storageState. All fetch() calls include credentials:'include' to send
@@ -29,7 +29,7 @@
  *      pnpm producer:archive --skip-harvest
  *
  * Environment variables:
- *   PRODUCER_BASE_URL    (default: https://www.producer.ai)
+ *   PRODUCER_BASE_URL    (default: https://www.flowmusic.app)
  *   PRODUCER_OUTPUT_DIR  (default: ./producer_backup)
  *   PRODUCER_AUTH_STATE  (default: ./producer_auth.json)
  *   PRODUCER_CONCURRENCY (default: 8)
@@ -45,7 +45,7 @@ import { chromium } from 'playwright';
 import PQueue from 'p-queue';
 import pRetry, { AbortError } from 'p-retry';
 
-const BASE_URL = process.env.PRODUCER_BASE_URL ?? 'https://www.producer.ai';
+const BASE_URL = process.env.PRODUCER_BASE_URL ?? 'https://www.flowmusic.app';
 const OUTPUT_DIR = process.env.PRODUCER_OUTPUT_DIR ?? './producer_backup';
 const AUTH_STATE = process.env.PRODUCER_AUTH_STATE ?? './producer_auth.json';
 const CONCURRENCY = Number(process.env.PRODUCER_CONCURRENCY ?? 8);
@@ -103,7 +103,24 @@ function inferExtension(url, fallback) {
 async function atomicWriteJson(filePath, data) {
   const tmpPath = `${filePath}.${Math.random().toString(36).slice(2)}.tmp`;
   await fs.writeFile(tmpPath, JSON.stringify(data, null, 2));
-  await fs.rename(tmpPath, filePath);
+  
+  // Retry rename with backoff for Windows EPERM issues
+  const maxRetries = 5;
+  const retryDelay = 100; // ms
+  
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      await fs.rename(tmpPath, filePath);
+      return;
+    } catch (err) {
+      if (err.code === 'EPERM' && attempt < maxRetries - 1) {
+        console.warn(`[atomicWriteJson] Rename failed (attempt ${attempt + 1}/${maxRetries}), retrying in ${retryDelay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, retryDelay * (attempt + 1)));
+      } else {
+        throw err;
+      }
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -143,7 +160,7 @@ async function doLogin() {
   try { await fs.unlink(LOGIN_READY_FILE); } catch { /* ignore */ }
 
   console.log('\n--- LOGIN REQUIRED ---');
-  console.log('1. Log in to Producer.ai in the browser window.');
+  console.log('1. Log in to FlowMusic.app in the browser window.');
   console.log('2. Wait until you see your song library.');
   console.log('3. In a NEW terminal run:  touch producer_login_ready');
   console.log('----------------------\n');
@@ -260,7 +277,24 @@ class ProducerArchiver {
     await fs.writeFile(tmpPath, JSON.stringify({
       completed: Array.from(this.completed).sort(),
     }, null, 2));
-    await fs.rename(tmpPath, COMPLETION_PATH);
+    
+    // Retry rename with backoff for Windows EPERM issues
+    const maxRetries = 5;
+    const retryDelay = 100; // ms
+    
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        await fs.rename(tmpPath, COMPLETION_PATH);
+        return;
+      } catch (err) {
+        if (err.code === 'EPERM' && attempt < maxRetries - 1) {
+          console.warn(`[persistCompletion] Rename failed (attempt ${attempt + 1}/${maxRetries}), retrying in ${retryDelay}ms...`);
+          await new Promise(resolve => setTimeout(resolve, retryDelay * (attempt + 1)));
+        } else {
+          throw err;
+        }
+      }
+    }
   }
 
   // -------------------------------------------------------------------------
@@ -649,7 +683,7 @@ async function main() {
     }
   });
   
-  console.log('Loading producer.ai...');
+  console.log('Loading flowmusic.app...');
   await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
   try { await page.waitForLoadState('networkidle', { timeout: 20000 }); } catch { /* ignore */ }
 
@@ -658,7 +692,7 @@ async function main() {
     try { await fs.unlink(LOGIN_READY_FILE); } catch { /* ignore */ }
 
     console.log('\n--- LOGIN REQUIRED ---');
-    console.log('1. Log in to Producer.ai in the browser window.');
+    console.log('1. Log in to FlowMusic.app in the browser window.');
     console.log('2. Wait until you see your song library.');
     console.log('3. In a NEW terminal run:  touch producer_login_ready');
     console.log('----------------------\n');
@@ -687,8 +721,8 @@ async function main() {
   // Extract the Bearer token using Playwright cookies API (more reliable than document.cookie)
   let accessToken = null;
   try {
-    const cookies = await context.cookies('https://www.producer.ai');
-    console.log(`[TokenExtraction] Found ${cookies.length} cookies for producer.ai`);
+    const cookies = await context.cookies('https://www.flowmusic.app');
+    console.log(`[TokenExtraction] Found ${cookies.length} cookies for flowmusic.app`);
     
     // Find auth-token cookies and combine them
     let rawCookieVal = '';
@@ -799,7 +833,7 @@ async function main() {
     // Re-extract access token after second reload using context.cookies()
     let freshToken = null;
     try {
-      const cookies = await context.cookies('https://www.producer.ai');
+      const cookies = await context.cookies('https://www.flowmusic.app');
       let rawCookieVal = '';
       for (let i = 0; i < 5; i++) {
         const cookieName = cookies.find(c => c.name === `sb-api-auth-token.${i}` || c.name === `sb-sb-auth-token.${i}`);

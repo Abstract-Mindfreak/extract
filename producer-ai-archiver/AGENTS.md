@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Producer.ai Archiver — a standalone Node.js script that uses Playwright to back up an entire Producer.ai music library. Downloads M4A audio, cover art (JPG), and full metadata (JSON) for every song.
+FlowMusic.app Archiver — a standalone Node.js script that uses Playwright to back up an entire FlowMusic.app music library. Downloads M4A audio, cover art (JPG), and full metadata (JSON) for every song.
 
 Single file: `archiver.mjs` (~700 lines). No framework, no build step.
 
@@ -58,7 +58,7 @@ Key classes:
 1. **All `fetch()` in `page.evaluate()` MUST use `credentials: 'include'`** — without this, cookies aren't sent and you get 401s even when logged in
 2. **Manifest JSON can exceed V8 string limits** — must stream to disk, never `JSON.stringify` the full manifest
 3. **Concurrent writes corrupt JSON files** — always use atomic writes (write to `.tmp`, then `fs.rename`)
-4. **~300 songs may have no audio** — these genuinely don't exist on Producer.ai's CDN (failed generations)
+4. **~300 songs may have no audio** — these genuinely don't exist on FlowMusic.app's CDN (failed generations)
 5. **Sessions expire** — Bearer tokens last a few hours; re-run with `--headful` to refresh
 
 ## Security

@@ -2,7 +2,7 @@
   "name": "prompt-db-local",
   "version": "0.1.0",
   "private": true,
-  "description": "Local Electron + React app for managing prompt JSON data and importing from producer.ai.",
+  "description": "Local Electron + React app for managing prompt JSON data and importing from flowmusic.app.",
   "main": "dist-electron/electron/main.js",
   "workspaces": [
     "renderer",

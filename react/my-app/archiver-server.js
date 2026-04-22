@@ -1,5 +1,5 @@
 /**
- * Producer.ai Archiver API Server
+ * FlowMusic.app Archiver API Server
  * Express server that wraps the archiver for browser communication
  * Run: node archiver-server.js
  */
@@ -19,7 +19,7 @@ const wss = new WebSocket.Server({ server });
 
 const PORT = process.env.ARCHIVER_PORT || 3456;
 const ARCHIVER_PATH = path.join(__dirname, '..', '..', 'producer-ai-archiver');
-const PRODUCER_BASE_URL = 'https://www.producer.ai';
+const PRODUCER_BASE_URL = 'https://www.flowmusic.app';
 const PRODUCER_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36';
 
 // Middleware
@@ -189,7 +189,7 @@ async function fetchConversationBatch(account, conversationIds) {
 
     const accessToken = await loadProducerAccessToken(page, context);
     if (!accessToken) {
-      throw new Error(`Could not extract Producer.ai access token for ${account.id}`);
+      throw new Error(`Could not extract FlowMusic.app access token for ${account.id}`);
     }
 
     return page.evaluate(async ({ accessToken, conversationIds }) => {
@@ -349,7 +349,7 @@ app.post('/api/accounts/:accountId/start', (req, res) => {
     PRODUCER_AUTH_STATE: path.join(ARCHIVER_PATH, account.authStateFile),
     PRODUCER_OUTPUT_DIR: path.join(ARCHIVER_PATH, account.outputDir),
     PRODUCER_CONCURRENCY: String(concurrency),
-    PRODUCER_BASE_URL: 'https://www.producer.ai'
+    PRODUCER_BASE_URL: 'https://www.flowmusic.app'
   };
 
   const args = ['archiver.mjs'];
@@ -468,7 +468,7 @@ app.post('/api/accounts/:accountId/cleanup', async (req, res) => {
   }
 });
 
-// Fetch conversation payloads for one account using saved Producer.ai auth
+// Fetch conversation payloads for one account using saved FlowMusic.app auth
 app.post('/api/accounts/:accountId/conversations/batch', async (req, res) => {
   try {
     const { accountId } = req.params;
@@ -527,7 +527,7 @@ app.get('/api/health', (req, res) => {
 // Start server
 server.listen(PORT, () => {
   console.log('='.repeat(50));
-  console.log('Producer.ai Archiver API Server');
+  console.log('FlowMusic.app Archiver API Server');
   console.log('='.repeat(50));
   console.log(`HTTP API: http://localhost:${PORT}`);
   console.log(`WebSocket: ws://localhost:${PORT}`);

@@ -796,7 +796,7 @@ function App() {
             <h1>Prismatic Core Dispatcher</h1>
             <p>
               Compact performance shell, full advanced controls, and isolated JSON prompt library
-              for producer.ai workflow.
+              for flowmusic.app workflow.
             </p>
             <button className="btn accent" onClick={launchCore}>
               Launch Core

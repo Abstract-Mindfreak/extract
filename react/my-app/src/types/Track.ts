@@ -1,5 +1,5 @@
 /**
- * Типы для треков Producer.ai Archive Manager
+ * Типы для треков FlowMusic.app Archive Manager
  */
 
 /** Основной тип трека */

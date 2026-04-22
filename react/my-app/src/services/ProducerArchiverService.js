@@ -1,5 +1,5 @@
 /**
- * Producer.ai Archiver Service (Browser Version)
+ * FlowMusic.app Archiver Service (Browser Version)
  * Communicates with archiver-server.js via HTTP API and WebSocket
  * Supports 4 accounts with different Google auth
  */

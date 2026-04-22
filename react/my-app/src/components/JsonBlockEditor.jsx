@@ -72,7 +72,7 @@ function JsonBlockEditor({ block, onSave, onExport }) {
         .map((tag) => tag.trim())
         .filter(Boolean),
       payload: {
-        type: "producer.ai_prompt",
+        type: "flowmusic.app_prompt",
         version: "1.0",
         data: parsedPayload,
       },

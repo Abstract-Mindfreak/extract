@@ -418,7 +418,7 @@ class LocalDataImporter {
           stage: 'extracting',
           current: 60 + Math.round((processedAccounts / totalAccounts) * 35),
           total: 100,
-          message: `Producer.ai enrichment: ${accountId}, ${conversationIds.length} conversation(s)`
+          message: `FlowMusic.app enrichment: ${accountId}, ${conversationIds.length} conversation(s)`
         });
       }
 
@@ -472,7 +472,7 @@ class LocalDataImporter {
     }
 
     if (enrichmentErrors.length > 0) {
-      console.warn('Producer.ai session enrichment warnings:', enrichmentErrors);
+      console.warn('FlowMusic.app session enrichment warnings:', enrichmentErrors);
     }
 
     return enrichedSessions;

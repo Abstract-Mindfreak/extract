@@ -1,13 +1,13 @@
-# Producer.ai Archiver
+# FlowMusic.app Archiver
 
-Emergency backup tool for Producer.ai — downloads your **entire music library** including M4A audio, cover art, and all metadata (lyrics, prompts, generation settings, seeds, etc.).
+Emergency backup tool for FlowMusic.app — downloads your **entire music library** including M4A audio, cover art, and all metadata (lyrics, prompts, generation settings, seeds, etc.).
 
 Built with Playwright for browser automation. Resumes on crash and skips already-downloaded songs.
 
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) 18+ installed
-- A Producer.ai account with songs in your library
+- A FlowMusic.app account with songs in your library
 
 ## Installation
 
@@ -27,7 +27,7 @@ npx playwright install chromium
 node archiver.mjs --headful
 ```
 
-1. A Chromium browser window will open and navigate to Producer.ai
+1. A Chromium browser window will open and navigate to FlowMusic.app
 2. **Log in** with your account in the browser window
 3. Once you see your song library, open a **separate terminal** and run:
    ```bash
@@ -92,7 +92,7 @@ The script is fully resumable:
 ## Known Limitations
 
 - **M4A only** — WAV/MP3 downloads require per-song API calls which would significantly slow down large archives
-- Some songs may return HTTP 404 if they failed to generate or were purged by Producer.ai
+- Some songs may return HTTP 404 if they failed to generate or were purged by FlowMusic.app
 - Sessions expire after a few hours; re-run with `--headful` to refresh
 
 ## Technical Details

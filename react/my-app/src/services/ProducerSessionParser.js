@@ -1,5 +1,5 @@
 /**
- * ProducerSessionParser — преобразует conversation payload из Producer.ai
+ * ProducerSessionParser — преобразует conversation payload из FlowMusic.app
  * в формат сессий приложения.
  */
 
@@ -233,7 +233,7 @@ class ProducerSessionParser {
       createdAt: conversation.created_at,
       updatedAt: conversation.last_message_at || conversation.created_at,
       metadata: {
-        source: 'producer.ai',
+        source: 'flowmusic.app',
         importedFromProducer: true,
         totalRawMessages: (conversation.messages || []).length
       }
@@ -375,7 +375,7 @@ class ProducerSessionParser {
   }
 
   generateSessionTitle(linkedTracks) {
-    if (!linkedTracks?.length) return 'Сессия Producer.ai';
+    if (!linkedTracks?.length) return 'Сессия FlowMusic.app';
     if (linkedTracks.length === 1) return linkedTracks[0].title;
     return `${linkedTracks[0].title} (+${linkedTracks.length - 1})`;
   }

@@ -34,7 +34,7 @@ export const DEFAULT_VISIBLE_COLUMNS = [
 ];
 
 export const APP_CONFIG = {
-  name: 'Producer.ai Archive Manager',
+  name: 'FlowMusic.app Archive Manager',
   version: '1.0.0',
   pageSize: 25,
   debounceDelay: 300

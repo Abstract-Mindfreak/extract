@@ -71,7 +71,7 @@ Chrome Extension
 {
   id: string;           // UUID импорта
   rawJson: string;      // Сырые JSON данные
-  source: string;       // Источник (producer.ai, file, ws-client)
+  source: string;       // Источник (flowmusic.app, file, ws-client)
   receivedAt: string;   // ISO timestamp
 }
 ```
@@ -125,7 +125,7 @@ type Tag = {
 
 | Location | Файл | Строка | Описание |
 |----------|------|--------|----------|
-| **3a** | `transform_blocks.py:50` | Нормализация producer.ai JSON |
+| **3a** | `transform_blocks.py:50` | Нормализация flowmusic.app JSON |
 | **3b** | `transform_blocks.py:53` | Определение домена и слоя |
 | **3c** | `indexer_v3.py:86` | Построение индекса с метаданными |
 | **3d** | `mutation_engine.py:55` | Создание вариаций блоков |
