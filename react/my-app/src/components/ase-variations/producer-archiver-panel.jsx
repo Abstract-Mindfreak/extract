@@ -238,7 +238,7 @@ export default function ProducerArchiverPanel() {
                 <span className="text-xs text-cyan-500 ml-2">{concurrency}</span>
               </div>
               <div className="text-[10px] text-cyan-700">
-                Output Base: <span className="text-cyan-500">d:\WORK\CLIENTS\extract\producer-ai-archiver</span>
+                Output Base: <span className="text-cyan-500">d:\WORK\CLIENTS\extract\flowmusic-archiver</span>
               </div>
             </div>
           </div>

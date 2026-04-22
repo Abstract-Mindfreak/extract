@@ -32,10 +32,10 @@ KIMI.md
 Thumbs.db
 
 # Personal data - FlowMusic.app Archiver
-producer-ai-archiver/producer_auth_*.json
-producer-ai-archiver/producer_login_ready
-producer-ai-archiver/producer_backup_*/
-!producer-ai-archiver/producer_backup_*/.gitkeep
+flowmusic-archiver/producer_auth_*.json
+flowmusic-archiver/producer_login_ready
+flowmusic-archiver/flowmusic_backup_*/
+!flowmusic-archiver/flowmusic_backup_*/.gitkeep
 
 # Archive files
 *.rar

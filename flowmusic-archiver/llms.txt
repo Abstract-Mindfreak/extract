@@ -1,0 +1,21 @@
+# FlowMusic.app Archiver
+
+> A Node.js backup tool that uses Playwright browser automation to download your entire FlowMusic.app music library — M4A audio, cover art, lyrics, prompts, and all metadata. Resumes on crash, skips already-downloaded songs, and handles Cloudflare-protected sessions.
+
+- This tool requires Node.js 18+ and runs a real Chromium browser to bypass Cloudflare bot detection
+- Authentication is handled via Supabase chunked cookies (`sb-api-auth-token.0`, `.1`, etc.) which encode a JWT Bearer token
+- The user must log in manually on first run (`--headful` flag), then signal readiness by running `touch producer_login_ready`
+- All API calls run inside `page.evaluate(fetch(...))` in the browser context with `credentials: 'include'`
+- Downloads are concurrent (default 8 workers) with retry and exponential backoff
+- Output goes to `producer_backup/` with hex-prefixed subfolders (e.g. `0a/`, `3f/`, `ff/`)
+- The manifest is streamed to JSON item-by-item to handle 8000+ song libraries without hitting V8 string limits
+
+## Docs
+
+- [README](README.md): Installation, usage instructions, and what gets downloaded
+- [Technical Reference](TECHNICAL_REFERENCE.md): Architecture, authentication flow, API endpoints, known issues, and output format
+
+## Source
+
+- [archiver.mjs](archiver.mjs): The main archival script — single-file, ~700 lines of JavaScript
+- [package.json](package.json): Dependencies (playwright, p-queue, p-retry)

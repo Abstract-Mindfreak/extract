@@ -277,7 +277,7 @@ export class ProducerArchiverManager {
     
     // Open via browser - can't directly open Explorer from browser
     // This would need a custom protocol or Electron
-    const outputDir = `d:\\WORK\\CLIENTS\\extract\\producer-ai-archiver\\${account.outputDir}`;
+    const outputDir = `d:\\WORK\\CLIENTS\\extract\\flowmusic-archiver\\${account.outputDir}`;
     console.log('Would open:', outputDir);
     // In a real implementation, this could use a custom URL scheme
     // or the server could handle this via an endpoint

@@ -1,5 +1,5 @@
 /**
- * FileSystemService — сканирование архива producer-ai-archiver
+ * FileSystemService — сканирование архива flowmusic-archiver
  * Поддерживает File System Access API + fallback на file input
  */
 
@@ -108,8 +108,8 @@ class FileSystemService implements IFileSystemService {
   }
 
   /**
-   * Сканировать архив producer-ai-archiver
-   * Структура: producer-ai-archiver/account_1/, account_2/, etc.
+   * Сканировать архив flowmusic-archiver
+   * Структура: flowmusic-archiver/account_1/, account_2/, etc.
    */
   async scanArchive(
     dirHandle: FileSystemDirectoryHandle,
@@ -247,7 +247,7 @@ class FileSystemService implements IFileSystemService {
       const file = files[i];
       const path = file.webkitRelativePath || file.name;
       
-      // Извлекаем account_id из пути: producer-ai-archiver/account_1/...
+      // Извлекаем account_id из пути: flowmusic-archiver/account_1/...
       const match = path.match(/account_(\d+)/);
       if (!match) continue;
 
@@ -380,7 +380,7 @@ class FileSystemService implements IFileSystemService {
   }
 
   /**
-   * Проверить структуру директории producer-ai-archiver
+   * Проверить структуру директории flowmusic-archiver
    */
   async validateArchiveStructure(dirHandle: FileSystemDirectoryHandle): Promise<{
     isValid: boolean;

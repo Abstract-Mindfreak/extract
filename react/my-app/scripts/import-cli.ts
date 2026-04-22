@@ -3,7 +3,7 @@
  * CLI-утилита для импорта архива flowmusic-archiver
  * 
  * Использование:
- *   npx ts-node scripts/import-cli.ts --input "./producer-ai-archiver" --accounts "1,2,3,4"
+ *   npx ts-node scripts/import-cli.ts --input "./flowmusic-archiver" --accounts "1,2,3,4"
  * 
  * Флаги:
  *   --input, -i      Путь к архиву (обязательный)
@@ -107,8 +107,8 @@ function formatSize(bytes: number): string {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-// Scan directory recursively for producer-ai-archiver structure
-// Structure: producer_backup_N/XX/uuid_title/meta.json
+// Scan directory recursively for flowmusic-archiver structure
+// Structure: flowmusic_backup_N/XX/uuid_title/meta.json
 async function scanDirectory(
   dirPath: string,
   accountIds: string[],
@@ -123,8 +123,8 @@ async function scanDirectory(
   };
 
   for (const accountId of accountIds) {
-    // Real structure uses producer_backup_N instead of account_N
-    const backupDir = path.join(dirPath, `producer_backup_${accountId}`);
+    // Real structure uses flowmusic_backup_N instead of account_N
+    const backupDir = path.join(dirPath, `flowmusic_backup_${accountId}`);
     
     try {
       const stat = await fs.stat(backupDir);
@@ -140,7 +140,7 @@ async function scanDirectory(
       }
       
       result.accountIds.push(accountId);
-      logger.verbose(`Сканирование producer_backup_${accountId}...`);
+      logger.verbose(`Сканирование flowmusic_backup_${accountId}...`);
 
       const sessionsDir = path.join(backupDir, 'sessions');
       try {
@@ -164,7 +164,7 @@ async function scanDirectory(
         }
       } catch (err) {
         if ((err as NodeJS.ErrnoException).code !== 'ENOENT') {
-          result.errors.push(`Ошибка чтения sessions producer_backup_${accountId}: ${(err as Error).message}`);
+          result.errors.push(`Ошибка чтения sessions flowmusic_backup_${accountId}: ${(err as Error).message}`);
         }
       }
 
@@ -232,7 +232,7 @@ async function scanDirectory(
       }
     } catch (err) {
       if ((err as NodeJS.ErrnoException).code !== 'ENOENT') {
-        result.errors.push(`Ошибка producer_backup_${accountId}: ${(err as Error).message}`);
+        result.errors.push(`Ошибка flowmusic_backup_${accountId}: ${(err as Error).message}`);
       }
     }
   }

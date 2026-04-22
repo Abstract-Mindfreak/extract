@@ -6,7 +6,7 @@ A comprehensive system for archiving tracks from FlowMusic.app and managing them
 
 ```
 extract/
-├── producer-ai-archiver/     # Node.js archiver for FlowMusic.app
+├── flowmusic-archiver/     # Node.js archiver for FlowMusic.app
 │   ├── archiver.mjs           # Main archiver script with Playwright
 │   ├── TECHNICAL_REFERENCE.md   # Technical documentation
 │   └── ...
@@ -36,12 +36,12 @@ Automated archiving system for FlowMusic.app tracks using Playwright browser aut
 
 ### Usage
 ```bash
-cd producer-ai-archiver
+cd flowmusic-archiver
 npm install
 node archiver.mjs --account 1 --headful
 ```
 
-See [producer-ai-archiver/TECHNICAL_REFERENCE.md](producer-ai-archiver/TECHNICAL_REFERENCE.md) for detailed documentation.
+See [flowmusic-archiver/TECHNICAL_REFERENCE.md](flowmusic-archiver/TECHNICAL_REFERENCE.md) for detailed documentation.
 
 ## 🎛️ MMSS Producer Station
 
@@ -90,7 +90,7 @@ The React app communicates with the archiver via:
 
 2. **Install dependencies**
    ```bash
-   cd producer-ai-archiver && npm install
+   cd flowmusic-archiver && npm install
    cd ../react/my-app && npm install
    ```
 
@@ -130,7 +130,7 @@ MIT License - See individual subdirectories for specific licensing.
 
 ```
 extract/
-├── producer-ai-archiver/     # Node.js архиватор для FlowMusic.app
+├── flowmusic-archiver/     # Node.js архиватор для FlowMusic.app
 │   ├── archiver.mjs           # Основной скрипт архиватора с Playwright
 │   ├── TECHNICAL_REFERENCE.md   # Техническая документация
 │   └── ...
@@ -160,12 +160,12 @@ extract/
 
 ### Использование
 ```bash
-cd producer-ai-archiver
+cd flowmusic-archiver
 npm install
 node archiver.mjs --account 1 --headful
 ```
 
-Подробная документация: [producer-ai-archiver/TECHNICAL_REFERENCE.md](producer-ai-archiver/TECHNICAL_REFERENCE.md)
+Подробная документация: [flowmusic-archiver/TECHNICAL_REFERENCE.md](flowmusic-archiver/TECHNICAL_REFERENCE.md)
 
 ## 🎛️ MMSS Producer Station
 
@@ -214,7 +214,7 @@ React приложение коммуницирует с архиватором 
 
 2. **Установка зависимостей**
    ```bash
-   cd producer-ai-archiver && npm install
+   cd flowmusic-archiver && npm install
    cd ../react/my-app && npm install
    ```
 

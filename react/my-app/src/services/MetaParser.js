@@ -223,7 +223,7 @@ class MetaParser {
       return String(raw.operation.conversation_id);
     }
 
-    // Реальный архив producer-ai-archiver хранит значение здесь
+    // Реальный архив flowmusic-archiver хранит значение здесь
     if (raw.raw_data?.operation?.conversation_id) {
       return String(raw.raw_data.operation.conversation_id);
     }
@@ -263,8 +263,8 @@ class MetaParser {
       .replace(/\\/g, '/')
       .replace(/^\/+/, '');
 
-    // Убираем префикс producer-ai-archiver если есть
-    const withoutPrefix = cleanPath.replace(/^producer-ai-archiver\//, '');
+    // Убираем префикс flowmusic-archiver если есть
+    const withoutPrefix = cleanPath.replace(/^flowmusic-archiver\//, '');
 
     return `${base}${withoutPrefix}`;
   }

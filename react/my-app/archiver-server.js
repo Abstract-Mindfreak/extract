@@ -18,7 +18,7 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 const PORT = process.env.ARCHIVER_PORT || 3456;
-const ARCHIVER_PATH = path.join(__dirname, '..', '..', 'producer-ai-archiver');
+const ARCHIVER_PATH = path.join(__dirname, '..', '..', 'flowmusic-archiver');
 const PRODUCER_BASE_URL = 'https://www.flowmusic.app';
 const PRODUCER_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36';
 

@@ -15,7 +15,7 @@ Multi-account archiver for FlowMusic.app integrated into ASE Master Console.
 
 Archiver is already cloned and dependencies installed:
 ```
-d:\WORK\CLIENTS\extract\producer-ai-archiver\
+d:\WORK\CLIENTS\extract\flowmusic-archiver\
 ```
 
 Dependencies:
@@ -91,17 +91,17 @@ After authentication:
 
 Each account has separate folder:
 ```
-producer-ai-archiver/
-├── producer_backup_1/     # Account 1 songs
+flowmusic-archiver/
+├── flowmusic_backup_1/     # Account 1 songs
 │   ├── ab/
 │   │   └── abc123_Song Title/
 │   │       ├── audio.m4a
 │   │       ├── image.jpg
 │   │       ├── video.mp4
 │   │       └── meta.json
-├── producer_backup_2/     # Account 2 songs
-├── producer_backup_3/     # Account 3 songs
-└── producer_backup_4/     # Account 4 songs
+├── flowmusic_backup_2/     # Account 2 songs
+├── flowmusic_backup_3/     # Account 3 songs
+└── flowmusic_backup_4/     # Account 4 songs
 ```
 
 ## Metadata Included
@@ -159,7 +159,7 @@ Since React runs in the browser and cannot access Node.js modules (child_process
         │                                               │
         │                                               │
         ▼                                               ▼
-ASEMasterConsole                              producer-ai-archiver
+ASEMasterConsole                              flowmusic-archiver
                                                       │
                                                       ▼
                                                Playwright Browser
@@ -217,4 +217,4 @@ react/my-app/src/
 
 ## License
 
-Same as producer-ai-archiver (presumably MIT)
+Same as flowmusic-archiver (presumably MIT)

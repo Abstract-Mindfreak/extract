@@ -2,7 +2,7 @@
 
 ## Текущий фокус
 
-1. Починить импорт реальных `meta.json` из `producer-ai-archiver`, чтобы не терялись:
+1. Починить импорт реальных `meta.json` из `flowmusic-archiver`, чтобы не терялись:
    - `raw_data.operation.sound_prompt`
    - `raw_data.operation.conversation_id`
    - session-ссылка вида `https://www.flowmusic.app/session/<conversationId>#song-<trackId>`
@@ -24,9 +24,9 @@
   - добавлен парсер FlowMusic.app conversation payload → session model приложения
 - `LocalDataImporter.js`
   - добавлен enrichment сессий через FlowMusic.app поверх локального архива
-- `producer-ai-archiver/archiver.mjs`
+- `flowmusic-archiver/archiver.mjs`
   - run стал двухфазным: после harvest/download сохраняет реальные session payloads
-  - session JSON пишутся в `producer_backup_N/sessions/session_<conversationId>.json`
+  - session JSON пишутся в `flowmusic_backup_N/sessions/session_<conversationId>.json`
   - создаётся `session_capture_summary.json`
 - `StorageService.js`
   - добавлена нормализация фрагментов перед записью в IndexedDB
