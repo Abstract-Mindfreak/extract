@@ -36,6 +36,7 @@ flowmusic-archiver/producer_auth_*.json
 flowmusic-archiver/producer_login_ready
 flowmusic-archiver/flowmusic_backup_*/
 !flowmusic-archiver/flowmusic_backup_*/.gitkeep
+flowmusic-archiver/producer_backup_*/
 
 # Archive files
 *.rar

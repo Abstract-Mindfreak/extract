@@ -43,7 +43,7 @@ class MetaParser {
     const track = {
       id: meta.id,
       title: meta.title || 'Untitled',
-      accountId: parseInt(accountId, 10) || 0,
+      accountId: Number(accountId) || 0,
       
       // Медиа
       coverUrl: imagePath ? this.toPublicUrl(imagePath) : '',

@@ -49,6 +49,7 @@ export const useTrackStore = create((set, get) => ({
     
     try {
       const tracks = await mockDataService.getAllTracks();
+      console.log(`Loaded ${tracks.length} tracks from database`);
       
       // Apply filters immediately with new tracks
       const { filters, sortConfig } = get();
@@ -65,12 +66,14 @@ export const useTrackStore = create((set, get) => ({
       }
       
       if (filters.accounts.length > 0) {
+        console.log(`Account filter active: ${filters.accounts.join(', ')}`);
         filtered = filtered.filter(track => 
           filters.accounts.includes(track.accountId)
         );
       }
       
       if (filters.rating !== null) {
+        console.log(`Rating filter active: >= ${filters.rating}`);
         filtered = filtered.filter(track => track.rating >= filters.rating);
       }
       
@@ -87,6 +90,8 @@ export const useTrackStore = create((set, get) => ({
         if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
         return 0;
       });
+      
+      console.log(`After filtering: ${filtered.length} tracks shown`);
       
       set({ 
         tracks,

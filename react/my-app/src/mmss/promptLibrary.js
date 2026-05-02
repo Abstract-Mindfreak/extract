@@ -167,7 +167,7 @@ export function reducePromptLibrary(state, action) {
         activeComposition: {
           ...state.activeComposition,
           blockIds: [...state.activeComposition.blockIds, action.blockId],
-          source: "manual",
+          source: action.source || "manual",
         },
       });
 
@@ -177,7 +177,7 @@ export function reducePromptLibrary(state, action) {
         activeComposition: {
           ...state.activeComposition,
           blockIds: state.activeComposition.blockIds.filter((_, index) => index !== action.index),
-          source: "manual",
+          source: action.source || "manual",
         },
       });
 
@@ -190,7 +190,7 @@ export function reducePromptLibrary(state, action) {
         activeComposition: {
           ...state.activeComposition,
           blockIds: nextIds,
-          source: "manual",
+          source: action.source || "manual",
         },
       });
     }
@@ -203,6 +203,7 @@ export function reducePromptLibrary(state, action) {
           blockIds: [],
           combinedJson: {},
           source: null,
+          externalPipeline: null,
         },
       });
 
@@ -212,7 +213,11 @@ export function reducePromptLibrary(state, action) {
         activeComposition: {
           ...state.activeComposition,
           blockIds: Array.isArray(action.blockIds) ? action.blockIds : [],
-          source: "manual",
+          mergeStrategy: MERGE_STRATEGIES.includes(action.mergeStrategy)
+            ? action.mergeStrategy
+            : state.activeComposition.mergeStrategy,
+          source: action.source || "manual",
+          externalPipeline: action.externalPipeline || null,
         },
       });
 
@@ -237,6 +242,7 @@ export function reducePromptLibrary(state, action) {
                   ...action.context,
                 }
               : state.activeComposition.context,
+          externalPipeline: null,
         },
       });
 
@@ -328,6 +334,8 @@ export function reducePromptLibrary(state, action) {
             state.sequencePressMode === "append"
               ? [...state.activeComposition.blockIds, ...orderedBlockIds]
               : orderedBlockIds,
+          source: "binding_sequence",
+          externalPipeline: null,
         },
       });
     }
@@ -491,6 +499,7 @@ function syncPromptLibraryState(state) {
       ...state.activeComposition,
       mergeStrategy,
       source: state.activeComposition?.source || null,
+      externalPipeline: state.activeComposition?.externalPipeline || null,
       context: state.activeComposition?.context || DEFAULT_BLOCKLY_CONTEXT,
       blocklyWorkspaceXml:
         state.activeComposition?.blocklyWorkspaceXml || DEFAULT_BLOCKLY_WORKSPACE_XML,
@@ -885,6 +894,7 @@ function createDefaultPromptLibraryState() {
       combinedJson: {},
       mergeStrategy: "merge_deep",
       source: null,
+      externalPipeline: null,
       context: DEFAULT_BLOCKLY_CONTEXT,
       blocklyWorkspaceXml: DEFAULT_BLOCKLY_WORKSPACE_XML,
     },

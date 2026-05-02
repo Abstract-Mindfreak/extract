@@ -394,6 +394,154 @@ code {
   margin-top: 0;
 }
 
+.ase-console {
+  display: grid;
+  gap: 18px;
+}
+
+.ase-console__hero,
+.ase-json-panel__header,
+.ase-sidebar__header,
+.ase-detail__header,
+.ase-control-card__head,
+.ase-mode-card__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+}
+
+.ase-console__actions,
+.ase-console__summary,
+.ase-fragment-grid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ase-summary-card,
+.ase-inline-badge,
+.ase-mode-card,
+.ase-control-card,
+.ase-fragment-card,
+.ase-json-panel,
+.ase-sidebar,
+.ase-detail {
+  border: 1px solid var(--stroke);
+  background: var(--surface-strong);
+  border-radius: 22px;
+}
+
+.ase-summary-card {
+  flex: 1 1 180px;
+  padding: 14px 16px;
+  display: grid;
+  gap: 6px;
+}
+
+.ase-summary-card span,
+.ase-mode-card span,
+.ase-control-card span,
+.ase-fragment-card p,
+.ase-inline-badge span,
+.ase-sidebar__header span {
+  color: var(--muted);
+}
+
+.ase-summary-card strong {
+  font-size: 1.1rem;
+}
+
+.ase-console__layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.4fr);
+  gap: 18px;
+}
+
+.ase-sidebar,
+.ase-detail,
+.ase-json-panel {
+  padding: 18px;
+}
+
+.ase-mode-list,
+.ase-control-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.ase-mode-card {
+  padding: 14px;
+  text-align: left;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.ase-mode-card.is-active {
+  border-color: rgba(61, 122, 87, 0.32);
+  box-shadow: 0 10px 30px rgba(61, 122, 87, 0.08);
+  transform: translateY(-1px);
+}
+
+.ase-mode-card.is-selected {
+  background: linear-gradient(135deg, var(--accent-soft), transparent), var(--surface-strong);
+}
+
+.ase-mode-card p,
+.ase-control-card p,
+.ase-fragment-card h5,
+.ase-detail h4,
+.ase-sidebar h4,
+.ase-json-panel h4,
+.ase-console h3 {
+  margin: 0;
+}
+
+.ase-control-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-bottom: 18px;
+}
+
+.ase-control-card,
+.ase-fragment-card {
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.ase-control-card code,
+.ase-fragment-card code {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+}
+
+.ase-tip-box {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(61, 122, 87, 0.1), transparent), var(--surface);
+}
+
+.ase-inline-badge {
+  max-width: 320px;
+  padding: 12px 14px;
+  gap: 8px;
+}
+
+.ase-inline-badge strong {
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.ase-json-panel pre {
+  margin: 0;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.06);
+  max-height: 420px;
+}
+
 @media (max-width: 1100px) {
   .app-shell {
     padding: 20px;
@@ -414,5 +562,18 @@ code {
   .inline-row {
     grid-template-columns: 1fr;
     display: grid;
+  }
+
+  .ase-console__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .ase-console__hero,
+  .ase-json-panel__header,
+  .ase-sidebar__header,
+  .ase-detail__header,
+  .ase-control-card__head,
+  .ase-mode-card__top {
+    flex-direction: column;
   }
 }

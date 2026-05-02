@@ -19,6 +19,7 @@ export default function ProducerArchiverPanel() {
   const [concurrency, setConcurrency] = useState(4);
   const [globalStatus, setGlobalStatus] = useState("idle");
   const [serverStatus, setServerStatus] = useState("checking");
+  const [autoScrollLogs, setAutoScrollLogs] = useState(false);
   const logsEndRef = useRef(null);
 
   // Load accounts on mount
@@ -81,10 +82,10 @@ export default function ProducerArchiverPanel() {
 
   // Auto-scroll logs
   useEffect(() => {
-    if (activeAccount && expandedLogs[activeAccount] && logsEndRef.current) {
+    if (autoScrollLogs && activeAccount && expandedLogs[activeAccount] && logsEndRef.current) {
       logsEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [logs, activeAccount, expandedLogs]);
+  }, [logs, activeAccount, expandedLogs, autoScrollLogs]);
 
   const loadAccountStats = async (accountId) => {
     const stat = await archiverManager.getAccountStats(accountId);
@@ -239,6 +240,18 @@ export default function ProducerArchiverPanel() {
               </div>
               <div className="text-[10px] text-cyan-700">
                 Output Base: <span className="text-cyan-500">d:\WORK\CLIENTS\extract\flowmusic-archiver</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="autoScrollLogs"
+                  checked={autoScrollLogs}
+                  onChange={(e) => setAutoScrollLogs(e.target.checked)}
+                  className="accent-pink-600"
+                />
+                <label htmlFor="autoScrollLogs" className="text-[10px] text-cyan-700 cursor-pointer">
+                  Auto-scroll logs
+                </label>
               </div>
             </div>
           </div>

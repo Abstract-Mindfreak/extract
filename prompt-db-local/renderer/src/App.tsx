@@ -10,6 +10,7 @@ import { PromptList } from '@/components/PromptList';
 import { SequencePresetsPanel } from '@/components/SequencePresetsPanel';
 import { TagKeyExplorer } from '@/components/TagKeyExplorer';
 import { SessionPanel } from '@/components/SessionPanel';
+import { AseUnifiedConsole } from '@/components/AseUnifiedConsole';
 import { usePrompts } from '@/hooks/usePrompts';
 import { usePromptStore } from '@/store/promptStore';
 import { useSessionImporter } from '@/hooks/useSessionImporter';
@@ -130,6 +131,7 @@ const App = () => {
     'import-flow',
     'tag-explorer',
     'sequence-presets',
+    'ase-unified-console',
     'prompt-editor',
     'mmss-runtime',
     'export-panel',
@@ -240,6 +242,17 @@ const App = () => {
               presets={keySequencePresets}
               onPersist={persistSequencePresets}
             />
+          </CollapsiblePanel>
+
+          <CollapsiblePanel
+            id="ase-unified-console"
+            title="ASE Unified Console"
+            eyebrow="Master Rack"
+            badge="MMSS JSON"
+            badgeType="success"
+            defaultExpanded={true}
+          >
+            <AseUnifiedConsole />
           </CollapsiblePanel>
 
           {/* Prompt Editor */}

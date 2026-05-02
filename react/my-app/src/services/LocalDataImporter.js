@@ -125,8 +125,12 @@ class LocalDataImporter {
           stage: 'extracting',
           current: 0,
           total: 100,
-          message: 'Извлечение сессий...'
+          message: `Успешно распарсено ${tracks.length} из ${trackDirs.length} треков${errors.length > 0 ? ` (${errors.length} ошибок)` : ''}`
         });
+      }
+
+      if (errors.length > 0) {
+        console.warn('Track parsing errors:', errors);
       }
 
       const extractionResult = sessionExtractor.extract(tracks);

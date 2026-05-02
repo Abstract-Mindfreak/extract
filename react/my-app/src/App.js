@@ -33,6 +33,7 @@ import {
 import {
   DEFAULT_BLOCKLY_WORKSPACE_XML,
   combinePromptBlocks,
+  createEntityId,
   parsePromptImportText,
   exportPromptLibraryFile,
   loadPromptLibraryState,
@@ -750,6 +751,119 @@ function App() {
     });
   }
 
+  function handleApplyAseUnifiedToSequenceBuilder(unifiedConfig) {
+    if (!unifiedConfig || !Array.isArray(unifiedConfig.modes) || !unifiedConfig.modes.length) {
+      dispatch({ type: "append_log", message: "ASE unified export skipped: no modes selected." });
+      return;
+    }
+
+    if (!libraryReady) {
+      handleLoadLibrary();
+    }
+
+    const modeBlocks = unifiedConfig.modes.map((mode, index) => {
+      const blockId = `ase_mode_${mode.id}`;
+      return {
+        id: blockId,
+        name: mode.name || mode.label || `ASE Mode ${index + 1}`,
+        description: mode.description || "Generated from ASE Unified Console",
+        category: mode.category || "ase_mode",
+        tags: Array.isArray(mode.tags) ? [...mode.tags, "ase_console", "unified_pipeline"] : ["ase_console", "unified_pipeline"],
+        payload: {
+          type: "flowmusic.app_prompt",
+          version: "1.0",
+          data: {
+            ase_mode: mode,
+            fragment: mode.fragment || null,
+          },
+        },
+        ui: {
+          color: "#ff8bd6",
+          icon: "ase",
+          boundButtonId: null,
+        },
+        sourceMeta: {
+          source: "ase_console",
+          pipeline: "unified",
+          order: index + 1,
+        },
+      };
+    });
+
+    const masterBlock = {
+      id: "ase_unified_master",
+      name: "ASE Unified Master",
+      description: "Master MMSS JSON generated from ASE Unified Console",
+      category: "ase_master",
+      tags: ["ase_console", "master", "mmss", "unified_json"],
+      payload: {
+        type: "flowmusic.app_prompt",
+        version: "1.0",
+        data: unifiedConfig,
+      },
+      ui: {
+        color: "#9be0ff",
+        icon: "stack",
+        boundButtonId: null,
+      },
+      sourceMeta: {
+        source: "ase_console",
+        pipeline: "master",
+      },
+    };
+
+    const allBlocks = [...modeBlocks, masterBlock];
+    const existingIds = new Set(state.promptLibrary.blocks.map((block) => block.id));
+    allBlocks.forEach((block) => {
+      dispatch({
+        type: existingIds.has(block.id) ? "PROMPT_BLOCK_UPDATE" : "PROMPT_BLOCK_CREATE",
+        block,
+      });
+    });
+
+    const orderedBlockIds = [...modeBlocks.map((block) => block.id), masterBlock.id];
+    dispatch({
+      type: "PROMPT_ACTIVE_COMPOSITION_SET",
+      blockIds: orderedBlockIds,
+      mergeStrategy: "merge_deep",
+      source: "ase_console",
+      externalPipeline: {
+        source: "ASE Unified Console",
+        label: unifiedConfig.masterConsole?.name || "ASE Unified Console",
+        modeCount: unifiedConfig.modes.length,
+        mergeStrategy: "merge_deep",
+        orderSummary: unifiedConfig.modes.map((mode) => mode.shortName || mode.name || mode.id).join(" -> "),
+      },
+    });
+    dispatch({ type: "PROMPT_SET_MERGE_STRATEGY", mergeStrategy: "merge_deep" });
+
+    const sequence = {
+      id: `sequence_ase_${Date.now()}`,
+      name: `ASE Unified ${new Date().toLocaleTimeString()}`,
+      description: "Sequence generated from ASE Unified Console",
+      blocks: orderedBlockIds.map((blockId, index) => ({ blockId, order: index })),
+      mergeStrategy: "merge_deep",
+      ui: {
+        color: "#ffb4e8",
+        icon: "ase",
+        boundButtonId: null,
+      },
+      sourceMeta: {
+        source: "ase_console",
+      },
+      conversationId: createEntityId("ase"),
+      linkedTrackIds: [],
+    };
+    dispatch({ type: "PROMPT_SEQUENCE_CREATE", sequence });
+
+    setActiveTab("prompt_library");
+    setActivePromptPanel("json_sequence_builder");
+    dispatch({
+      type: "append_log",
+      message: `ASE unified pipeline loaded into JsonSequenceBuilder (${orderedBlockIds.length} block(s)).`,
+    });
+  }
+
   function handleMovePromptPanel(panelId, direction) {
     const currentIndex = promptPanelOrder.indexOf(panelId);
     if (currentIndex < 0) return;
@@ -1297,6 +1411,7 @@ function App() {
         {activeTab === "ase_console" ? (
           <div className="tab-view ase-console-view">
             <ASEMasterConsole
+              onSendToSequenceBuilder={handleApplyAseUnifiedToSequenceBuilder}
               onSaveToDatabase={(config) => {
                 const existing = JSON.parse(localStorage.getItem(ASE_DB_STORAGE_KEY) || "[]");
                 const updated = [...existing, { ...config, savedAt: new Date().toISOString() }];

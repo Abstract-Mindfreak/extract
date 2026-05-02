@@ -43,8 +43,26 @@ function JsonSequenceBuilder({
     });
   }, [sequences, sourceFilter]);
 
+  const externalPipeline = activeComposition?.externalPipeline || null;
+
   return (
     <div className="json-sequence-builder">
+      {externalPipeline ? (
+        <div className="sequence-pipeline-banner">
+          <div>
+            <strong>{externalPipeline.label || "External Pipeline"}</strong>
+            <p>
+              Источник: {externalPipeline.source || "external"}.
+              Порядок модулей влияет на merge pipeline и уже перенесён в активную композицию.
+            </p>
+          </div>
+          <div className="sequence-pipeline-meta">
+            <span>{externalPipeline.modeCount || 0} modes</span>
+            <span>{externalPipeline.mergeStrategy || activeComposition.mergeStrategy}</span>
+          </div>
+        </div>
+      ) : null}
+
       <div className="sequence-builder-top">
         <div>
           <strong>Saved Sequences</strong>
@@ -117,6 +135,11 @@ function JsonSequenceBuilder({
             <option value="merge_deep">merge_deep</option>
           </select>
         </label>
+        {externalPipeline ? (
+          <div className="merge-strip-note">
+            Unified pipeline: {externalPipeline.orderSummary || "custom order"}
+          </div>
+        ) : null}
       </div>
 
       <div className="preset-builder">
@@ -180,7 +203,12 @@ function JsonSequenceBuilder({
       <div className="composition-blocks">
         {compositionBlocks.map((entry, index) => (
           <div className="composition-chip" key={`${entry.block?.id || "missing"}_${index}`}>
-            <span>{entry.block?.name || "Missing block"}</span>
+            <div className="composition-chip-main">
+              <span>{entry.block?.name || "Missing block"}</span>
+              {entry.block?.sourceMeta?.source ? (
+                <small>{entry.block.sourceMeta.source}</small>
+              ) : null}
+            </div>
             <div>
               <button onClick={() => onReorder(index, Math.max(0, index - 1))} disabled={index === 0}>
                 Up
