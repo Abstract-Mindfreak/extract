@@ -38,16 +38,16 @@ const ASE_STORAGE_KEY = "mmss.ase.configurations.v1";
 const ASE_STATE_KEY = "mmss.ase.currentState.v1";
 
 const FORMULAS = [
-  { id: "PHI_TOTAL", label: "О¦_total", formula: "Fix(ОЁ -> Stack_Engine ∘ T_ОЁ)", desc: "Recursive self-optimization" },
+  { id: "PHI_TOTAL", label: "Φ_total", formula: "Fix(Ψ -> Stack_Engine ∘ T_Ψ)", desc: "Recursive self-optimization" },
   { id: "ENTROPY", label: "Entropy H(p,c)", formula: "(p * log(1/p)) + (c * exp(D_f / R_T))", desc: "Order and chaos balance" },
   { id: "GRAVITY", label: "Quantum Grav", formula: "∫ (Freq_Hop * Anti_Grid) dt", desc: "Gravity inversion layer" },
-  { id: "DENSITY", label: "Field Density", formula: "∇ · (ОЁ(G) ⊗ R_T) = ∂О·/∂t", desc: "Spectral density map" },
+  { id: "DENSITY", label: "Field Density", formula: "∇ · (Ψ(G) ⊗ R_T) = ∂Φ/∂t", desc: "Spectral density map" },
 ];
 
 const LOGIC_STACKS = {
-  basic: ["G_BASE", "О¦_DIV", "Q_GRAV", "M_SHIFT"],
-  extended: ["G_BASE", "О¦_DIV", "Q_GRAV", "M_SHIFT", "ОЁ_RECUR", "ОЈ_SYNTH"],
-  supreme: ["G_BASE", "О¦_DIV", "Q_GRAV", "M_SHIFT", "ОЁ_RECUR", "ОЈ_SYNTH", "в€‡_DENSITY", "в†¦_MAP"],
+  basic: ["G_BASE", "Φ_DIV", "Q_GRAV", "M_SHIFT"],
+  extended: ["G_BASE", "Φ_DIV", "Q_GRAV", "M_SHIFT", "Ψ_RECUR", "Σ_SYNTH"],
+  supreme: ["G_BASE", "Φ_DIV", "Q_GRAV", "M_SHIFT", "Ψ_RECUR", "Σ_SYNTH", "∇_DENSITY", "↦_MAP"],
 };
 
 const LFE_MODES = ["AMBIENT", "COLLAPSE", "DRAMA_PEAK", "META_FRACTAL"];
@@ -234,11 +234,11 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
   const [lfeMode, setLfeMode] = useState("AMBIENT");
   const [phiSync, setPhiSync] = useState(true);
   const [logicStack, setLogicStack] = useState(LOGIC_STACKS.extended);
-  const [metaKey, setMetaKey] = useState("О¦_KEY_0411_ALPHA");
+  const [metaKey, setMetaKey] = useState("Φ_KEY_0411_ALPHA");
   const [hyperParams, setHyperParams] = useState(DEFAULT_HYPER_PARAMS);
   const [opMode, setOpMode] = useState("ANNIHILATE");
   const [quantumState, setQuantumState] = useState("COLLAPSED");
-  const [events, setEvents] = useState(["SYNC_LOCK_ESTABLISHED", "О¦_STREAM_INITIALIZED"]);
+  const [events, setEvents] = useState(["SYNC_LOCK_ESTABLISHED", "Φ_STREAM_INITIALIZED"]);
   const [activeTab, setActiveTab] = useState("control");
   const [savedConfigs, setSavedConfigs] = useState([]);
   const [selectedConfig, setSelectedConfig] = useState(null);
@@ -303,7 +303,7 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
         setLfeMode(state.lfeMode || "AMBIENT");
         setPhiSync(state.phiSync ?? true);
         setLogicStack(state.logicStack || LOGIC_STACKS.extended);
-        setMetaKey(state.metaKey || "О¦_KEY_0411_ALPHA");
+        setMetaKey(state.metaKey || "Φ_KEY_0411_ALPHA");
         setHyperParams(state.hyperParams || DEFAULT_HYPER_PARAMS);
         setOpMode(state.opMode || "ANNIHILATE");
         setQuantumState(state.quantumState || "COLLAPSED");
@@ -352,8 +352,8 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
         const nextEvent = [
           `DRIFT_CORRECTED_${Math.random().toString(16).slice(2, 6).toUpperCase()}`,
           `PHASE_SHIFT_${(Math.random() * 100).toFixed(0)}`,
-          "О·_THRESHOLD_REACHED",
-          `О¦_PULSE_${(Math.random() * 1000).toFixed(0)}`,
+          "Φ_THRESHOLD_REACHED",
+          `Φ_PULSE_${(Math.random() * 1000).toFixed(0)}`,
           "ENTROPY_HARVESTED",
           "Q_STATE_COLLAPSED",
         ];
@@ -787,7 +787,7 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
                 ASE MASTER CONSOLE <span className="text-pink-500 italic">v5.UNIFIED</span>
               </h1>
               <div className="flex gap-3 text-[9px] uppercase tracking-[0.3em] text-cyan-800">
-                <span>О¦-Sync: {phiSync ? "ENABLED" : "BYPASS"}</span>
+                <span>Φ-Sync: {phiSync ? "ENABLED" : "BYPASS"}</span>
                 <span className="text-pink-900">/</span>
                 <span>Stack: {logicStack.length} OPS</span>
                 <span className="text-pink-900">/</span>
@@ -856,7 +856,7 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
               onClick={() => setPhiSync((current) => !current)}
               className={`px-4 py-1 text-[10px] font-bold border transition-all ${phiSync ? "border-pink-500 text-pink-500 bg-pink-500/10" : "border-cyan-900 text-cyan-800 hover:text-cyan-500"}`}
             >
-              FORCE О¦-RESONANCE
+              FORCE Φ-RESONANCE
             </button>
             <button
               onClick={() => setIsFullscreen((current) => !current)}
@@ -964,12 +964,12 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4 border-t border-cyan-900/20 pt-6">
-          <StatBox label="О¦_TOTAL" value={(entropy.p * 1.618).toFixed(4)} />
-          <StatBox label="О·_PURITY" value={`${(hyperParams.purity * 100).toFixed(1)}%`} />
+          <StatBox label="Φ_TOTAL" value={(entropy.p * 1.618).toFixed(4)} />
+          <StatBox label="Φ_PURITY" value={`${(hyperParams.purity * 100).toFixed(1)}%`} />
           <StatBox label="VELOCITY" value={currentVelocity} />
           <StatBox label="FRACTAL" value={currentFractal} />
           <StatBox label="NEGENTROPY" value={currentNegentropy} />
-          <StatBox label="SYNC_MODE" value={phiSync ? "О¦_LOCK" : "BYPASS"} color="text-pink-500" />
+          <StatBox label="SYNC_MODE" value={phiSync ? "Φ_LOCK" : "BYPASS"} color="text-pink-500" />
         </div>
       </div>
     </div>
