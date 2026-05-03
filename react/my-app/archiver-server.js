@@ -12,6 +12,7 @@ const fs = require('fs/promises');
 const { existsSync } = require('fs');
 const http = require('http');
 const WebSocket = require('ws');
+const archiverAccounts = require('./src/config/flowmusicArchiverAccounts.json');
 
 const app = express();
 const server = http.createServer(app);
@@ -29,49 +30,30 @@ app.use(express.json());
 // Active processes store
 const activeProcesses = new Map();
 
-// Default accounts config
-const DEFAULT_ACCOUNTS = [
-  {
-    id: 'account_1',
-    name: 'Account 1',
-    color: '#ef4444',
-    authStateFile: 'producer_auth_1.json',
-    outputDir: 'producer_backup_1',
-    isConfigured: false
-  },
-  {
-    id: 'account_2',
-    name: 'Account 2',
-    color: '#3b82f6',
-    authStateFile: 'producer_auth_2.json',
-    outputDir: 'producer_backup_2',
-    isConfigured: false
-  },
-  {
-    id: 'account_3',
-    name: 'Account 3',
-    color: '#22c55e',
-    authStateFile: 'producer_auth_3.json',
-    outputDir: 'producer_backup_3',
-    isConfigured: false
-  },
-  {
-    id: 'account_4',
-    name: 'Account 4',
-    color: '#a855f7',
-    authStateFile: 'producer_auth_4.json',
-    outputDir: 'producer_backup_4',
-    isConfigured: false
-  },
-  {
-    id: 'account_5',
-    name: 'Account 5',
-    color: '#f97316',
-    authStateFile: 'producer_auth_5.json',
-    outputDir: 'producer_backup_5',
-    isConfigured: false
+const DEFAULT_ACCOUNTS = archiverAccounts.map((account) => ({
+  ...account,
+  isConfigured: false,
+}));
+
+function resolveAccountFile(preferredName, legacyName) {
+  const preferredPath = path.join(ARCHIVER_PATH, preferredName);
+  if (existsSync(preferredPath) || !legacyName) {
+    return preferredPath;
   }
-];
+
+  const legacyPath = path.join(ARCHIVER_PATH, legacyName);
+  return existsSync(legacyPath) ? legacyPath : preferredPath;
+}
+
+function resolveAccountDir(account) {
+  const preferredPath = path.join(ARCHIVER_PATH, account.outputDir);
+  if (existsSync(preferredPath) || !account.legacyOutputDir) {
+    return preferredPath;
+  }
+
+  const legacyPath = path.join(ARCHIVER_PATH, account.legacyOutputDir);
+  return existsSync(legacyPath) ? legacyPath : preferredPath;
+}
 
 // WebSocket connection handling
 wss.on('connection', (ws) => {
@@ -156,7 +138,7 @@ async function loadProducerAccessToken(page, context) {
 }
 
 async function fetchConversationBatch(account, conversationIds) {
-  const authFile = path.join(ARCHIVER_PATH, account.authStateFile);
+  const authFile = resolveAccountFile(account.authStateFile, account.legacyAuthStateFile);
   if (!existsSync(authFile)) {
     throw new Error(`Auth state not found for ${account.id}`);
   }
@@ -245,8 +227,8 @@ async function fetchConversationBatch(account, conversationIds) {
 
 // Get account with status
 async function getAccountStatus(account) {
-  const authFile = path.join(ARCHIVER_PATH, account.authStateFile);
-  const outputDir = path.join(ARCHIVER_PATH, account.outputDir);
+  const authFile = resolveAccountFile(account.authStateFile, account.legacyAuthStateFile);
+  const outputDir = resolveAccountDir(account);
   const manifestPath = path.join(outputDir, 'producer_manifest.json');
   const completionPath = path.join(outputDir, 'completion.json');
   const verificationPath = path.join(outputDir, 'verification_summary.json');
@@ -346,6 +328,8 @@ app.post('/api/accounts/:accountId/start', (req, res) => {
 
   const env = {
     ...process.env,
+    FLOWMUSIC_AUTH_STATE: path.join(ARCHIVER_PATH, account.authStateFile),
+    FLOWMUSIC_OUTPUT_DIR: path.join(ARCHIVER_PATH, account.outputDir),
     PRODUCER_AUTH_STATE: path.join(ARCHIVER_PATH, account.authStateFile),
     PRODUCER_OUTPUT_DIR: path.join(ARCHIVER_PATH, account.outputDir),
     PRODUCER_CONCURRENCY: String(concurrency),
@@ -457,7 +441,7 @@ app.post('/api/accounts/:accountId/cleanup', async (req, res) => {
       return res.status(404).json({ error: 'Account not found' });
     }
 
-    const authFile = path.join(ARCHIVER_PATH, account.authStateFile);
+    const authFile = resolveAccountFile(account.authStateFile, account.legacyAuthStateFile);
     if (existsSync(authFile)) {
       await fs.unlink(authFile);
     }

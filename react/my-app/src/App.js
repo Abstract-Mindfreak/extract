@@ -1,35 +1,25 @@
-import { useEffect, useMemo, useReducer, useState } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import {
+  Archive,
+  Boxes,
+  ChevronRight,
+  Database,
+  LayoutTemplate,
+  Library,
+  Settings,
+  Sparkles,
+  Workflow,
+  X,
+} from "lucide-react";
 import "./App.css";
-import AccordionSection from "./components/AccordionSection";
 import ASEMasterConsole from "./components/ASEMasterConsole";
-import CompactTransportBar from "./components/CompactTransportBar";
-import ControlGrid from "./components/ControlGrid";
-import HeaderBar from "./components/HeaderBar";
-import IntentComposer from "./components/IntentComposer";
 import JsonBindingsPanel from "./components/JsonBindingsPanel";
 import JsonBlockEditor from "./components/JsonBlockEditor";
 import JsonBlockList from "./components/JsonBlockList";
 import JsonSequenceBuilder from "./components/JsonSequenceBuilder";
-import MatrixEditor from "./components/MatrixEditor";
-import MiniMatrixStrip from "./components/MiniMatrixStrip";
-import OrbitQuickPad from "./components/OrbitQuickPad";
 import PromptLogicBlocklyPanel from "./components/PromptLogicBlocklyPanel";
-import PrismaticCoreDock from "./components/PrismaticCoreDock";
 import SectionCard from "./components/SectionCard";
-import StageCanvas from "./components/StageCanvas";
-import StatusCards from "./components/StatusCards";
-import TextListPanel from "./components/TextListPanel";
-import {
-  AUDIO_CONTROLS,
-  DEFAULT_INTENT_EXAMPLE,
-  GRID_COLS,
-  GRID_ROWS,
-  SCENES,
-  TRANSPORT_CONTROLS,
-  VISION_CONTROLS,
-  createGrid,
-  createInitialState,
-} from "./mmss/config";
+import { createInitialState } from "./mmss/config";
 import {
   DEFAULT_BLOCKLY_WORKSPACE_XML,
   combinePromptBlocks,
@@ -41,19 +31,26 @@ import {
 } from "./mmss/promptLibrary";
 import { mmssReducer } from "./mmss/reducer";
 import { DEFAULT_BLOCKLY_CONTEXT } from "./mmss/promptTypes";
-import { useAudioEngine } from "./mmss/useAudioEngine";
-import { useHotkeys } from "./mmss/useHotkeys";
-import { useOrbitMotion } from "./mmss/useOrbitMotion";
-import { analyzeImageElement, getThemePalette } from "./mmss/utils";
+import { getThemePalette } from "./mmss/utils";
 import ArchivesPage from "./components/ArchivesPage";
 import storageService from "./services/StorageService";
 
 const APP_TABS = [
-  { id: "performance", label: "Performance" },
-  { id: "advanced", label: "Advanced" },
-  { id: "prompt_library", label: "Prompt Library" },
-  { id: "ase_console", label: "ASE Console" },
-  { id: "archives", label: "Archives" },
+  {
+    id: "prompt_library",
+    label: "Prompt Library",
+    summary: "Blocks, sequences, bindings",
+  },
+  {
+    id: "ase_console",
+    label: "ASE Console",
+    summary: "Unified MMSS and ASE rack",
+  },
+  {
+    id: "archives",
+    label: "Archives",
+    summary: "Archive import and browsing",
+  },
 ];
 
 const ORBIT_SLOT_STORAGE_KEY = "mmss.orbitQuickSlots.v1";
@@ -122,31 +119,22 @@ const DEFAULT_ORBIT_SLOTS = [
 ];
 
 function App() {
+  const sectionRefs = useRef({
+    prompt_library: null,
+    ase_console: null,
+    archives: null,
+  });
+  const [expandedPanel, setExpandedPanel] = useState(null);
   const [activeTab, setActiveTab] = useState("ase_console");
   const [state, dispatch] = useReducer(
     mmssReducer,
     undefined,
     () => createInitialState({ __empty: true })
   );
-  const [intentText, setIntentText] = useState(DEFAULT_INTENT_EXAMPLE);
-  const [orbitSlots, setOrbitSlots] = useState(loadStoredOrbitSlots);
+  const [orbitSlots] = useState(loadStoredOrbitSlots);
   const [libraryReady, setLibraryReady] = useState(false);
   const [promptPanelOrder, setPromptPanelOrder] = useState(loadStoredPromptPanelOrder);
   const [activePromptPanel, setActivePromptPanel] = useState(loadStoredPromptActivePanel);
-  const { initializeAudio, analyserNode } = useAudioEngine({
-    initialized: state.initialized,
-    audio: state.audio,
-    transport: state.transport,
-    grid: state.matrix.grid,
-    dispatch,
-  });
-
-  useOrbitMotion({
-    orbit: state.orbit,
-    baseline: state.mmss.baseline,
-    dispatch,
-    enabled: state.orbit.enabled,
-  });
 
   // Bridge object intentionally captures current render state.
   /* eslint-disable react-hooks/exhaustive-deps */
@@ -299,38 +287,6 @@ function App() {
   }, [libraryReady, state.promptLibrary.blocks, state.promptLibrary.sequences]);
   /* eslint-enable react-hooks/exhaustive-deps */
 
-  useHotkeys([
-    {
-      match: (event) => event.code === "Space",
-      preventDefault: true,
-      run: () => handleTogglePlaying(),
-    },
-    {
-      match: (event) => event.code === "KeyB",
-      run: () => handleCaptureBaseline("hotkey"),
-    },
-    {
-      match: (event) => event.code === "KeyO",
-      run: () => handleToggleOrbit(),
-    },
-    {
-      match: (event) => event.code === "Digit1",
-      run: () => handleSceneLoad("BASELINE"),
-    },
-    {
-      match: (event) => event.code === "Digit2",
-      run: () => handleSceneLoad("AURORA_GATE"),
-    },
-    {
-      match: (event) => event.code === "Digit3",
-      run: () => handleSceneLoad("GLASS_ORBIT"),
-    },
-    {
-      match: (event) => event.code === "Digit4",
-      run: () => handleSceneLoad("NOISE_TIDE"),
-    },
-  ]);
-
   const palette = getThemePalette(state.vision.theme);
   const themeStyle = {
     "--accent-primary": palette.primary,
@@ -339,23 +295,15 @@ function App() {
     "--panel-fill-b": palette.fillB,
     "--panel-noise": palette.noise,
   };
-  const sceneKeys = ["BASELINE", ...Object.keys(SCENES)];
-  const effectivePlaying = state.initialized ? state.transport.playing : false;
-  const statusText = buildStatusText(state);
-  const transportValues = {
-    bpm: state.transport.bpm,
-    speed: state.orbit.speed,
-    visualWeight: state.orbit.visualWeight,
-    collisionIntensity: state.orbit.collisionIntensity,
-  };
-  const checkpointItems = state.mmss.checkpoints.map((checkpoint) => checkpoint.label);
   const selectedBlock =
     state.promptLibrary.blocks.find((block) => block.id === state.promptLibrary.selectedBlockId) || null;
-  const activeOrbitPreset = orbitSlots.find((slot) =>
-    ["speed", "visualWeight", "collisionIntensity"].every(
-      (key) => Math.abs(slot.values[key] - state.orbit[key]) < 0.01
-    )
-  );
+  const aseConfigCount = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem(ASE_DB_STORAGE_KEY) || "[]").length;
+    } catch {
+      return 0;
+    }
+  }, []);
   const promptPanelIndex = useMemo(
     () =>
       promptPanelOrder.reduce((map, panelId, index) => {
@@ -366,163 +314,10 @@ function App() {
   );
 
   function launchCore() {
-    initializeAudio();
     if (!state.initialized) {
       dispatch({ type: "initialize" });
       dispatch({ type: "capture_baseline", reason: "launch_sequence" });
     }
-  }
-
-  function handleCaptureBaseline(reason = "manual_capture") {
-    launchCore();
-    dispatch({ type: "capture_baseline", reason });
-  }
-
-  function handleRestoreBaseline() {
-    launchCore();
-    if (state.orbit.enabled) {
-      dispatch({ type: "toggle_orbit", enabled: false });
-    }
-    dispatch({ type: "load_scene", sceneName: "BASELINE" });
-  }
-
-  function handleTogglePlaying() {
-    if (activeTab === "prompt_library") {
-      dispatch({ type: "append_log", message: "Audio is paused while Prompt Library mode is active." });
-      return;
-    }
-
-    if (!state.initialized) {
-      launchCore();
-      return;
-    }
-
-    initializeAudio();
-    dispatch({ type: "toggle_playing" });
-  }
-
-  function handleToggleOrbit() {
-    launchCore();
-    dispatch({ type: "toggle_orbit" });
-  }
-
-  function handleSceneLoad(sceneName) {
-    launchCore();
-    if (sceneName === "BASELINE" && state.orbit.enabled) {
-      dispatch({ type: "toggle_orbit", enabled: false });
-    }
-    dispatch({ type: "load_scene", sceneName });
-  }
-
-  function handleAudioChange(key, value) {
-    dispatch({ type: "set_audio_param", key, value });
-  }
-
-  function handleVisionChange(key, value) {
-    dispatch({ type: "set_vision_param", key, value });
-  }
-
-  function handleTransportChange(key, value) {
-    if (key === "bpm") {
-      dispatch({ type: "set_transport_param", key, value });
-      return;
-    }
-    dispatch({ type: "set_orbit_param", key, value });
-  }
-
-  function handleOrbitChange(key, value) {
-    dispatch({ type: "set_orbit_param", key, value });
-  }
-
-  function handleCellPaint(column, row, value) {
-    if (state.matrix.grid[column]?.[row] === value) return;
-    dispatch({ type: "toggle_matrix_cell", column, row, value });
-  }
-
-  function handleApplyIntent() {
-    const prompt = intentText.trim();
-    if (!prompt) return;
-    launchCore();
-    dispatch({ type: "apply_intent", prompt });
-  }
-
-  function handleImageFile(file) {
-    if (!file) return;
-    launchCore();
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      const previewSrc = typeof reader.result === "string" ? reader.result : "";
-      if (!previewSrc) return;
-
-      const image = new Image();
-      image.onload = () => {
-        const analysis = analyzeImageElement(image);
-        dispatch({ type: "apply_image_analysis", previewSrc, analysis });
-      };
-      image.src = previewSrc;
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function handlePrismaticAutoTune() {
-    if (!state.image.analysis || !state.image.previewSrc) {
-      dispatch({ type: "append_log", message: "Prismatic auto tune needs a bound vision source." });
-      return;
-    }
-
-    dispatch({
-      type: "apply_image_analysis",
-      previewSrc: state.image.previewSrc,
-      analysis: state.image.analysis,
-    });
-    dispatch({ type: "append_log", message: "Prismatic auto tune re-applied image analysis." });
-  }
-
-  async function handleApplyImageMap(scanMode, scaleMode) {
-    launchCore();
-    const grid = await buildGridFromImageMap({
-      previewSrc: state.image.previewSrc,
-      analysis: state.image.analysis,
-      scanMode,
-      scaleMode,
-    });
-    dispatch({ type: "set_matrix_grid", grid });
-    if (!state.transport.playing) {
-      dispatch({ type: "toggle_playing" });
-    }
-    dispatch({
-      type: "append_log",
-      message: `Image map applied to matrix (${scanMode}, ${scaleMode}).`,
-    });
-  }
-
-  function handleApplyOrbitSlot(slot) {
-    launchCore();
-    Object.entries(slot.values).forEach(([key, value]) => {
-      dispatch({ type: "set_orbit_param", key, value });
-    });
-    if (!state.orbit.enabled) {
-      dispatch({ type: "toggle_orbit", enabled: true });
-    }
-  }
-
-  function handleSaveOrbitSlot(slotId) {
-    const nextSlots = orbitSlots.map((slot) =>
-      slot.id === slotId
-        ? {
-            ...slot,
-            meta: "saved preset",
-            values: {
-              speed: state.orbit.speed,
-              visualWeight: state.orbit.visualWeight,
-              collisionIntensity: state.orbit.collisionIntensity,
-            },
-          }
-        : slot
-    );
-    setOrbitSlots(nextSlots);
-    dispatch({ type: "append_log", message: `Orbit slot ${slotId} saved.` });
   }
 
   function handlePromptBlockSave(block) {
@@ -901,242 +696,272 @@ function App() {
     });
   }
 
+  function focusWorkspaceSection(sectionId) {
+    setActiveTab(sectionId);
+    const node = sectionRefs.current[sectionId];
+    if (node?.scrollIntoView) {
+      node.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  const drawerItems = [
+    { id: "overview", icon: LayoutTemplate, label: "Workspace" },
+    { id: "prompt_library", icon: Library, label: "Prompt Tools" },
+    { id: "ase_console", icon: Workflow, label: "ASE Flow" },
+    { id: "archives", icon: Archive, label: "Archives" },
+    { id: "system", icon: Settings, label: "System State" },
+  ];
+
+  const activeSequence = state.promptLibrary.sequences.find(
+    (sequence) => sequence.id === state.promptLibrary.selectedSequenceId
+  ) || null;
+  const activeComposition = state.promptLibrary.activeComposition || null;
+
+  function toggleDrawerPanel(panelId) {
+    setExpandedPanel((current) => (current === panelId ? null : panelId));
+  }
+
   return (
     <div className="app-shell compact-shell" style={themeStyle}>
       {!state.initialized ? (
         <div className="boot-overlay">
           <div className="boot-card">
             <span className="eyebrow">MMSS React Rebuild</span>
-            <h1>Prismatic Core Dispatcher</h1>
+            <h1>Core Workspace</h1>
             <p>
-              Compact performance shell, full advanced controls, and isolated JSON prompt library
-              for flowmusic.app workflow.
+              Focused workspace for Prompt Library, ASE Console, and Archives inside `react/my-app`.
             </p>
             <button className="btn accent" onClick={launchCore}>
-              Launch Core
+              Open Workspace
             </button>
           </div>
         </div>
       ) : null}
 
-      <HeaderBar
-        level={state.mmss.level}
-        scene={state.mmss.currentScene}
-        visionBound={state.mmss.visionBound}
-        orbitEnabled={state.orbit.enabled}
-        playing={effectivePlaying}
-        onCaptureBaseline={() => handleCaptureBaseline("header_button")}
-        onToggleOrbit={handleToggleOrbit}
-        onTogglePlaying={handleTogglePlaying}
-        onFileSelect={handleImageFile}
-        onLongPressCapture={handleRestoreBaseline}
-      />
-
-      <main className="compact-app-layout">
-        <div className="tab-bar">
-          {APP_TABS.map((tab) => (
-            <button
-              key={tab.id}
-              className={`tab-pill ${activeTab === tab.id ? "active" : ""}`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        {activeTab === "performance" ? (
-          <div className="tab-view performance-view">
-            <CompactTransportBar
-              playing={effectivePlaying}
-              bpm={state.transport.bpm}
-              volume={state.audio.master}
-              currentScene={state.mmss.currentScene}
-              scenes={sceneKeys}
-              onTogglePlaying={handleTogglePlaying}
-              onBpmChange={(value) => handleTransportChange("bpm", value)}
-              onVolumeChange={(value) => handleAudioChange("master", value)}
-              onSceneSelect={handleSceneLoad}
-            />
-
-            <div className="performance-grid">
-              <SectionCard title="Stage Canvas" subtitle="Compact visual core with waveform and current scene">
-                <StageCanvas
-                  vision={state.vision}
-                  scene={state.mmss.currentScene}
-                  imagePreview={state.image.previewSrc}
-                  imageAnalysis={state.image.analysis}
-                  analyserNode={analyserNode}
-                  onDropFile={handleImageFile}
-                  statusText={statusText}
-                />
-              </SectionCard>
-
-              <div className="performance-sidebar">
-                <SectionCard title="Pattern Strip" subtitle="Always-visible pattern context without the full grid">
-                  <MiniMatrixStrip
-                    grid={state.matrix.grid}
-                    playhead={state.transport.playhead}
-                    onOpenAdvanced={() => setActiveTab("advanced")}
-                  />
-                </SectionCard>
-
-                <SectionCard title="Orbit Pad" subtitle="Quick morph presets with hold-to-save slots">
-                  <OrbitQuickPad
-                    slots={orbitSlots}
-                    activePresetId={activeOrbitPreset?.id ?? ""}
-                    onApplySlot={handleApplyOrbitSlot}
-                    onSaveSlot={handleSaveOrbitSlot}
-                  />
-                </SectionCard>
-
-                <SectionCard title="Quick Status" subtitle="Only the essentials stay visible in performance mode">
-                  <StatusCards
-                    checkpoint={state.mmss.lastCheckpoint}
-                    intent={state.mmss.lastIntent}
-                    orbitSpeed={state.orbit.speed}
-                    contrast={state.image.analysis?.contrast ?? state.vision.depth}
-                  />
-                </SectionCard>
-              </div>
-            </div>
+      <main className={`compact-app-layout workspace-shell-with-rail ${expandedPanel ? "has-drawer" : ""}`}>
+        <aside className="workspace-rail">
+          <div className="workspace-rail__logo">
+            <Boxes size={20} />
           </div>
-        ) : null}
+          <div className="workspace-rail__nav">
+            {drawerItems.map((item) => (
+              <button
+                key={item.id}
+                className={`workspace-rail__btn ${expandedPanel === item.id ? "active" : ""}`}
+                onClick={() => toggleDrawerPanel(item.id)}
+                title={item.label}
+              >
+                <item.icon size={18} />
+              </button>
+            ))}
+          </div>
+        </aside>
 
-        {activeTab === "advanced" ? (
-          <div className="tab-view advanced-view">
-            <div className="advanced-grid">
-              <div className="advanced-main">
-                <SectionCard title="Full Matrix Editor" subtitle="Detailed transport editing and stage monitoring">
-                  <StageCanvas
-                    vision={state.vision}
-                    scene={state.mmss.currentScene}
-                    imagePreview={state.image.previewSrc}
-                    imageAnalysis={state.image.analysis}
-                    analyserNode={analyserNode}
-                    onDropFile={handleImageFile}
-                    statusText={statusText}
-                  />
-                  <div className="advanced-spacer" />
-                  <MatrixEditor
-                    grid={state.matrix.grid}
-                    playhead={state.transport.playhead}
-                    onCellPaint={handleCellPaint}
-                  />
+        <aside className={`workspace-drawer ${expandedPanel ? "is-open" : ""}`}>
+          <div className="workspace-drawer__head">
+            <div>
+              <span className="workspace-surface__eyebrow">Context Drawer</span>
+              <h3>{drawerItems.find((item) => item.id === expandedPanel)?.label || "Workspace"}</h3>
+            </div>
+            <button className="workspace-drawer__close" onClick={() => setExpandedPanel(null)}>
+              <X size={18} />
+            </button>
+          </div>
+
+          <div className="workspace-drawer__body">
+            {expandedPanel === "overview" ? (
+              <div className="drawer-stack">
+                <SectionCard title="Workspace Focus" subtitle="Current rebuild direction">
+                  <div className="drawer-metric-grid">
+                    <div className="drawer-metric-card"><span>Modes</span><strong>3 Core</strong></div>
+                    <div className="drawer-metric-card"><span>Prompt Blocks</span><strong>{state.promptLibrary.blocks.length}</strong></div>
+                    <div className="drawer-metric-card"><span>Sequences</span><strong>{state.promptLibrary.sequences.length}</strong></div>
+                    <div className="drawer-metric-card"><span>ASE Saves</span><strong>{aseConfigCount}</strong></div>
+                  </div>
                 </SectionCard>
-              </div>
-
-              <div className="advanced-side">
-                <AccordionSection
-                  title="Audio Engine Panel"
-                  subtitle="Master volume plus the full prismatic voice controls"
-                  defaultOpen
-                >
-                  <ControlGrid controls={AUDIO_CONTROLS} values={state.audio} onChange={handleAudioChange} />
-                </AccordionSection>
-
-                <AccordionSection
-                  title="Orbit Motion Panel"
-                  subtitle="Transport bar details, orbit blending, and quick preset morphing"
-                >
-                  <ControlGrid
-                    controls={TRANSPORT_CONTROLS}
-                    values={transportValues}
-                    onChange={handleTransportChange}
-                  />
-                  <div className="advanced-spacer compact" />
-                  <OrbitQuickPad
-                    slots={orbitSlots}
-                    activePresetId={activeOrbitPreset?.id ?? ""}
-                    onApplySlot={handleApplyOrbitSlot}
-                    onSaveSlot={handleSaveOrbitSlot}
-                  />
-                </AccordionSection>
-
-                <AccordionSection
-                  title="Image Analysis Panel"
-                  subtitle="Scene launcher, vision controls, and the React port of Prismatic Core dock"
-                >
-                  <div className="scene-grid compact">
-                    {sceneKeys.map((sceneName) => (
-                      <button
-                        key={sceneName}
-                        className={`scene-pill ${state.mmss.currentScene === sceneName ? "active" : ""}`}
-                        onClick={() => handleSceneLoad(sceneName)}
-                      >
-                        <strong>{sceneName.replace(/_/g, " ")}</strong>
-                        <span>{sceneName === "BASELINE" ? "Stored neutral state" : "Preset state"}</span>
+                <SectionCard title="Quick Jumps" subtitle="Move around the single-page workspace">
+                  <div className="drawer-link-list">
+                    {APP_TABS.map((tab) => (
+                      <button key={`drawer-${tab.id}`} onClick={() => focusWorkspaceSection(tab.id)}>
+                        <strong>{tab.label}</strong>
+                        <ChevronRight size={14} />
                       </button>
                     ))}
                   </div>
-                  <div className="advanced-spacer compact" />
-                  <ControlGrid controls={VISION_CONTROLS} values={state.vision} onChange={handleVisionChange} />
-                  <div className="advanced-spacer compact" />
-                  <PrismaticCoreDock
-                    audio={state.audio}
-                    vision={state.vision}
-                    transport={state.transport}
-                    orbit={state.orbit}
-                    initialized={state.initialized}
-                    imagePreview={state.image.previewSrc}
-                    imageAnalysis={state.image.analysis}
-                    onTogglePlaying={handleTogglePlaying}
-                    onFileSelect={handleImageFile}
-                    onAutoTune={handlePrismaticAutoTune}
-                    onAudioChange={handleAudioChange}
-                    onVisionChange={handleVisionChange}
-                    onTransportChange={handleTransportChange}
-                    onOrbitChange={handleOrbitChange}
-                    onApplyImageMap={handleApplyImageMap}
-                  />
-                </AccordionSection>
+                </SectionCard>
+              </div>
+            ) : null}
 
-                <AccordionSection
-                  title="Intent Panel"
-                  subtitle="Prompt-to-state steering and operational feedback"
-                >
-                  <IntentComposer
-                    value={intentText}
-                    onChange={setIntentText}
-                    onApply={handleApplyIntent}
-                    onLoadExample={() => setIntentText(DEFAULT_INTENT_EXAMPLE)}
-                  />
-                  <StatusCards
-                    checkpoint={state.mmss.lastCheckpoint}
-                    intent={state.mmss.lastIntent}
-                    orbitSpeed={state.orbit.speed}
-                    contrast={state.image.analysis?.contrast ?? state.vision.depth}
-                  />
-                </AccordionSection>
-
-                <AccordionSection
-                  title="System Panels"
-                  subtitle="Checkpoints and logs moved one click deeper instead of living on the main screen"
-                >
-                  <div className="prompt-two-column">
-                    <SectionCard title="Checkpoints" subtitle="Captured anchors and milestones">
-                      <TextListPanel
-                        className="checkpoint-list"
-                        items={checkpointItems}
-                        emptyText="No checkpoints yet."
-                      />
-                    </SectionCard>
-                    <SectionCard title="System Log" subtitle="Recent orchestration events">
-                      <TextListPanel
-                        className="log-list"
-                        items={state.mmss.logs}
-                        emptyText="Logs will appear after launch."
-                      />
-                    </SectionCard>
+            {expandedPanel === "prompt_library" ? (
+              <div className="drawer-stack">
+                <SectionCard title="Prompt Sections" subtitle="All prompt submodes stay one click away">
+                  <div className="drawer-link-list">
+                    {promptPanelOrder.map((panelId) => {
+                      const panelMeta = PROMPT_LIBRARY_PANEL_META[panelId];
+                      return (
+                        <button
+                          key={`drawer-panel-${panelId}`}
+                          onClick={() => {
+                            setActivePromptPanel(panelId);
+                            focusWorkspaceSection("prompt_library");
+                          }}
+                        >
+                          <div>
+                            <strong>{panelMeta.label}</strong>
+                            <span>{panelMeta.subtitle}</span>
+                          </div>
+                          <ChevronRight size={14} />
+                        </button>
+                      );
+                    })}
                   </div>
-                </AccordionSection>
+                </SectionCard>
+                <SectionCard title="Active Composition" subtitle="Live prompt composition state">
+                  <div className="drawer-note-list">
+                    <div><strong>Merge:</strong> {activeComposition?.mergeStrategy || "merge_deep"}</div>
+                    <div><strong>Blocks:</strong> {activeComposition?.blockIds?.length || 0}</div>
+                    <div><strong>Selected sequence:</strong> {activeSequence?.name || "None"}</div>
+                    <div><strong>Selected block:</strong> {selectedBlock?.name || "None"}</div>
+                  </div>
+                </SectionCard>
+              </div>
+            ) : null}
+
+            {expandedPanel === "ase_console" ? (
+              <div className="drawer-stack">
+                <SectionCard title="ASE Workflow" subtitle="Fast handoff and stored unified configs">
+                  <div className="drawer-note-list">
+                    <div><strong>Saved configs:</strong> {aseConfigCount}</div>
+                    <div><strong>Builder handoff:</strong> Direct to `JsonSequenceBuilder`</div>
+                    <div><strong>Rack mode:</strong> Unified MMSS pipeline</div>
+                  </div>
+                </SectionCard>
+                <SectionCard title="Quick Actions" subtitle="Jump into the console surface">
+                  <div className="drawer-link-list">
+                    <button onClick={() => focusWorkspaceSection("ase_console")}>
+                      <strong>Open ASE workspace</strong>
+                      <ChevronRight size={14} />
+                    </button>
+                    <button
+                      onClick={() => {
+                        setActivePromptPanel("json_sequence_builder");
+                        focusWorkspaceSection("prompt_library");
+                      }}
+                    >
+                      <strong>Open JsonSequenceBuilder</strong>
+                      <ChevronRight size={14} />
+                    </button>
+                  </div>
+                </SectionCard>
+              </div>
+            ) : null}
+
+            {expandedPanel === "archives" ? (
+              <div className="drawer-stack">
+                <SectionCard title="Archive Tools" subtitle="Archive import remains attached to the same workspace">
+                  <div className="drawer-link-list">
+                    <button onClick={() => focusWorkspaceSection("archives")}>
+                      <strong>Open Archives surface</strong>
+                      <ChevronRight size={14} />
+                    </button>
+                  </div>
+                </SectionCard>
+                <SectionCard title="Archive Focus" subtitle="Single source of truth already switched to flowmusic">
+                  <div className="drawer-note-list">
+                    <div><strong>Output folders:</strong> `flowmusic_backup_*`</div>
+                    <div><strong>Legacy support:</strong> `producer_backup_*` still readable</div>
+                    <div><strong>Auth files:</strong> `flowmusic_auth_*` preferred</div>
+                  </div>
+                </SectionCard>
+              </div>
+            ) : null}
+
+            {expandedPanel === "system" ? (
+              <div className="drawer-stack">
+                <SectionCard title="System State" subtitle="Useful rebuild telemetry">
+                  <div className="drawer-metric-grid">
+                    <div className="drawer-metric-card"><span>Library</span><strong>{libraryReady ? "Ready" : "Idle"}</strong></div>
+                    <div className="drawer-metric-card"><span>Focused mode</span><strong>{APP_TABS.find((tab) => tab.id === activeTab)?.label}</strong></div>
+                    <div className="drawer-metric-card"><span>Drawer</span><strong>{expandedPanel || "Closed"}</strong></div>
+                    <div className="drawer-metric-card"><span>State</span><strong>{state.initialized ? "Initialized" : "Boot"}</strong></div>
+                  </div>
+                </SectionCard>
+                <SectionCard title="Rebuild Status" subtitle="Current direction of the UI rewrite">
+                  <div className="drawer-note-list">
+                    <div><Sparkles size={14} /> Single-page shell is active</div>
+                    <div><Database size={14} /> Prompt/ASE/Archives are preserved</div>
+                    <div><Workflow size={14} /> Legacy prismatic/performance surface is detached</div>
+                  </div>
+                </SectionCard>
+              </div>
+            ) : null}
+          </div>
+        </aside>
+
+        <div className="core-workspace-shell">
+          <div className="core-shell-hero">
+            <div className="core-shell-hero-copy">
+              <span className="eyebrow">React Main App</span>
+              <h2>Unified workspace for the 3 core modes</h2>
+              <p>
+                Current focus is narrowed to <strong>Prompt Library</strong>, <strong>ASE Console</strong>, and
+                <strong> Archives</strong>. Performance, advanced audio, and prismatic orchestration have been detached
+                from the main surface so we can rebuild the product around one clean workflow.
+              </p>
+            </div>
+            <div className="core-shell-stats">
+              <div className="core-stat-card">
+                <span>Active mode</span>
+                <strong>{APP_TABS.find((tab) => tab.id === activeTab)?.label}</strong>
+              </div>
+              <div className="core-stat-card">
+                <span>Prompt blocks</span>
+                <strong>{state.promptLibrary.blocks.length}</strong>
+              </div>
+              <div className="core-stat-card">
+                <span>Sequences</span>
+                <strong>{state.promptLibrary.sequences.length}</strong>
+              </div>
+              <div className="core-stat-card">
+                <span>Library status</span>
+                <strong>{libraryReady ? "Ready" : "Idle"}</strong>
               </div>
             </div>
           </div>
-        ) : null}
 
-        {activeTab === "prompt_library" ? (
-          <div className="tab-view prompt-library-view">
+          <div className="core-shell-nav">
+            {APP_TABS.map((tab, index) => (
+              <button
+                key={tab.id}
+                className={`core-shell-pill ${activeTab === tab.id ? "active" : ""}`}
+                onClick={() => focusWorkspaceSection(tab.id)}
+              >
+                <span className="core-shell-pill__index">0{index + 1}</span>
+                <strong>{tab.label}</strong>
+                <span>{tab.summary}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="core-shell-stage">
+
+        <div className="workspace-core-grid">
+          <section
+            ref={(node) => { sectionRefs.current.prompt_library = node; }}
+            className={`workspace-surface workspace-surface--library ${activeTab === "prompt_library" ? "is-focused" : ""}`}
+          >
+            <div className="workspace-surface__head">
+              <div>
+                <span className="workspace-surface__eyebrow">Core Mode 01</span>
+                <h3>Prompt Library</h3>
+                <p>Блоки, последовательности, binding workflow и unified JSON-сборка.</p>
+              </div>
+              <button className="workspace-surface__action" onClick={() => focusWorkspaceSection("prompt_library")}>
+                Focus
+              </button>
+            </div>
+
+            <div className="tab-view prompt-library-view">
             <div className="prompt-library-shell">
               <div className="prompt-library-topbar">
                 <div className="row">
@@ -1405,11 +1230,26 @@ function App() {
                 </SectionCard>
               )}
             </div>
-          </div>
-        ) : null}
+            </div>
+          </section>
 
-        {activeTab === "ase_console" ? (
-          <div className="tab-view ase-console-view">
+          <div className="workspace-side-stack">
+            <section
+              ref={(node) => { sectionRefs.current.ase_console = node; }}
+              className={`workspace-surface workspace-surface--ase ${activeTab === "ase_console" ? "is-focused" : ""}`}
+            >
+              <div className="workspace-surface__head">
+                <div>
+                  <span className="workspace-surface__eyebrow">Core Mode 02</span>
+                  <h3>ASE Console</h3>
+                  <p>Unified ASE rack, MMSS JSON, mode tips, pipeline ordering and builder handoff.</p>
+                </div>
+                <button className="workspace-surface__action" onClick={() => focusWorkspaceSection("ase_console")}>
+                  Focus
+                </button>
+              </div>
+
+              <div className="tab-view ase-console-view">
             <ASEMasterConsole
               onSendToSequenceBuilder={handleApplyAseUnifiedToSequenceBuilder}
               onSaveToDatabase={(config) => {
@@ -1419,35 +1259,35 @@ function App() {
                 dispatch({ type: "append_log", message: `ASE config "${config.name}" saved to database.` });
               }}
             />
-          </div>
-        ) : null}
+              </div>
+            </section>
 
-        {activeTab === "archives" ? (
-          <ArchivesPage />
-        ) : null}
+            <section
+              ref={(node) => { sectionRefs.current.archives = node; }}
+              className={`workspace-surface workspace-surface--archives ${activeTab === "archives" ? "is-focused" : ""}`}
+            >
+              <div className="workspace-surface__head">
+                <div>
+                  <span className="workspace-surface__eyebrow">Core Mode 03</span>
+                  <h3>Archives</h3>
+                  <p>Archive import, browsing, filtering and session drill-down stay available in the same workspace.</p>
+                </div>
+                <button className="workspace-surface__action" onClick={() => focusWorkspaceSection("archives")}>
+                  Focus
+                </button>
+              </div>
+
+              <div className="workspace-archives-shell">
+                <ArchivesPage />
+              </div>
+            </section>
+          </div>
+        </div>
+          </div>
+        </div>
       </main>
     </div>
   );
-}
-
-function buildStatusText(state) {
-  if (state.orbit.enabled) {
-    return `Orbit active with ${state.orbit.speed.toFixed(2)}x interpolation speed and ${Math.round(
-      state.orbit.collisionIntensity * 100
-    )}% collision intensity.`;
-  }
-
-  if (state.image.analysis) {
-    return `Vision bound with ${state.image.analysis.theme.toLowerCase()} theme and contrast ${state.image.analysis.contrast.toFixed(
-      2
-    )}.`;
-  }
-
-  if (state.mmss.lastIntent !== "idle") {
-    return `Last intent: ${state.mmss.lastIntent}.`;
-  }
-
-  return "Capture a baseline, bind an image, or apply an intent to steer the system.";
 }
 
 function generateCompositionByMode(blocks, mode, requestedCount) {
@@ -1559,80 +1399,6 @@ function generateCompositionByMode(blocks, mode, requestedCount) {
   }
 
   return ids.slice(0, count);
-}
-
-async function buildGridFromImageMap({ previewSrc, analysis, scanMode, scaleMode }) {
-  const fallback = createGrid();
-  if (!previewSrc || scanMode === "xy") {
-    return generatePatternGridFromMeta(fallback, analysis, scaleMode);
-  }
-
-  try {
-    const image = await loadImage(previewSrc);
-    return generatePatternGridFromImage(image, analysis, scanMode, scaleMode);
-  } catch (error) {
-    return generatePatternGridFromMeta(fallback, analysis, scaleMode);
-  }
-}
-
-function generatePatternGridFromImage(image, analysis, scanMode, scaleMode) {
-  const grid = createGrid();
-  const canvas = document.createElement("canvas");
-  const width = GRID_COLS;
-  const height = GRID_ROWS;
-  canvas.width = width;
-  canvas.height = height;
-  const context = canvas.getContext("2d", { willReadFrequently: true });
-  context.drawImage(image, 0, 0, width, height);
-  const data = context.getImageData(0, 0, width, height).data;
-
-  const modeShift = scaleMode === "Chromatic" ? 0.18 : scaleMode === "Minor" ? 0.1 : 0.14;
-  const thresholdBase = scanMode === "image" ? 0.42 : 0.36;
-  const contrastBoost = Number.isFinite(analysis?.contrast) ? analysis.contrast * 0.2 : 0;
-  const threshold = thresholdBase - contrastBoost;
-
-  for (let col = 0; col < GRID_COLS; col += 1) {
-    for (let row = 0; row < GRID_ROWS; row += 1) {
-      const index = (row * width + col) * 4;
-      const red = data[index] / 255;
-      const green = data[index + 1] / 255;
-      const blue = data[index + 2] / 255;
-      const brightness = red * 0.2126 + green * 0.7152 + blue * 0.0722;
-      const wave = (Math.sin(col * 0.45 + row * 0.38) + 1) * 0.5 * modeShift;
-      const on = brightness + wave > threshold;
-      grid[col][row] = on ? 1 : 0;
-    }
-  }
-
-  return grid;
-}
-
-function generatePatternGridFromMeta(baseGrid, analysis, scaleMode) {
-  const grid = baseGrid.map((column) => [...column]);
-  const contrast = Number.isFinite(analysis?.contrast) ? analysis.contrast : 0.45;
-  const symmetry = Number.isFinite(analysis?.symmetryScore) ? analysis.symmetryScore : 0.5;
-  const modifier = scaleMode === "Whole Tone" ? 0.8 : scaleMode === "Blues" ? 0.62 : 0.7;
-
-  for (let col = 0; col < GRID_COLS; col += 1) {
-    const primary = Math.floor(((Math.sin(col * modifier) * 0.5 + 0.5) * (GRID_ROWS - 1)));
-    const shifted = Math.floor((primary + contrast * 4 + symmetry * 2) % GRID_ROWS);
-    grid[col][primary] = 1;
-    grid[col][shifted] = 1;
-    if (col % 4 === 0) {
-      grid[col][(GRID_ROWS - 1) - primary] = 1;
-    }
-  }
-
-  return grid;
-}
-
-function loadImage(source) {
-  return new Promise((resolve, reject) => {
-    const image = new Image();
-    image.onload = () => resolve(image);
-    image.onerror = reject;
-    image.src = source;
-  });
 }
 
 function shuffle(values) {

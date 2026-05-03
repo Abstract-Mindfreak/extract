@@ -520,7 +520,7 @@ export default function ProducerArchiverPanel() {
           
           <div className="mt-4 pt-4 border-t border-cyan-900/30 text-[10px] text-cyan-800 space-y-1">
             <p><strong>Downloads include:</strong> M4A audio, JPG covers, MP4 videos, JSON metadata (lyrics, prompts, seeds, conditions)</p>
-            <p><strong>Output location:</strong> Each account has separate folder (producer_backup_1, producer_backup_2, etc.)</p>
+            <p><strong>Output location:</strong> Each account has separate folder (`flowmusic_backup_1`, `flowmusic_backup_2`, etc.). Legacy `producer_backup_*` folders are still supported.</p>
           </div>
         </div>
 

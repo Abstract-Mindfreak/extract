@@ -10,6 +10,7 @@ export const SYNC_MODES = {
 };
 
 export default function DecompositionAudio({ syncMode = SYNC_MODES.OFF, onSyncChange, prismaticCoreData = null, onASEDataChange }) {
+  const syncControlsDisabled = true;
   const [protocol, setProtocol] = useState(1.618);
   const [phiSync, setPhiSync] = useState(true);
   const [logicStack, setLogicStack] = useState(["G_BASE", "Φ_DIV", "Q_GRAV", "M_SHIFT", "Ψ_RECUR", "Δ_COLLAPSE", "Σ_SYNTH", "H_ANNIHILATE", "Ψ_INJECT", "∇_DENSITY", "⧴_DRIFT", "↦_MAP"]);
@@ -222,12 +223,21 @@ export default function DecompositionAudio({ syncMode = SYNC_MODES.OFF, onSyncCh
 
   const SyncButton = ({ mode, label, icon: Icon, color }) => (
     <button
-      onClick={() => onSyncChange && onSyncChange(mode)}
+      type="button"
+      disabled={syncControlsDisabled}
+      onClick={() => {
+        if (!syncControlsDisabled && onSyncChange) {
+          onSyncChange(mode);
+        }
+      }}
       className={`flex items-center gap-2 px-3 py-2 rounded-lg text-[10px] font-bold transition-all border ${
-        syncMode === mode 
-          ? `${color} shadow-[0_0_15px_rgba(236,72,153,0.3)]` 
-          : "bg-cyan-950/20 border-cyan-900 text-cyan-700 hover:border-cyan-700"
+        syncControlsDisabled
+          ? "bg-slate-950/60 border-slate-800 text-slate-600 opacity-55 cursor-not-allowed"
+          : syncMode === mode
+            ? `${color} shadow-[0_0_15px_rgba(236,72,153,0.3)]`
+            : "bg-cyan-950/20 border-cyan-900 text-cyan-700 hover:border-cyan-700"
       }`}
+      title={syncControlsDisabled ? "Sync preserved as a future binding interface and temporarily disabled." : label}
     >
       <Icon size={14} />
       {label}
@@ -286,6 +296,9 @@ export default function DecompositionAudio({ syncMode = SYNC_MODES.OFF, onSyncCh
               icon={Wifi}
               color="bg-green-900/30 border-green-500 text-green-500"
             />
+            <div className="ml-2 text-[8px] uppercase tracking-[0.2em] text-slate-600">
+              Disabled for now, binding concept preserved
+            </div>
           </div>
         </div>
 

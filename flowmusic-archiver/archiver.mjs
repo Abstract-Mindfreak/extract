@@ -29,10 +29,13 @@
  *      pnpm producer:archive --skip-harvest
  *
  * Environment variables:
- *   PRODUCER_BASE_URL    (default: https://www.flowmusic.app)
- *   PRODUCER_OUTPUT_DIR  (default: ./producer_backup)
- *   PRODUCER_AUTH_STATE  (default: ./producer_auth.json)
- *   PRODUCER_CONCURRENCY (default: 8)
+ *   FLOWMUSIC_BASE_URL    (default: https://www.flowmusic.app)
+ *   FLOWMUSIC_OUTPUT_DIR  (default: ./flowmusic_backup)
+ *   FLOWMUSIC_AUTH_STATE  (default: ./flowmusic_auth.json)
+ *   FLOWMUSIC_CONCURRENCY (default: 8)
+ *
+ * Legacy compatibility:
+ *   PRODUCER_BASE_URL / PRODUCER_OUTPUT_DIR / PRODUCER_AUTH_STATE / PRODUCER_CONCURRENCY
  *
  * See docs/PRODUCER_ARCHIVER.md for full technical reference.
  */
@@ -45,10 +48,10 @@ import { chromium } from 'playwright';
 import PQueue from 'p-queue';
 import pRetry, { AbortError } from 'p-retry';
 
-const BASE_URL = process.env.PRODUCER_BASE_URL ?? 'https://www.flowmusic.app';
-const OUTPUT_DIR = process.env.PRODUCER_OUTPUT_DIR ?? './producer_backup';
-const AUTH_STATE = process.env.PRODUCER_AUTH_STATE ?? './producer_auth.json';
-const CONCURRENCY = Number(process.env.PRODUCER_CONCURRENCY ?? 8);
+const BASE_URL = process.env.FLOWMUSIC_BASE_URL ?? process.env.PRODUCER_BASE_URL ?? 'https://www.flowmusic.app';
+const OUTPUT_DIR = process.env.FLOWMUSIC_OUTPUT_DIR ?? process.env.PRODUCER_OUTPUT_DIR ?? './flowmusic_backup';
+const AUTH_STATE = process.env.FLOWMUSIC_AUTH_STATE ?? process.env.PRODUCER_AUTH_STATE ?? './flowmusic_auth.json';
+const CONCURRENCY = Number(process.env.FLOWMUSIC_CONCURRENCY ?? process.env.PRODUCER_CONCURRENCY ?? 8);
 const MANIFEST_PATH = path.join(OUTPUT_DIR, 'producer_manifest.json');
 const COMPLETION_PATH = path.join(OUTPUT_DIR, 'completion.json');
 const LOGIN_READY_FILE = path.resolve('./producer_login_ready');
@@ -56,7 +59,7 @@ const SESSIONS_DIR = path.join(OUTPUT_DIR, 'sessions');
 const SESSION_SUMMARY_PATH = path.join(OUTPUT_DIR, 'session_capture_summary.json');
 
 if (!Number.isFinite(CONCURRENCY) || CONCURRENCY < 1) {
-  throw new Error(`Invalid PRODUCER_CONCURRENCY: ${process.env.PRODUCER_CONCURRENCY}`);
+  throw new Error(`Invalid FLOWMUSIC_CONCURRENCY: ${process.env.FLOWMUSIC_CONCURRENCY ?? process.env.PRODUCER_CONCURRENCY}`);
 }
 
 const args = new Set(process.argv.slice(2));

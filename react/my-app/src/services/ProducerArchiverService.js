@@ -5,60 +5,34 @@
  */
 
 import { EventEmitter } from 'events';
+import archiverAccounts from '../config/flowmusicArchiverAccounts.json';
 
 const API_BASE = 'http://localhost:3456/api';
 const WS_URL = 'ws://localhost:3456';
 const ACCOUNTS_CONFIG_KEY = 'mmss.producer_archiver.accounts';
 const ACTIVE_ACCOUNT_KEY = 'mmss.producer_archiver.active_account';
 
-// Account profiles for 5 different Google accounts
-export const DEFAULT_ACCOUNTS = [
-  {
-    id: 'account_1',
-    name: 'Account 1',
-    color: '#ef4444', // red
-    authStateFile: 'producer_auth_1.json',
-    outputDir: 'producer_backup_1',
-    googleAccount: '',
-    isConfigured: false
-  },
-  {
-    id: 'account_2',
-    name: 'Account 2',
-    color: '#3b82f6', // blue
-    authStateFile: 'producer_auth_2.json',
-    outputDir: 'producer_backup_2',
-    googleAccount: '',
-    isConfigured: false
-  },
-  {
-    id: 'account_3',
-    name: 'Account 3',
-    color: '#22c55e', // green
-    authStateFile: 'producer_auth_3.json',
-    outputDir: 'producer_backup_3',
-    googleAccount: '',
-    isConfigured: false
-  },
-  {
-    id: 'account_4',
-    name: 'Account 4',
-    color: '#a855f7', // purple
-    authStateFile: 'producer_auth_4.json',
-    outputDir: 'producer_backup_4',
-    googleAccount: '',
-    isConfigured: false
-  },
-  {
-    id: 'account_5',
-    name: 'Account 5',
-    color: '#f97316', // orange
-    authStateFile: 'producer_auth_5.json',
-    outputDir: 'producer_backup_5',
-    googleAccount: '',
-    isConfigured: false
+function normalizeAccount(account) {
+  const base = DEFAULT_ACCOUNTS.find((item) => item.id === account?.id);
+  if (!base) {
+    return account;
   }
-];
+
+  return {
+    ...base,
+    ...account,
+    authStateFile: base.authStateFile,
+    legacyAuthStateFile: base.legacyAuthStateFile,
+    outputDir: base.outputDir,
+    legacyOutputDir: base.legacyOutputDir,
+  };
+}
+
+export const DEFAULT_ACCOUNTS = archiverAccounts.map((account) => ({
+  ...account,
+  googleAccount: '',
+  isConfigured: false,
+}));
 
 // HTTP API helpers with detailed error handling
 async function apiGet(endpoint) {
@@ -161,7 +135,7 @@ export class ProducerArchiverManager {
     try {
       const saved = localStorage.getItem(ACCOUNTS_CONFIG_KEY);
       if (saved) {
-        return JSON.parse(saved);
+        return JSON.parse(saved).map(normalizeAccount);
       }
     } catch (e) {
       console.warn('Failed to load accounts config:', e);

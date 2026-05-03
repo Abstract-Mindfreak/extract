@@ -1,0 +1,47 @@
+[
+  {
+    "id": "account_1",
+    "name": "Account 1",
+    "color": "#ef4444",
+    "authStateFile": "flowmusic_auth_1.json",
+    "legacyAuthStateFile": "producer_auth_1.json",
+    "outputDir": "flowmusic_backup_1",
+    "legacyOutputDir": "producer_backup_1"
+  },
+  {
+    "id": "account_2",
+    "name": "Account 2",
+    "color": "#3b82f6",
+    "authStateFile": "flowmusic_auth_2.json",
+    "legacyAuthStateFile": "producer_auth_2.json",
+    "outputDir": "flowmusic_backup_2",
+    "legacyOutputDir": "producer_backup_2"
+  },
+  {
+    "id": "account_3",
+    "name": "Account 3",
+    "color": "#22c55e",
+    "authStateFile": "flowmusic_auth_3.json",
+    "legacyAuthStateFile": "producer_auth_3.json",
+    "outputDir": "flowmusic_backup_3",
+    "legacyOutputDir": "producer_backup_3"
+  },
+  {
+    "id": "account_4",
+    "name": "Account 4",
+    "color": "#a855f7",
+    "authStateFile": "flowmusic_auth_4.json",
+    "legacyAuthStateFile": "producer_auth_4.json",
+    "outputDir": "flowmusic_backup_4",
+    "legacyOutputDir": "producer_backup_4"
+  },
+  {
+    "id": "account_5",
+    "name": "Account 5",
+    "color": "#f97316",
+    "authStateFile": "flowmusic_auth_5.json",
+    "legacyAuthStateFile": "producer_auth_5.json",
+    "outputDir": "flowmusic_backup_5",
+    "legacyOutputDir": "producer_backup_5"
+  }
+]
