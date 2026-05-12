@@ -267,6 +267,8 @@ function App() {
   };
   const selectedBlock =
     state.promptLibrary.blocks.find((block) => block.id === state.promptLibrary.selectedBlockId) || null;
+  const activePromptPanelMeta =
+    PROMPT_LIBRARY_PANEL_META[activePromptPanel] || PROMPT_LIBRARY_PANEL_META.json_block_list;
   const aseConfigCount = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem(ASE_DB_STORAGE_KEY) || "[]").length;
@@ -810,7 +812,7 @@ function App() {
     activeTab === "ase_console"
       ? "@_TOTAL_INIT"
       : activeTab === "prompt_library"
-        ? `@_${(PROMPT_LIBRARY_PANEL_META[activePromptPanel]?.label || "PANEL").replace(/\s+/g, "_").toUpperCase()}`
+        ? `@_${(activePromptPanelMeta.label || "PANEL").replace(/\s+/g, "_").toUpperCase()}`
         : "@_FLOWMUSIC_ARCHIVE";
 
   function toggleDrawerPanel(panelId) {
@@ -834,6 +836,21 @@ function App() {
           </button>
         </div>
 
+        <div className="workspace-surface__summary">
+          <div className="workspace-summary-card">
+            <span>Focused panel</span>
+            <strong>{activePromptPanelMeta.label}</strong>
+          </div>
+          <div className="workspace-summary-card">
+            <span>Active composition</span>
+            <strong>{state.promptLibrary.activeComposition?.blockIds?.length || 0} block(s)</strong>
+          </div>
+          <div className="workspace-summary-card">
+            <span>Merge strategy</span>
+            <strong>{state.promptLibrary.activeComposition?.mergeStrategy || "merge_deep"}</strong>
+          </div>
+        </div>
+
         <div className="tab-view prompt-library-view">
           <div className="prompt-library-shell">
             <div className="prompt-library-topbar">
@@ -846,7 +863,7 @@ function App() {
                 </div>
                 <div className="prompt-library-status">
                   <span>{libraryReady ? "Ready" : "Idle"}</span>
-                  <span>{PROMPT_LIBRARY_PANEL_META[activePromptPanel]?.label || "Panel"}</span>
+                  <span>{activePromptPanelMeta.label}</span>
                 </div>
               </div>
               <div className="row">
@@ -875,9 +892,7 @@ function App() {
                 <aside className="prompt-panel-sidebar">
                   <div className="prompt-panel-sidebar-head">
                     <strong>Panels</strong>
-                    <span>
-                      Switch tools without leaving the workspace
-                    </span>
+                    <span>Switch tools without leaving the workspace</span>
                   </div>
                   <div className="prompt-panel-sidebar-list">
                     {promptPanelOrder.map((panelId) => {
@@ -897,6 +912,17 @@ function App() {
                   </div>
                 </aside>
                 <div className="prompt-panel-stage">
+                  <div className="prompt-stage-shell-head">
+                    <div>
+                      <strong>{activePromptPanelMeta.label}</strong>
+                      <span>{activePromptPanelMeta.subtitle}</span>
+                    </div>
+                    <div className="prompt-stage-shell-tags">
+                      <span>{state.promptLibrary.blocks.length} blocks</span>
+                      <span>{state.promptLibrary.sequences.length} sequences</span>
+                      <span>{selectedBlock?.name || "No block selected"}</span>
+                    </div>
+                  </div>
                   <div className="prompt-panel-grid">
                     {promptPanelOrder.map((panelId) => {
                       const panelActions = (
@@ -1138,6 +1164,20 @@ function App() {
         </div>
 
         <div className="tab-view ase-console-view">
+          <div className="workspace-surface__summary">
+            <div className="workspace-summary-card">
+              <span>Saved configs</span>
+              <strong>{aseConfigCount}</strong>
+            </div>
+            <div className="workspace-summary-card">
+              <span>Unified handoff</span>
+              <strong>JsonSequenceBuilder</strong>
+            </div>
+            <div className="workspace-summary-card">
+              <span>Active model</span>
+              <strong>ASE Unified Rack</strong>
+            </div>
+          </div>
           <div className="mode-shell-head mode-shell-head--ase">
             <div>
               <strong>ASE Workspace</strong>
@@ -1180,6 +1220,20 @@ function App() {
         </div>
 
         <div className="workspace-archives-shell">
+          <div className="workspace-surface__summary">
+            <div className="workspace-summary-card">
+              <span>Source of truth</span>
+              <strong>flowmusic_backup_*</strong>
+            </div>
+            <div className="workspace-summary-card">
+              <span>Legacy fallback</span>
+              <strong>producer_backup_*</strong>
+            </div>
+            <div className="workspace-summary-card">
+              <span>Auth preference</span>
+              <strong>flowmusic_auth_*</strong>
+            </div>
+          </div>
           <div className="mode-shell-head mode-shell-head--archives">
             <div>
               <strong>Archive Workspace</strong>
