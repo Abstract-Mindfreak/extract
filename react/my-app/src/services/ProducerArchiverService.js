@@ -1,7 +1,7 @@
 /**
  * FlowMusic.app Archiver Service (Browser Version)
  * Communicates with archiver-server.js via HTTP API and WebSocket
- * Supports 4 accounts with different Google auth
+ * Supports up to 5 accounts with different Google auth
  */
 
 import { EventEmitter } from 'events';

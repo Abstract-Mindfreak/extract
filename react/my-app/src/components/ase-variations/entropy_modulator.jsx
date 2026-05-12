@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Activity, Cpu, Zap, Database, Layers, Binary, ShieldAlert, Radio, Move } from "lucide-react";
+import React, { useState } from "react";
+import { Activity, Zap, Database, Binary, ShieldAlert, Radio } from "lucide-react";
 
 export default function MMSSMasterConfig() {
   const [entropy, setEntropy] = useState({ p: 0.45, c: 0.55 });

@@ -245,7 +245,7 @@ function JsonSequenceBuilder({
           }}
           disabled={!compositionBlocks.length}
         >
-          Save composition as lyrics
+          Save composition as sequence
         </button>
         <div className="sequence-save-actions">
           <button onClick={() => onCopyPreview(activeComposition.combinedJson)}>Copy JSON Preview</button>

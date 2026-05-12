@@ -4,8 +4,6 @@
  * Simulates prompt-db-local Python functionality in browser
  */
 
-import { generateRulesStructured } from './MistralOrchestrator';
-
 // Default rules from prompt-db-local/system/rule_engine.py
 export const DEFAULT_RULES = {
   composition_rules: [
@@ -128,6 +126,9 @@ export function validateSelection(blocks, rules = DEFAULT_RULES) {
             report.warnings.push(`${rule.target} not at φ: ${avg.toFixed(3)} vs ${rule.value} (±${rule.tolerance})`);
           }
         }
+        break;
+
+      default:
         break;
     }
   }

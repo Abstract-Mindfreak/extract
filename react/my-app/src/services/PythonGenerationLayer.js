@@ -4,7 +4,7 @@
  * Includes: builder, builder_v3, mutation_engine, crossover_engine, memory_v3, self_rule_engine
  */
 
-import { generateRulesStructured, callMistral } from './MistralOrchestrator';
+import { callMistral } from './MistralOrchestrator';
 
 // =========================
 // MEMORY SYSTEM (memory_v3.py)
@@ -197,7 +197,7 @@ export async function build(config) {
   
   while (selectedIds.size < Math.min(max_blocks, topK.length)) {
     if (Math.random() > temperature) {
-      for (const [bid, score, meta] of topK) {
+      for (const [bid] of topK) {
         if (!selectedIds.has(bid)) {
           selectedIds.add(bid);
           break;
@@ -263,8 +263,6 @@ export async function buildV3(config) {
     max_blocks = 10,
     temperature = 0.55,
     runs = 8,
-    allowMutation = true,
-    allowCrossover = true,
     blockIndex = null,
     embeddings = null,
     graph = null
@@ -634,6 +632,9 @@ export function validateSelection(blocks, rules) {
             report.errors.push("Logic anchor requirement not met");
           }
         }
+        break;
+
+      default:
         break;
     }
   }

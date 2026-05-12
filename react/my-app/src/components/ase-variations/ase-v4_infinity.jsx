@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { Activity, Cpu, Zap, Database, Layers, Binary, ShieldAlert, Radio, Move, Wind, ZapOff, FlaskConical, Terminal, Code2, SlidersHorizontal, BrainCircuit, Link, GitMerge, RefreshCw, Key } from "lucide-react";
+import React, { useState, useMemo } from "react";
+import { Layers, Move, Terminal, Code2, SlidersHorizontal, GitMerge, RefreshCw, Key } from "lucide-react";
 
 export default function MMSSMasterConfig() {
-  const [protocol, setProtocol] = useState(1.618);
   const [phiSync, setPhiSync] = useState(true);
   const [logicStack, setLogicStack] = useState(["G_BASE", "Φ_DIV", "Q_GRAV", "M_SHIFT"]);
   const [metaKey, setMetaKey] = useState("Φ_KEY_0411_ALPHA");
-  const [entropy, setEntropy] = useState({ p: 0.965, c: 0.946 });
+  const [entropy] = useState({ p: 0.965, c: 0.946 });
   const [hyperParams, setHyperParams] = useState({
     purity: 0.98,
     divergence: 1.55,

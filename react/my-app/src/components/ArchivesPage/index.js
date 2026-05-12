@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import TrackTable from '../TrackTable';
+import React, { useEffect, useState } from 'react';
 import FilterPanel from '../FilterPanel';
-import SessionDialog from '../SessionDialog';
 import PlayerBar from '../PlayerBar';
-import { useTrackStore } from '../../hooks/useTrackStore';
+import SessionDialog from '../SessionDialog';
+import TrackTable from '../TrackTable';
 import { APP_CONFIG } from '../../constants/app';
+import { useTrackStore } from '../../hooks/useTrackStore';
 import './styles.css';
 
 export default function ArchivesPage() {
   const [selectedTrack, setSelectedTrack] = useState(null);
   const [showSessionDialog, setShowSessionDialog] = useState(false);
-  
-  const { 
-    isLoading, 
-    filteredTracks, 
-    selectedTracks,
+
+  const {
+    isLoading,
+    filteredTracks,
     initMockData,
     loadTracks,
-    importLocalData
+    importLocalData,
   } = useTrackStore();
 
   const handleSessionClick = (track) => {
@@ -41,23 +40,22 @@ export default function ArchivesPage() {
       const result = await importLocalData((progress) => {
         console.log(`[${progress.stage}] ${progress.message} (${progress.current}/${progress.total})`);
       });
-      
-      alert(`Импорт завершен!\nТреков: ${result.tracksImported}\nСессий: ${result.sessionsImported}`);
+
+      alert(`Import complete.\nTracks: ${result.tracksImported}\nSessions: ${result.sessionsImported}`);
     } catch (error) {
-      alert(`Ошибка импорта: ${error.message}`);
+      alert(`Import failed: ${error.message}`);
     }
   };
 
-  // Load data on mount only
   useEffect(() => {
     const loadData = async () => {
       try {
         await loadTracks();
       } catch {
-        // No tracks loaded, initialize mock data
         await handleInitMockData();
       }
     };
+
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -65,28 +63,19 @@ export default function ArchivesPage() {
   return (
     <div className="archives-page">
       <header className="archives-header">
-        <h1>{APP_CONFIG.name}</h1>
+        <div className="archives-header__copy">
+          <h1>{APP_CONFIG.name}</h1>
+          <p>Browse imported tracks, inspect sessions, and manage archive data without leaving the unified workspace.</p>
+        </div>
         <div className="header-actions">
-          <button 
-            className="btn-secondary"
-            onClick={loadTracks}
-            disabled={isLoading}
-          >
-            🔄 Обновить
+          <button className="btn-secondary" onClick={loadTracks} disabled={isLoading}>
+            Refresh
           </button>
-          <button 
-            className="btn-secondary"
-            onClick={handleInitMockData}
-            disabled={isLoading}
-          >
-            📦 Загрузить моки
+          <button className="btn-secondary" onClick={handleInitMockData} disabled={isLoading}>
+            Load Mock Data
           </button>
-          <button 
-            className="btn-primary"
-            onClick={handleImportLocalData}
-            disabled={isLoading}
-          >
-            ➕ Импорт из local-data
+          <button className="btn-primary" onClick={handleImportLocalData} disabled={isLoading}>
+            Import Local Data
           </button>
         </div>
       </header>
@@ -100,18 +89,15 @@ export default function ArchivesPage() {
           {isLoading ? (
             <div className="loading-state">
               <div className="spinner" />
-              <p>Загрузка данных...</p>
+              <p>Loading archive data...</p>
             </div>
           ) : filteredTracks.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">🎵</div>
-              <h3>Нет треков</h3>
-              <p>Загрузите данные архива, чтобы начать работу</p>
-              <button 
-                className="btn-primary"
-                onClick={handleInitMockData}
-              >
-                Загрузить моковые данные
+              <div className="empty-icon">♪</div>
+              <h3>No tracks yet</h3>
+              <p>Import archive data or load mock content to start working inside the archive workspace.</p>
+              <button className="btn-primary" onClick={handleInitMockData}>
+                Load Mock Data
               </button>
             </div>
           ) : (
@@ -122,12 +108,9 @@ export default function ArchivesPage() {
 
       <PlayerBar />
 
-      {showSessionDialog && (
-        <SessionDialog 
-          track={selectedTrack} 
-          onClose={handleCloseDialog} 
-        />
-      )}
+      {showSessionDialog ? (
+        <SessionDialog track={selectedTrack} onClose={handleCloseDialog} />
+      ) : null}
     </div>
   );
 }

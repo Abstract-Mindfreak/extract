@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Activity, Cpu, Zap, Database, Layers, Binary, ShieldAlert, Radio, Move, Wind, ZapOff, FlaskConical, Terminal, Code2, SlidersHorizontal, BrainCircuit, Link, GitMerge, RefreshCw, Key, Search, Download, FileAudio, History, Wifi, ArrowRightLeft } from "lucide-react";
+import { Activity, Layers, Radio, Move, Wind, ZapOff, Terminal, Code2, SlidersHorizontal, BrainCircuit, GitMerge, RefreshCw, Search, Download, FileAudio, History, Wifi, ArrowRightLeft } from "lucide-react";
 
 // Audio Sync Modes
 export const SYNC_MODES = {
@@ -11,10 +11,9 @@ export const SYNC_MODES = {
 
 export default function DecompositionAudio({ syncMode = SYNC_MODES.OFF, onSyncChange, prismaticCoreData = null, onASEDataChange }) {
   const syncControlsDisabled = true;
-  const [protocol, setProtocol] = useState(1.618);
-  const [phiSync, setPhiSync] = useState(true);
+  const [phiSync] = useState(true);
   const [logicStack, setLogicStack] = useState(["G_BASE", "Φ_DIV", "Q_GRAV", "M_SHIFT", "Ψ_RECUR", "Δ_COLLAPSE", "Σ_SYNTH", "H_ANNIHILATE", "Ψ_INJECT", "∇_DENSITY", "⧴_DRIFT", "↦_MAP"]);
-  const [metaKey, setMetaKey] = useState("Φ_KEY_0411_OMEGA_SUPREME");
+  const [metaKey] = useState("Φ_KEY_0411_OMEGA_SUPREME");
   const [entropy, setEntropy] = useState({ p: 0.9999, c: 0.9999 });
   const [hyperParams, setHyperParams] = useState({
     purity: 0.9999,
@@ -32,7 +31,6 @@ export default function DecompositionAudio({ syncMode = SYNC_MODES.OFF, onSyncCh
   const [isVisualizing, setIsVisualizing] = useState(false);
   const [spectralData, setSpectralData] = useState(new Array(32).fill(0));
   const [targetClipId, setTargetClipId] = useState("");
-  const [inferredBPM, setInferredBPM] = useState(120);
   const [lastSyncTime, setLastSyncTime] = useState(null);
 
   // Real-time Web Audio API Integration with Deep Heuristics
@@ -106,7 +104,7 @@ export default function DecompositionAudio({ syncMode = SYNC_MODES.OFF, onSyncCh
       if (audioCtx) audioCtx.close();
       if (stream) stream.getTracks().forEach(t => t.stop());
     };
-  }, [isVisualizing, phiSync]);
+  }, [isVisualizing, phiSync, logicStack]);
 
   // SYNC HANDLERS
   useEffect(() => {
@@ -139,7 +137,7 @@ export default function DecompositionAudio({ syncMode = SYNC_MODES.OFF, onSyncCh
       }
       setLastSyncTime(new Date().toLocaleTimeString());
     }
-  }, [syncMode, entropy.p, entropy.c, hyperParams.purity, hyperParams.divergence, opMode]);
+  }, [syncMode, entropy, hyperParams, opMode, quantumState, logicStack, metaKey, spectralData, phiSync, onASEDataChange, prismaticCoreData]);
 
   const capturedSamples = [
     { id: "96807206", title: "MMSS_ASE_EVOLUTION_STEP_v17.1", prompt: "V=0.999, D_f=9.5, experimental noise" },
@@ -163,7 +161,7 @@ export default function DecompositionAudio({ syncMode = SYNC_MODES.OFF, onSyncCh
     }, 2500);
   };
 
-  const formulas = [
+  const formulas = useMemo(() => [
     { id: "Φ_T", label: "Φ_total", formula: "Fix(Ψ ↦ META_G_Ψ ∘ T_Ψ)" },
     { id: "D_V", label: "Divergence", formula: "lim(Δ→0) [G(x + Δ) ⊗ Φ(x)] / R_T" },
     { id: "H_E", label: "Entropy H(p,c)", formula: "p·ln(1/p) + c·exp(9.5 / 2.618)" },
@@ -172,7 +170,7 @@ export default function DecompositionAudio({ syncMode = SYNC_MODES.OFF, onSyncCh
     { id: "Σ_M", label: "Σ_Synthesis", formula: "Σ(Word_i(t + τ_i) × Noise_i)" },
     { id: "∇_D", label: "∇_Density", formula: "∇ · (Ψ(G) ⊗ R_T) = ∂η/∂t" },
     { id: "⧴_T", label: "⧴_Temporal", formula: "T(x) ↦ x ⊗ self(x) ⊢ᵠ Fix" }
-  ];
+  ], []);
 
   const moveStack = (index) => {
     const newStack = [...logicStack];
@@ -219,7 +217,7 @@ export default function DecompositionAudio({ syncMode = SYNC_MODES.OFF, onSyncCh
         prismatic_connected: !!prismaticCoreData
       }
     }, null, 2);
-  }, [metaKey, phiSync, logicStack, entropy, hyperParams, opMode, quantumState, events, syncMode, lastSyncTime, prismaticCoreData]);
+  }, [metaKey, phiSync, logicStack, entropy, hyperParams, opMode, quantumState, events, syncMode, lastSyncTime, prismaticCoreData, formulas]);
 
   const SyncButton = ({ mode, label, icon: Icon, color }) => (
     <button

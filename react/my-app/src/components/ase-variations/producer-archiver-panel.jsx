@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { 
   Archive, Play, Square, FolderOpen, Trash2, RefreshCw, 
   CheckCircle, AlertCircle, LogIn, Settings, Music, 
-  Download, FileJson, Image, Film, Activity, Globe,
-  User, ChevronDown, ChevronUp, Terminal, Save
+  Download, Globe, ChevronDown, ChevronUp
 } from "lucide-react";
 import { archiverManager, DEFAULT_ACCOUNTS } from "../../services/ProducerArchiverService";
 
@@ -17,7 +16,6 @@ export default function ProducerArchiverPanel() {
   const [editingAccount, setEditingAccount] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
   const [concurrency, setConcurrency] = useState(4);
-  const [globalStatus, setGlobalStatus] = useState("idle");
   const [serverStatus, setServerStatus] = useState("checking");
   const [autoScrollLogs, setAutoScrollLogs] = useState(false);
   const logsEndRef = useRef(null);
@@ -57,10 +55,6 @@ export default function ProducerArchiverPanel() {
 
     const handleComplete = ({ accountId, code }) => {
       setRunningAccounts(prev => prev.filter(id => id !== accountId));
-      setGlobalStatus(prev => {
-        const stillRunning = runningAccounts.filter(id => id !== accountId);
-        return stillRunning.length > 0 ? "running" : "idle";
-      });
       loadAccountStats(accountId);
     };
 
@@ -110,7 +104,6 @@ export default function ProducerArchiverPanel() {
 
   const handleStart = async (accountId, options = {}) => {
     try {
-      setGlobalStatus("running");
       await archiverManager.startArchiver(accountId, { 
         ...options, 
         concurrency: concurrency.toString() 

@@ -6,7 +6,7 @@ export default function MMSSMasterConfig() {
   const [gravity, setGravity] = useState(0.88);
   const [phase, setPhase] = useState("STABLE");
   const [lfeMode, setLfeMode] = useState("AMBIENT");
-  const [isWarping, setIsWarping] = useState(false);
+  const [, setIsWarping] = useState(false);
 
   const handlePadMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();

@@ -8,25 +8,25 @@ export const ACCOUNTS = [
 ];
 
 export const RATING_OPTIONS = [
-  { value: 0, label: 'Без оценки' },
-  { value: 1, label: '⭐' },
-  { value: 2, label: '⭐⭐' },
-  { value: 3, label: '⭐⭐⭐' },
-  { value: 4, label: '⭐⭐⭐⭐' },
-  { value: 5, label: '⭐⭐⭐⭐⭐' }
+  { value: 0, label: 'No rating' },
+  { value: 1, label: '1 star' },
+  { value: 2, label: '2 stars' },
+  { value: 3, label: '3 stars' },
+  { value: 4, label: '4 stars' },
+  { value: 5, label: '5 stars' }
 ];
 
 export const TABLE_COLUMNS = {
   SELECT: { id: 'select', label: '', width: 40, fixed: true },
-  COVER: { id: 'cover', label: 'Обложка', width: 80, fixed: true },
-  TITLE: { id: 'title', label: 'Название', width: 200, sortable: true },
-  ACCOUNT: { id: 'account', label: 'Аккаунт', width: 120, sortable: true },
-  DURATION: { id: 'duration', label: 'Длит.', width: 80, sortable: true },
-  PROMPT: { id: 'prompt', label: 'Промпт', width: 300 },
-  RATING: { id: 'rating', label: 'Оценка', width: 100, sortable: true },
-  DATE: { id: 'date', label: 'Дата', width: 120, sortable: true },
-  PLAY_COUNT: { id: 'playCount', label: 'Просл.', width: 80, sortable: true },
-  ACTIONS: { id: 'actions', label: 'Действия', width: 120, fixed: true }
+  COVER: { id: 'cover', label: 'Cover', width: 80, fixed: true },
+  TITLE: { id: 'title', label: 'Title', width: 200, sortable: true },
+  ACCOUNT: { id: 'account', label: 'Account', width: 120, sortable: true },
+  DURATION: { id: 'duration', label: 'Length', width: 80, sortable: true },
+  PROMPT: { id: 'prompt', label: 'Prompt', width: 300 },
+  RATING: { id: 'rating', label: 'Rating', width: 100, sortable: true },
+  DATE: { id: 'date', label: 'Date', width: 120, sortable: true },
+  PLAY_COUNT: { id: 'playCount', label: 'Plays', width: 80, sortable: true },
+  ACTIONS: { id: 'actions', label: 'Actions', width: 120, fixed: true }
 };
 
 export const DEFAULT_VISIBLE_COLUMNS = [
@@ -34,7 +34,7 @@ export const DEFAULT_VISIBLE_COLUMNS = [
 ];
 
 export const APP_CONFIG = {
-  name: 'FlowMusic.app Archive Manager',
+  name: 'FlowMusic Archive Workspace',
   version: '1.0.0',
   pageSize: 25,
   debounceDelay: 300

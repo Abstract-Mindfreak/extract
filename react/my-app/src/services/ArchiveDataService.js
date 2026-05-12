@@ -27,7 +27,7 @@ class ArchiveDataService {
     try {
       const response = await fetch(`${ARCHIVE_PATH}/archive3.json`);
       if (response.ok) {
-        const data = await response.json();
+        await response.json();
         // Parse the text format - this is a custom format that needs parsing
         // For now, return empty since the format is non-standard JSON
         console.warn('Archive file is in custom text format, needs parser');

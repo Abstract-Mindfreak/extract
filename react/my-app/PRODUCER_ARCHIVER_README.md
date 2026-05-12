@@ -184,7 +184,8 @@ Browser-compatible service that:
 
 ### Auth System
 - Uses Supabase Auth (sb-api-auth-token cookies)
-- Session stored in `producer_auth_{N}.json`
+- Session stored in `flowmusic_auth_{N}.json`
+- Legacy `producer_auth_{N}.json` files are still supported for backward compatibility
 - Bearer token extracted automatically
 - Cookie-based auth with Cloudflare clearance
 

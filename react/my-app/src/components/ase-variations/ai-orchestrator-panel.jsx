@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Brain, Key, Wand2, Sparkles, AlertTriangle, CheckCircle, Terminal, Activity, Zap, Shield, RefreshCw } from "lucide-react";
 import { useMistralOrchestrator } from "../../services/MistralOrchestrator";
 import { usePythonBridge, DEFAULT_RULES } from "../../services/PythonBridge";
@@ -33,19 +33,19 @@ export default function AIOrchestratorPanel() {
   // Active tab
   const [activeTab, setActiveTab] = useState("config");
 
+  const checkApiStatus = useCallback(async (key) => {
+    setApiStatus({ configured: !!key, checking: true });
+    const status = mistral.getMistralStatus();
+    setApiStatus({ ...status, checking: false });
+  }, [mistral]);
+
   useEffect(() => {
     const savedKey = mistral.getApiKey();
     if (savedKey) {
       setApiKey(savedKey);
       checkApiStatus(savedKey);
     }
-  }, []);
-
-  const checkApiStatus = async (key) => {
-    setApiStatus({ configured: !!key, checking: true });
-    const status = mistral.getMistralStatus();
-    setApiStatus({ ...status, checking: false });
-  };
+  }, [mistral, checkApiStatus]);
 
   const handleSaveApiKey = () => {
     mistral.setApiKey(apiKey);

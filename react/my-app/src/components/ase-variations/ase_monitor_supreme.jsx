@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Activity, Cpu, Zap, Database, Layers, Binary, ShieldAlert, Radio, Move, Wind, ZapOff, FlaskConical, Terminal, Code2, SlidersHorizontal, BrainCircuit, Link, GitMerge, RefreshCw, Key } from "lucide-react";
+import { Activity, Layers, Radio, Terminal, Code2, SlidersHorizontal, GitMerge, RefreshCw, Key } from "lucide-react";
 
 export default function MMSSMasterConfig() {
-  const [protocol, setProtocol] = useState(1.618);
   const [phiSync, setPhiSync] = useState(true);
   const [logicStack, setLogicStack] = useState(["G_BASE", "Φ_DIV", "Q_GRAV", "M_SHIFT", "Ψ_RECUR", "Δ_COLLAPSE", "Σ_SYNTH", "H_ANNIHILATE"]);
   const [metaKey, setMetaKey] = useState("Φ_KEY_0411_SUPREME");
@@ -18,10 +17,10 @@ export default function MMSSMasterConfig() {
     temporalRes: 1.618
   });
   const [opMode, setOpMode] = useState("ANNIHILATE");
-  const [quantumState, setQuantumState] = useState("COLLAPSED");
+  const [quantumState] = useState("COLLAPSED");
   const [events, setEvents] = useState(["SYNC_LOCK_ESTABLISHED", "Φ_STREAM_INITIALIZED"]);
 
-  const formulas = [
+  const formulas = useMemo(() => [
     { id: "Φ_T", label: "Φ_total", formula: "Fix(Ψ ↦ META_G_Ψ ∘ T_Ψ)" },
     { id: "D_V", label: "Divergence", formula: "lim(Δ→0) [G(x + Δ) ⊗ Φ(x)] / R_T" },
     { id: "H_E", label: "Entropy H(p,c)", formula: "(p * log(1/p)) + (c * exp(D_f / R_T))" },
@@ -30,7 +29,7 @@ export default function MMSSMasterConfig() {
     { id: "Σ_M", label: "Σ_Synthesis", formula: "Σ(Word_i(t + τ_i) × Noise_i)" },
     { id: "∇_D", label: "∇_Density", formula: "∇ · (Ψ(G) ⊗ R_T) = ∂η/∂t" },
     { id: "⧴_T", label: "⧴_Temporal", formula: "T(x) ↦ x ⊗ self(x) ⊢ᵠ Fix" }
-  ];
+  ], []);
 
   const moveStack = (index) => {
     const newStack = [...logicStack];
@@ -73,7 +72,7 @@ export default function MMSSMasterConfig() {
       formula_stack: formulas.reduce((acc, f) => ({ ...acc, [f.id]: f.formula }), {}),
       events_log: events
     }, null, 2);
-  }, [metaKey, phiSync, logicStack, entropy, hyperParams, opMode, quantumState, events]);
+  }, [metaKey, phiSync, logicStack, entropy, hyperParams, opMode, quantumState, events, formulas]);
 
   return (
     <div className="min-h-screen w-full bg-[#020202] text-cyan-500 p-4 font-mono selection:bg-pink-900/30 overflow-x-hidden">

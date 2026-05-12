@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Cpu, Dna, GitMerge, Brain, Play, Save, Download, Upload, Trash2, Activity, Layers, Target, Zap, RefreshCw, Terminal, Code2 } from "lucide-react";
+import { Cpu, Dna, GitMerge, Brain, Download, Trash2, Activity, Target, Zap, Terminal, Code2 } from "lucide-react";
 import { usePythonGenerationLayer } from "../../services/PythonGenerationLayer";
 import { DEFAULT_RULES } from "../../services/PythonBridge";
 
@@ -114,13 +114,13 @@ export default function GenerationEnginePanel() {
 
   const handleMutate = () => {
     if (!blockIndex) return;
-    const { report, mutations: muts } = genLayer.runMutationEngine(blockIndex, 10);
+    const { mutations: muts } = genLayer.runMutationEngine(blockIndex, 10);
     setMutations(muts);
   };
 
   const handleCrossover = () => {
     if (!blockIndex) return;
-    const { report, crossovers: crosses } = genLayer.runCrossoverEngine(blockIndex, 5);
+    const { crossovers: crosses } = genLayer.runCrossoverEngine(blockIndex, 5);
     setCrossovers(crosses);
   };
 

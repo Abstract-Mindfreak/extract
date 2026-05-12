@@ -3,7 +3,7 @@
 ## Active checkpoint
 - [x] Создать backup branch: `backup/ui-rebuild-preflight-2026-05-03`
 - [x] Зафиксировать один source of truth для архивных output-папок
-- [ ] Подтвердить и зафиксировать `react/my-app` как главный app
+- [x] Подтвердить и зафиксировать `react/my-app` как главный app
 - [ ] Отключить неверный Electron-фокус без удаления полезных Python-скриптов
 - [~] Отвязать performance/audio/prismatic слой от главного UI
 - [~] Перенести новый shell из `src/main-template-new.tsx`
@@ -22,7 +22,7 @@
 ## Phase 2. App focus cleanup
 - [ ] Найти Electron entrypoints и связанный запускной фокус
 - [ ] Отключить/понизить приоритет Electron app
-- [~] Проверить, что `react/my-app` остаётся рабочей основной точкой
+- [x] Проверить, что `react/my-app` остаётся рабочей основной точкой
 - [x] Не трогать Python-скрипты, которые используются или могут понадобиться
 
 ## Phase 3. Remove audio/performance surface
@@ -35,7 +35,7 @@
 - [x] Убрать `System Panels` с главной поверхности
 - [x] Отвязать `PrismaticCoreDock`
 - [x] Сохранить `PrismaticCore Sync` как disabled-концепт в `ASE Audio Decomposer`
-- [~] Проверить, что `Prompt Library`, `ASE Console`, `Archives` не повреждены
+- [x] Проверить, что `Prompt Library`, `ASE Console`, `Archives` не повреждены
 
 ## Phase 4. New shell from template
 - [x] Разобрать структуру `main-template-new.tsx`
@@ -55,10 +55,10 @@
 
 ## Phase 6. Validation
 - [x] `npm run build`
-- [ ] Проверить архиватор и output path flow
+- [x] Проверить архиватор и output path flow
 - [ ] Проверить импорт архива в библиотеку
-- [ ] Проверить `ASE -> JsonSequenceBuilder`
-- [ ] Проверить `Prompt Library` block/sequence flow
+- [x] Проверить `ASE -> JsonSequenceBuilder`
+- [x] Проверить `Prompt Library` block/sequence flow
 - [ ] Подготовить список старого UI на возможное удаление после подтверждения
 
 ## What was completed recently
@@ -72,3 +72,4 @@
 - [ ] Дочистить оставшиеся неиспользуемые хвосты в `App.js`
 - [ ] Пройтись по responsive UX и убрать потенциальную перегруженность
 - [ ] Провести ручную smoke-проверку основных сценариев
+- [ ] Решить, нужен ли Plan B с разворотом прямо от шаблона, если визуально итог начнёт расходиться слишком сильно

@@ -1,5 +1,7 @@
 # Prompt DB Local
 
+> Note: this is a separate Electron project kept in the repository. For the current main UI rebuild and product workflow, the primary app is `react/my-app`.
+
 `Prompt DB Local` — локальное Electron + React приложение для импорта JSON-пакетов с промтами, хранения библиотеки блоков, тегирования, извлечения последовательностей ключей, генерации экспортов и связи с Chrome extension для `flowmusic.app`.
 
 Этот README описывает:

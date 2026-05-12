@@ -2,6 +2,16 @@
 
 A comprehensive system for archiving tracks from FlowMusic.app and managing them through the MMSS (Multi-Modal Synthesis System) Producer Station interface.
 
+## Primary App Focus
+
+The current main application for product work and UI rebuild is:
+
+- `react/my-app`
+
+Use this app as the default target for development, testing, and interface changes.
+
+`prompt-db-local` remains in the repository as a separate Electron-based project, but it is not the primary UI target for the current rebuild flow.
+
 ## 📁 Project Structure
 
 ```

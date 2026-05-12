@@ -53,7 +53,13 @@ const APP_TABS = [
   },
 ];
 
-const ORBIT_SLOT_STORAGE_KEY = "mmss.orbitQuickSlots.v1";
+const HERO_METRICS = [
+  { id: "active_mode", label: "Active mode" },
+  { id: "prompt_blocks", label: "Prompt blocks" },
+  { id: "sequences", label: "Sequences" },
+  { id: "library_status", label: "Library status" },
+];
+
 const PROMPT_PANEL_ORDER_STORAGE_KEY = "mmss.promptPanelOrder.v1";
 const PROMPT_ACTIVE_PANEL_STORAGE_KEY = "mmss.promptActivePanel.v1";
 const ASE_DB_STORAGE_KEY = "mmss.ase.database.v1";
@@ -67,56 +73,25 @@ const PROMPT_PANEL_DEFAULT_ORDER = [
 const PROMPT_LIBRARY_PANEL_META = {
   json_block_list: {
     label: "Block Library",
-    title: "JsonBlockList",
     subtitle: "Searchable block catalog with filters, tags, and quick actions",
   },
   prompt_logic_blockly: {
     label: "Blockly",
-    title: "PromptLogicBlocklyPanel",
     subtitle: "Visual DSL for selecting blocks/sequences and merge strategy",
   },
   json_block_editor: {
     label: "Block Editor",
-    title: "JsonBlockEditor",
     subtitle: "Metadata form plus validated JSON editor with save, format, and export",
   },
   json_sequence_builder: {
     label: "Sequences",
-    title: "JsonSequenceBuilder",
     subtitle: "Assemble active compositions, preview merge output, and save sequences",
   },
   json_bindings_panel: {
     label: "Bindings",
-    title: "JsonBindingsPanel",
     subtitle: "4 x 4 trigger matrix for block and sequence bindings with import/export tools",
   },
 };
-const DEFAULT_ORBIT_SLOTS = [
-  {
-    id: "calm",
-    label: "Calm",
-    meta: "soft drift",
-    values: { speed: 0.34, visualWeight: 0.52, collisionIntensity: 0.18 },
-  },
-  {
-    id: "intense",
-    label: "Intense",
-    meta: "tight pull",
-    values: { speed: 0.92, visualWeight: 0.84, collisionIntensity: 0.62 },
-  },
-  {
-    id: "chaos",
-    label: "Chaos",
-    meta: "collision storm",
-    values: { speed: 1.48, visualWeight: 0.9, collisionIntensity: 0.94 },
-  },
-  {
-    id: "glass_orbit",
-    label: "GlassOrbit",
-    meta: "balanced lab",
-    values: { speed: 0.64, visualWeight: 0.82, collisionIntensity: 0.45 },
-  },
-];
 
 function App() {
   const sectionRefs = useRef({
@@ -131,7 +106,6 @@ function App() {
     undefined,
     () => createInitialState({ __empty: true })
   );
-  const [orbitSlots] = useState(loadStoredOrbitSlots);
   const [libraryReady, setLibraryReady] = useState(false);
   const [promptPanelOrder, setPromptPanelOrder] = useState(loadStoredPromptPanelOrder);
   const [activePromptPanel, setActivePromptPanel] = useState(loadStoredPromptActivePanel);
@@ -142,10 +116,6 @@ function App() {
     if (!libraryReady) return;
     savePromptLibraryState(state.promptLibrary);
   }, [state.promptLibrary, libraryReady]);
-
-  useEffect(() => {
-    window.localStorage.setItem(ORBIT_SLOT_STORAGE_KEY, JSON.stringify(orbitSlots));
-  }, [orbitSlots]);
 
   useEffect(() => {
     window.localStorage.setItem(PROMPT_PANEL_ORDER_STORAGE_KEY, JSON.stringify(promptPanelOrder));
@@ -698,6 +668,7 @@ function App() {
 
   function focusWorkspaceSection(sectionId) {
     setActiveTab(sectionId);
+    setExpandedPanel(null);
     const node = sectionRefs.current[sectionId];
     if (node?.scrollIntoView) {
       node.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -716,9 +687,523 @@ function App() {
     (sequence) => sequence.id === state.promptLibrary.selectedSequenceId
   ) || null;
   const activeComposition = state.promptLibrary.activeComposition || null;
+  const activityLogs = useMemo(
+    () => [...(state.mmss?.logs || [])].slice(-8).reverse(),
+    [state.mmss?.logs]
+  );
+  const heroMetrics = HERO_METRICS.map((metric) => {
+    if (metric.id === "active_mode") {
+      return {
+        ...metric,
+        value: APP_TABS.find((tab) => tab.id === activeTab)?.label || "Workspace",
+      };
+    }
+
+    if (metric.id === "prompt_blocks") {
+      return { ...metric, value: state.promptLibrary.blocks.length };
+    }
+
+    if (metric.id === "sequences") {
+      return { ...metric, value: state.promptLibrary.sequences.length };
+    }
+
+    return {
+      ...metric,
+      value: libraryReady ? "Ready" : "Idle",
+    };
+  });
+  const activeModeMeta = APP_TABS.find((tab) => tab.id === activeTab) || APP_TABS[0];
+  const streamFeedback = useMemo(() => {
+    if (activeTab === "prompt_library") {
+      if (!libraryReady) {
+        return "Prompt library is idle. Load the library to unlock blocks, sequences, bindings, and JSON composition tools.";
+      }
+      return `Prompt workspace ready. ${state.promptLibrary.blocks.length} blocks and ${state.promptLibrary.sequences.length} sequences are available in the active toolchain.`;
+    }
+
+    if (activeTab === "archives") {
+      return "Archive workspace is online. Import local Flowmusic data, inspect sessions, and keep archive flows inside the same shell.";
+    }
+
+    return `ASE workspace is active. ${aseConfigCount} saved configs are available and direct handoff into the sequence builder remains linked.`;
+  }, [
+    activeTab,
+    aseConfigCount,
+    libraryReady,
+    state.promptLibrary.blocks.length,
+    state.promptLibrary.sequences.length,
+  ]);
+  const streamPreviewPayload = useMemo(() => {
+    if (activeTab === "prompt_library") {
+      return (
+        activeComposition?.combinedJson ||
+        selectedBlock?.payload?.data ||
+        {
+          mode: "prompt_library",
+          libraryReady,
+          activePanel: PROMPT_LIBRARY_PANEL_META[activePromptPanel]?.label || activePromptPanel,
+          blocks: state.promptLibrary.blocks.length,
+          sequences: state.promptLibrary.sequences.length,
+          bindingMode: state.promptLibrary.bindingMode,
+          mergeStrategy: activeComposition?.mergeStrategy || "merge_deep",
+        }
+      );
+    }
+
+    if (activeTab === "archives") {
+      return {
+        mode: "archives",
+        source: "flowmusic",
+        libraryReady,
+        selectedSequence: activeSequence?.name || null,
+        checkpoints: state.mmss.checkpoints.slice(-4),
+        logs: activityLogs.slice(0, 4),
+      };
+    }
+
+    return {
+      mode: "ase_console",
+      savedConfigs: aseConfigCount,
+      builderLinked: true,
+      promptBlocks: state.promptLibrary.blocks.length,
+      sequences: state.promptLibrary.sequences.length,
+      activeComposition: {
+        blocks: activeComposition?.blockIds?.length || 0,
+        mergeStrategy: activeComposition?.mergeStrategy || "merge_deep",
+      },
+      system: {
+        initialized: state.initialized,
+        theme: state.vision.theme,
+        playing: state.transport.playing,
+        orbitEnabled: state.orbit.enabled,
+      },
+    };
+  }, [
+    activeTab,
+    activeComposition,
+    activePromptPanel,
+    activeSequence,
+    activityLogs,
+    aseConfigCount,
+    libraryReady,
+    selectedBlock,
+    state.initialized,
+    state.mmss.checkpoints,
+    state.orbit.enabled,
+    state.promptLibrary.bindingMode,
+    state.promptLibrary.blocks.length,
+    state.promptLibrary.sequences.length,
+    state.transport.playing,
+    state.vision.theme,
+  ]);
+  const streamPreviewText = useMemo(
+    () => JSON.stringify(streamPreviewPayload || {}, null, 2),
+    [streamPreviewPayload]
+  );
+  const activeTopbarLabel =
+    activeTab === "ase_console"
+      ? "ASE_CONSOLE_X10"
+      : activeTab === "prompt_library"
+        ? "PROMPT_LIBRARY"
+        : "ARCHIVE_WORKSPACE";
+  const activeSeedLabel =
+    activeTab === "ase_console"
+      ? "@_TOTAL_INIT"
+      : activeTab === "prompt_library"
+        ? `@_${(PROMPT_LIBRARY_PANEL_META[activePromptPanel]?.label || "PANEL").replace(/\s+/g, "_").toUpperCase()}`
+        : "@_FLOWMUSIC_ARCHIVE";
 
   function toggleDrawerPanel(panelId) {
     setExpandedPanel((current) => (current === panelId ? null : panelId));
+  }
+
+  function renderPromptLibraryStage() {
+    return (
+      <section
+        ref={(node) => { sectionRefs.current.prompt_library = node; }}
+        className="workspace-surface workspace-surface--library is-focused template-stage-panel"
+      >
+        <div className="workspace-surface__head">
+          <div>
+            <span className="workspace-surface__eyebrow">Core Mode 01</span>
+            <h3>Prompt Library</h3>
+            <p>Blocks, sequences, bindings, and unified JSON composition stay accessible here.</p>
+          </div>
+          <button className="workspace-surface__action" onClick={() => setExpandedPanel("prompt_library")}>
+            Open Tools
+          </button>
+        </div>
+
+        <div className="tab-view prompt-library-view">
+          <div className="prompt-library-shell">
+            <div className="prompt-library-topbar">
+              <div className="prompt-library-topbar__head">
+                <div>
+                  <strong>Prompt Workspace</strong>
+                  <span>
+                    {state.promptLibrary.blocks.length} block(s), {state.promptLibrary.sequences.length} sequence(s)
+                  </span>
+                </div>
+                <div className="prompt-library-status">
+                  <span>{libraryReady ? "Ready" : "Idle"}</span>
+                  <span>{PROMPT_LIBRARY_PANEL_META[activePromptPanel]?.label || "Panel"}</span>
+                </div>
+              </div>
+              <div className="row">
+                <button onClick={handleLoadLibrary} disabled={libraryReady}>
+                  {libraryReady ? "Library Ready" : "Load Library"}
+                </button>
+                <button onClick={handleImportNormalizedPromptAssets}>
+                  Import Session Blocks
+                </button>
+                <button
+                  onClick={() => {
+                    setPromptPanelOrder(PROMPT_PANEL_DEFAULT_ORDER);
+                    setActivePromptPanel(PROMPT_PANEL_DEFAULT_ORDER[0]);
+                  }}
+                >
+                  Reset Layout
+                </button>
+                <button onClick={() => dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_CLEAR" })}>
+                  Clear Composition
+                </button>
+              </div>
+            </div>
+
+            {libraryReady ? (
+              <div className="prompt-library-workbench">
+                <aside className="prompt-panel-sidebar">
+                  <div className="prompt-panel-sidebar-head">
+                    <strong>Panels</strong>
+                    <span>
+                      Switch tools without leaving the workspace
+                    </span>
+                  </div>
+                  <div className="prompt-panel-sidebar-list">
+                    {promptPanelOrder.map((panelId) => {
+                      const panelMeta = PROMPT_LIBRARY_PANEL_META[panelId];
+                      const isActive = activePromptPanel === panelId;
+                      return (
+                        <button
+                          key={`nav-${panelId}`}
+                          className={`prompt-panel-nav ${isActive ? "active" : ""}`}
+                          onClick={() => setActivePromptPanel(panelId)}
+                        >
+                          <strong>{panelMeta.label}</strong>
+                          <span>{panelMeta.subtitle}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </aside>
+                <div className="prompt-panel-stage">
+                  <div className="prompt-panel-grid">
+                    {promptPanelOrder.map((panelId) => {
+                      const panelActions = (
+                        <div className="panel-move-actions">
+                          <button
+                            onClick={() => handleMovePromptPanel(panelId, "left")}
+                            disabled={(promptPanelIndex[panelId] ?? 0) % 2 === 0}
+                          >
+                            в†ђ
+                          </button>
+                          <button
+                            onClick={() => handleMovePromptPanel(panelId, "right")}
+                            disabled={(promptPanelIndex[panelId] ?? 0) % 2 === 1}
+                          >
+                            в†’
+                          </button>
+                          <button
+                            onClick={() => handleMovePromptPanel(panelId, "up")}
+                            disabled={(promptPanelIndex[panelId] ?? 0) < 2}
+                          >
+                            в†‘
+                          </button>
+                          <button
+                            onClick={() => handleMovePromptPanel(panelId, "down")}
+                            disabled={(promptPanelIndex[panelId] ?? 0) > 1}
+                          >
+                            в†“
+                          </button>
+                        </div>
+                      );
+
+                      if (panelId !== activePromptPanel) {
+                        return null;
+                      }
+
+                      if (panelId === "json_block_list") {
+                        return (
+                          <SectionCard
+                            key={panelId}
+                            className="prompt-fixed-panel"
+                            title="JsonBlockList"
+                            subtitle="Searchable block catalog with filters, tags, and quick actions"
+                            actions={panelActions}
+                          >
+                            <JsonBlockList
+                              blocks={state.promptLibrary.blocks}
+                              selectedBlockId={state.promptLibrary.selectedBlockId}
+                              onSelect={(blockId) => dispatch({ type: "PROMPT_SELECT_BLOCK", blockId })}
+                              onDuplicate={(blockId) => dispatch({ type: "PROMPT_BLOCK_DUPLICATE", blockId })}
+                              onDelete={(blockId) => dispatch({ type: "PROMPT_BLOCK_DELETE", blockId })}
+                              onPrepareBind={handlePrepareBind}
+                            />
+                          </SectionCard>
+                        );
+                      }
+
+                      if (panelId === "json_block_editor") {
+                        return (
+                          <SectionCard
+                            key={panelId}
+                            className="prompt-fixed-panel"
+                            title="JsonBlockEditor"
+                            subtitle="Metadata form plus validated JSON editor with save, format, and export"
+                            actions={panelActions}
+                          >
+                            <JsonBlockEditor
+                              block={selectedBlock}
+                              onSave={handlePromptBlockSave}
+                              onExport={(payload, name) => handleExportPayload(payload, `${name || "block"}_payload`)}
+                            />
+                          </SectionCard>
+                        );
+                      }
+
+                      if (panelId === "prompt_logic_blockly") {
+                        return (
+                          <SectionCard
+                            key={panelId}
+                            className="prompt-fixed-panel blockly-panel-shell"
+                            title="PromptLogicBlocklyPanel"
+                            subtitle="Visual DSL for selecting blocks/sequences and merge strategy"
+                            actions={panelActions}
+                          >
+                            <PromptLogicBlocklyPanel
+                              blocks={state.promptLibrary.blocks}
+                              sequences={state.promptLibrary.sequences}
+                              sourceJson={
+                                selectedBlock?.payload?.data ||
+                                state.promptLibrary.activeComposition.combinedJson?.data ||
+                                state.promptLibrary.activeComposition.combinedJson
+                              }
+                              initialContext={state.promptLibrary.activeComposition.context || DEFAULT_BLOCKLY_CONTEXT}
+                              initialWorkspaceXml={
+                                state.promptLibrary.activeComposition.blocklyWorkspaceXml ||
+                                DEFAULT_BLOCKLY_WORKSPACE_XML
+                              }
+                              onWorkspaceXmlChange={(workspaceXml) =>
+                                dispatch({
+                                  type: "PROMPT_ACTIVE_COMPOSITION_SET_FROM_BLOCKLY",
+                                  blockIds: state.promptLibrary.activeComposition.blockIds,
+                                  mergeStrategy: state.promptLibrary.activeComposition.mergeStrategy,
+                                  workspaceXml,
+                                  context: state.promptLibrary.activeComposition.context || DEFAULT_BLOCKLY_CONTEXT,
+                                })
+                              }
+                              onSetActiveComposition={handleSetActiveCompositionFromBlockly}
+                              onClearActiveComposition={() =>
+                                dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_CLEAR" })
+                              }
+                            />
+                          </SectionCard>
+                        );
+                      }
+
+                      if (panelId === "json_sequence_builder") {
+                        return (
+                          <SectionCard
+                            key={panelId}
+                            className="prompt-fixed-panel"
+                            title="JsonSequenceBuilder"
+                            subtitle="Assemble active compositions, preview merge output, and save sequences"
+                            actions={panelActions}
+                          >
+                            <JsonSequenceBuilder
+                              blocks={state.promptLibrary.blocks}
+                              sequences={state.promptLibrary.sequences}
+                              selectedSequenceId={state.promptLibrary.selectedSequenceId}
+                              activeComposition={state.promptLibrary.activeComposition}
+                              onSelectSequence={(sequenceId) =>
+                                dispatch({ type: "PROMPT_SELECT_SEQUENCE", sequenceId })
+                              }
+                              onDeleteSequence={(sequenceId) => dispatch({ type: "PROMPT_SEQUENCE_DELETE", sequenceId })}
+                              onAddBlock={(blockId) =>
+                                dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_ADD_BLOCK", blockId })
+                              }
+                              onRemoveBlock={(index) =>
+                                dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_REMOVE_BLOCK", index })
+                              }
+                              onReorder={(fromIndex, toIndex) =>
+                                dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_REORDER", fromIndex, toIndex })
+                              }
+                              onSetMergeStrategy={(mergeStrategy) =>
+                                dispatch({ type: "PROMPT_SET_MERGE_STRATEGY", mergeStrategy })
+                              }
+                              onSaveCompositionAsSequence={(name, description) =>
+                                dispatch({ type: "PROMPT_SAVE_COMPOSITION_AS_SEQUENCE", name, description })
+                              }
+                              onExportSequence={(payload, label) => handleExportPayload(payload, label)}
+                              onGeneratePresetComposition={handleGeneratePresetComposition}
+                              onCopyPreview={(payload) => handleExportPayload(payload, "json_preview")}
+                              onSavePreviewFile={handleSavePreviewFile}
+                              onBatchExport={handleBatchExportByFormula}
+                            />
+                          </SectionCard>
+                        );
+                      }
+
+                      return (
+                        <SectionCard
+                          key={panelId}
+                          className="prompt-fixed-panel"
+                          title="JsonBindingsPanel"
+                          subtitle="4 x 4 trigger matrix for block and sequence bindings with import/export tools"
+                          actions={panelActions}
+                        >
+                          <JsonBindingsPanel
+                            bindings={state.promptLibrary.bindings}
+                            bindingMode={state.promptLibrary.bindingMode}
+                            sequencePressMode={state.promptLibrary.sequencePressMode}
+                            blocks={state.promptLibrary.blocks}
+                            sequences={state.promptLibrary.sequences}
+                            selectedBlockId={state.promptLibrary.selectedBlockId}
+                            selectedSequenceId={state.promptLibrary.selectedSequenceId}
+                            activeComposition={state.promptLibrary.activeComposition}
+                            onSetBindingMode={(bindingMode) =>
+                              dispatch({ type: "PROMPT_SET_BINDING_MODE", bindingMode })
+                            }
+                            onSetSequencePressMode={(sequencePressMode) =>
+                              dispatch({ type: "PROMPT_SET_SEQUENCE_PRESS_MODE", sequencePressMode })
+                            }
+                            onBindButton={(buttonId, bindingType, targetId) =>
+                              dispatch({ type: "PROMPT_BIND_BUTTON", buttonId, bindingType, targetId })
+                            }
+                            onTriggerButton={(buttonId) => dispatch({ type: "PROMPT_TRIGGER_BUTTON", buttonId })}
+                            onClearComposition={() => dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_CLEAR" })}
+                            onSaveCompositionAsSequence={() =>
+                              dispatch({
+                                type: "PROMPT_SAVE_COMPOSITION_AS_SEQUENCE",
+                                name: `Composition ${state.promptLibrary.sequences.length + 1}`,
+                                description: "Saved from binding panel",
+                              })
+                            }
+                            onExportComposition={(payload, label) => handleExportPayload(payload, label)}
+                            onPrepareBind={handlePrepareBind}
+                            onImportLibrary={handleImportLibrary}
+                            onExportLibrary={handleExportLibrary}
+                            onExportBlocksAsFiles={handleExportBlocksAsFiles}
+                            onLoadLibrary={handleLoadLibrary}
+                            libraryReady={libraryReady}
+                          />
+                        </SectionCard>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <SectionCard
+                title="Prompt Library Idle"
+                subtitle="Library data stays unloaded until explicit activation"
+              >
+                <p>
+                  Click <strong>Load Library</strong> to open prompt panels, imports, exports, and sequence tools
+                  inside the unified workspace.
+                </p>
+              </SectionCard>
+            )}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  function renderAseStage() {
+    return (
+      <section
+        ref={(node) => { sectionRefs.current.ase_console = node; }}
+        className="workspace-surface workspace-surface--ase is-focused template-stage-panel template-stage-panel--ase"
+      >
+        <div className="workspace-surface__head">
+          <div>
+            <span className="workspace-surface__eyebrow">Core Mode 02</span>
+            <h3>ASE Console</h3>
+            <p>Unified ASE rack, MMSS JSON, mode tips, pipeline ordering, and builder handoff.</p>
+          </div>
+          <button className="workspace-surface__action" onClick={() => setExpandedPanel("ase_console")}>
+            Open Flow
+          </button>
+        </div>
+
+        <div className="tab-view ase-console-view">
+          <div className="mode-shell-head mode-shell-head--ase">
+            <div>
+              <strong>ASE Workspace</strong>
+              <span>Unified modules, pipeline order, and direct MMSS builder handoff.</span>
+            </div>
+            <div className="mode-shell-status">
+              <span>{aseConfigCount} saved configs</span>
+              <span>Builder linked</span>
+            </div>
+          </div>
+          <ASEMasterConsole
+            onSendToSequenceBuilder={handleApplyAseUnifiedToSequenceBuilder}
+            onSaveToDatabase={(config) => {
+              const existing = JSON.parse(localStorage.getItem(ASE_DB_STORAGE_KEY) || "[]");
+              const updated = [...existing, { ...config, savedAt: new Date().toISOString() }];
+              localStorage.setItem(ASE_DB_STORAGE_KEY, JSON.stringify(updated));
+              dispatch({ type: "append_log", message: `ASE config "${config.name}" saved to database.` });
+            }}
+          />
+        </div>
+      </section>
+    );
+  }
+
+  function renderArchivesStage() {
+    return (
+      <section
+        ref={(node) => { sectionRefs.current.archives = node; }}
+        className="workspace-surface workspace-surface--archives is-focused template-stage-panel"
+      >
+        <div className="workspace-surface__head">
+          <div>
+            <span className="workspace-surface__eyebrow">Core Mode 03</span>
+            <h3>Archives</h3>
+            <p>Archive import, browsing, filtering, and session drill-down stay available in the same workspace.</p>
+          </div>
+          <button className="workspace-surface__action" onClick={() => setExpandedPanel("archives")}>
+            Open Archive
+          </button>
+        </div>
+
+        <div className="workspace-archives-shell">
+          <div className="mode-shell-head mode-shell-head--archives">
+            <div>
+              <strong>Archive Workspace</strong>
+              <span>Import local data, browse sessions, and keep archive flows inside the same app shell.</span>
+            </div>
+            <div className="mode-shell-status">
+              <span>Flowmusic source</span>
+              <span>Import ready</span>
+            </div>
+          </div>
+          <ArchivesPage />
+        </div>
+      </section>
+    );
+  }
+
+  function renderActiveStageSection() {
+    if (activeTab === "prompt_library") {
+      return renderPromptLibraryStage();
+    }
+    if (activeTab === "archives") {
+      return renderArchivesStage();
+    }
+    return renderAseStage();
   }
 
   return (
@@ -747,7 +1232,9 @@ function App() {
             {drawerItems.map((item) => (
               <button
                 key={item.id}
-                className={`workspace-rail__btn ${expandedPanel === item.id ? "active" : ""}`}
+                className={`workspace-rail__btn ${
+                  expandedPanel === item.id || activeTab === item.id ? "active" : ""
+                }`}
                 onClick={() => toggleDrawerPanel(item.id)}
                 title={item.label}
               >
@@ -779,11 +1266,14 @@ function App() {
                     <div className="drawer-metric-card"><span>ASE Saves</span><strong>{aseConfigCount}</strong></div>
                   </div>
                 </SectionCard>
-                <SectionCard title="Quick Jumps" subtitle="Move around the single-page workspace">
+                <SectionCard title="Quick Jumps" subtitle="Move around the workspace">
                   <div className="drawer-link-list">
                     {APP_TABS.map((tab) => (
                       <button key={`drawer-${tab.id}`} onClick={() => focusWorkspaceSection(tab.id)}>
-                        <strong>{tab.label}</strong>
+                        <div>
+                          <strong>{tab.label}</strong>
+                          <span>{tab.summary}</span>
+                        </div>
                         <ChevronRight size={14} />
                       </button>
                     ))}
@@ -794,7 +1284,7 @@ function App() {
 
             {expandedPanel === "prompt_library" ? (
               <div className="drawer-stack">
-                <SectionCard title="Prompt Sections" subtitle="All prompt submodes stay one click away">
+                <SectionCard title="Prompt Sections" subtitle="Prompt tools in one place">
                   <div className="drawer-link-list">
                     {promptPanelOrder.map((panelId) => {
                       const panelMeta = PROMPT_LIBRARY_PANEL_META[panelId];
@@ -829,14 +1319,14 @@ function App() {
 
             {expandedPanel === "ase_console" ? (
               <div className="drawer-stack">
-                <SectionCard title="ASE Workflow" subtitle="Fast handoff and stored unified configs">
+                <SectionCard title="ASE Workflow" subtitle="Unified rack and builder handoff">
                   <div className="drawer-note-list">
                     <div><strong>Saved configs:</strong> {aseConfigCount}</div>
                     <div><strong>Builder handoff:</strong> Direct to `JsonSequenceBuilder`</div>
                     <div><strong>Rack mode:</strong> Unified MMSS pipeline</div>
                   </div>
                 </SectionCard>
-                <SectionCard title="Quick Actions" subtitle="Jump into the console surface">
+                <SectionCard title="Quick Actions" subtitle="Jump to the active ASE surface">
                   <div className="drawer-link-list">
                     <button onClick={() => focusWorkspaceSection("ase_console")}>
                       <strong>Open ASE workspace</strong>
@@ -858,7 +1348,7 @@ function App() {
 
             {expandedPanel === "archives" ? (
               <div className="drawer-stack">
-                <SectionCard title="Archive Tools" subtitle="Archive import remains attached to the same workspace">
+                <SectionCard title="Archive Tools" subtitle="Archive import stays inside the same workspace">
                   <div className="drawer-link-list">
                     <button onClick={() => focusWorkspaceSection("archives")}>
                       <strong>Open Archives surface</strong>
@@ -878,7 +1368,7 @@ function App() {
 
             {expandedPanel === "system" ? (
               <div className="drawer-stack">
-                <SectionCard title="System State" subtitle="Useful rebuild telemetry">
+                <SectionCard title="System State" subtitle="Current shell status">
                   <div className="drawer-metric-grid">
                     <div className="drawer-metric-card"><span>Library</span><strong>{libraryReady ? "Ready" : "Idle"}</strong></div>
                     <div className="drawer-metric-card"><span>Focused mode</span><strong>{APP_TABS.find((tab) => tab.id === activeTab)?.label}</strong></div>
@@ -898,42 +1388,33 @@ function App() {
           </div>
         </aside>
 
-        <div className="core-workspace-shell">
-          <div className="core-shell-hero">
-            <div className="core-shell-hero-copy">
-              <span className="eyebrow">React Main App</span>
-              <h2>Unified workspace for the 3 core modes</h2>
-              <p>
-                Current focus is narrowed to <strong>Prompt Library</strong>, <strong>ASE Console</strong>, and
-                <strong> Archives</strong>. Performance, advanced audio, and prismatic orchestration have been detached
-                from the main surface so we can rebuild the product around one clean workflow.
-              </p>
+        <div className="core-workspace-shell template-workspace-shell">
+          <header className="template-topbar">
+            <div className="template-topbar__brand">
+              <Boxes size={18} />
+              <span>{activeTopbarLabel}</span>
             </div>
-            <div className="core-shell-stats">
-              <div className="core-stat-card">
-                <span>Active mode</span>
-                <strong>{APP_TABS.find((tab) => tab.id === activeTab)?.label}</strong>
+            <div className="template-topbar__seed">
+              <Sparkles size={14} />
+              <span>{activeSeedLabel}</span>
+            </div>
+            <div className="template-topbar__actions">
+              <div className="template-topbar__badge">
+                <span>Mode</span>
+                <strong>{activeModeMeta.label}</strong>
               </div>
-              <div className="core-stat-card">
-                <span>Prompt blocks</span>
-                <strong>{state.promptLibrary.blocks.length}</strong>
-              </div>
-              <div className="core-stat-card">
-                <span>Sequences</span>
-                <strong>{state.promptLibrary.sequences.length}</strong>
-              </div>
-              <div className="core-stat-card">
-                <span>Library status</span>
+              <div className="template-topbar__badge">
+                <span>Status</span>
                 <strong>{libraryReady ? "Ready" : "Idle"}</strong>
               </div>
             </div>
-          </div>
+          </header>
 
-          <div className="core-shell-nav">
+          <div className="core-shell-nav template-mode-switcher">
             {APP_TABS.map((tab, index) => (
               <button
                 key={tab.id}
-                className={`core-shell-pill ${activeTab === tab.id ? "active" : ""}`}
+                className={`core-shell-pill template-mode-pill ${activeTab === tab.id ? "active" : ""}`}
                 onClick={() => focusWorkspaceSection(tab.id)}
               >
                 <span className="core-shell-pill__index">0{index + 1}</span>
@@ -943,346 +1424,89 @@ function App() {
             ))}
           </div>
 
-          <div className="core-shell-stage">
-
-        <div className="workspace-core-grid">
-          <section
-            ref={(node) => { sectionRefs.current.prompt_library = node; }}
-            className={`workspace-surface workspace-surface--library ${activeTab === "prompt_library" ? "is-focused" : ""}`}
-          >
-            <div className="workspace-surface__head">
-              <div>
-                <span className="workspace-surface__eyebrow">Core Mode 01</span>
-                <h3>Prompt Library</h3>
-                <p>Блоки, последовательности, binding workflow и unified JSON-сборка.</p>
-              </div>
-              <button className="workspace-surface__action" onClick={() => focusWorkspaceSection("prompt_library")}>
-                Focus
-              </button>
+          <div className="workspace-core-grid template-stage-grid">
+            <div className="template-stage-column">
+              {renderActiveStageSection()}
             </div>
 
-            <div className="tab-view prompt-library-view">
-            <div className="prompt-library-shell">
-              <div className="prompt-library-topbar">
-                <div className="row">
-                  <button onClick={handleLoadLibrary} disabled={libraryReady}>
-                    {libraryReady ? "Library Ready" : "Load Library"}
-                  </button>
-                  <button onClick={handleImportNormalizedPromptAssets}>
-                    Import Session Blocks
-                  </button>
-                  <button
-                    onClick={() => {
-                      setPromptPanelOrder(PROMPT_PANEL_DEFAULT_ORDER);
-                      setActivePromptPanel(PROMPT_PANEL_DEFAULT_ORDER[0]);
-                    }}
-                  >
-                    Reset Panel Layout
-                  </button>
-                  <button onClick={() => dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_CLEAR" })}>
-                    Clear Active Composition
-                  </button>
+            <aside className="template-stream-sidebar">
+              <div className="template-stream-sidebar__head">
+                <div className="template-stream-sidebar__title">
+                  <ChevronRight size={16} />
+                  <span>{activeModeMeta.label.toUpperCase()} STREAM</span>
+                </div>
+                <div className="template-stream-sidebar__status">
+                  <span className="template-stream-sidebar__dot" />
+                  <strong>{activeTab === "ase_console" ? "ACTIVE STREAM" : "SYNCED"}</strong>
                 </div>
               </div>
 
-              {libraryReady ? (
-                <div className="prompt-library-workbench">
-                  <aside className="prompt-panel-sidebar">
-                    <div className="prompt-panel-sidebar-head">
-                      <strong>Sections</strong>
-                      <span>
-                        {state.promptLibrary.blocks.length} block(s), {state.promptLibrary.sequences.length} sequence(s)
-                      </span>
-                    </div>
-                    <div className="prompt-panel-sidebar-list">
-                      {promptPanelOrder.map((panelId) => {
-                        const panelMeta = PROMPT_LIBRARY_PANEL_META[panelId];
-                        const isActive = activePromptPanel === panelId;
-                        return (
-                          <button
-                            key={`nav-${panelId}`}
-                            className={`prompt-panel-nav ${isActive ? "active" : ""}`}
-                            onClick={() => setActivePromptPanel(panelId)}
-                          >
-                            <strong>{panelMeta.label}</strong>
-                            <span>{panelMeta.subtitle}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </aside>
-                  <div className="prompt-panel-stage">
-                    <div className="prompt-panel-grid">
-                  {promptPanelOrder.map((panelId) => {
-                    const panelActions = (
-                      <div className="panel-move-actions">
-                        <button
-                          onClick={() => handleMovePromptPanel(panelId, "left")}
-                          disabled={(promptPanelIndex[panelId] ?? 0) % 2 === 0}
-                        >
-                          ←
-                        </button>
-                        <button
-                          onClick={() => handleMovePromptPanel(panelId, "right")}
-                          disabled={(promptPanelIndex[panelId] ?? 0) % 2 === 1}
-                        >
-                          →
-                        </button>
-                        <button
-                          onClick={() => handleMovePromptPanel(panelId, "up")}
-                          disabled={(promptPanelIndex[panelId] ?? 0) < 2}
-                        >
-                          ↑
-                        </button>
-                        <button
-                          onClick={() => handleMovePromptPanel(panelId, "down")}
-                          disabled={(promptPanelIndex[panelId] ?? 0) > 1}
-                        >
-                          ↓
-                        </button>
-                      </div>
-                    );
+              <div className="template-stream-card template-stream-card--feedback">
+                <div className="template-stream-card__eyebrow">
+                  <Sparkles size={12} />
+                  <span>Orchestrator Feedback</span>
+                </div>
+                <p>{streamFeedback}</p>
+              </div>
 
-                    if (panelId !== activePromptPanel) {
-                      return null;
-                    }
-
-                    if (panelId === "json_block_list") {
-                      return (
-                        <SectionCard
-                          key={panelId}
-                          className="prompt-fixed-panel"
-                          title="JsonBlockList"
-                          subtitle="Searchable block catalog with filters, tags, and quick actions"
-                          actions={panelActions}
-                        >
-                          <JsonBlockList
-                            blocks={state.promptLibrary.blocks}
-                            selectedBlockId={state.promptLibrary.selectedBlockId}
-                            onSelect={(blockId) => dispatch({ type: "PROMPT_SELECT_BLOCK", blockId })}
-                            onDuplicate={(blockId) => dispatch({ type: "PROMPT_BLOCK_DUPLICATE", blockId })}
-                            onDelete={(blockId) => dispatch({ type: "PROMPT_BLOCK_DELETE", blockId })}
-                            onPrepareBind={handlePrepareBind}
-                          />
-                        </SectionCard>
-                      );
-                    }
-
-                    if (panelId === "json_block_editor") {
-                      return (
-                        <SectionCard
-                          key={panelId}
-                          className="prompt-fixed-panel"
-                          title="JsonBlockEditor"
-                          subtitle="Metadata form plus validated JSON editor with save, format, and export"
-                          actions={panelActions}
-                        >
-                          <JsonBlockEditor
-                            block={selectedBlock}
-                            onSave={handlePromptBlockSave}
-                            onExport={(payload, name) => handleExportPayload(payload, `${name || "block"}_payload`)}
-                          />
-                        </SectionCard>
-                      );
-                    }
-
-                    if (panelId === "prompt_logic_blockly") {
-                      return (
-                        <SectionCard
-                          key={panelId}
-                          className="prompt-fixed-panel blockly-panel-shell"
-                          title="PromptLogicBlocklyPanel"
-                          subtitle="Visual DSL for selecting blocks/sequences and merge strategy"
-                          actions={panelActions}
-                        >
-                          <PromptLogicBlocklyPanel
-                            blocks={state.promptLibrary.blocks}
-                            sequences={state.promptLibrary.sequences}
-                            sourceJson={
-                              selectedBlock?.payload?.data ||
-                              state.promptLibrary.activeComposition.combinedJson?.data ||
-                              state.promptLibrary.activeComposition.combinedJson
-                            }
-                            initialContext={state.promptLibrary.activeComposition.context || DEFAULT_BLOCKLY_CONTEXT}
-                            initialWorkspaceXml={
-                              state.promptLibrary.activeComposition.blocklyWorkspaceXml ||
-                              DEFAULT_BLOCKLY_WORKSPACE_XML
-                            }
-                            onWorkspaceXmlChange={(workspaceXml) =>
-                              dispatch({
-                                type: "PROMPT_ACTIVE_COMPOSITION_SET_FROM_BLOCKLY",
-                                blockIds: state.promptLibrary.activeComposition.blockIds,
-                                mergeStrategy: state.promptLibrary.activeComposition.mergeStrategy,
-                                workspaceXml,
-                                context: state.promptLibrary.activeComposition.context || DEFAULT_BLOCKLY_CONTEXT,
-                              })
-                            }
-                            onSetActiveComposition={handleSetActiveCompositionFromBlockly}
-                            onClearActiveComposition={() =>
-                              dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_CLEAR" })
-                            }
-                          />
-                        </SectionCard>
-                      );
-                    }
-
-                    if (panelId === "json_sequence_builder") {
-                      return (
-                        <SectionCard
-                          key={panelId}
-                          className="prompt-fixed-panel"
-                          title="JsonSequenceBuilder"
-                          subtitle="Assemble active compositions, preview merge output, and save sequences"
-                          actions={panelActions}
-                        >
-                          <JsonSequenceBuilder
-                            blocks={state.promptLibrary.blocks}
-                            sequences={state.promptLibrary.sequences}
-                            selectedSequenceId={state.promptLibrary.selectedSequenceId}
-                            activeComposition={state.promptLibrary.activeComposition}
-                            onSelectSequence={(sequenceId) =>
-                              dispatch({ type: "PROMPT_SELECT_SEQUENCE", sequenceId })
-                            }
-                            onDeleteSequence={(sequenceId) => dispatch({ type: "PROMPT_SEQUENCE_DELETE", sequenceId })}
-                            onAddBlock={(blockId) =>
-                              dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_ADD_BLOCK", blockId })
-                            }
-                            onRemoveBlock={(index) =>
-                              dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_REMOVE_BLOCK", index })
-                            }
-                            onReorder={(fromIndex, toIndex) =>
-                              dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_REORDER", fromIndex, toIndex })
-                            }
-                            onSetMergeStrategy={(mergeStrategy) =>
-                              dispatch({ type: "PROMPT_SET_MERGE_STRATEGY", mergeStrategy })
-                            }
-                            onSaveCompositionAsSequence={(name, description) =>
-                              dispatch({ type: "PROMPT_SAVE_COMPOSITION_AS_SEQUENCE", name, description })
-                            }
-                            onExportSequence={(payload, label) => handleExportPayload(payload, label)}
-                            onGeneratePresetComposition={handleGeneratePresetComposition}
-                            onCopyPreview={(payload) => handleExportPayload(payload, "json_preview")}
-                            onSavePreviewFile={handleSavePreviewFile}
-                            onBatchExport={handleBatchExportByFormula}
-                          />
-                        </SectionCard>
-                      );
-                    }
-
-                    return (
-                      <SectionCard
-                        key={panelId}
-                        className="prompt-fixed-panel"
-                        title="JsonBindingsPanel"
-                        subtitle="4 x 4 trigger matrix for block and sequence bindings with import/export tools"
-                        actions={panelActions}
-                      >
-                        <JsonBindingsPanel
-                          bindings={state.promptLibrary.bindings}
-                          bindingMode={state.promptLibrary.bindingMode}
-                          sequencePressMode={state.promptLibrary.sequencePressMode}
-                          blocks={state.promptLibrary.blocks}
-                          sequences={state.promptLibrary.sequences}
-                          selectedBlockId={state.promptLibrary.selectedBlockId}
-                          selectedSequenceId={state.promptLibrary.selectedSequenceId}
-                          activeComposition={state.promptLibrary.activeComposition}
-                          onSetBindingMode={(bindingMode) =>
-                            dispatch({ type: "PROMPT_SET_BINDING_MODE", bindingMode })
-                          }
-                          onSetSequencePressMode={(sequencePressMode) =>
-                            dispatch({ type: "PROMPT_SET_SEQUENCE_PRESS_MODE", sequencePressMode })
-                          }
-                          onBindButton={(buttonId, bindingType, targetId) =>
-                            dispatch({ type: "PROMPT_BIND_BUTTON", buttonId, bindingType, targetId })
-                          }
-                          onTriggerButton={(buttonId) => dispatch({ type: "PROMPT_TRIGGER_BUTTON", buttonId })}
-                          onClearComposition={() => dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_CLEAR" })}
-                          onSaveCompositionAsSequence={() =>
-                            dispatch({
-                              type: "PROMPT_SAVE_COMPOSITION_AS_SEQUENCE",
-                              name: `Composition ${state.promptLibrary.sequences.length + 1}`,
-                              description: "Saved from binding panel",
-                            })
-                          }
-                          onExportComposition={(payload, label) => handleExportPayload(payload, label)}
-                          onPrepareBind={handlePrepareBind}
-                          onImportLibrary={handleImportLibrary}
-                          onExportLibrary={handleExportLibrary}
-                          onExportBlocksAsFiles={handleExportBlocksAsFiles}
-                          onLoadLibrary={handleLoadLibrary}
-                          libraryReady={libraryReady}
-                        />
-                      </SectionCard>
-                    );
-                  })}
-                    </div>
+              <div className="template-stream-metrics">
+                {heroMetrics.map((metric) => (
+                  <div key={metric.id} className="template-stream-metric">
+                    <span>{metric.label}</span>
+                    <strong>{metric.value}</strong>
                   </div>
+                ))}
+              </div>
+
+              <div className="template-stream-card template-stream-card--json">
+                <div className="template-stream-card__eyebrow">
+                  <Database size={12} />
+                  <span>Unified Preview</span>
                 </div>
-              ) : (
-                <SectionCard
-                  title="Prompt Library Idle"
-                  subtitle="Library data stays unloaded until explicit activation"
+                <pre>{streamPreviewText}</pre>
+              </div>
+
+              <div className="template-stream-card template-stream-card--logs">
+                <div className="template-stream-card__eyebrow">
+                  <Workflow size={12} />
+                  <span>Recent Activity</span>
+                </div>
+                <div className="template-stream-log-list">
+                  {activityLogs.length ? (
+                    activityLogs.map((entry, index) => (
+                      <div key={`${entry}-${index}`} className="template-stream-log-item">
+                        {entry}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="template-stream-log-item is-empty">No activity yet.</div>
+                  )}
+                </div>
+              </div>
+
+              <div className="template-stream-actions">
+                <button
+                  className="template-stream-actions__primary"
+                  onClick={() => {
+                    if (activeTab === "prompt_library" && !libraryReady) {
+                      handleLoadLibrary();
+                      return;
+                    }
+                    setExpandedPanel(activeTab);
+                  }}
                 >
-                  <p>
-                    Library is currently detached from audio workflow. Click <strong>Load Library</strong> to open
-                    prompt panels, imports, and exports.
-                  </p>
-                </SectionCard>
-              )}
-            </div>
-            </div>
-          </section>
-
-          <div className="workspace-side-stack">
-            <section
-              ref={(node) => { sectionRefs.current.ase_console = node; }}
-              className={`workspace-surface workspace-surface--ase ${activeTab === "ase_console" ? "is-focused" : ""}`}
-            >
-              <div className="workspace-surface__head">
-                <div>
-                  <span className="workspace-surface__eyebrow">Core Mode 02</span>
-                  <h3>ASE Console</h3>
-                  <p>Unified ASE rack, MMSS JSON, mode tips, pipeline ordering and builder handoff.</p>
-                </div>
-                <button className="workspace-surface__action" onClick={() => focusWorkspaceSection("ase_console")}>
-                  Focus
+                  {activeTab === "prompt_library" && !libraryReady ? "LOAD LIBRARY" : `OPEN ${activeModeMeta.label.toUpperCase()}`}
                 </button>
-              </div>
-
-              <div className="tab-view ase-console-view">
-            <ASEMasterConsole
-              onSendToSequenceBuilder={handleApplyAseUnifiedToSequenceBuilder}
-              onSaveToDatabase={(config) => {
-                const existing = JSON.parse(localStorage.getItem(ASE_DB_STORAGE_KEY) || "[]");
-                const updated = [...existing, { ...config, savedAt: new Date().toISOString() }];
-                localStorage.setItem(ASE_DB_STORAGE_KEY, JSON.stringify(updated));
-                dispatch({ type: "append_log", message: `ASE config "${config.name}" saved to database.` });
-              }}
-            />
-              </div>
-            </section>
-
-            <section
-              ref={(node) => { sectionRefs.current.archives = node; }}
-              className={`workspace-surface workspace-surface--archives ${activeTab === "archives" ? "is-focused" : ""}`}
-            >
-              <div className="workspace-surface__head">
-                <div>
-                  <span className="workspace-surface__eyebrow">Core Mode 03</span>
-                  <h3>Archives</h3>
-                  <p>Archive import, browsing, filtering and session drill-down stay available in the same workspace.</p>
+                <div className="template-stream-actions__row">
+                  <button onClick={() => handleExportPayload(streamPreviewPayload, `${activeModeMeta.label}_preview`)}>
+                    Copy Preview
+                  </button>
+                  <button onClick={() => handleSavePreviewFile(streamPreviewPayload)}>
+                    Save JSON
+                  </button>
                 </div>
-                <button className="workspace-surface__action" onClick={() => focusWorkspaceSection("archives")}>
-                  Focus
-                </button>
               </div>
-
-              <div className="workspace-archives-shell">
-                <ArchivesPage />
-              </div>
-            </section>
-          </div>
-        </div>
+            </aside>
           </div>
         </div>
       </main>
@@ -1497,17 +1721,6 @@ function filterBlocksByPreset(blocks, tagPreset) {
   });
 }
 
-function loadStoredOrbitSlots() {
-  try {
-    const raw = window.localStorage.getItem(ORBIT_SLOT_STORAGE_KEY);
-    if (!raw) return DEFAULT_ORBIT_SLOTS;
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) && parsed.length ? parsed : DEFAULT_ORBIT_SLOTS;
-  } catch (error) {
-    return DEFAULT_ORBIT_SLOTS;
-  }
-}
-
 function loadStoredPromptPanelOrder() {
   try {
     const raw = window.localStorage.getItem(PROMPT_PANEL_ORDER_STORAGE_KEY);
@@ -1556,3 +1769,5 @@ function sanitizeFileName(input) {
 }
 
 export default App;
+
+
