@@ -29,6 +29,7 @@ const MMSS_BRIDGE_DIR = path.join(__dirname, 'tmp');
 const MMSS_LIBRARY_STATE_PATH = path.join(MMSS_BRIDGE_DIR, 'mmss-library-state.json');
 const MMSS_GENESIS_HANDOFF_PATH = path.join(MMSS_BRIDGE_DIR, 'mmss-genesis-handoff.json');
 const MMSS_IMPORT_QUEUE_PATH = path.join(MMSS_BRIDGE_DIR, 'mmss-import-queue.json');
+const MMSS_MISTRAL_PRESET_PATH = path.join(MMSS_BRIDGE_DIR, 'mmss-mistral-preset.json');
 
 // Middleware
 app.use(cors());
@@ -175,6 +176,28 @@ app.post('/api/mmss/import-queue/ack', async (req, res) => {
     const nextQueue = queue.filter((item) => !ids.includes(item.id));
     await writeJsonFileSafe(MMSS_IMPORT_QUEUE_PATH, nextQueue);
     res.json({ ok: true, removed: ids.length });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/mmss/mistral-preset', async (_req, res) => {
+  const payload = await readJsonFileSafe(MMSS_MISTRAL_PRESET_PATH, {
+    preset: null,
+    updatedAt: null,
+  });
+  res.json(payload);
+});
+
+app.post('/api/mmss/mistral-preset', async (req, res) => {
+  try {
+    const payload = {
+      preset: req.body?.preset ?? null,
+      updatedAt: new Date().toISOString(),
+    };
+    await writeJsonFileSafe(MMSS_MISTRAL_PRESET_PATH, payload);
+    console.log(`[MMSS] mistral-preset updated at ${payload.updatedAt}`);
+    res.json({ ok: true, updatedAt: payload.updatedAt });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

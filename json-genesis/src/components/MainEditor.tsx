@@ -2,8 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   Activity,
   Box,
+  Check,
   Download,
- FileCode,
+  FileCode,
   Layers,
   Pin,
   Save,
@@ -20,7 +21,13 @@ import { BlockNode } from './BlockNode';
 import { BlockPalette } from './BlockPalette';
 
 const MMSS_BRIDGE_API_BASE = 'http://localhost:3456/api/mmss';
-const MAX_CONTEXT_BLOCKS = 8;
+const MAX_CONTEXT_BLOCKS = 10;
+const STORAGE_KEY = 'json_genesis_mistral_pipeline_v1';
+const DEFAULT_MMSS_META_RULES = [
+  'Include MMSS metrics when relevant: V, N, S, D_f, G_S, R_T.',
+  'Preserve MMSS meta-formulas and relation operators when they match the selected context.',
+  'Respect MMSS JSON construction rules: explicit hierarchy, reusable principles, operator traceability, and measurable output fields.',
+];
 
 type MmssPromptBlock = {
   id: string;
@@ -34,12 +41,35 @@ type RankedBlock = {
   block: MmssPromptBlock;
   score: number;
   reasons: string[];
+  roleMatches: string[];
+};
+
+type PipelineStep = 'plan' | 'preview' | 'approve' | 'generate';
+
+type PipelinePreset = {
+  pipelineMode: 'direct' | 'search-plan';
+  rankedLimit: number;
+  includeMmssMeta: boolean;
+  assemblyRules: string;
+  manualPinnedBlockIds: string[];
+  approvedBlockIds: string[];
 };
 
 const EMPTY_PLAN: MistralLibraryPlan = {
   queries: [],
   principles: [],
   notes: [],
+  blockRoles: [],
+  metaDirectives: [],
+};
+
+const DEFAULT_PRESET: PipelinePreset = {
+  pipelineMode: 'search-plan',
+  rankedLimit: 4,
+  includeMmssMeta: true,
+  assemblyRules: '',
+  manualPinnedBlockIds: [],
+  approvedBlockIds: [],
 };
 
 const tokenize = (input: string) =>
@@ -49,9 +79,8 @@ const tokenize = (input: string) =>
     .map((token) => token.trim())
     .filter((token) => token.length >= 2);
 
-const dedupeTokens = (values: string[]) => Array.from(new Set(values.filter(Boolean)));
-
-const safeJsonSnippet = (value: unknown, maxLength = 1200) => JSON.stringify(value ?? {}).slice(0, maxLength);
+const dedupeStrings = (items: string[]) => Array.from(new Set(items.filter(Boolean)));
+const safeJsonSnippet = (value: unknown, maxLength = 1600) => JSON.stringify(value ?? {}).slice(0, maxLength);
 
 export const MainEditor: React.FC = () => {
   const [root, setRoot] = useState<JSONBlock>(createDefaultBlock('object', 'root'));
@@ -61,7 +90,7 @@ export const MainEditor: React.FC = () => {
   const [aiPrompt, setAiPrompt] = useState('');
   const [aiModel, setAiModel] = useState<'gemini' | 'mistral'>('gemini');
   const [genMode, setGenMode] = useState<'augment' | 'rewrite' | 'skeleton'>('augment');
-  const [assemblyRules, setAssemblyRules] = useState('');
+  const [assemblyRules, setAssemblyRules] = useState(DEFAULT_PRESET.assemblyRules);
   const [aiEventLog, setAiEventLog] = useState<string[]>([]);
   const [aiStatusText, setAiStatusText] = useState('Idle');
   const [libraryBlocks, setLibraryBlocks] = useState<JSONBlock[]>([]);
@@ -70,13 +99,18 @@ export const MainEditor: React.FC = () => {
   const [mmssPromptBlocks, setMmssPromptBlocks] = useState<MmssPromptBlock[]>([]);
   const [lastLibrarySyncAt, setLastLibrarySyncAt] = useState<string | null>(null);
   const [lastGenesisHandoffAt, setLastGenesisHandoffAt] = useState<string | null>(null);
+  const [lastPresetSyncAt, setLastPresetSyncAt] = useState<string | null>(null);
   const [librarySearchQuery, setLibrarySearchQuery] = useState('');
-  const [manualPinnedBlockIds, setManualPinnedBlockIds] = useState<string[]>([]);
-  const [rankedLimit, setRankedLimit] = useState(4);
+  const [manualPinnedBlockIds, setManualPinnedBlockIds] = useState<string[]>(DEFAULT_PRESET.manualPinnedBlockIds);
+  const [approvedBlockIds, setApprovedBlockIds] = useState<string[]>(DEFAULT_PRESET.approvedBlockIds);
+  const [rankedLimit, setRankedLimit] = useState(DEFAULT_PRESET.rankedLimit);
   const [selectedLibraryBlockId, setSelectedLibraryBlockId] = useState<string | null>(null);
   const [mistralPlan, setMistralPlan] = useState<MistralLibraryPlan>(EMPTY_PLAN);
-  const [mistralPipelineMode, setMistralPipelineMode] = useState<'direct' | 'search-plan'>('search-plan');
+  const [mistralPipelineMode, setMistralPipelineMode] = useState<'direct' | 'search-plan'>(DEFAULT_PRESET.pipelineMode);
   const [lastSentBlockNames, setLastSentBlockNames] = useState<string[]>([]);
+  const [pipelineStep, setPipelineStep] = useState<PipelineStep>('plan');
+  const [includeMmssMeta, setIncludeMmssMeta] = useState(DEFAULT_PRESET.includeMmssMeta);
+  const [isSavingPreset, setIsSavingPreset] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('json_genesis_project');
@@ -92,6 +126,40 @@ export const MainEditor: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as Partial<PipelinePreset>;
+      setMistralPipelineMode(parsed.pipelineMode || DEFAULT_PRESET.pipelineMode);
+      setRankedLimit(parsed.rankedLimit || DEFAULT_PRESET.rankedLimit);
+      setIncludeMmssMeta(parsed.includeMmssMeta ?? DEFAULT_PRESET.includeMmssMeta);
+      setAssemblyRules(parsed.assemblyRules ?? DEFAULT_PRESET.assemblyRules);
+      setManualPinnedBlockIds(Array.isArray(parsed.manualPinnedBlockIds) ? parsed.manualPinnedBlockIds : []);
+      setApprovedBlockIds(Array.isArray(parsed.approvedBlockIds) ? parsed.approvedBlockIds : []);
+    } catch (error) {
+      console.error('Failed to load Mistral preset', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadMistralPresetFromBridge();
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        pipelineMode: mistralPipelineMode,
+        rankedLimit,
+        includeMmssMeta,
+        assemblyRules,
+        manualPinnedBlockIds,
+        approvedBlockIds,
+      } satisfies PipelinePreset),
+    );
+  }, [mistralPipelineMode, rankedLimit, includeMmssMeta, assemblyRules, manualPinnedBlockIds, approvedBlockIds]);
+
+  useEffect(() => {
     void requestMmssLibrary();
     void pullGenesisHandoff();
   }, []);
@@ -101,12 +169,11 @@ export const MainEditor: React.FC = () => {
       void requestMmssLibrary(true);
       void pullGenesisHandoff(true);
     }, 4000);
-
     return () => window.clearInterval(intervalId);
   }, [lastLibrarySyncAt, lastGenesisHandoffAt]);
 
   const appendAiEvent = (message: string) => {
-    setAiEventLog((prev) => [`${new Date().toLocaleTimeString()}: ${message}`, ...prev].slice(0, 20));
+    setAiEventLog((prev) => [`${new Date().toLocaleTimeString()}: ${message}`, ...prev].slice(0, 24));
   };
 
   const saveToLocal = () => {
@@ -118,6 +185,56 @@ export const MainEditor: React.FC = () => {
         name: projectName,
       }),
     );
+  };
+
+  const buildPipelinePreset = (): PipelinePreset => ({
+    pipelineMode: mistralPipelineMode,
+    rankedLimit,
+    includeMmssMeta,
+    assemblyRules,
+    manualPinnedBlockIds,
+    approvedBlockIds,
+  });
+
+  const loadMistralPresetFromBridge = async () => {
+    try {
+      const response = await fetch(`${MMSS_BRIDGE_API_BASE}/mistral-preset`);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const payload = await response.json();
+      if (!payload?.preset) return;
+      const preset = payload.preset as Partial<PipelinePreset>;
+      setMistralPipelineMode(preset.pipelineMode || DEFAULT_PRESET.pipelineMode);
+      setRankedLimit(preset.rankedLimit || DEFAULT_PRESET.rankedLimit);
+      setIncludeMmssMeta(preset.includeMmssMeta ?? DEFAULT_PRESET.includeMmssMeta);
+      setAssemblyRules(preset.assemblyRules ?? DEFAULT_PRESET.assemblyRules);
+      setManualPinnedBlockIds(Array.isArray(preset.manualPinnedBlockIds) ? preset.manualPinnedBlockIds : []);
+      setApprovedBlockIds(Array.isArray(preset.approvedBlockIds) ? preset.approvedBlockIds : []);
+      setLastPresetSyncAt(payload.updatedAt || null);
+      appendAiEvent('Loaded Mistral preset from MMSS bridge');
+    } catch (error) {
+      appendAiEvent(`Preset bridge load failed: ${error instanceof Error ? error.message : 'unknown error'}`);
+    }
+  };
+
+  const saveMistralPresetToBridge = async () => {
+    try {
+      setIsSavingPreset(true);
+      const response = await fetch(`${MMSS_BRIDGE_API_BASE}/mistral-preset`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          preset: buildPipelinePreset(),
+        }),
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const payload = await response.json();
+      setLastPresetSyncAt(payload.updatedAt || null);
+      appendAiEvent('Saved Mistral preset to MMSS bridge');
+    } catch (error) {
+      appendAiEvent(`Preset bridge save failed: ${error instanceof Error ? error.message : 'unknown error'}`);
+    } finally {
+      setIsSavingPreset(false);
+    }
   };
 
   const requestMmssLibrary = async (silent = false) => {
@@ -186,98 +303,161 @@ export const MainEditor: React.FC = () => {
     }
   };
 
-  const togglePinnedBlock = (blockId: string) => {
-    setManualPinnedBlockIds((prev) => (prev.includes(blockId) ? prev.filter((id) => id !== blockId) : [...prev, blockId]));
+  const resetPipeline = () => {
+    setMistralPlan(EMPTY_PLAN);
+    setApprovedBlockIds([]);
+    setPipelineStep('plan');
+    appendAiEvent('Mistral pipeline reset');
   };
-
-  const buildRankedBlocks = (tokens: string[]): RankedBlock[] =>
-    mmssPromptBlocks
-      .map((block) => {
-        const name = (block.name || '').toLowerCase();
-        const description = (block.description || '').toLowerCase();
-        const tags = Array.isArray(block.tags) ? block.tags.map((tag) => tag.toLowerCase()) : [];
-        const payloadText = safeJsonSnippet(block.payload?.data ?? {}, 1800).toLowerCase();
-        let score = 0;
-        const reasons: string[] = [];
-
-        tokens.forEach((token) => {
-          let tokenScore = 0;
-          if (name.includes(token)) tokenScore += 5;
-          if (description.includes(token)) tokenScore += 3;
-          if (tags.some((tag) => tag.includes(token))) tokenScore += 4;
-          if (payloadText.includes(token)) tokenScore += 1;
-          if (tokenScore > 0) reasons.push(`${token}:${tokenScore}`);
-          score += tokenScore;
-        });
-
-        return { block, score, reasons };
-      })
-      .filter((entry) => entry.score > 0 || manualPinnedBlockIds.includes(entry.block.id))
-      .sort((left, right) => right.score - left.score || (left.block.name || '').localeCompare(right.block.name || ''));
 
   const allSearchTokens = useMemo(() => {
     const promptTokens = tokenize(aiPrompt);
     const manualTokens = tokenize(librarySearchQuery);
     const planTokens = mistralPlan.queries.flatMap((query) => tokenize(query));
-    return dedupeTokens([...promptTokens, ...manualTokens, ...planTokens]);
+    const roleTokens = mistralPlan.blockRoles.flatMap((role) => tokenize(role));
+    const principleTokens = mistralPlan.principles.flatMap((item) => tokenize(item));
+    return dedupeStrings([...promptTokens, ...manualTokens, ...planTokens, ...roleTokens, ...principleTokens]);
   }, [aiPrompt, librarySearchQuery, mistralPlan]);
 
-  const rankedBlocks = useMemo(() => buildRankedBlocks(allSearchTokens), [allSearchTokens, mmssPromptBlocks, manualPinnedBlockIds]);
+  const buildRankedBlocks = (tokens: string[]): RankedBlock[] =>
+    mmssPromptBlocks
+      .map((block) => {
+        const rawPayload = block.payload?.data ?? {};
+        const name = (block.name || '').toLowerCase();
+        const description = (block.description || '').toLowerCase();
+        const tags = Array.isArray(block.tags) ? block.tags.map((tag) => tag.toLowerCase()) : [];
+        const payloadText = safeJsonSnippet(rawPayload, 2400).toLowerCase();
+        const payloadKeys = collectKeys(rawPayload);
+        const payloadDepth = getJsonDepth(rawPayload);
+        const roleMatches: string[] = [];
+        let score = 0;
+        const reasons: string[] = [];
 
-  const pinnedBlocks = useMemo(
-    () => mmssPromptBlocks.filter((block) => manualPinnedBlockIds.includes(block.id)),
-    [manualPinnedBlockIds, mmssPromptBlocks],
+        tokens.forEach((token) => {
+          let tokenScore = 0;
+          if (name.includes(token)) tokenScore += 7;
+          if (description.includes(token)) tokenScore += 4;
+          if (tags.some((tag) => tag.includes(token))) tokenScore += 5;
+          if (payloadKeys.some((key) => key.includes(token))) tokenScore += 4;
+          if (payloadText.includes(token)) tokenScore += 2;
+          if (tokenScore > 0) reasons.push(`${token}:${tokenScore}`);
+          score += tokenScore;
+        });
+
+        mistralPlan.blockRoles.forEach((role) => {
+          const roleToken = role.toLowerCase();
+          const roleMatched =
+            name.includes(roleToken) ||
+            description.includes(roleToken) ||
+            tags.some((tag) => tag.includes(roleToken)) ||
+            payloadKeys.some((key) => key.includes(roleToken));
+          if (roleMatched) {
+            score += 6;
+            roleMatches.push(role);
+          }
+        });
+
+        if (payloadDepth >= 4) {
+          score += 2;
+          reasons.push(`depth:${payloadDepth}`);
+        }
+        if (payloadKeys.length >= 12) {
+          score += 2;
+          reasons.push(`keys:${payloadKeys.length}`);
+        }
+        if (containsMmssMeta(rawPayload)) {
+          score += 4;
+          reasons.push('mmss-meta');
+        }
+        if (manualPinnedBlockIds.includes(block.id)) {
+          score += 50;
+          reasons.push('pinned');
+        }
+
+        return { block, score, reasons, roleMatches };
+      })
+      .filter((entry) => entry.score > 0 || manualPinnedBlockIds.includes(entry.block.id))
+      .sort((left, right) => right.score - left.score || (left.block.name || '').localeCompare(right.block.name || ''));
+
+  const rankedBlocks = useMemo(
+    () => buildRankedBlocks(allSearchTokens),
+    [allSearchTokens, mmssPromptBlocks, manualPinnedBlockIds, mistralPlan.blockRoles],
   );
 
+  const candidateBlocks = useMemo(
+    () => rankedBlocks.slice(0, Math.max(rankedLimit + manualPinnedBlockIds.length + 2, rankedLimit)),
+    [rankedBlocks, rankedLimit, manualPinnedBlockIds.length],
+  );
+
+  const approvedContextBlocks = useMemo(() => {
+    if (!approvedBlockIds.length) return [];
+    return approvedBlockIds
+      .map((id) => mmssPromptBlocks.find((block) => block.id === id))
+      .filter((block): block is MmssPromptBlock => Boolean(block))
+      .slice(0, MAX_CONTEXT_BLOCKS);
+  }, [approvedBlockIds, mmssPromptBlocks]);
+
   const selectedContextBlocks = useMemo(() => {
-    const pinned = pinnedBlocks;
-    const autoRanked = rankedBlocks
-      .filter((entry) => !manualPinnedBlockIds.includes(entry.block.id))
-      .slice(0, rankedLimit)
-      .map((entry) => entry.block);
+    if (mistralPipelineMode === 'search-plan' && approvedContextBlocks.length) {
+      return approvedContextBlocks;
+    }
+    return dedupeById(
+      candidateBlocks
+        .filter((entry) => manualPinnedBlockIds.includes(entry.block.id) || entry.score > 0)
+        .slice(0, rankedLimit + manualPinnedBlockIds.length)
+        .map((entry) => entry.block),
+    ).slice(0, MAX_CONTEXT_BLOCKS);
+  }, [mistralPipelineMode, approvedContextBlocks, candidateBlocks, manualPinnedBlockIds, rankedLimit]);
 
-    return dedupeById([...pinned, ...autoRanked]).slice(0, MAX_CONTEXT_BLOCKS);
-  }, [pinnedBlocks, rankedBlocks, rankedLimit, manualPinnedBlockIds]);
+  const mmssMetaContext = useMemo(() => {
+    if (!includeMmssMeta) return null;
+    return {
+      requiredMetrics: ['V', 'N', 'S', 'D_f', 'G_S', 'R_T'],
+      defaultRules: DEFAULT_MMSS_META_RULES,
+      planPrinciples: mistralPlan.principles,
+      metaDirectives: mistralPlan.metaDirectives,
+    };
+  }, [includeMmssMeta, mistralPlan]);
 
-  const relevantLibraryContext = useMemo(() => {
-    if (!selectedContextBlocks.length) {
-      return JSON.stringify(
+  const relevantLibraryContext = useMemo(
+    () =>
+      JSON.stringify(
         {
           summary: mmssLibrarySummary,
-          relevantBlocks: [],
-          selectionStrategy: {
-            pipelineMode: mistralPipelineMode,
+          pipeline: {
+            mode: mistralPipelineMode,
+            step: pipelineStep,
             queryTokens: allSearchTokens,
+            approvedBlockIds,
             pinnedBlockIds: manualPinnedBlockIds,
+            mistralQueries: mistralPlan.queries,
+            blockRoles: mistralPlan.blockRoles,
+            principles: mistralPlan.principles,
           },
+          mmssMeta: mmssMetaContext,
+          relevantBlocks: selectedContextBlocks.map((block) => ({
+            id: block.id,
+            name: block.name,
+            description: block.description,
+            tags: block.tags || [],
+            payload: block.payload?.data ?? {},
+          })),
         },
         null,
         2,
-      );
-    }
-
-    return JSON.stringify(
-      {
-        summary: mmssLibrarySummary,
-        selectionStrategy: {
-          pipelineMode: mistralPipelineMode,
-          queryTokens: allSearchTokens,
-          pinnedBlockIds: manualPinnedBlockIds,
-          mistralQueries: mistralPlan.queries,
-          principles: mistralPlan.principles,
-        },
-        relevantBlocks: selectedContextBlocks.map((block) => ({
-          id: block.id,
-          name: block.name,
-          description: block.description,
-          tags: block.tags || [],
-          payload: block.payload?.data ?? {},
-        })),
-      },
-      null,
-      2,
-    );
-  }, [selectedContextBlocks, mmssLibrarySummary, mistralPipelineMode, allSearchTokens, manualPinnedBlockIds, mistralPlan]);
+      ),
+    [
+      mmssLibrarySummary,
+      mistralPipelineMode,
+      pipelineStep,
+      allSearchTokens,
+      approvedBlockIds,
+      manualPinnedBlockIds,
+      mistralPlan,
+      mmssMetaContext,
+      selectedContextBlocks,
+    ],
+  );
 
   const selectedLibraryBlock = useMemo(() => {
     const fromPromptLibrary = mmssPromptBlocks.find((block) => block.id === selectedLibraryBlockId);
@@ -297,6 +477,21 @@ export const MainEditor: React.FC = () => {
     () => JSON.stringify(selectedLibraryBlock?.payload?.data ?? {}, null, 2),
     [selectedLibraryBlock],
   );
+
+  const togglePinnedBlock = (blockId: string) => {
+    setManualPinnedBlockIds((prev) => (prev.includes(blockId) ? prev.filter((id) => id !== blockId) : [...prev, blockId]));
+  };
+
+  const toggleApprovedBlock = (blockId: string) => {
+    setApprovedBlockIds((prev) => (prev.includes(blockId) ? prev.filter((id) => id !== blockId) : [...prev, blockId]));
+  };
+
+  const approveSuggestedContext = () => {
+    const nextIds = candidateBlocks.slice(0, rankedLimit + manualPinnedBlockIds.length).map((entry) => entry.block.id);
+    setApprovedBlockIds(dedupeStrings([...manualPinnedBlockIds, ...nextIds]));
+    setPipelineStep('approve');
+    appendAiEvent(`Approved context blocks: ${nextIds.length}`);
+  };
 
   const updateBlock = (id: string, updates: Partial<JSONBlock>) => {
     const walk = (blocks: JSONBlock[]): JSONBlock[] =>
@@ -388,16 +583,19 @@ export const MainEditor: React.FC = () => {
   const handlePlanMistralContext = async () => {
     if (!aiPrompt.trim()) return;
     setIsPlanningContext(true);
+    setPipelineStep('plan');
     appendAiEvent('Mistral planning retrieval queries');
     try {
       const summary = JSON.stringify(
         {
           librarySummary: mmssLibrarySummary,
-          availableBlocks: mmssPromptBlocks.slice(0, 20).map((block) => ({
+          availableBlocks: mmssPromptBlocks.slice(0, 40).map((block) => ({
             id: block.id,
             name: block.name,
             description: block.description,
             tags: block.tags || [],
+            payloadKeys: collectKeys(block.payload?.data ?? {}).slice(0, 24),
+            hasMmssMeta: containsMmssMeta(block.payload?.data ?? {}),
           })),
         },
         null,
@@ -408,7 +606,9 @@ export const MainEditor: React.FC = () => {
         appendAiEvent(message);
       });
       setMistralPlan(plan);
+      setPipelineStep('preview');
       appendAiEvent(`Mistral queries: ${plan.queries.join(' | ') || 'none'}`);
+      appendAiEvent(`Mistral roles: ${plan.blockRoles.join(', ') || 'none'}`);
     } catch (error) {
       appendAiEvent(`Mistral planning failed: ${error instanceof Error ? error.message : 'unknown error'}`);
     } finally {
@@ -419,22 +619,34 @@ export const MainEditor: React.FC = () => {
 
   const runAiGen = async () => {
     if (!aiPrompt) return;
+    if (aiModel === 'mistral' && mistralPipelineMode === 'search-plan') {
+      if (pipelineStep === 'plan') {
+        appendAiEvent('Plan the Mistral retrieval step before generation');
+        return;
+      }
+      if (!approvedBlockIds.length) {
+        appendAiEvent('Approve at least one context block before generation');
+        return;
+      }
+    }
+
     setIsGenerating(true);
+    setPipelineStep('generate');
     setAiStatusText(`Starting ${aiModel} synthesis`);
     appendAiEvent(`Start ${aiModel} · mode ${genMode}`);
     try {
-      if (aiModel === 'mistral' && mistralPipelineMode === 'search-plan' && aiPrompt.trim()) {
-        await handlePlanMistralContext();
-      }
-
       const currentStructure = JSON.stringify(blocksToJson(root));
       const selectedNames = selectedContextBlocks.map((block) => block.name || block.id);
       setLastSentBlockNames(selectedNames);
       appendAiEvent(`Context blocks sent: ${selectedNames.join(', ') || 'none'}`);
 
+      const mergedRules = includeMmssMeta
+        ? [assemblyRules, ...DEFAULT_MMSS_META_RULES, ...mistralPlan.metaDirectives].filter(Boolean).join('\n')
+        : assemblyRules;
+
       const options = {
         mode: genMode,
-        rules: assemblyRules,
+        rules: mergedRules,
         libraryContext: relevantLibraryContext,
         onProgress: (message: string) => {
           setAiStatusText(message);
@@ -459,7 +671,23 @@ export const MainEditor: React.FC = () => {
     }
   };
 
-  const mmssRelevantPreview = useMemo(() => relevantLibraryContext.slice(0, 1600), [relevantLibraryContext]);
+  const runApprovedContextGen = async () => {
+    if (aiModel !== 'mistral') {
+      appendAiEvent('Approved-context generation is available only for Mistral');
+      return;
+    }
+    if (mistralPipelineMode !== 'search-plan') {
+      appendAiEvent('Switch Mistral pipeline mode to search-plan to use approved-context generation');
+      return;
+    }
+    if (!approvedBlockIds.length) {
+      appendAiEvent('Approve at least one context block before approved-context generation');
+      return;
+    }
+    await runAiGen();
+  };
+
+  const mmssRelevantPreview = useMemo(() => relevantLibraryContext.slice(0, 2200), [relevantLibraryContext]);
 
   return (
     <div className="flex flex-col h-screen bg-bg-deep overflow-hidden selection:bg-orange-500/30">
@@ -480,7 +708,7 @@ export const MainEditor: React.FC = () => {
           </label>
           <button onClick={() => setImportToLib((prev) => !prev)} className="px-4 py-1.5 rounded bg-zinc-900/70 text-zinc-300 text-[10px] font-bold uppercase border border-white/5 flex items-center gap-2">
             <Box size={12} />
-            {importToLib ? 'Import → Library' : 'Import → Root'}
+            {importToLib ? 'Import to Library' : 'Import to Root'}
           </button>
           <button onClick={() => void requestMmssLibrary()} className="px-4 py-1.5 rounded bg-cyan-950/30 text-cyan-300 text-[10px] font-bold uppercase border border-cyan-500/20 flex items-center gap-2">
             <Layers size={12} />
@@ -595,7 +823,7 @@ export const MainEditor: React.FC = () => {
           </div>
         </main>
 
-        <aside className="w-[30rem] border-l border-white/[0.03] bg-bg-panel flex flex-col shrink-0">
+        <aside className="w-[34rem] border-l border-white/[0.03] bg-bg-panel flex flex-col shrink-0">
           <div className="p-6 border-b border-white/[0.03]">
             <div className="flex items-center gap-3">
               <Sparkles size={14} className="text-orange-500" />
@@ -624,22 +852,48 @@ export const MainEditor: React.FC = () => {
           <div className="flex-1 p-6 overflow-y-auto custom-scrollbar space-y-5">
             <section className="border border-white/5 rounded-xl bg-black/20 p-4">
               <div className="flex items-center justify-between gap-4 mb-3">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Mistral Retrieval Control</p>
-                <div className="flex bg-black/50 rounded-lg p-1 border border-white/5">
-                  {(['direct', 'search-plan'] as const).map((mode) => (
-                    <button
-                      key={mode}
-                      onClick={() => setMistralPipelineMode(mode)}
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Mistral Multi-Step Pipeline</p>
+                <div className="flex gap-2">
+                  {(['plan', 'preview', 'approve', 'generate'] as PipelineStep[]).map((step) => (
+                    <div
+                      key={step}
                       className={cn(
-                        'px-3 py-1 rounded text-[9px] font-black uppercase',
-                        mistralPipelineMode === mode ? 'bg-orange-600 text-bg-deep' : 'text-zinc-500',
+                        'px-2 py-1 rounded text-[9px] font-black uppercase border',
+                        pipelineStep === step ? 'border-orange-500/30 text-orange-300 bg-orange-500/10' : 'border-white/5 text-zinc-600',
                       )}
                     >
-                      {mode}
-                    </button>
+                      {step}
+                    </div>
                   ))}
                 </div>
               </div>
+
+              <div className="flex bg-black/50 rounded-lg p-1 border border-white/5 mb-3">
+                {(['direct', 'search-plan'] as const).map((mode) => (
+                  <button
+                    key={mode}
+                    onClick={() => setMistralPipelineMode(mode)}
+                    className={cn(
+                      'px-3 py-1 rounded text-[9px] font-black uppercase',
+                      mistralPipelineMode === mode ? 'bg-orange-600 text-bg-deep' : 'text-zinc-500',
+                    )}
+                  >
+                    {mode}
+                  </button>
+                ))}
+              </div>
+
+              <label className="flex items-center gap-3 mb-4 px-3 py-2 rounded-lg border border-white/5 bg-black/20 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={includeMmssMeta}
+                  onChange={(event) => setIncludeMmssMeta(event.target.checked)}
+                />
+                <div>
+                  <div className="text-[10px] font-black uppercase text-zinc-300">Include MMSS Meta Rules</div>
+                  <div className="text-[10px] text-zinc-500">Include MMSS metrics, meta-formulas, and MMSS JSON construction rules in the payload.</div>
+                </div>
+              </label>
 
               <div className="flex items-center gap-3 mb-3 bg-black/40 border border-white/5 rounded-xl px-3 py-2">
                 <Search size={12} className="text-zinc-600" />
@@ -657,15 +911,48 @@ export const MainEditor: React.FC = () => {
                   disabled={isPlanningContext || !aiPrompt.trim()}
                   className="px-4 py-2 rounded-lg bg-cyan-950/40 text-cyan-300 text-[10px] font-black uppercase border border-cyan-500/20 disabled:opacity-40"
                 >
-                  {isPlanningContext ? 'Planning…' : 'Ask Mistral for Queries'}
+                  {isPlanningContext ? 'Planning...' : '1. Plan Queries'}
                 </button>
-                <label className="text-[10px] font-mono text-zinc-500">
-                  Auto picks: {rankedLimit}
-                </label>
+                <button
+                  onClick={approveSuggestedContext}
+                  disabled={!candidateBlocks.length}
+                  className="px-4 py-2 rounded-lg bg-emerald-950/40 text-emerald-300 text-[10px] font-black uppercase border border-emerald-500/20 disabled:opacity-40"
+                >
+                  2. Approve Suggested
+                </button>
+                <button
+                  onClick={resetPipeline}
+                  className="px-4 py-2 rounded-lg bg-zinc-900 text-zinc-300 text-[10px] font-black uppercase border border-white/5"
+                >
+                  Reset
+                </button>
+              </div>
+
+              <div className="flex items-center gap-3 mb-3">
+                <button
+                  onClick={() => void saveMistralPresetToBridge()}
+                  disabled={isSavingPreset}
+                  className="px-4 py-2 rounded-lg bg-indigo-950/40 text-indigo-300 text-[10px] font-black uppercase border border-indigo-500/20 disabled:opacity-40"
+                >
+                  {isSavingPreset ? 'Saving Preset...' : 'Save Preset to Bridge'}
+                </button>
+                <button
+                  onClick={() => void loadMistralPresetFromBridge()}
+                  className="px-4 py-2 rounded-lg bg-zinc-900 text-zinc-300 text-[10px] font-black uppercase border border-white/5"
+                >
+                  Load Preset from Bridge
+                </button>
+                <div className="text-[10px] font-mono text-zinc-600">
+                  {lastPresetSyncAt ? `bridge: ${new Date(lastPresetSyncAt).toLocaleTimeString()}` : 'bridge: not synced'}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 mb-3">
+                <label className="text-[10px] font-mono text-zinc-500">Auto picks: {rankedLimit}</label>
                 <input
                   type="range"
                   min={1}
-                  max={6}
+                  max={8}
                   step={1}
                   value={rankedLimit}
                   onChange={(event) => setRankedLimit(Number(event.target.value))}
@@ -675,27 +962,28 @@ export const MainEditor: React.FC = () => {
 
               <div className="grid grid-cols-1 gap-3">
                 <InfoList title="Mistral Queries" items={mistralPlan.queries} empty="No retrieval queries yet." />
+                <InfoList title="Desired Block Roles" items={mistralPlan.blockRoles} empty="No block roles yet." />
                 <InfoList title="MMSS Principles" items={mistralPlan.principles} empty="No extracted principles yet." />
-                <InfoList title="Mistral Notes" items={mistralPlan.notes} empty="No planning notes yet." />
+                <InfoList title="Meta Directives" items={mistralPlan.metaDirectives} empty="No meta directives yet." />
                 <InfoList title="Blocks Sent to Mistral" items={lastSentBlockNames} empty="No context blocks sent yet." />
               </div>
             </section>
 
             <section className="border border-white/5 rounded-xl bg-black/20 p-4">
               <div className="flex items-center justify-between gap-4 mb-3">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Relevant MMSS Context</p>
-                <p className="text-[10px] font-mono text-zinc-600">{selectedContextBlocks.length} selected</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Candidate Blocks</p>
+                <p className="text-[10px] font-mono text-zinc-600">{candidateBlocks.length} candidates</p>
               </div>
-              <div className="space-y-2 max-h-64 overflow-y-auto custom-scrollbar">
-                {rankedBlocks.length ? rankedBlocks.slice(0, 12).map((entry) => {
+              <div className="space-y-2 max-h-72 overflow-y-auto custom-scrollbar">
+                {candidateBlocks.length ? candidateBlocks.map((entry) => {
                   const isPinned = manualPinnedBlockIds.includes(entry.block.id);
-                  const isSelected = selectedContextBlocks.some((block) => block.id === entry.block.id);
+                  const isApproved = approvedBlockIds.includes(entry.block.id);
                   return (
                     <div
                       key={entry.block.id}
                       className={cn(
                         'border rounded-lg p-3 transition-all',
-                        isSelected ? 'border-orange-500/30 bg-orange-500/10' : 'border-white/5 bg-black/20',
+                        isApproved ? 'border-emerald-500/30 bg-emerald-500/10' : 'border-white/5 bg-black/20',
                       )}
                     >
                       <div className="flex items-start justify-between gap-3">
@@ -707,23 +995,34 @@ export const MainEditor: React.FC = () => {
                           <span className="text-[10px] font-mono text-cyan-300">{entry.score}</span>
                           <button
                             onClick={() => togglePinnedBlock(entry.block.id)}
-                            className={cn(
-                              'p-1 rounded border',
-                              isPinned ? 'border-orange-500/30 text-orange-300' : 'border-white/10 text-zinc-500',
-                            )}
+                            className={cn('p-1 rounded border', isPinned ? 'border-orange-500/30 text-orange-300' : 'border-white/10 text-zinc-500')}
                           >
                             <Pin size={12} />
+                          </button>
+                          <button
+                            onClick={() => toggleApprovedBlock(entry.block.id)}
+                            className={cn('p-1 rounded border', isApproved ? 'border-emerald-500/30 text-emerald-300' : 'border-white/10 text-zinc-500')}
+                          >
+                            <Check size={12} />
                           </button>
                         </div>
                       </div>
                       <div className="mt-2 text-[9px] text-zinc-600 font-mono break-words">{entry.reasons.join(' · ') || 'manual only'}</div>
+                      {!!entry.roleMatches.length && <div className="mt-1 text-[9px] text-indigo-300 font-mono">roles: {entry.roleMatches.join(', ')}</div>}
                     </div>
                   );
                 }) : (
-                  <div className="text-[11px] text-zinc-600 font-mono">No relevant blocks yet. Use prompt text, manual search, or ask Mistral for queries.</div>
+                  <div className="text-[11px] text-zinc-600 font-mono">No candidate blocks yet. Run the planning step first.</div>
                 )}
               </div>
-              <pre className="mt-3 bg-black/30 p-4 rounded-xl border border-white/5 text-[10px] text-zinc-400 whitespace-pre-wrap overflow-hidden">
+            </section>
+
+            <section className="border border-white/5 rounded-xl bg-black/20 p-4">
+              <div className="flex items-center justify-between gap-4 mb-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Approved Context Payload</p>
+                <p className="text-[10px] font-mono text-zinc-600">{selectedContextBlocks.length} block(s)</p>
+              </div>
+              <pre className="bg-black/30 p-4 rounded-xl border border-white/5 text-[10px] text-zinc-400 whitespace-pre-wrap overflow-hidden max-h-72 overflow-y-auto custom-scrollbar">
                 {mmssRelevantPreview}
               </pre>
             </section>
@@ -734,15 +1033,22 @@ export const MainEditor: React.FC = () => {
                 <p className="text-[10px] font-mono text-zinc-600">{selectedLibraryBlock?.name || 'No block selected'}</p>
               </div>
               <div className="text-[10px] text-zinc-500 mb-3">
-                Click any library block on the left or any ranked MMSS result here to inspect its full payload without reloading the page.
+                Click any library block on the left or any candidate block here to inspect its full payload without reloading the page.
               </div>
-              <pre className="bg-black/30 p-4 rounded-xl border border-white/5 text-[10px] text-zinc-400 whitespace-pre-wrap overflow-auto max-h-[32rem]">
+              <pre className="bg-black/30 p-4 rounded-xl border border-white/5 text-[10px] text-zinc-400 whitespace-pre-wrap overflow-auto max-h-[28rem]">
                 {selectedLibraryJson}
               </pre>
             </section>
           </div>
 
-          <div className="p-6 border-t border-white/[0.03]">
+          <div className="p-6 border-t border-white/[0.03] space-y-3">
+            <button
+              onClick={() => void runApprovedContextGen()}
+              disabled={isGenerating || !aiPrompt || !approvedBlockIds.length || aiModel !== 'mistral' || mistralPipelineMode !== 'search-plan'}
+              className="w-full py-4 bg-emerald-500 text-bg-deep text-[10px] font-black rounded-xl uppercase tracking-[0.2em] shadow-xl disabled:opacity-30"
+            >
+              Generate with Approved Context
+            </button>
             <button onClick={saveToLocal} className="w-full py-4 bg-white text-bg-deep text-[10px] font-black rounded-xl uppercase tracking-[0.2em] shadow-xl">
               Commit to Storage
             </button>
@@ -755,10 +1061,39 @@ export const MainEditor: React.FC = () => {
 
 function dedupeById(blocks: MmssPromptBlock[]) {
   const map = new Map<string, MmssPromptBlock>();
-  blocks.forEach((block) => {
-    map.set(block.id, block);
-  });
+  blocks.forEach((block) => map.set(block.id, block));
   return Array.from(map.values());
+}
+
+function collectKeys(value: unknown, prefix = '', seen = new Set<string>()): string[] {
+  if (!value || typeof value !== 'object') return [];
+  if (Array.isArray(value)) {
+    return value.flatMap((item, index) => collectKeys(item, `${prefix}[${index}]`, seen));
+  }
+
+  const keys: string[] = [];
+  Object.entries(value as Record<string, unknown>).forEach(([key, child]) => {
+    const path = prefix ? `${prefix}.${key}` : key;
+    if (!seen.has(path)) {
+      seen.add(path);
+      keys.push(path.toLowerCase());
+    }
+    keys.push(...collectKeys(child, path, seen));
+  });
+  return keys;
+}
+
+function getJsonDepth(value: unknown): number {
+  if (!value || typeof value !== 'object') return 0;
+  if (Array.isArray(value)) {
+    return 1 + Math.max(0, ...value.map((item) => getJsonDepth(item)));
+  }
+  return 1 + Math.max(0, ...Object.values(value as Record<string, unknown>).map((item) => getJsonDepth(item)));
+}
+
+function containsMmssMeta(value: unknown): boolean {
+  const text = JSON.stringify(value ?? {}).toLowerCase();
+  return ['v', 'n', 's', 'd_f', 'g_s', 'r_t', 'formula', 'operator', 'metric'].some((token) => text.includes(`"${token}`) || text.includes(token));
 }
 
 const InfoList: React.FC<{ title: string; items: string[]; empty: string }> = ({ title, items, empty }) => (
