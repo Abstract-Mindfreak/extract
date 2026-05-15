@@ -12,6 +12,7 @@ const fs = require('fs/promises');
 const { existsSync } = require('fs');
 const http = require('http');
 const WebSocket = require('ws');
+require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') });
 const archiverAccounts = require('./src/config/flowmusicArchiverAccounts.json');
 
 const app = express();
@@ -22,13 +23,186 @@ const PORT = process.env.ARCHIVER_PORT || 3456;
 const ARCHIVER_PATH = path.join(__dirname, '..', '..', 'flowmusic-archiver');
 const PRODUCER_BASE_URL = 'https://www.flowmusic.app';
 const PRODUCER_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36';
+const MISTRAL_API_BASE = 'https://api.mistral.ai/v1';
+const MISTRAL_MODEL = process.env.MISTRAL_MODEL || 'mistral-large-latest';
+const MMSS_BRIDGE_DIR = path.join(__dirname, 'tmp');
+const MMSS_LIBRARY_STATE_PATH = path.join(MMSS_BRIDGE_DIR, 'mmss-library-state.json');
+const MMSS_GENESIS_HANDOFF_PATH = path.join(MMSS_BRIDGE_DIR, 'mmss-genesis-handoff.json');
+const MMSS_IMPORT_QUEUE_PATH = path.join(MMSS_BRIDGE_DIR, 'mmss-import-queue.json');
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '20mb' }));
+app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+
+async function ensureMmssBridgeDir() {
+  await fs.mkdir(MMSS_BRIDGE_DIR, { recursive: true });
+}
+
+async function readJsonFileSafe(filePath, fallback) {
+  try {
+    const raw = await fs.readFile(filePath, 'utf8');
+    return JSON.parse(raw);
+  } catch (_error) {
+    return fallback;
+  }
+}
+
+async function writeJsonFileSafe(filePath, payload) {
+  await ensureMmssBridgeDir();
+  await fs.writeFile(filePath, JSON.stringify(payload, null, 2), 'utf8');
+}
+
+app.get('/api/mistral/status', (_req, res) => {
+  const hasKey = Boolean(process.env.MISTRAL_API_KEY && process.env.MISTRAL_API_KEY.length > 10);
+  res.json({
+    configured: hasKey,
+    available: hasKey,
+    source: hasKey ? 'server_env' : 'missing',
+    defaultModel: MISTRAL_MODEL,
+  });
+});
+
+app.post('/api/mistral/chat', async (req, res) => {
+  const apiKey = process.env.MISTRAL_API_KEY;
+  if (!apiKey) {
+    res.status(503).json({ error: 'Mistral API key is not configured on server' });
+    return;
+  }
+
+  try {
+    const response = await fetch(`${MISTRAL_API_BASE}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: req.body?.model || MISTRAL_MODEL,
+        messages: req.body?.messages || [],
+        temperature: req.body?.temperature ?? 0.7,
+        max_tokens: req.body?.max_tokens ?? 4096,
+      }),
+    });
+
+    const responseText = await response.text();
+    if (!response.ok) {
+      res.status(response.status).json({ error: responseText });
+      return;
+    }
+
+    res.type('application/json').send(responseText);
+  } catch (error) {
+    res.status(500).json({ error: error.message || 'Mistral proxy request failed' });
+  }
+});
+
+app.get('/api/mmss/library-state', async (_req, res) => {
+  const payload = await readJsonFileSafe(MMSS_LIBRARY_STATE_PATH, {
+    promptLibrary: null,
+    updatedAt: null,
+  });
+  res.json(payload);
+});
+
+app.post('/api/mmss/library-state', async (req, res) => {
+  try {
+    const payload = {
+      promptLibrary: req.body?.promptLibrary || null,
+      updatedAt: new Date().toISOString(),
+    };
+    await writeJsonFileSafe(MMSS_LIBRARY_STATE_PATH, payload);
+    const blockCount = Array.isArray(payload.promptLibrary?.blocks) ? payload.promptLibrary.blocks.length : 0;
+    const sequenceCount = Array.isArray(payload.promptLibrary?.sequences) ? payload.promptLibrary.sequences.length : 0;
+    console.log(`[MMSS] library-state updated: ${blockCount} block(s), ${sequenceCount} sequence(s) at ${payload.updatedAt}`);
+    res.json({ ok: true, updatedAt: payload.updatedAt });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/mmss/genesis-handoff', async (_req, res) => {
+  const payload = await readJsonFileSafe(MMSS_GENESIS_HANDOFF_PATH, {
+    json: null,
+    source: null,
+    updatedAt: null,
+  });
+  res.json(payload);
+});
+
+app.post('/api/mmss/genesis-handoff', async (req, res) => {
+  try {
+    const payload = {
+      json: req.body?.json ?? null,
+      source: req.body?.source ?? 'my-app',
+      updatedAt: new Date().toISOString(),
+    };
+    await writeJsonFileSafe(MMSS_GENESIS_HANDOFF_PATH, payload);
+    console.log(`[MMSS] genesis-handoff updated from ${payload.source} at ${payload.updatedAt}`);
+    res.json({ ok: true, updatedAt: payload.updatedAt });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/mmss/import-queue', async (_req, res) => {
+  const queue = await readJsonFileSafe(MMSS_IMPORT_QUEUE_PATH, []);
+  res.json({ items: queue });
+});
+
+app.post('/api/mmss/import-queue', async (req, res) => {
+  try {
+    const queue = await readJsonFileSafe(MMSS_IMPORT_QUEUE_PATH, []);
+    const nextItem = {
+      id: `import_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      json: req.body?.json ?? null,
+      source: req.body?.source ?? 'json-genesis',
+      createdAt: new Date().toISOString(),
+    };
+    queue.push(nextItem);
+    await writeJsonFileSafe(MMSS_IMPORT_QUEUE_PATH, queue);
+    console.log(`[MMSS] import queued from ${nextItem.source}: ${nextItem.id}`);
+    res.json({ ok: true, item: nextItem });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/mmss/import-queue/ack', async (req, res) => {
+  try {
+    const ids = Array.isArray(req.body?.ids) ? req.body.ids : [];
+    const queue = await readJsonFileSafe(MMSS_IMPORT_QUEUE_PATH, []);
+    const nextQueue = queue.filter((item) => !ids.includes(item.id));
+    await writeJsonFileSafe(MMSS_IMPORT_QUEUE_PATH, nextQueue);
+    res.json({ ok: true, removed: ids.length });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.use((error, _req, res, next) => {
+  if (error?.type === 'entity.too.large') {
+    res.status(413).json({
+      error: 'Request payload too large',
+      detail: 'Increase bridge payload limit or reduce prompt library size',
+    });
+    return;
+  }
+
+  if (error) {
+    next(error);
+    return;
+  }
+
+  next();
+});
 
 // Active processes store
 const activeProcesses = new Map();
+const libraryCatalogCache = {
+  value: null,
+  expiresAt: 0
+};
 
 const DEFAULT_ACCOUNTS = archiverAccounts.map((account) => ({
   ...account,
@@ -53,6 +227,164 @@ function resolveAccountDir(account) {
 
   const legacyPath = path.join(ARCHIVER_PATH, account.legacyOutputDir);
   return existsSync(legacyPath) ? legacyPath : preferredPath;
+}
+
+function findAccount(accountId) {
+  return DEFAULT_ACCOUNTS.find((item) => item.id === accountId);
+}
+
+async function scanTrackDirectory(accountId, trackDirPath) {
+  const trackFiles = await fs.readdir(trackDirPath, { withFileTypes: true });
+  const fileNames = trackFiles.filter((entry) => entry.isFile()).map((entry) => entry.name);
+  const dirName = path.basename(trackDirPath);
+  const trackId = dirName.slice(0, 36);
+
+  if (!trackId || !fileNames.includes('meta.json')) {
+    return null;
+  }
+
+  const audioFileName =
+    fileNames.find((name) => /\.(m4a|mp3|wav|ogg)$/i.test(name)) || null;
+  const imageFileName =
+    fileNames.find((name) => /\.(jpg|jpeg|png|webp)$/i.test(name)) || null;
+  const metaPath = path.join(trackDirPath, 'meta.json');
+  const metaStat = await fs.stat(metaPath);
+
+  return {
+    trackId,
+    dirName,
+    audioFileName,
+    imageFileName,
+    updatedAt: metaStat.mtime.toISOString(),
+    metaUrl: `http://localhost:${PORT}/api/library/meta/${accountId}/${trackId}`,
+    audioUrl: audioFileName
+      ? `http://localhost:${PORT}/api/library/file/${accountId}/${trackId}/${encodeURIComponent(audioFileName)}`
+      : null,
+    coverUrl: imageFileName
+      ? `http://localhost:${PORT}/api/library/file/${accountId}/${trackId}/${encodeURIComponent(imageFileName)}`
+      : null
+  };
+}
+
+async function scanAccountCatalog(account) {
+  const accountDir = resolveAccountDir(account);
+  const sessionsDir = path.join(accountDir, 'sessions');
+  const result = {
+    accountId: account.id,
+    outputDir: account.outputDir,
+    resolvedOutputDir: accountDir,
+    trackCount: 0,
+    latestUpdatedAt: null,
+    tracks: [],
+    sessionCount: 0
+  };
+
+  if (!existsSync(accountDir)) {
+    return result;
+  }
+
+  const rootEntries = await fs.readdir(accountDir, { withFileTypes: true });
+
+  for (const entry of rootEntries) {
+    if (!entry.isDirectory()) continue;
+    if (!/^[0-9a-f]{2}$/i.test(entry.name)) continue;
+
+    const bucketDir = path.join(accountDir, entry.name);
+    const trackEntries = await fs.readdir(bucketDir, { withFileTypes: true });
+
+    for (const trackEntry of trackEntries) {
+      if (!trackEntry.isDirectory()) continue;
+
+      const trackData = await scanTrackDirectory(account.id, path.join(bucketDir, trackEntry.name));
+      if (!trackData) continue;
+
+      result.tracks.push(trackData);
+      result.trackCount += 1;
+
+      if (!result.latestUpdatedAt || trackData.updatedAt > result.latestUpdatedAt) {
+        result.latestUpdatedAt = trackData.updatedAt;
+      }
+    }
+  }
+
+  if (existsSync(sessionsDir)) {
+    const sessionEntries = await fs.readdir(sessionsDir, { withFileTypes: true });
+    result.sessionCount = sessionEntries.filter(
+      (entry) => entry.isFile() && /^session_.+\.json$/i.test(entry.name)
+    ).length;
+  }
+
+  result.tracks.sort((left, right) => left.trackId.localeCompare(right.trackId));
+
+  return result;
+}
+
+async function buildLibraryCatalog(force = false) {
+  const now = Date.now();
+  if (!force && libraryCatalogCache.value && libraryCatalogCache.expiresAt > now) {
+    return libraryCatalogCache.value;
+  }
+
+  const accounts = [];
+  for (const account of DEFAULT_ACCOUNTS) {
+    accounts.push(await scanAccountCatalog(account));
+  }
+
+  const catalog = {
+    generatedAt: new Date().toISOString(),
+    source: ARCHIVER_PATH,
+    accounts
+  };
+
+  libraryCatalogCache.value = catalog;
+  libraryCatalogCache.expiresAt = now + 15000;
+  return catalog;
+}
+
+async function findTrackDirectory(accountId, trackId) {
+  const account = findAccount(accountId);
+  if (!account) {
+    throw new Error('Account not found');
+  }
+
+  const accountDir = resolveAccountDir(account);
+  if (!existsSync(accountDir)) {
+    throw new Error('Account output directory not found');
+  }
+
+  const bucket = String(trackId).slice(0, 2).toLowerCase();
+  const bucketDir = path.join(accountDir, bucket);
+
+  if (existsSync(bucketDir)) {
+    const matches = await fs.readdir(bucketDir, { withFileTypes: true });
+    const match = matches.find(
+      (entry) => entry.isDirectory() && entry.name.toLowerCase().startsWith(String(trackId).toLowerCase())
+    );
+
+    if (match) {
+      return path.join(bucketDir, match.name);
+    }
+  }
+
+  const rootEntries = await fs.readdir(accountDir, { withFileTypes: true });
+  for (const entry of rootEntries) {
+    if (!entry.isDirectory()) continue;
+    if (!/^[0-9a-f]{2}$/i.test(entry.name)) continue;
+
+    const bucketPath = path.join(accountDir, entry.name);
+    const trackEntries = await fs.readdir(bucketPath, { withFileTypes: true });
+    const match = trackEntries.find(
+      (trackEntry) =>
+        trackEntry.isDirectory() &&
+        trackEntry.name.toLowerCase().startsWith(String(trackId).toLowerCase())
+    );
+
+    if (match) {
+      return path.join(bucketPath, match.name);
+    }
+  }
+
+  throw new Error('Track directory not found');
 }
 
 // WebSocket connection handling
@@ -499,6 +831,71 @@ app.get('/api/stats', async (req, res) => {
   }
 });
 
+app.get('/api/library/catalog', async (req, res) => {
+  try {
+    const force = String(req.query.force || '').toLowerCase() === 'true';
+    const catalog = await buildLibraryCatalog(force);
+    res.json(catalog);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/library/meta/:accountId/:trackId', async (req, res) => {
+  try {
+    const { accountId, trackId } = req.params;
+    const trackDir = await findTrackDirectory(accountId, trackId);
+    const metaPath = path.join(trackDir, 'meta.json');
+
+    if (!existsSync(metaPath)) {
+      return res.status(404).json({ error: 'meta.json not found' });
+    }
+
+    const metaText = await fs.readFile(metaPath, 'utf8');
+    res.type('application/json').send(metaText);
+  } catch (err) {
+    res.status(404).json({ error: err.message });
+  }
+});
+
+app.get('/api/library/file/:accountId/:trackId/:fileName', async (req, res) => {
+  try {
+    const { accountId, trackId, fileName } = req.params;
+    const decodedFileName = decodeURIComponent(fileName);
+    const trackDir = await findTrackDirectory(accountId, trackId);
+    const filePath = path.join(trackDir, decodedFileName);
+
+    if (!existsSync(filePath)) {
+      return res.status(404).json({ error: 'File not found' });
+    }
+
+    res.sendFile(filePath);
+  } catch (err) {
+    res.status(404).json({ error: err.message });
+  }
+});
+
+app.get('/api/library/session/:accountId/:conversationId', async (req, res) => {
+  try {
+    const { accountId, conversationId } = req.params;
+    const account = findAccount(accountId);
+    if (!account) {
+      return res.status(404).json({ error: 'Account not found' });
+    }
+
+    const sessionsDir = path.join(resolveAccountDir(account), 'sessions');
+    const sessionPath = path.join(sessionsDir, `session_${conversationId}.json`);
+
+    if (!existsSync(sessionPath)) {
+      return res.status(404).json({ error: 'Session file not found' });
+    }
+
+    res.sendFile(sessionPath);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
@@ -526,6 +923,10 @@ server.listen(PORT, () => {
   console.log(`  GET  /api/running           - List running processes`);
   console.log(`  POST /api/login-ready       - Trigger login ready`);
   console.log(`  GET  /api/stats             - Get all stats`);
+  console.log(`  GET  /api/library/catalog   - Scan live FlowMusic backup folders`);
+  console.log(`  GET  /api/library/meta/:accountId/:trackId - Read live meta.json`);
+  console.log(`  GET  /api/library/file/:accountId/:trackId/:fileName - Stream live media file`);
+  console.log(`  GET  /api/library/session/:accountId/:conversationId - Read live session file`);
   console.log(`  GET  /api/health            - Health check`);
   console.log('='.repeat(50));
 });

@@ -10,6 +10,8 @@ import {
   Sparkles,
   Workflow,
   X,
+  Magnet,
+  FileJson,
 } from "lucide-react";
 import "./App.css";
 import ASEMasterConsole from "./components/ASEMasterConsole";
@@ -19,6 +21,7 @@ import JsonBlockList from "./components/JsonBlockList";
 import JsonSequenceBuilder from "./components/JsonSequenceBuilder";
 import PromptLogicBlocklyPanel from "./components/PromptLogicBlocklyPanel";
 import SectionCard from "./components/SectionCard";
+import { MMSSWidget } from "./components/MMSSWidget";
 import { createInitialState } from "./mmss/config";
 import {
   DEFAULT_BLOCKLY_WORKSPACE_XML,
@@ -51,6 +54,16 @@ const APP_TABS = [
     label: "Archives",
     summary: "Archive import and browsing",
   },
+  {
+    id: "magnetic",
+    label: "Magnetic Builder",
+    summary: "MMSS magnetic field simulation",
+  },
+  {
+    id: "json_genesis",
+    label: "JSON Genesis",
+    summary: "AI-powered JSON structure editor",
+  },
 ];
 
 const HERO_METRICS = [
@@ -70,6 +83,8 @@ const PROMPT_PANEL_DEFAULT_ORDER = [
   "json_sequence_builder",
   "json_bindings_panel",
 ];
+const SERVICE_POLL_INTERVAL_MS = 15000;
+const MMSS_BRIDGE_API_BASE = "http://localhost:3456/api/mmss";
 const PROMPT_LIBRARY_PANEL_META = {
   json_block_list: {
     label: "Block Library",
@@ -98,6 +113,8 @@ function App() {
     prompt_library: null,
     ase_console: null,
     archives: null,
+    magnetic: null,
+    json_genesis: null,
   });
   const [expandedPanel, setExpandedPanel] = useState(null);
   const [activeTab, setActiveTab] = useState("ase_console");
@@ -109,6 +126,11 @@ function App() {
   const [libraryReady, setLibraryReady] = useState(false);
   const [promptPanelOrder, setPromptPanelOrder] = useState(loadStoredPromptPanelOrder);
   const [activePromptPanel, setActivePromptPanel] = useState(loadStoredPromptActivePanel);
+  const [serviceHealth, setServiceHealth] = useState({
+    magnetic: { online: false, label: "Offline", detail: "http://localhost:8001/state" },
+    mistral: { online: false, label: "Offline", detail: "http://localhost:3456/api/mistral/status" },
+    jsonhero: { online: false, label: "Offline", detail: "http://localhost:8787" },
+  });
 
   // Bridge object intentionally captures current render state.
   /* eslint-disable react-hooks/exhaustive-deps */
@@ -126,6 +148,12 @@ function App() {
   }, [activePromptPanel]);
 
   useEffect(() => {
+    if (!libraryReady) {
+      handleLoadLibrary();
+    }
+  }, [libraryReady]);
+
+  useEffect(() => {
     if (activeTab !== "prompt_library") return;
     if (state.transport.playing) {
       dispatch({ type: "toggle_playing" });
@@ -134,6 +162,128 @@ function App() {
       dispatch({ type: "toggle_orbit", enabled: false });
     }
   }, [activeTab, state.transport.playing, state.orbit.enabled]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const updateServiceHealth = async () => {
+      const [magnetic, mistral, jsonhero] = await Promise.all([
+        probeJsonEndpoint("http://localhost:8001/state", (payload) => ({
+          online: true,
+          label: `Online · day ${payload?.day ?? "?"}`,
+          detail: payload?.phase ? `phase: ${payload.phase}` : "http://localhost:8001/state",
+        })),
+        probeJsonEndpoint("http://localhost:3456/api/mistral/status", (payload) => ({
+          online: !!payload?.configured,
+          label: payload?.configured ? "Online · env key" : "Offline",
+          detail: payload?.defaultModel || "http://localhost:3456/api/mistral/status",
+        })),
+        probeTextEndpoint("http://localhost:8787", () => ({
+          online: true,
+          label: "Online",
+          detail: "http://localhost:8787",
+        })),
+      ]);
+
+      if (!cancelled) {
+        setServiceHealth({
+          magnetic,
+          mistral,
+          jsonhero,
+        });
+      }
+    };
+
+    void updateServiceHealth();
+    const intervalId = window.setInterval(() => {
+      void updateServiceHealth();
+    }, SERVICE_POLL_INTERVAL_MS);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!libraryReady) {
+      return;
+    }
+
+    void fetch(`${MMSS_BRIDGE_API_BASE}/library-state`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        promptLibrary: state.promptLibrary,
+      }),
+    }).catch(() => {
+      // Ignore bridge sync errors in UI loop; status panel already reflects backend availability.
+    });
+  }, [libraryReady, state.promptLibrary]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const pollImportQueue = async () => {
+      try {
+        const response = await fetch(`${MMSS_BRIDGE_API_BASE}/import-queue`);
+        if (!response.ok) {
+          return;
+        }
+
+        const payload = await response.json();
+        const items = Array.isArray(payload?.items) ? payload.items : [];
+        if (!items.length || cancelled) {
+          return;
+        }
+
+        if (!libraryReady) {
+          handleLoadLibrary();
+        }
+
+        const ackIds = [];
+        for (const item of items) {
+          const jsonText = JSON.stringify(item.json ?? {}, null, 2);
+          const parsedImport = parsePromptImportText(jsonText);
+
+          if (parsedImport.mode === "library" && parsedImport.library) {
+            dispatch({
+              type: "PROMPT_IMPORT_LIBRARY",
+              payload: parsedImport.library,
+            });
+          } else if (parsedImport.blocks.length) {
+            dispatch({ type: "PROMPT_IMPORT_BLOCKS", blocks: parsedImport.blocks });
+          }
+
+          ackIds.push(item.id);
+        }
+
+        if (ackIds.length) {
+          await fetch(`${MMSS_BRIDGE_API_BASE}/import-queue/ack`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ids: ackIds }),
+          });
+        }
+      } catch (_error) {
+        // noop
+      }
+    };
+
+    void pollImportQueue();
+    const intervalId = window.setInterval(() => {
+      void pollImportQueue();
+    }, 4000);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(intervalId);
+    };
+  }, [libraryReady]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -452,6 +602,69 @@ function App() {
     dispatch({ type: "append_log", message: `JSON preview saved as ${fileName}.` });
   }
 
+  function handleOpenInJsonHero(payload, label = "JSON preview") {
+    try {
+      const jsonText = typeof payload === "string" ? payload : JSON.stringify(payload || {}, null, 2);
+      const encoded = bytesToBase64(new TextEncoder().encode(jsonText));
+      window.open(`http://localhost:8787/new?j=${encodeURIComponent(encoded)}`, "_blank", "noopener,noreferrer");
+      dispatch({ type: "append_log", message: `${label} opened in JSON Hero.` });
+    } catch (error) {
+      dispatch({ type: "append_log", message: `Failed to open ${label} in JSON Hero: ${error.message}` });
+    }
+  }
+
+  function handleOpenJsonHeroRepo() {
+    window.open("http://localhost:8787", "_blank", "noopener,noreferrer");
+    dispatch({ type: "append_log", message: "Local JSON Hero opened." });
+  }
+
+  async function handlePushPreviewToGenesis() {
+    try {
+      const response = await fetch(`${MMSS_BRIDGE_API_BASE}/genesis-handoff`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          json: streamPreviewPayload || {},
+          source: activeModeMeta.label,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      dispatch({ type: "append_log", message: "Current preview sent to JSON Genesis." });
+    } catch (error) {
+      dispatch({ type: "append_log", message: `Failed to send preview to JSON Genesis: ${error.message}` });
+    }
+  }
+
+  async function handlePushLibraryToGenesis() {
+    if (!libraryReady) {
+      handleLoadLibrary();
+    }
+    try {
+      const response = await fetch(`${MMSS_BRIDGE_API_BASE}/library-state`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          promptLibrary: state.promptLibrary,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      dispatch({
+        type: "append_log",
+        message: `Prompt library pushed to JSON Genesis: ${state.promptLibrary.blocks.length} block(s), ${state.promptLibrary.sequences.length} sequence(s).`,
+      });
+    } catch (error) {
+      dispatch({ type: "append_log", message: `Failed to push library to JSON Genesis: ${error.message}` });
+    }
+  }
+
   async function handleExportBlocksAsFiles() {
     const blocks = state.promptLibrary.blocks || [];
     if (!blocks.length) {
@@ -682,6 +895,8 @@ function App() {
     { id: "prompt_library", icon: Library, label: "Prompt Tools" },
     { id: "ase_console", icon: Workflow, label: "ASE Flow" },
     { id: "archives", icon: Archive, label: "Archives" },
+    { id: "magnetic", icon: Magnet, label: "Magnetic" },
+    { id: "json_genesis", icon: FileJson, label: "JSON Genesis" },
     { id: "system", icon: Settings, label: "System State" },
   ];
 
@@ -714,6 +929,11 @@ function App() {
       value: libraryReady ? "Ready" : "Idle",
     };
   });
+  const serviceCards = [
+    { id: "magnetic", name: "Magnetic", ...serviceHealth.magnetic },
+    { id: "mistral", name: "Mistral", ...serviceHealth.mistral },
+    { id: "jsonhero", name: "JSON Hero", ...serviceHealth.jsonhero },
+  ];
   const activeModeMeta = APP_TABS.find((tab) => tab.id === activeTab) || APP_TABS[0];
   const streamFeedback = useMemo(() => {
     if (activeTab === "prompt_library") {
@@ -725,6 +945,14 @@ function App() {
 
     if (activeTab === "archives") {
       return "Archive workspace is online. Import local Flowmusic data, inspect sessions, and keep archive flows inside the same shell.";
+    }
+
+    if (activeTab === "magnetic") {
+      return "Magnetic Builder is active. Simulate field evolution with charge, spin, wavelength, and stability metrics. Backend running on port 8001.";
+    }
+
+    if (activeTab === "json_genesis") {
+      return "JSON Genesis workspace ready. AI-powered JSON structure editor with block-based composition and neural synthesis capabilities.";
     }
 
     return `ASE workspace is active. ${aseConfigCount} saved configs are available and direct handoff into the sequence builder remains linked.`;
@@ -760,6 +988,26 @@ function App() {
         selectedSequence: activeSequence?.name || null,
         checkpoints: state.mmss.checkpoints.slice(-4),
         logs: activityLogs.slice(0, 4),
+      };
+    }
+
+    if (activeTab === "magnetic") {
+      return {
+        mode: "magnetic",
+        backend: "FastAPI",
+        port: 8001,
+        features: ["field_simulation", "charge_metrics", "spin_dynamics", "phase_transitions"],
+        state: "persistent_json",
+      };
+    }
+
+    if (activeTab === "json_genesis") {
+      return {
+        mode: "json_genesis",
+        engine: "Vite + React",
+        ai_models: ["Gemini 3-Flash", "Mistral Large 2"],
+        features: ["block_editor", "ai_synthesis", "fragment_library", "export_import"],
+        location: "json-genesis/",
       };
     }
 
@@ -807,13 +1055,21 @@ function App() {
       ? "ASE_CONSOLE_X10"
       : activeTab === "prompt_library"
         ? "PROMPT_LIBRARY"
-        : "ARCHIVE_WORKSPACE";
+        : activeTab === "magnetic"
+          ? "MAGNETIC_BUILDER"
+          : activeTab === "json_genesis"
+            ? "JSON_GENESIS"
+            : "ARCHIVE_WORKSPACE";
   const activeSeedLabel =
     activeTab === "ase_console"
       ? "@_TOTAL_INIT"
       : activeTab === "prompt_library"
         ? `@_${(activePromptPanelMeta.label || "PANEL").replace(/\s+/g, "_").toUpperCase()}`
-        : "@_FLOWMUSIC_ARCHIVE";
+        : activeTab === "magnetic"
+          ? "@_MAGNETIC_FIELD"
+          : activeTab === "json_genesis"
+            ? "@_JSON_SYNTHESIS"
+            : "@_FLOWMUSIC_ARCHIVE";
 
   function toggleDrawerPanel(panelId) {
     setExpandedPanel((current) => (current === panelId ? null : panelId));
@@ -1250,12 +1506,161 @@ function App() {
     );
   }
 
+  function renderMagneticStage() {
+    return (
+      <section
+        ref={(node) => { sectionRefs.current.magnetic = node; }}
+        className="workspace-surface workspace-surface--magnetic is-focused template-stage-panel"
+      >
+        <div className="workspace-surface__head">
+          <div>
+            <span className="workspace-surface__eyebrow">Core Mode 04</span>
+            <h3>Magnetic Builder</h3>
+            <p>MMSS magnetic field simulation with charge, spin, wavelength, and stability metrics.</p>
+          </div>
+          <button className="workspace-surface__action" onClick={() => setExpandedPanel("magnetic")}>
+            Open Controls
+          </button>
+        </div>
+
+        <div className="workspace-magnetic-shell">
+          <div className="workspace-surface__summary">
+            <div className="workspace-summary-card">
+              <span>Backend</span>
+              <strong>{serviceHealth.magnetic.online ? "FastAPI · online" : "FastAPI · offline"}</strong>
+            </div>
+            <div className="workspace-summary-card">
+              <span>State</span>
+              <strong>{serviceHealth.magnetic.detail}</strong>
+            </div>
+            <div className="workspace-summary-card">
+              <span>Phases</span>
+              <strong>harmonic → wave → pulse → void</strong>
+            </div>
+          </div>
+          <div className="mode-shell-head mode-shell-head--magnetic">
+            <div>
+              <strong>Magnetic Workspace</strong>
+              <span>Interactive field simulation with real-time canvas visualization.</span>
+            </div>
+            <div className="mode-shell-status">
+              <span>Port 8001</span>
+              <span>{serviceHealth.magnetic.label}</span>
+            </div>
+          </div>
+          <div style={{ padding: 20 }}>
+            <MMSSWidget mode="magnetic" title="🧲 MMSS: Магнитное поле" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  function renderJsonGenesisStage() {
+    return (
+      <section
+        ref={(node) => { sectionRefs.current.json_genesis = node; }}
+        className="workspace-surface workspace-surface--json-genesis is-focused template-stage-panel"
+      >
+        <div className="workspace-surface__head">
+          <div>
+            <span className="workspace-surface__eyebrow">Core Mode 05</span>
+            <h3>JSON Genesis</h3>
+            <p>AI-powered JSON structure editor with block-based composition and neural synthesis.</p>
+          </div>
+          <button className="workspace-surface__action" onClick={() => setExpandedPanel("json_genesis")}>
+            Open Editor
+          </button>
+        </div>
+
+        <div className="workspace-json-genesis-shell">
+          <div className="workspace-surface__summary">
+            <div className="workspace-summary-card">
+              <span>Engine</span>
+              <strong>Vite + React</strong>
+            </div>
+            <div className="workspace-summary-card">
+              <span>JSON Hero</span>
+              <strong>{serviceHealth.jsonhero.label}</strong>
+            </div>
+            <div className="workspace-summary-card">
+              <span>Mistral</span>
+              <strong>{serviceHealth.mistral.label}</strong>
+            </div>
+          </div>
+          <div className="mode-shell-head mode-shell-head--json-genesis">
+            <div>
+              <strong>JSON Genesis Workspace</strong>
+              <span>Visual JSON structure editor with AI-powered content generation.</span>
+            </div>
+            <div className="mode-shell-status">
+              <span>Standalone</span>
+              <span>{serviceHealth.jsonhero.online ? "JSON Hero Online" : "JSON Hero Offline"}</span>
+            </div>
+          </div>
+          <div style={{ padding: 20, textAlign: 'center' }}>
+            <SectionCard title="JSON Genesis Integration" subtitle="AI-powered JSON editor">
+              <p style={{ marginBottom: 16 }}>
+                JSON Genesis is a standalone Vite application located at <code>json-genesis/</code>.
+              </p>
+              <p style={{ marginBottom: 16 }}>
+                To use it, run: <code>cd json-genesis &amp;&amp; npm run dev</code> and open <code>http://localhost:3001</code>
+              </p>
+              <p>
+                Features: Block-based JSON editing, AI synthesis with Gemini/Mistral, fragment library, export/import.
+              </p>
+            </SectionCard>
+            <SectionCard
+              title="JSON Hero Bridge"
+              subtitle="Open current app JSON in jsonhero-web"
+              className="jsonhero-bridge-card"
+            >
+              <p style={{ marginBottom: 16 }}>
+                Send the current preview payload from this app to JSON Hero, or open the upstream
+                local
+                <code> jsonhero-web </code>
+                service.
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 12,
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                }}
+              >
+                <button className="workspace-surface__action" onClick={() => handleOpenInJsonHero(streamPreviewPayload, "Stream preview")}>
+                  Open Preview in JSON Hero
+                </button>
+                <button className="workspace-surface__action" onClick={handleOpenJsonHeroRepo}>
+                  Open Local JSON Hero
+                </button>
+                <button className="workspace-surface__action" onClick={handlePushPreviewToGenesis}>
+                  Send Preview to Genesis
+                </button>
+                <button className="workspace-surface__action" onClick={handlePushLibraryToGenesis}>
+                  Send Library to Genesis
+                </button>
+              </div>
+            </SectionCard>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   function renderActiveStageSection() {
     if (activeTab === "prompt_library") {
       return renderPromptLibraryStage();
     }
     if (activeTab === "archives") {
       return renderArchivesStage();
+    }
+    if (activeTab === "magnetic") {
+      return renderMagneticStage();
+    }
+    if (activeTab === "json_genesis") {
+      return renderJsonGenesisStage();
     }
     return renderAseStage();
   }
@@ -1314,7 +1719,7 @@ function App() {
               <div className="drawer-stack">
                 <SectionCard title="Workspace Focus" subtitle="Current rebuild direction">
                   <div className="drawer-metric-grid">
-                    <div className="drawer-metric-card"><span>Modes</span><strong>3 Core</strong></div>
+                    <div className="drawer-metric-card"><span>Modes</span><strong>5 Core</strong></div>
                     <div className="drawer-metric-card"><span>Prompt Blocks</span><strong>{state.promptLibrary.blocks.length}</strong></div>
                     <div className="drawer-metric-card"><span>Sequences</span><strong>{state.promptLibrary.sequences.length}</strong></div>
                     <div className="drawer-metric-card"><span>ASE Saves</span><strong>{aseConfigCount}</strong></div>
@@ -1420,6 +1825,48 @@ function App() {
               </div>
             ) : null}
 
+            {expandedPanel === "magnetic" ? (
+              <div className="drawer-stack">
+                <SectionCard title="Magnetic Tools" subtitle="Field simulation controls">
+                  <div className="drawer-link-list">
+                    <button onClick={() => focusWorkspaceSection("magnetic")}>
+                      <strong>Open Magnetic workspace</strong>
+                      <ChevronRight size={14} />
+                    </button>
+                  </div>
+                </SectionCard>
+                <SectionCard title="Magnetic Focus" subtitle="FastAPI backend on port 8001">
+                  <div className="drawer-note-list">
+                    <div><strong>Backend:</strong> FastAPI (uvicorn)</div>
+                    <div><strong>State file:</strong> mmss_state.json</div>
+                    <div><strong>Metrics:</strong> charge, spin, wavelength, stability</div>
+                    <div><strong>Phases:</strong> harmonic → wave → pulse → void</div>
+                  </div>
+                </SectionCard>
+              </div>
+            ) : null}
+
+            {expandedPanel === "json_genesis" ? (
+              <div className="drawer-stack">
+                <SectionCard title="JSON Genesis Tools" subtitle="AI-powered JSON editor">
+                  <div className="drawer-link-list">
+                    <button onClick={() => focusWorkspaceSection("json_genesis")}>
+                      <strong>Open JSON Genesis workspace</strong>
+                      <ChevronRight size={14} />
+                    </button>
+                  </div>
+                </SectionCard>
+                <SectionCard title="JSON Genesis Focus" subtitle="Standalone Vite application">
+                  <div className="drawer-note-list">
+                    <div><strong>Location:</strong> json-genesis/</div>
+                    <div><strong>Engine:</strong> Vite + React + TypeScript</div>
+                    <div><strong>AI Models:</strong> Gemini 3-Flash, Mistral Large 2</div>
+                    <div><strong>Features:</strong> Block editor, AI synthesis, fragment library</div>
+                  </div>
+                </SectionCard>
+              </div>
+            ) : null}
+
             {expandedPanel === "system" ? (
               <div className="drawer-stack">
                 <SectionCard title="System State" subtitle="Current shell status">
@@ -1433,7 +1880,7 @@ function App() {
                 <SectionCard title="Rebuild Status" subtitle="Current direction of the UI rewrite">
                   <div className="drawer-note-list">
                     <div><Sparkles size={14} /> Single-page shell is active</div>
-                    <div><Database size={14} /> Prompt/ASE/Archives are preserved</div>
+                    <div><Database size={14} /> Prompt/ASE/Archives/Magnetic/JSON Genesis are preserved</div>
                     <div><Workflow size={14} /> Legacy prismatic/performance surface is detached</div>
                   </div>
                 </SectionCard>
@@ -1510,6 +1957,27 @@ function App() {
                     <strong>{metric.value}</strong>
                   </div>
                 ))}
+              </div>
+
+              <div className="template-stream-card template-stream-card--services">
+                <div className="template-stream-card__eyebrow">
+                  <Boxes size={12} />
+                  <span>Service Health</span>
+                </div>
+                <div className="template-service-list">
+                  {serviceCards.map((service) => (
+                    <div
+                      key={service.id}
+                      className={`template-service-item ${service.online ? "is-online" : "is-offline"}`}
+                    >
+                      <div className="template-service-item__head">
+                        <span>{service.name}</span>
+                        <strong>{service.label}</strong>
+                      </div>
+                      <small>{service.detail}</small>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="template-stream-card template-stream-card--json">
@@ -1820,6 +2288,55 @@ function sanitizeFileName(input) {
     cleaned += code >= 32 ? raw[index] : "_";
   }
   return cleaned.slice(0, 80);
+}
+
+function bytesToBase64(bytes) {
+  let binary = "";
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+  return window.btoa(binary);
+}
+
+async function probeJsonEndpoint(url, onSuccess) {
+  try {
+    const response = await fetchWithTimeout(url, 3500);
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    const payload = await response.json();
+    return onSuccess(payload);
+  } catch (error) {
+    return {
+      online: false,
+      label: "Offline",
+      detail: error.message || url,
+    };
+  }
+}
+
+async function probeTextEndpoint(url, onSuccess) {
+  try {
+    await fetchWithTimeout(url, 3500, { mode: "no-cors" });
+    return onSuccess();
+  } catch (error) {
+    return {
+      online: false,
+      label: "Offline",
+      detail: error.message || url,
+    };
+  }
+}
+
+async function fetchWithTimeout(url, timeoutMs, options = {}) {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
 }
 
 export default App;
