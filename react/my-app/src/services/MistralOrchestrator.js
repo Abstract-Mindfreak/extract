@@ -5,10 +5,13 @@
  */
 
 const MISTRAL_API_BASE = "https://api.mistral.ai/v1";
+const MISTRAL_PROXY_BASE = "http://localhost:3456/api/mistral";
 const DEFAULT_MODEL = "mistral-large-latest";
 
 // API Key management
 let apiKey = localStorage.getItem("mistral_api_key") || "";
+let backendConfigured = false;
+let backendAvailable = false;
 
 export function setApiKey(key) {
   apiKey = key;
@@ -20,18 +23,70 @@ export function getApiKey() {
 }
 
 export function hasApiKey() {
-  return !!apiKey && apiKey.length > 10;
+  return (!!apiKey && apiKey.length > 10) || backendConfigured;
+}
+
+export async function initializeMistral() {
+  try {
+    const response = await fetch(`${MISTRAL_PROXY_BASE}/status`);
+    if (!response.ok) {
+      backendAvailable = false;
+      backendConfigured = false;
+      return getMistralStatus();
+    }
+
+    const status = await response.json();
+    backendAvailable = true;
+    backendConfigured = !!status.configured;
+    return {
+      configured: hasApiKey(),
+      available: backendAvailable || hasApiKey(),
+      defaultModel: status.defaultModel || DEFAULT_MODEL,
+      source: backendConfigured ? "server_env" : apiKey ? "browser_storage" : "missing",
+    };
+  } catch (_error) {
+    backendAvailable = false;
+    backendConfigured = false;
+    return getMistralStatus();
+  }
 }
 
 /**
  * Core Mistral API call
  */
 export async function callMistral(messages, model = DEFAULT_MODEL, temperature = 0.7) {
+  if (!apiKey && !backendConfigured) {
+    await initializeMistral();
+  }
+
   if (!hasApiKey()) {
     return { ok: false, error: "Mistral API key not configured" };
   }
 
   try {
+    if (!apiKey && backendConfigured) {
+      const proxyResponse = await fetch(`${MISTRAL_PROXY_BASE}/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          temperature,
+          max_tokens: 4096,
+        })
+      });
+
+      if (!proxyResponse.ok) {
+        const error = await proxyResponse.text();
+        return { ok: false, error: `Proxy Error: ${proxyResponse.status} - ${error}` };
+      }
+
+      const data = await proxyResponse.json();
+      return { ok: true, data };
+    }
+
     const response = await fetch(`${MISTRAL_API_BASE}/chat/completions`, {
       method: "POST",
       headers: {
@@ -277,8 +332,9 @@ Summarize.`
 export function getMistralStatus() {
   return {
     configured: hasApiKey(),
-    available: hasApiKey(),
+    available: hasApiKey() || backendAvailable,
     defaultModel: DEFAULT_MODEL,
+    source: backendConfigured ? "server_env" : apiKey ? "browser_storage" : "missing",
     error: hasApiKey() ? undefined : "API key not set"
   };
 }
@@ -302,6 +358,7 @@ export function useMistralOrchestrator() {
     setApiKey,
     getApiKey,
     hasApiKey,
+    initializeMistral,
     getMistralStatus,
     
     // Core

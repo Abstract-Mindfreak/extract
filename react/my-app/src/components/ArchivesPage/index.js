@@ -35,7 +35,7 @@ export default function ArchivesPage() {
     });
   };
 
-  const handleImportLocalData = async () => {
+  const handleImportArchiveData = async () => {
     try {
       const result = await importLocalData((progress) => {
         console.log(`[${progress.stage}] ${progress.message} (${progress.current}/${progress.total})`);
@@ -74,8 +74,8 @@ export default function ArchivesPage() {
           <button className="btn-secondary" onClick={handleInitMockData} disabled={isLoading}>
             Load Mock Data
           </button>
-          <button className="btn-primary" onClick={handleImportLocalData} disabled={isLoading}>
-            Import Local Data
+          <button className="btn-primary" onClick={handleImportArchiveData} disabled={isLoading}>
+            Import Archive Data
           </button>
         </div>
       </header>
@@ -95,9 +95,9 @@ export default function ArchivesPage() {
             <div className="empty-state">
               <div className="empty-icon">♪</div>
               <h3>No tracks yet</h3>
-              <p>Import archive data or load mock content to start working inside the archive workspace.</p>
-              <button className="btn-primary" onClick={handleInitMockData}>
-                Load Mock Data
+              <p>Import archive data from live FlowMusic backups or load mock content to start working inside the archive workspace.</p>
+              <button className="btn-primary" onClick={handleImportArchiveData}>
+                Import Archive Data
               </button>
             </div>
           ) : (

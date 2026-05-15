@@ -276,6 +276,37 @@ export class ProducerArchiverManager {
       conversationIds
     });
   }
+
+  async getLibraryCatalog({ force = false } = {}) {
+    const query = force ? '?force=true' : '';
+    return apiGet(`/library/catalog${query}`);
+  }
+
+  async fetchTrackMeta(accountId, trackId) {
+    const response = await fetch(`${API_BASE}/library/meta/${accountId}/${trackId}`, {
+      headers: { Accept: 'application/json' }
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`HTTP ${response.status}: ${text}`);
+    }
+
+    return response.text();
+  }
+
+  async fetchLibrarySession(accountId, conversationId) {
+    const response = await fetch(`${API_BASE}/library/session/${accountId}/${conversationId}`, {
+      headers: { Accept: 'application/json' }
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`HTTP ${response.status}: ${text}`);
+    }
+
+    return response.json();
+  }
 }
 
 // Singleton instance

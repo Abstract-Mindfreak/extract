@@ -35,7 +35,7 @@ export default function AIOrchestratorPanel() {
 
   const checkApiStatus = useCallback(async (key) => {
     setApiStatus({ configured: !!key, checking: true });
-    const status = mistral.getMistralStatus();
+    const status = await mistral.initializeMistral();
     setApiStatus({ ...status, checking: false });
   }, [mistral]);
 
@@ -43,8 +43,8 @@ export default function AIOrchestratorPanel() {
     const savedKey = mistral.getApiKey();
     if (savedKey) {
       setApiKey(savedKey);
-      checkApiStatus(savedKey);
     }
+    checkApiStatus(savedKey);
   }, [mistral, checkApiStatus]);
 
   const handleSaveApiKey = () => {
@@ -181,8 +181,13 @@ export default function AIOrchestratorPanel() {
               
               <div className={`flex items-center gap-2 text-xs ${apiStatus.configured ? "text-green-500" : "text-yellow-600"}`}>
                 {apiStatus.configured ? <CheckCircle size={14}/> : <AlertTriangle size={14}/>}
-                {apiStatus.configured ? "API Key configured successfully" : "API Key required for AI features"}
+                {apiStatus.configured ? "Mistral ready" : "API Key required for AI features"}
               </div>
+              {apiStatus.configured ? (
+                <div className="text-[11px] text-cyan-700">
+                  Source: {apiStatus.source === "server_env" ? "server .env" : "browser storage"}
+                </div>
+              ) : null}
               
               <div className="bg-cyan-950/10 border border-cyan-900/50 rounded p-4 text-xs text-cyan-700 space-y-1">
                 <div className="font-bold text-pink-500 mb-2">Available Features:</div>

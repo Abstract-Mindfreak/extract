@@ -3,21 +3,24 @@ import {
   Activity,
   Box,
   Download,
-  FileCode,
+ FileCode,
   Layers,
+  Pin,
   Save,
+  Search,
   Sparkles,
   Terminal,
   Upload,
 } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
-import { generateWithGemini, generateWithMistral } from '../services/aiService';
+import { generateWithGemini, generateWithMistral, planMistralLibraryQueries, type MistralLibraryPlan } from '../services/aiService';
 import { cn } from '../lib/utils';
 import { JSONBlock, JSONType, blocksToJson, chunkJSON, createDefaultBlock, jsonToBlocks } from '../types';
 import { BlockNode } from './BlockNode';
 import { BlockPalette } from './BlockPalette';
 
 const MMSS_BRIDGE_API_BASE = 'http://localhost:3456/api/mmss';
+const MAX_CONTEXT_BLOCKS = 8;
 
 type MmssPromptBlock = {
   id: string;
@@ -27,10 +30,34 @@ type MmssPromptBlock = {
   payload?: { data?: any };
 };
 
+type RankedBlock = {
+  block: MmssPromptBlock;
+  score: number;
+  reasons: string[];
+};
+
+const EMPTY_PLAN: MistralLibraryPlan = {
+  queries: [],
+  principles: [],
+  notes: [],
+};
+
+const tokenize = (input: string) =>
+  String(input || '')
+    .toLowerCase()
+    .split(/[^a-zа-я0-9_]+/i)
+    .map((token) => token.trim())
+    .filter((token) => token.length >= 2);
+
+const dedupeTokens = (values: string[]) => Array.from(new Set(values.filter(Boolean)));
+
+const safeJsonSnippet = (value: unknown, maxLength = 1200) => JSON.stringify(value ?? {}).slice(0, maxLength);
+
 export const MainEditor: React.FC = () => {
   const [root, setRoot] = useState<JSONBlock>(createDefaultBlock('object', 'root'));
   const [projectName, setProjectName] = useState('Industrial_Sublime_v4');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isPlanningContext, setIsPlanningContext] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
   const [aiModel, setAiModel] = useState<'gemini' | 'mistral'>('gemini');
   const [genMode, setGenMode] = useState<'augment' | 'rewrite' | 'skeleton'>('augment');
@@ -43,6 +70,13 @@ export const MainEditor: React.FC = () => {
   const [mmssPromptBlocks, setMmssPromptBlocks] = useState<MmssPromptBlock[]>([]);
   const [lastLibrarySyncAt, setLastLibrarySyncAt] = useState<string | null>(null);
   const [lastGenesisHandoffAt, setLastGenesisHandoffAt] = useState<string | null>(null);
+  const [librarySearchQuery, setLibrarySearchQuery] = useState('');
+  const [manualPinnedBlockIds, setManualPinnedBlockIds] = useState<string[]>([]);
+  const [rankedLimit, setRankedLimit] = useState(4);
+  const [selectedLibraryBlockId, setSelectedLibraryBlockId] = useState<string | null>(null);
+  const [mistralPlan, setMistralPlan] = useState<MistralLibraryPlan>(EMPTY_PLAN);
+  const [mistralPipelineMode, setMistralPipelineMode] = useState<'direct' | 'search-plan'>('search-plan');
+  const [lastSentBlockNames, setLastSentBlockNames] = useState<string[]>([]);
 
   useEffect(() => {
     const saved = localStorage.getItem('json_genesis_project');
@@ -68,13 +102,11 @@ export const MainEditor: React.FC = () => {
       void pullGenesisHandoff(true);
     }, 4000);
 
-    return () => {
-      window.clearInterval(intervalId);
-    };
+    return () => window.clearInterval(intervalId);
   }, [lastLibrarySyncAt, lastGenesisHandoffAt]);
 
   const appendAiEvent = (message: string) => {
-    setAiEventLog((prev) => [`${new Date().toLocaleTimeString()}: ${message}`, ...prev].slice(0, 12));
+    setAiEventLog((prev) => [`${new Date().toLocaleTimeString()}: ${message}`, ...prev].slice(0, 20));
   };
 
   const saveToLocal = () => {
@@ -101,6 +133,7 @@ export const MainEditor: React.FC = () => {
         const blockJson = block?.payload?.data ?? {};
         const genesisBlock = jsonToBlocks(blockJson, block?.name || 'MMSS Block');
         genesisBlock.libraryName = block?.name || 'MMSS Block';
+        genesisBlock.sourcePromptBlockId = block.id;
         return genesisBlock;
       });
 
@@ -108,6 +141,7 @@ export const MainEditor: React.FC = () => {
       setLibraryBlocks(importedBlocks);
       setMmssLibrarySummary(`${promptBlocks.length} blocks · ${promptLibrary?.sequences?.length || 0} sequences`);
       setLastLibrarySyncAt(payload?.updatedAt || null);
+      setSelectedLibraryBlockId((current) => current || promptBlocks[0]?.id || null);
       appendAiEvent(`MMSS library synced: ${promptBlocks.length} block(s)`);
     } catch (error) {
       if (!silent) {
@@ -152,49 +186,117 @@ export const MainEditor: React.FC = () => {
     }
   };
 
-  const relevantLibraryContext = useMemo(() => {
-    const tokens = String(aiPrompt || '')
-      .toLowerCase()
-      .split(/[^a-zа-я0-9_]+/i)
-      .filter((token) => token.length >= 3);
+  const togglePinnedBlock = (blockId: string) => {
+    setManualPinnedBlockIds((prev) => (prev.includes(blockId) ? prev.filter((id) => id !== blockId) : [...prev, blockId]));
+  };
 
-    const scored = mmssPromptBlocks
+  const buildRankedBlocks = (tokens: string[]): RankedBlock[] =>
+    mmssPromptBlocks
       .map((block) => {
-        const haystack = [
-          block.name || '',
-          block.description || '',
-          ...(Array.isArray(block.tags) ? block.tags : []),
-          JSON.stringify(block.payload?.data ?? {}).slice(0, 800),
-        ]
-          .join(' ')
-          .toLowerCase();
+        const name = (block.name || '').toLowerCase();
+        const description = (block.description || '').toLowerCase();
+        const tags = Array.isArray(block.tags) ? block.tags.map((tag) => tag.toLowerCase()) : [];
+        const payloadText = safeJsonSnippet(block.payload?.data ?? {}, 1800).toLowerCase();
+        let score = 0;
+        const reasons: string[] = [];
 
-        const score = tokens.reduce((sum, token) => sum + (haystack.includes(token) ? 1 : 0), 0);
-        return { block, score };
+        tokens.forEach((token) => {
+          let tokenScore = 0;
+          if (name.includes(token)) tokenScore += 5;
+          if (description.includes(token)) tokenScore += 3;
+          if (tags.some((tag) => tag.includes(token))) tokenScore += 4;
+          if (payloadText.includes(token)) tokenScore += 1;
+          if (tokenScore > 0) reasons.push(`${token}:${tokenScore}`);
+          score += tokenScore;
+        });
+
+        return { block, score, reasons };
       })
-      .filter((entry) => entry.score > 0)
-      .sort((left, right) => right.score - left.score)
-      .slice(0, 6)
-      .map(({ block }) => ({
-        name: block.name,
-        description: block.description,
-        tags: block.tags || [],
-        payload: block.payload?.data ?? {},
-      }));
+      .filter((entry) => entry.score > 0 || manualPinnedBlockIds.includes(entry.block.id))
+      .sort((left, right) => right.score - left.score || (left.block.name || '').localeCompare(right.block.name || ''));
 
-    if (!scored.length) {
-      return `MMSS library summary: ${mmssLibrarySummary}`;
+  const allSearchTokens = useMemo(() => {
+    const promptTokens = tokenize(aiPrompt);
+    const manualTokens = tokenize(librarySearchQuery);
+    const planTokens = mistralPlan.queries.flatMap((query) => tokenize(query));
+    return dedupeTokens([...promptTokens, ...manualTokens, ...planTokens]);
+  }, [aiPrompt, librarySearchQuery, mistralPlan]);
+
+  const rankedBlocks = useMemo(() => buildRankedBlocks(allSearchTokens), [allSearchTokens, mmssPromptBlocks, manualPinnedBlockIds]);
+
+  const pinnedBlocks = useMemo(
+    () => mmssPromptBlocks.filter((block) => manualPinnedBlockIds.includes(block.id)),
+    [manualPinnedBlockIds, mmssPromptBlocks],
+  );
+
+  const selectedContextBlocks = useMemo(() => {
+    const pinned = pinnedBlocks;
+    const autoRanked = rankedBlocks
+      .filter((entry) => !manualPinnedBlockIds.includes(entry.block.id))
+      .slice(0, rankedLimit)
+      .map((entry) => entry.block);
+
+    return dedupeById([...pinned, ...autoRanked]).slice(0, MAX_CONTEXT_BLOCKS);
+  }, [pinnedBlocks, rankedBlocks, rankedLimit, manualPinnedBlockIds]);
+
+  const relevantLibraryContext = useMemo(() => {
+    if (!selectedContextBlocks.length) {
+      return JSON.stringify(
+        {
+          summary: mmssLibrarySummary,
+          relevantBlocks: [],
+          selectionStrategy: {
+            pipelineMode: mistralPipelineMode,
+            queryTokens: allSearchTokens,
+            pinnedBlockIds: manualPinnedBlockIds,
+          },
+        },
+        null,
+        2,
+      );
     }
 
     return JSON.stringify(
       {
         summary: mmssLibrarySummary,
-        relevantBlocks: scored,
+        selectionStrategy: {
+          pipelineMode: mistralPipelineMode,
+          queryTokens: allSearchTokens,
+          pinnedBlockIds: manualPinnedBlockIds,
+          mistralQueries: mistralPlan.queries,
+          principles: mistralPlan.principles,
+        },
+        relevantBlocks: selectedContextBlocks.map((block) => ({
+          id: block.id,
+          name: block.name,
+          description: block.description,
+          tags: block.tags || [],
+          payload: block.payload?.data ?? {},
+        })),
       },
       null,
       2,
     );
-  }, [aiPrompt, mmssLibrarySummary, mmssPromptBlocks]);
+  }, [selectedContextBlocks, mmssLibrarySummary, mistralPipelineMode, allSearchTokens, manualPinnedBlockIds, mistralPlan]);
+
+  const selectedLibraryBlock = useMemo(() => {
+    const fromPromptLibrary = mmssPromptBlocks.find((block) => block.id === selectedLibraryBlockId);
+    if (fromPromptLibrary) return fromPromptLibrary;
+    const fromGenesisLibrary = libraryBlocks.find((block) => block.id === selectedLibraryBlockId);
+    if (!fromGenesisLibrary) return null;
+    return {
+      id: fromGenesisLibrary.id,
+      name: fromGenesisLibrary.libraryName,
+      description: 'Imported fragment preview',
+      tags: [],
+      payload: { data: blocksToJson(fromGenesisLibrary) },
+    } satisfies MmssPromptBlock;
+  }, [selectedLibraryBlockId, mmssPromptBlocks, libraryBlocks]);
+
+  const selectedLibraryJson = useMemo(
+    () => JSON.stringify(selectedLibraryBlock?.payload?.data ?? {}, null, 2),
+    [selectedLibraryBlock],
+  );
 
   const updateBlock = (id: string, updates: Partial<JSONBlock>) => {
     const walk = (blocks: JSONBlock[]): JSONBlock[] =>
@@ -283,13 +385,53 @@ export const MainEditor: React.FC = () => {
     anchor.click();
   };
 
+  const handlePlanMistralContext = async () => {
+    if (!aiPrompt.trim()) return;
+    setIsPlanningContext(true);
+    appendAiEvent('Mistral planning retrieval queries');
+    try {
+      const summary = JSON.stringify(
+        {
+          librarySummary: mmssLibrarySummary,
+          availableBlocks: mmssPromptBlocks.slice(0, 20).map((block) => ({
+            id: block.id,
+            name: block.name,
+            description: block.description,
+            tags: block.tags || [],
+          })),
+        },
+        null,
+        2,
+      );
+      const plan = await planMistralLibraryQueries(aiPrompt, summary, (message) => {
+        setAiStatusText(message);
+        appendAiEvent(message);
+      });
+      setMistralPlan(plan);
+      appendAiEvent(`Mistral queries: ${plan.queries.join(' | ') || 'none'}`);
+    } catch (error) {
+      appendAiEvent(`Mistral planning failed: ${error instanceof Error ? error.message : 'unknown error'}`);
+    } finally {
+      setIsPlanningContext(false);
+      setAiStatusText('Idle');
+    }
+  };
+
   const runAiGen = async () => {
     if (!aiPrompt) return;
     setIsGenerating(true);
     setAiStatusText(`Starting ${aiModel} synthesis`);
     appendAiEvent(`Start ${aiModel} · mode ${genMode}`);
     try {
+      if (aiModel === 'mistral' && mistralPipelineMode === 'search-plan' && aiPrompt.trim()) {
+        await handlePlanMistralContext();
+      }
+
       const currentStructure = JSON.stringify(blocksToJson(root));
+      const selectedNames = selectedContextBlocks.map((block) => block.name || block.id);
+      setLastSentBlockNames(selectedNames);
+      appendAiEvent(`Context blocks sent: ${selectedNames.join(', ') || 'none'}`);
+
       const options = {
         mode: genMode,
         rules: assemblyRules,
@@ -317,7 +459,7 @@ export const MainEditor: React.FC = () => {
     }
   };
 
-  const mmssRelevantPreview = useMemo(() => relevantLibraryContext.slice(0, 800), [relevantLibraryContext]);
+  const mmssRelevantPreview = useMemo(() => relevantLibraryContext.slice(0, 1600), [relevantLibraryContext]);
 
   return (
     <div className="flex flex-col h-screen bg-bg-deep overflow-hidden selection:bg-orange-500/30">
@@ -336,15 +478,19 @@ export const MainEditor: React.FC = () => {
             Import
             <input type="file" className="hidden" onChange={handleImport} accept=".json" />
           </label>
-          <button onClick={requestMmssLibrary} className="px-4 py-1.5 rounded bg-cyan-950/30 text-cyan-300 text-[10px] font-bold uppercase border border-cyan-500/20 flex items-center gap-2">
+          <button onClick={() => setImportToLib((prev) => !prev)} className="px-4 py-1.5 rounded bg-zinc-900/70 text-zinc-300 text-[10px] font-bold uppercase border border-white/5 flex items-center gap-2">
+            <Box size={12} />
+            {importToLib ? 'Import → Library' : 'Import → Root'}
+          </button>
+          <button onClick={() => void requestMmssLibrary()} className="px-4 py-1.5 rounded bg-cyan-950/30 text-cyan-300 text-[10px] font-bold uppercase border border-cyan-500/20 flex items-center gap-2">
             <Layers size={12} />
             Sync MMSS
           </button>
-          <button onClick={pullGenesisHandoff} className="px-4 py-1.5 rounded bg-indigo-950/30 text-indigo-300 text-[10px] font-bold uppercase border border-indigo-500/20 flex items-center gap-2">
+          <button onClick={() => void pullGenesisHandoff()} className="px-4 py-1.5 rounded bg-indigo-950/30 text-indigo-300 text-[10px] font-bold uppercase border border-indigo-500/20 flex items-center gap-2">
             <Download size={12} />
             Pull Handoff
           </button>
-          <button onClick={saveRootToMmssLibrary} className="px-4 py-1.5 rounded bg-emerald-950/30 text-emerald-300 text-[10px] font-bold uppercase border border-emerald-500/20 flex items-center gap-2">
+          <button onClick={() => void saveRootToMmssLibrary()} className="px-4 py-1.5 rounded bg-emerald-950/30 text-emerald-300 text-[10px] font-bold uppercase border border-emerald-500/20 flex items-center gap-2">
             <Save size={12} />
             Save to MMSS
           </button>
@@ -355,9 +501,15 @@ export const MainEditor: React.FC = () => {
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        <aside className="w-72 border-r border-white/[0.03] bg-bg-panel flex flex-col shrink-0 overflow-hidden">
+        <aside className="w-80 border-r border-white/[0.03] bg-bg-panel flex flex-col shrink-0 overflow-hidden">
           <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
-            <BlockPalette onAddRoot={(type) => setRoot(createDefaultBlock(type, 'root'))} customBlocks={libraryBlocks} onAddCustomBlock={addLibraryItemToRoot} />
+            <BlockPalette
+              onAddRoot={(type) => setRoot(createDefaultBlock(type, 'root'))}
+              customBlocks={libraryBlocks}
+              onAddCustomBlock={addLibraryItemToRoot}
+              onPreviewCustomBlock={(block) => setSelectedLibraryBlockId(block.sourcePromptBlockId || block.id)}
+              activePreviewBlockId={selectedLibraryBlockId}
+            />
           </div>
         </aside>
 
@@ -422,7 +574,7 @@ export const MainEditor: React.FC = () => {
                     className="bg-transparent border-none text-xs flex-grow focus:outline-none placeholder:text-zinc-800 text-zinc-300 font-medium"
                   />
                 </div>
-                <button onClick={runAiGen} disabled={isGenerating || !aiPrompt} className="px-10 h-12 bg-white text-bg-deep rounded-xl font-black text-[11px] tracking-widest disabled:opacity-20 shrink-0 uppercase flex items-center gap-3 shadow-xl">
+                <button onClick={() => void runAiGen()} disabled={isGenerating || !aiPrompt} className="px-10 h-12 bg-white text-bg-deep rounded-xl font-black text-[11px] tracking-widest disabled:opacity-20 shrink-0 uppercase flex items-center gap-3 shadow-xl">
                   {isGenerating ? <Activity size={16} className="animate-spin" /> : <Sparkles size={16} />}
                   {isGenerating ? 'Synthesizing...' : 'Execute Synth'}
                 </button>
@@ -443,7 +595,7 @@ export const MainEditor: React.FC = () => {
           </div>
         </main>
 
-        <aside className="w-80 border-l border-white/[0.03] bg-bg-panel flex flex-col shrink-0">
+        <aside className="w-[30rem] border-l border-white/[0.03] bg-bg-panel flex flex-col shrink-0">
           <div className="p-6 border-b border-white/[0.03]">
             <div className="flex items-center gap-3">
               <Sparkles size={14} className="text-orange-500" />
@@ -469,13 +621,125 @@ export const MainEditor: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex-1 p-6 overflow-y-auto custom-scrollbar">
-            <div className="mb-4">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Relevant MMSS Context</p>
+          <div className="flex-1 p-6 overflow-y-auto custom-scrollbar space-y-5">
+            <section className="border border-white/5 rounded-xl bg-black/20 p-4">
+              <div className="flex items-center justify-between gap-4 mb-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Mistral Retrieval Control</p>
+                <div className="flex bg-black/50 rounded-lg p-1 border border-white/5">
+                  {(['direct', 'search-plan'] as const).map((mode) => (
+                    <button
+                      key={mode}
+                      onClick={() => setMistralPipelineMode(mode)}
+                      className={cn(
+                        'px-3 py-1 rounded text-[9px] font-black uppercase',
+                        mistralPipelineMode === mode ? 'bg-orange-600 text-bg-deep' : 'text-zinc-500',
+                      )}
+                    >
+                      {mode}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 mb-3 bg-black/40 border border-white/5 rounded-xl px-3 py-2">
+                <Search size={12} className="text-zinc-600" />
+                <input
+                  value={librarySearchQuery}
+                  onChange={(event) => setLibrarySearchQuery(event.target.value)}
+                  placeholder="Manual search override for MMSS blocks"
+                  className="bg-transparent border-none text-xs flex-grow focus:outline-none placeholder:text-zinc-700 text-zinc-300"
+                />
+              </div>
+
+              <div className="flex items-center gap-3 mb-3">
+                <button
+                  onClick={() => void handlePlanMistralContext()}
+                  disabled={isPlanningContext || !aiPrompt.trim()}
+                  className="px-4 py-2 rounded-lg bg-cyan-950/40 text-cyan-300 text-[10px] font-black uppercase border border-cyan-500/20 disabled:opacity-40"
+                >
+                  {isPlanningContext ? 'Planning…' : 'Ask Mistral for Queries'}
+                </button>
+                <label className="text-[10px] font-mono text-zinc-500">
+                  Auto picks: {rankedLimit}
+                </label>
+                <input
+                  type="range"
+                  min={1}
+                  max={6}
+                  step={1}
+                  value={rankedLimit}
+                  onChange={(event) => setRankedLimit(Number(event.target.value))}
+                  className="flex-1"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-3">
+                <InfoList title="Mistral Queries" items={mistralPlan.queries} empty="No retrieval queries yet." />
+                <InfoList title="MMSS Principles" items={mistralPlan.principles} empty="No extracted principles yet." />
+                <InfoList title="Mistral Notes" items={mistralPlan.notes} empty="No planning notes yet." />
+                <InfoList title="Blocks Sent to Mistral" items={lastSentBlockNames} empty="No context blocks sent yet." />
+              </div>
+            </section>
+
+            <section className="border border-white/5 rounded-xl bg-black/20 p-4">
+              <div className="flex items-center justify-between gap-4 mb-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Relevant MMSS Context</p>
+                <p className="text-[10px] font-mono text-zinc-600">{selectedContextBlocks.length} selected</p>
+              </div>
+              <div className="space-y-2 max-h-64 overflow-y-auto custom-scrollbar">
+                {rankedBlocks.length ? rankedBlocks.slice(0, 12).map((entry) => {
+                  const isPinned = manualPinnedBlockIds.includes(entry.block.id);
+                  const isSelected = selectedContextBlocks.some((block) => block.id === entry.block.id);
+                  return (
+                    <div
+                      key={entry.block.id}
+                      className={cn(
+                        'border rounded-lg p-3 transition-all',
+                        isSelected ? 'border-orange-500/30 bg-orange-500/10' : 'border-white/5 bg-black/20',
+                      )}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <button onClick={() => setSelectedLibraryBlockId(entry.block.id)} className="text-left min-w-0">
+                          <div className="text-[11px] font-black text-white/80 truncate">{entry.block.name || entry.block.id}</div>
+                          <div className="text-[10px] text-zinc-500 line-clamp-2">{entry.block.description || 'No description'}</div>
+                        </button>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className="text-[10px] font-mono text-cyan-300">{entry.score}</span>
+                          <button
+                            onClick={() => togglePinnedBlock(entry.block.id)}
+                            className={cn(
+                              'p-1 rounded border',
+                              isPinned ? 'border-orange-500/30 text-orange-300' : 'border-white/10 text-zinc-500',
+                            )}
+                          >
+                            <Pin size={12} />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="mt-2 text-[9px] text-zinc-600 font-mono break-words">{entry.reasons.join(' · ') || 'manual only'}</div>
+                    </div>
+                  );
+                }) : (
+                  <div className="text-[11px] text-zinc-600 font-mono">No relevant blocks yet. Use prompt text, manual search, or ask Mistral for queries.</div>
+                )}
+              </div>
               <pre className="mt-3 bg-black/30 p-4 rounded-xl border border-white/5 text-[10px] text-zinc-400 whitespace-pre-wrap overflow-hidden">
                 {mmssRelevantPreview}
               </pre>
-            </div>
+            </section>
+
+            <section className="border border-white/5 rounded-xl bg-black/20 p-4">
+              <div className="flex items-center justify-between gap-4 mb-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Library Block Inspector</p>
+                <p className="text-[10px] font-mono text-zinc-600">{selectedLibraryBlock?.name || 'No block selected'}</p>
+              </div>
+              <div className="text-[10px] text-zinc-500 mb-3">
+                Click any library block on the left or any ranked MMSS result here to inspect its full payload without reloading the page.
+              </div>
+              <pre className="bg-black/30 p-4 rounded-xl border border-white/5 text-[10px] text-zinc-400 whitespace-pre-wrap overflow-auto max-h-[32rem]">
+                {selectedLibraryJson}
+              </pre>
+            </section>
           </div>
 
           <div className="p-6 border-t border-white/[0.03]">
@@ -488,3 +752,28 @@ export const MainEditor: React.FC = () => {
     </div>
   );
 };
+
+function dedupeById(blocks: MmssPromptBlock[]) {
+  const map = new Map<string, MmssPromptBlock>();
+  blocks.forEach((block) => {
+    map.set(block.id, block);
+  });
+  return Array.from(map.values());
+}
+
+const InfoList: React.FC<{ title: string; items: string[]; empty: string }> = ({ title, items, empty }) => (
+  <div className="border border-white/5 rounded-lg p-3 bg-black/20">
+    <div className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-2">{title}</div>
+    {items.length ? (
+      <div className="space-y-1">
+        {items.map((item, index) => (
+          <div key={`${title}-${index}-${item}`} className="text-[10px] text-zinc-300 font-mono break-words">
+            {item}
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div className="text-[10px] text-zinc-600 font-mono">{empty}</div>
+    )}
+  </div>
+);

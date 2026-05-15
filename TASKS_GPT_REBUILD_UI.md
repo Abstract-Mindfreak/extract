@@ -73,3 +73,13 @@
 - [ ] Пройтись по responsive UX и убрать потенциальную перегруженность
 - [ ] Провести ручную smoke-проверку основных сценариев
 - [ ] Решить, нужен ли Plan B с разворотом прямо от шаблона, если визуально итог начнёт расходиться слишком сильно
+## Latest progress
+- [x] Archive import now prefers live `flowmusic_backup_*` data through `archiver-server`, with fallback to `public/local-data`
+- [x] Archives UI renamed `Import Archive Data` to reflect the real workflow
+- [x] ASE Unified Rack moved closer to template structure with a calmer hero, overview strip, and staged widget spans
+- [x] ASE widget titles normalized toward a clearer orchestration vocabulary
+
+## Next UI pass
+- [ ] Replace remaining mojibake and legacy strings inside `ASEMasterConsole.jsx`
+- [ ] Tighten top shell spacing and typography another step toward `main-template-new.tsx`
+- [ ] Review rail, drawer, and mobile behavior after the new ASE rack density changes

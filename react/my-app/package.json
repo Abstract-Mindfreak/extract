@@ -23,9 +23,14 @@
     "eject": "react-scripts eject",
     "sync:server": "node sync-server/server.js",
     "archiver:server": "node archiver-server.js",
-    "import": "ts-node scripts/import-cli.ts"
+    "json:genesis:dev": "cd ../../json-genesis && npm run dev",
+    "jsonhero:dev": "cd ../../gitprojects/jsonhero-web && npm run build && npm start",
+    "import": "ts-node scripts/import-cli.ts",
+    "mmss:magnetic:server": "..\\..\\venv\\Scripts\\python.exe -m uvicorn main:app --reload --port 8001 --app-dir ..\\..\\mmss-magnetic-server",
+    "dev:full": "concurrently \"npm start\" \"npm run archiver:server\" \"npm run mmss:magnetic:server\" \"npm run json:genesis:dev\" \"npm run jsonhero:dev\""
   },
   "devDependencies": {
+    "concurrently": "^8.0.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "ws": "^8.14.2"

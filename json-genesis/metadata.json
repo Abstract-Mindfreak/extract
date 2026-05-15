@@ -1,0 +1,6 @@
+{
+  "name": "Remix: JSON Genesis",
+  "description": "Advanced block-based JSON editor with partial document import, fragment library, repeating tag visualization, and AI synthesis (Gemini & Mistral).",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

@@ -37,16 +37,16 @@ const ASE_STORAGE_KEY = "mmss.ase.configurations.v1";
 const ASE_STATE_KEY = "mmss.ase.currentState.v1";
 
 const FORMULAS = [
-  { id: "PHI_TOTAL", label: "Φ_total", formula: "Fix(Ψ -> Stack_Engine ∘ T_Ψ)", desc: "Recursive self-optimization" },
+  { id: "PHI_TOTAL", label: "?_total", formula: "Fix(? -> Stack_Engine ? T_?)", desc: "Recursive self-optimization" },
   { id: "ENTROPY", label: "Entropy H(p,c)", formula: "(p * log(1/p)) + (c * exp(D_f / R_T))", desc: "Order and chaos balance" },
-  { id: "GRAVITY", label: "Quantum Grav", formula: "∫ (Freq_Hop * Anti_Grid) dt", desc: "Gravity inversion layer" },
-  { id: "DENSITY", label: "Field Density", formula: "∇ · (Ψ(G) ⊗ R_T) = ∂Φ/∂t", desc: "Spectral density map" },
+  { id: "GRAVITY", label: "Quantum Grav", formula: "? (Freq_Hop * Anti_Grid) dt", desc: "Gravity inversion layer" },
+  { id: "DENSITY", label: "Field Density", formula: "? · (?(G) ? R_T) = ??/?t", desc: "Spectral density map" },
 ];
 
 const LOGIC_STACKS = {
-  basic: ["G_BASE", "Φ_DIV", "Q_GRAV", "M_SHIFT"],
-  extended: ["G_BASE", "Φ_DIV", "Q_GRAV", "M_SHIFT", "Ψ_RECUR", "Σ_SYNTH"],
-  supreme: ["G_BASE", "Φ_DIV", "Q_GRAV", "M_SHIFT", "Ψ_RECUR", "Σ_SYNTH", "∇_DENSITY", "↦_MAP"],
+  basic: ["G_BASE", "?_DIV", "Q_GRAV", "M_SHIFT"],
+  extended: ["G_BASE", "?_DIV", "Q_GRAV", "M_SHIFT", "?_RECUR", "?_SYNTH"],
+  supreme: ["G_BASE", "?_DIV", "Q_GRAV", "M_SHIFT", "?_RECUR", "?_SYNTH", "?_DENSITY", "?_MAP"],
 };
 
 const LFE_MODES = ["AMBIENT", "COLLAPSE", "DRAMA_PEAK", "META_FRACTAL"];
@@ -233,11 +233,11 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
   const [lfeMode, setLfeMode] = useState("AMBIENT");
   const [phiSync, setPhiSync] = useState(true);
   const [logicStack, setLogicStack] = useState(LOGIC_STACKS.extended);
-  const [metaKey, setMetaKey] = useState("Φ_KEY_0411_ALPHA");
+  const [metaKey, setMetaKey] = useState("?_KEY_0411_ALPHA");
   const [hyperParams, setHyperParams] = useState(DEFAULT_HYPER_PARAMS);
   const [opMode, setOpMode] = useState("ANNIHILATE");
   const [quantumState, setQuantumState] = useState("COLLAPSED");
-  const [events, setEvents] = useState(["SYNC_LOCK_ESTABLISHED", "Φ_STREAM_INITIALIZED"]);
+  const [events, setEvents] = useState(["SYNC_LOCK_ESTABLISHED", "?_STREAM_INITIALIZED"]);
   const [activeTab, setActiveTab] = useState("control");
   const [savedConfigs, setSavedConfigs] = useState([]);
   const [selectedConfig, setSelectedConfig] = useState(null);
@@ -302,7 +302,7 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
         setLfeMode(state.lfeMode || "AMBIENT");
         setPhiSync(state.phiSync ?? true);
         setLogicStack(state.logicStack || LOGIC_STACKS.extended);
-        setMetaKey(state.metaKey || "Φ_KEY_0411_ALPHA");
+        setMetaKey(state.metaKey || "?_KEY_0411_ALPHA");
         setHyperParams(state.hyperParams || DEFAULT_HYPER_PARAMS);
         setOpMode(state.opMode || "ANNIHILATE");
         setQuantumState(state.quantumState || "COLLAPSED");
@@ -351,8 +351,8 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
         const nextEvent = [
           `DRIFT_CORRECTED_${Math.random().toString(16).slice(2, 6).toUpperCase()}`,
           `PHASE_SHIFT_${(Math.random() * 100).toFixed(0)}`,
-          "Φ_THRESHOLD_REACHED",
-          `Φ_PULSE_${(Math.random() * 1000).toFixed(0)}`,
+          "?_THRESHOLD_REACHED",
+          `?_PULSE_${(Math.random() * 1000).toFixed(0)}`,
           "ENTROPY_HARVESTED",
           "Q_STATE_COLLAPSED",
         ];
@@ -771,42 +771,43 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
     return <Box size={14} />;
   };
 
+  const activeVariationMeta = ASE_VARIATIONS[currentVariation];
+  const activeVariationDetail = ASE_VARIATION_DETAILS[currentVariation] || null;
+
   return (
     <div
-      className={`w-full bg-[#020202] text-cyan-500 p-4 font-mono selection:bg-pink-900/30 overflow-x-hidden ${isFullscreen ? "fixed inset-0 z-[9999] min-h-screen overflow-y-auto" : "min-h-screen"}`}
+      className={`ase-console-shell font-mono selection:bg-pink-900/30 overflow-x-hidden ${isFullscreen ? "fixed inset-0 z-[9999] overflow-y-auto" : ""}`}
     >
-      <div className="max-w-[1600px] mx-auto space-y-6">
-        <div className="flex justify-between items-center border-b border-cyan-900/30 pb-4">
-          <div className="flex items-center gap-4">
-            <div className={`p-2 rounded-full ${phiSync ? "bg-pink-500 shadow-[0_0_20px_rgba(236,72,153,0.5)]" : "bg-cyan-950"}`}>
+      <div className="ase-console-shell__inner">
+        <div className="ase-console-shell__topbar">
+          <div className="ase-console-shell__brand">
+            <div className={`ase-console-shell__brand-mark ${phiSync ? "is-active" : ""}`}>
               <RefreshCw size={20} className={phiSync ? "text-white" : "text-cyan-900"} />
             </div>
             <div>
-              <h1 className="text-xl font-black tracking-tighter text-white flex items-center gap-2">
-                ASE MASTER CONSOLE <span className="text-pink-500 italic">v5.UNIFIED</span>
+              <h1 className="ase-console-shell__title">
+                ASE Unified Console <span>v5.UNIFIED</span>
               </h1>
-              <div className="flex gap-3 text-[9px] uppercase tracking-[0.3em] text-cyan-800">
-                <span>Φ-Sync: {phiSync ? "ENABLED" : "BYPASS"}</span>
-                <span className="text-pink-900">/</span>
-                <span>Stack: {logicStack.length} OPS</span>
-                <span className="text-pink-900">/</span>
+              <div className="ase-console-shell__meta">
+                <span>Phi Sync: {phiSync ? "Enabled" : "Bypass"}</span>
+                <span>Stack: {logicStack.length} ops</span>
                 <span>Modes: {selectedModeIds.length}</span>
               </div>
             </div>
           </div>
 
-          <div className="flex gap-2 items-center">
-            <div className="relative">
+          <div className="ase-console-shell__controls">
+            <div className="ase-console-shell__variation">
               <button
                 onClick={() => setShowVariationMenu((current) => !current)}
-                className="px-4 py-1 text-[10px] font-bold border border-cyan-900 text-cyan-800 hover:text-cyan-500 hover:border-cyan-700 flex items-center gap-2 transition-all"
+                className="ase-console-shell__variation-btn"
               >
                 {renderVariationIcon()}
-                {ASE_VARIATIONS[currentVariation].label}
+                {activeVariationMeta.label}
                 <ChevronDown size={12} className={`transform transition-transform ${showVariationMenu ? "rotate-180" : ""}`} />
               </button>
               {showVariationMenu ? (
-                <div className="absolute top-full right-0 mt-1 bg-[#0a0a0a] border border-cyan-900 rounded-lg overflow-hidden z-50 min-w-[220px]">
+                <div className="ase-console-shell__variation-menu">
                   {Object.values(ASE_VARIATIONS).map((variation) => (
                     <button
                       key={variation.id}
@@ -814,10 +815,10 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
                         setCurrentVariation(variation.id);
                         setShowVariationMenu(false);
                       }}
-                      className={`w-full text-left px-4 py-2 text-[10px] transition-all ${currentVariation === variation.id ? "bg-pink-500/10 text-pink-500 border-l-2 border-pink-500" : "text-cyan-700 hover:text-cyan-500 hover:bg-cyan-950/30"}`}
+                      className={`ase-console-shell__variation-item ${currentVariation === variation.id ? "is-active" : ""}`}
                     >
                       <div className="font-bold">{variation.label}</div>
-                      <div className="text-[8px] text-cyan-900 mt-0.5">{variation.description}</div>
+                      <div className="ase-console-shell__variation-copy">{variation.description}</div>
                     </button>
                   ))}
                 </div>
@@ -825,48 +826,68 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
             </div>
 
             {currentVariation === "decomposition_audio" ? (
-              <div className="flex items-center gap-2 bg-black/40 border border-pink-900/30 rounded-lg px-3 py-1.5 mr-2">
+              <div className="flex items-center gap-2 bg-black/40 border border-pink-900/30 rounded-lg px-3 py-1.5 mr-2 opacity-70">
                 <span className="text-[8px] text-pink-700 font-bold uppercase">PrismaticCore Sync:</span>
-                <button onClick={() => handleSyncChange(SYNC_MODES.OFF)} className={`p-1.5 rounded ${syncMode === SYNC_MODES.OFF ? "bg-gray-800 text-gray-500" : "text-cyan-900 hover:text-cyan-700"}`} title="Sync: OFF">
+                <button disabled className={`p-1.5 rounded ${syncMode === SYNC_MODES.OFF ? "bg-gray-800 text-gray-500" : "text-cyan-900"}`} title="Sync: OFF">
                   <ZapOffIcon size={12} />
                 </button>
-                <button onClick={() => handleSyncChange(SYNC_MODES.ASE_TO_PRISMATIC)} className={`p-1.5 rounded ${syncMode === SYNC_MODES.ASE_TO_PRISMATIC ? "bg-pink-900/50 text-pink-500" : "text-cyan-900 hover:text-cyan-700"}`} title="ASE -> PrismaticCore">
+                <button disabled className={`p-1.5 rounded ${syncMode === SYNC_MODES.ASE_TO_PRISMATIC ? "bg-pink-900/50 text-pink-500" : "text-cyan-900"}`} title="ASE -> PrismaticCore">
                   <ArrowRightLeft size={12} />
                 </button>
-                <button onClick={() => handleSyncChange(SYNC_MODES.PRISMATIC_TO_ASE)} className={`p-1.5 rounded ${syncMode === SYNC_MODES.PRISMATIC_TO_ASE ? "bg-cyan-900/50 text-cyan-500" : "text-cyan-900 hover:text-cyan-700"}`} title="PrismaticCore -> ASE">
+                <button disabled className={`p-1.5 rounded ${syncMode === SYNC_MODES.PRISMATIC_TO_ASE ? "bg-cyan-900/50 text-cyan-500" : "text-cyan-900"}`} title="PrismaticCore -> ASE">
                   <Download size={12} />
                 </button>
-                <button onClick={() => handleSyncChange(SYNC_MODES.BIDIRECTIONAL)} className={`p-1.5 rounded ${syncMode === SYNC_MODES.BIDIRECTIONAL ? "bg-green-900/50 text-green-500" : "text-cyan-900 hover:text-cyan-700"}`} title="Both Way Sync">
+                <button disabled className={`p-1.5 rounded ${syncMode === SYNC_MODES.BIDIRECTIONAL ? "bg-green-900/50 text-green-500" : "text-cyan-900"}`} title="Both Way Sync">
                   <Wifi size={12} />
                 </button>
               </div>
             ) : null}
 
-            {["control", "formulas", "data"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-4 py-1 text-[10px] font-bold border transition-all ${activeTab === tab ? "border-pink-500 text-pink-500 bg-pink-500/10" : "border-cyan-900 text-cyan-800 hover:text-cyan-500"}`}
-              >
-                {tab.toUpperCase()}
-              </button>
-            ))}
+            <div className="ase-console-shell__tabs">
+              {["control", "formulas", "data"].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`ase-console-shell__tab ${activeTab === tab ? "is-active" : ""}`}
+                >
+                  {tab.toUpperCase()}
+                </button>
+              ))}
+            </div>
             <button
               onClick={() => setPhiSync((current) => !current)}
-              className={`px-4 py-1 text-[10px] font-bold border transition-all ${phiSync ? "border-pink-500 text-pink-500 bg-pink-500/10" : "border-cyan-900 text-cyan-800 hover:text-cyan-500"}`}
+              className={`ase-console-shell__action ${phiSync ? "is-active" : ""}`}
             >
-              FORCE Φ-RESONANCE
+              Force Resonance
             </button>
             <button
               onClick={() => setIsFullscreen((current) => !current)}
-              className={`px-4 py-1 text-[10px] font-bold border transition-all ${isFullscreen ? "border-cyan-400 text-cyan-300 bg-cyan-500/10" : "border-cyan-900 text-cyan-800 hover:text-cyan-500"}`}
+              className={`ase-console-shell__action ${isFullscreen ? "is-active-secondary" : ""}`}
             >
               {isFullscreen ? "EXIT FULLSCREEN" : "FULLSCREEN"}
             </button>
           </div>
         </div>
 
-        <div className="flex-1 overflow-auto p-6">
+        <div className="ase-console-shell__summary">
+          <div className="ase-console-shell__summary-card">
+            <span>Current mode</span>
+            <strong>{activeVariationMeta.label}</strong>
+            <small>{activeVariationMeta.description}</small>
+          </div>
+          <div className="ase-console-shell__summary-card">
+            <span>Mode focus</span>
+            <strong>{activeVariationDetail?.category || "Unified"}</strong>
+            <small>{activeVariationDetail?.tags?.slice(0, 3).join(" / ") || "MMSS pipeline"}</small>
+          </div>
+          <div className="ase-console-shell__summary-card">
+            <span>System state</span>
+            <strong>{phiSync ? "Resonant" : "Freeform"}</strong>
+            <small>{selectedModeIds.length} modules in pipeline</small>
+          </div>
+        </div>
+
+        <div className="ase-console-shell__body">
           {activeTab === "control" ? (
             currentVariation !== "unified" ? (
               <div className="h-full">
@@ -939,7 +960,7 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
 
           {activeTab === "formulas" ? (
             <div className="bg-black border border-cyan-900 rounded-xl p-6">
-              <SectionHeader icon={<BrainCircuit size={18} />} title="FORMULARY_REFERENCE" />
+              <SectionHeader icon={<BrainCircuit size={18} />} title="Formula Reference" />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                 {FORMULAS.map((formula) => (
                   <div key={formula.id} className="group bg-cyan-950/10 p-4 rounded border border-cyan-900/50 hover:border-pink-500/50 transition-all">
@@ -954,7 +975,7 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
 
           {activeTab === "data" ? (
             <div className="bg-black border border-cyan-900 rounded-xl p-6">
-              <SectionHeader icon={<Terminal size={18} />} title="FULL_DATA_STREAM" />
+              <SectionHeader icon={<Terminal size={18} />} title="Full Data Stream" />
               <pre className="mt-4 p-4 bg-[#050505] rounded text-[10px] font-mono text-cyan-600/80 whitespace-pre-wrap overflow-auto max-h-[60vh]">
                 {jsonLog}
               </pre>
@@ -963,12 +984,12 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4 border-t border-cyan-900/20 pt-6">
-          <StatBox label="Φ_TOTAL" value={(entropy.p * 1.618).toFixed(4)} />
-          <StatBox label="Φ_PURITY" value={`${(hyperParams.purity * 100).toFixed(1)}%`} />
+          <StatBox label="Phi Total" value={(entropy.p * 1.618).toFixed(4)} />
+          <StatBox label="Purity" value={`${(hyperParams.purity * 100).toFixed(1)}%`} />
           <StatBox label="VELOCITY" value={currentVelocity} />
           <StatBox label="FRACTAL" value={currentFractal} />
           <StatBox label="NEGENTROPY" value={currentNegentropy} />
-          <StatBox label="SYNC_MODE" value={phiSync ? "Φ_LOCK" : "BYPASS"} color="text-pink-500" />
+          <StatBox label="Sync Mode" value={phiSync ? "LOCK" : "BYPASS"} color="text-pink-500" />
         </div>
       </div>
     </div>
@@ -1125,13 +1146,30 @@ function UnifiedRack({
 
   const pipelineSummary = selectedVariationEntries.map((variation) => variation.label).join(" -> ");
   const streamPreview = jsonLog ? jsonLog.slice(0, 220) : "";
+  const selectedPromptBlockLabel = selectedPromptBlock?.name || "No prompt block linked";
+  const selectedArchiveTrackLabel = selectedArchiveTrack?.title || "No archive track linked";
+
+  const widgetMeta = {
+    stats: { className: "ase-widget--summary" },
+    module_library: { className: "ase-widget--library" },
+    pipeline: { className: "ase-widget--pipeline" },
+    entropy_pad: { className: "ase-widget--control" },
+    quick_controls: { className: "ase-widget--control" },
+    logic_meta: { className: "ase-widget--control" },
+    prompt_library: { className: "ase-widget--prompt" },
+    archive_tracks: { className: "ase-widget--archive" },
+    config_db: { className: "ase-widget--config" },
+    json_preview: { className: "ase-widget--preview" },
+    event_feed: { className: "ase-widget--events" },
+  };
 
   const Widget = ({ id, title, icon, children, actions, defaultCollapsed = false }) => {
     const widget = widgetLayout.find(w => w.id === id);
     const collapsed = widget?.collapsed ?? defaultCollapsed;
+    const widgetClassName = widgetMeta[id]?.className || "";
     
     return (
-      <div className={`ase-widget ${collapsed ? 'is-collapsed' : ''}`}>
+      <div className={`ase-widget ${widgetClassName} ${collapsed ? 'is-collapsed' : ''}`}>
         <div className="ase-widget__header">
           <div className="ase-widget__header-left">
             <button 
@@ -1148,14 +1186,14 @@ function UnifiedRack({
               className="ase-widget__move"
               disabled={widget?.order === 0}
             >
-              ↑
+              ^
             </button>
             <button 
               onClick={() => moveWidget(id, 'down')}
               className="ase-widget__move"
               disabled={widget?.order === widgetLayout.length - 1}
             >
-              ↓
+              v
             </button>
             {actions && <div className="ase-widget__actions">{actions}</div>}
           </div>
@@ -1170,10 +1208,43 @@ function UnifiedRack({
       <div className="ase-workbench__hero">
         <div>
           <div className="ase-workbench__eyebrow">ASE Unified Console</div>
-          <h2 className="ase-workbench__title">Единая консоль для настройки и экспорта MMSS JSON</h2>
+          <h2 className="ase-workbench__title">One rack for module selection, pipeline order, and MMSS export</h2>
           <p className="ase-workbench__copy">
-            Виджет-система для управления модулями. Перетаскивайте виджеты ↑↓ для изменения порядка.
+            Work from one surface: choose ASE modules, control merge order, inspect linked prompt and archive context, and hand the result to JsonSequenceBuilder.
           </p>
+        </div>
+        <div className="ase-workbench__hero-stats">
+          <MetricChip label="Pipeline" value={`${selectedModeIds.length} modes`} />
+          <MetricChip label="Velocity" value={currentVelocity} />
+          <MetricChip label="Negentropy" value={currentNegentropy} />
+          <MetricChip label="Phi Sync" value={phiSync ? "ON" : "BYPASS"} />
+        </div>
+      </div>
+
+      <div className="ase-workbench__hero-toolbar">
+        <button onClick={enableAllModes} className="ase-ui-btn ase-ui-btn--ghost">Select all</button>
+        <button onClick={clearSelectedModes} className="ase-ui-btn ase-ui-btn--muted">Clear selected</button>
+        <button onClick={copyUnifiedJson} className="ase-ui-btn ase-ui-btn--ghost">Copy JSON</button>
+        <button
+          onClick={() => onSendToSequenceBuilder && onSendToSequenceBuilder(unifiedConfig)}
+          className="ase-ui-btn ase-ui-btn--primary"
+        >
+          Send to Builder
+        </button>
+      </div>
+
+      <div className="ase-workbench__overview-strip">
+        <div className="ase-overview-card">
+          <span>Pipeline summary</span>
+          <strong>{pipelineSummary || "No modules selected"}</strong>
+        </div>
+        <div className="ase-overview-card">
+          <span>Prompt context</span>
+          <strong>{selectedPromptBlockLabel}</strong>
+        </div>
+        <div className="ase-overview-card">
+          <span>Archive context</span>
+          <strong>{selectedArchiveTrackLabel}</strong>
         </div>
       </div>
 
@@ -1185,7 +1256,7 @@ function UnifiedRack({
                 <Widget 
                   key="stats" 
                   id="stats" 
-                  title="STATS_WIDGET" 
+                  title="Workspace Overview" 
                   icon={<Activity size={14} />}
                 >
                   <div className="ase-chip-grid">
@@ -1202,14 +1273,8 @@ function UnifiedRack({
                 <Widget 
                   key="module_library" 
                   id="module_library" 
-                  title="MODULE_LIBRARY" 
+                  title="Mode Library" 
                   icon={<Music size={14} />}
-                  actions={
-                    <>
-                      <button onClick={enableAllModes} className="ase-ui-btn ase-ui-btn--ghost">SELECT ALL</button>
-                      <button onClick={clearSelectedModes} className="ase-ui-btn ase-ui-btn--muted">CLEAR</button>
-                    </>
-                  }
                 >
                   <div className="ase-filter-bar">
                     <input
@@ -1254,7 +1319,7 @@ function UnifiedRack({
                             </div>
                             <div className="ase-module-card__footer">
                               <button onClick={() => setCurrentVariation(variation.id)} className="ase-ui-btn ase-ui-btn--ghost">
-                                OPEN
+                                Open mode
                               </button>
                               {enabled ? <span>#{selectedModeIds.indexOf(variation.id) + 1}</span> : <span>-</span>}
                             </div>
@@ -1271,19 +1336,8 @@ function UnifiedRack({
                 <Widget 
                   key="pipeline" 
                   id="pipeline" 
-                  title="PIPELINE_RACK" 
+                  title="Pipeline Order" 
                   icon={<GitMerge size={14} />}
-                  actions={
-                    <>
-                      <button onClick={copyUnifiedJson} className="ase-ui-btn ase-ui-btn--ghost">COPY JSON</button>
-                      <button
-                        onClick={() => onSendToSequenceBuilder && onSendToSequenceBuilder(unifiedConfig)}
-                        className="ase-ui-btn ase-ui-btn--primary"
-                      >
-                        SEND TO BUILDER
-                      </button>
-                    </>
-                  }
                 >
                   <div className="ase-pipeline-list custom-scrollbar" style={{ maxHeight: "250px" }}>
                     {selectedVariationEntries.length === 0 ? (
@@ -1307,7 +1361,7 @@ function UnifiedRack({
                               <small>{detail?.tip}</small>
                             </div>
                             <div className="ase-pipeline-item__actions">
-                              <button onClick={() => setCurrentVariation(variation.id)} className="ase-ui-btn ase-ui-btn--muted">OPEN</button>
+                              <button onClick={() => setCurrentVariation(variation.id)} className="ase-ui-btn ase-ui-btn--muted">Focus</button>
                             </div>
                           </div>
                         );
@@ -1323,7 +1377,7 @@ function UnifiedRack({
                 <Widget 
                   key="entropy_pad" 
                   id="entropy_pad" 
-                  title="ENTROPY_PAD" 
+                  title="Entropy Pad" 
                   icon={<Radio size={14} />}
                 >
                   <div
@@ -1351,7 +1405,7 @@ function UnifiedRack({
                 <Widget 
                   key="quick_controls" 
                   id="quick_controls" 
-                  title="QUICK_CONTROLS" 
+                  title="Quick Controls" 
                   icon={<SlidersHorizontal size={14} />}
                 >
                   <div className="ase-control-stack">
@@ -1381,7 +1435,7 @@ function UnifiedRack({
                 <Widget 
                   key="logic_meta" 
                   id="logic_meta" 
-                  title="LOGIC_AND_META" 
+                  title="Logic and Meta" 
                   icon={<Key size={14} />}
                 >
                   <div className="ase-control-stack">
@@ -1405,7 +1459,7 @@ function UnifiedRack({
                 <Widget 
                   key="prompt_library" 
                   id="prompt_library" 
-                  title="PROMPT_LIBRARY" 
+                  title="Prompt Library Link" 
                   icon={<Database size={14} />}
                   actions={<MetricChip label="Загружено" value={promptLibraryLoaded ? `${promptLibraryBlocks.length}` : "..."} />}
                 >
@@ -1444,7 +1498,7 @@ function UnifiedRack({
                                 onClick={() => setSelectedPromptBlock(selectedPromptBlock?.id === block.id ? null : block)}
                                 className="ase-ui-btn ase-ui-btn--ghost"
                               >
-                                {selectedPromptBlock?.id === block.id ? "✓" : "+"}
+                                {selectedPromptBlock?.id === block.id ? "Linked" : "Link"}
                               </button>
                             </div>
                             <p className="ase-module-card__desc">{block.description || "Без описания"}</p>
@@ -1465,7 +1519,7 @@ function UnifiedRack({
                 <Widget 
                   key="archive_tracks" 
                   id="archive_tracks" 
-                  title="ARCHIVE_TRACKS" 
+                  title="Archive Track Link" 
                   icon={<Archive size={14} />}
                   actions={archiveStats && <MetricChip label="Всего" value={archiveStats.totalTracks || 0} />}
                 >
@@ -1503,7 +1557,7 @@ function UnifiedRack({
                                 onClick={() => setSelectedArchiveTrack(selectedArchiveTrack?.id === track.id ? null : track)}
                                 className="ase-ui-btn ase-ui-btn--ghost"
                               >
-                                {selectedArchiveTrack?.id === track.id ? "✓" : "+"}
+                                {selectedArchiveTrack?.id === track.id ? "Linked" : "Link"}
                               </button>
                             </div>
                             <p className="ase-module-card__desc">
@@ -1521,7 +1575,7 @@ function UnifiedRack({
                 <Widget 
                   key="config_db" 
                   id="config_db" 
-                  title="CONFIGURATION_DB" 
+                  title="Saved Configurations" 
                   icon={<Database size={14} />}
                   defaultCollapsed={true}
                 >
@@ -1562,7 +1616,7 @@ function UnifiedRack({
                 <Widget 
                   key="json_preview" 
                   id="json_preview" 
-                  title="JSON_PREVIEW" 
+                  title="Unified JSON Preview" 
                   icon={<Code2 size={14} />}
                   actions={
                     <button onClick={() => setShowJsonPreview(!showJsonPreview)} className="ase-ui-btn ase-ui-btn--ghost">
@@ -1585,7 +1639,7 @@ function UnifiedRack({
                 <Widget 
                   key="event_feed" 
                   id="event_feed" 
-                  title="SYSTEM_EVENT_FEED" 
+                  title="System Event Feed" 
                   icon={<Terminal size={14} />}
                   defaultCollapsed={true}
                 >
