@@ -1,9 +1,9 @@
 {
-  "day": 205,
+  "day": 295,
   "phase": "harmonic",
   "metrics": {
-    "charge": -0.5999999999999999,
-    "spin": -0.2,
+    "charge": 0.9,
+    "spin": 0.9,
     "wavelength": 1.0,
     "stability": 1.0,
     "res_x": 0.3,
@@ -824,6 +824,366 @@
     },
     {
       "day": 204,
+      "choice": "B"
+    },
+    {
+      "day": 205,
+      "choice": "B"
+    },
+    {
+      "day": 206,
+      "choice": "A"
+    },
+    {
+      "day": 207,
+      "choice": "A"
+    },
+    {
+      "day": 208,
+      "choice": "A"
+    },
+    {
+      "day": 209,
+      "choice": "A"
+    },
+    {
+      "day": 210,
+      "choice": "A"
+    },
+    {
+      "day": 211,
+      "choice": "B"
+    },
+    {
+      "day": 212,
+      "choice": "B"
+    },
+    {
+      "day": 213,
+      "choice": "B"
+    },
+    {
+      "day": 214,
+      "choice": "C"
+    },
+    {
+      "day": 215,
+      "choice": "A"
+    },
+    {
+      "day": 216,
+      "choice": "A"
+    },
+    {
+      "day": 217,
+      "choice": "A"
+    },
+    {
+      "day": 218,
+      "choice": "A"
+    },
+    {
+      "day": 219,
+      "choice": "A"
+    },
+    {
+      "day": 220,
+      "choice": "A"
+    },
+    {
+      "day": 221,
+      "choice": "A"
+    },
+    {
+      "day": 222,
+      "choice": "A"
+    },
+    {
+      "day": 223,
+      "choice": "A"
+    },
+    {
+      "day": 224,
+      "choice": "B"
+    },
+    {
+      "day": 225,
+      "choice": "B"
+    },
+    {
+      "day": 226,
+      "choice": "B"
+    },
+    {
+      "day": 227,
+      "choice": "B"
+    },
+    {
+      "day": 228,
+      "choice": "B"
+    },
+    {
+      "day": 229,
+      "choice": "B"
+    },
+    {
+      "day": 230,
+      "choice": "B"
+    },
+    {
+      "day": 231,
+      "choice": "B"
+    },
+    {
+      "day": 232,
+      "choice": "B"
+    },
+    {
+      "day": 233,
+      "choice": "A"
+    },
+    {
+      "day": 234,
+      "choice": "A"
+    },
+    {
+      "day": 235,
+      "choice": "A"
+    },
+    {
+      "day": 236,
+      "choice": "C"
+    },
+    {
+      "day": 237,
+      "choice": "C"
+    },
+    {
+      "day": 238,
+      "choice": "C"
+    },
+    {
+      "day": 239,
+      "choice": "C"
+    },
+    {
+      "day": 240,
+      "choice": "C"
+    },
+    {
+      "day": 241,
+      "choice": "C"
+    },
+    {
+      "day": 242,
+      "choice": "A"
+    },
+    {
+      "day": 243,
+      "choice": "A"
+    },
+    {
+      "day": 244,
+      "choice": "A"
+    },
+    {
+      "day": 245,
+      "choice": "A"
+    },
+    {
+      "day": 246,
+      "choice": "A"
+    },
+    {
+      "day": 247,
+      "choice": "A"
+    },
+    {
+      "day": 248,
+      "choice": "A"
+    },
+    {
+      "day": 249,
+      "choice": "B"
+    },
+    {
+      "day": 250,
+      "choice": "B"
+    },
+    {
+      "day": 251,
+      "choice": "B"
+    },
+    {
+      "day": 252,
+      "choice": "B"
+    },
+    {
+      "day": 253,
+      "choice": "B"
+    },
+    {
+      "day": 254,
+      "choice": "B"
+    },
+    {
+      "day": 255,
+      "choice": "B"
+    },
+    {
+      "day": 256,
+      "choice": "B"
+    },
+    {
+      "day": 257,
+      "choice": "B"
+    },
+    {
+      "day": 258,
+      "choice": "B"
+    },
+    {
+      "day": 259,
+      "choice": "B"
+    },
+    {
+      "day": 260,
+      "choice": "B"
+    },
+    {
+      "day": 261,
+      "choice": "A"
+    },
+    {
+      "day": 262,
+      "choice": "A"
+    },
+    {
+      "day": 263,
+      "choice": "A"
+    },
+    {
+      "day": 264,
+      "choice": "A"
+    },
+    {
+      "day": 265,
+      "choice": "A"
+    },
+    {
+      "day": 266,
+      "choice": "A"
+    },
+    {
+      "day": 267,
+      "choice": "A"
+    },
+    {
+      "day": 268,
+      "choice": "A"
+    },
+    {
+      "day": 269,
+      "choice": "A"
+    },
+    {
+      "day": 270,
+      "choice": "A"
+    },
+    {
+      "day": 271,
+      "choice": "A"
+    },
+    {
+      "day": 272,
+      "choice": "C"
+    },
+    {
+      "day": 273,
+      "choice": "C"
+    },
+    {
+      "day": 274,
+      "choice": "C"
+    },
+    {
+      "day": 275,
+      "choice": "C"
+    },
+    {
+      "day": 276,
+      "choice": "C"
+    },
+    {
+      "day": 277,
+      "choice": "C"
+    },
+    {
+      "day": 278,
+      "choice": "C"
+    },
+    {
+      "day": 279,
+      "choice": "C"
+    },
+    {
+      "day": 280,
+      "choice": "C"
+    },
+    {
+      "day": 281,
+      "choice": "C"
+    },
+    {
+      "day": 282,
+      "choice": "C"
+    },
+    {
+      "day": 283,
+      "choice": "C"
+    },
+    {
+      "day": 284,
+      "choice": "C"
+    },
+    {
+      "day": 285,
+      "choice": "C"
+    },
+    {
+      "day": 286,
+      "choice": "A"
+    },
+    {
+      "day": 287,
+      "choice": "C"
+    },
+    {
+      "day": 288,
+      "choice": "C"
+    },
+    {
+      "day": 289,
+      "choice": "C"
+    },
+    {
+      "day": 290,
+      "choice": "C"
+    },
+    {
+      "day": 291,
+      "choice": "C"
+    },
+    {
+      "day": 292,
+      "choice": "C"
+    },
+    {
+      "day": 293,
+      "choice": "C"
+    },
+    {
+      "day": 294,
       "choice": "B"
     }
   ]

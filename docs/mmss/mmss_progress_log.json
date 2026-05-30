@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "project": "Flowmusic MMSS Genesis",
+    "startDate": "2026-05-15",
+    "owner": "human_designer_researcher",
+    "sourceTaskBoardFile": "TASKBOArd.md"
+  },
+  "sessions": [
+    {
+      "date": "2026-05-15",
+      "focusTasks": [
+        "ARCH-002",
+        "BE-001",
+        "UI-001",
+        "MMSS-001",
+        "MMSS-002"
+      ],
+      "notes": "Старт PHASE_1 core pipeline с фиксацией retrieval schema, metrics contract, meta injector и backend-driven candidate retrieval для json-genesis.",
+      "changes": [
+        {
+          "taskId": "ARCH-002",
+          "oldStatus": "todo",
+          "newStatus": "in_progress",
+          "comment": "Создана canonical retrieval candidate schema в json-genesis/src/mmss/mmssRetrievalCandidate.schema.json с example candidate."
+        },
+        {
+          "taskId": "BE-001",
+          "oldStatus": "todo",
+          "newStatus": "in_progress",
+          "comment": "Добавлен in-memory index builder и базовый search/rerank модуль в react/my-app/src/services/mmssRetrievalIndex.js."
+        },
+        {
+          "taskId": "UI-001",
+          "oldStatus": "todo",
+          "newStatus": "in_progress",
+          "comment": "MainEditor переведен на единый fetchCandidates() с backend retrieval endpoint и локальным fallback для candidate blocks."
+        },
+        {
+          "taskId": "MMSS-001",
+          "oldStatus": "todo",
+          "newStatus": "in_progress",
+          "comment": "Создан docs/mmss/mmss-metrics-contract.json с минимальным MMSS metrics contract и связью с retrieval candidate contract."
+        },
+        {
+          "taskId": "MMSS-002",
+          "oldStatus": "todo",
+          "newStatus": "in_progress",
+          "comment": "Добавлен сервис json-genesis/src/services/mmssMetaInjector.ts и подключен к сборке generation context."
+        }
+      ],
+      "nextSuggestedFocus": [
+        "ARCH-003",
+        "BE-002",
+        "BE-003",
+        "BE-004",
+        "MMSS-003",
+        "TEST-002"
+      ]
+    }
+  ]
+}

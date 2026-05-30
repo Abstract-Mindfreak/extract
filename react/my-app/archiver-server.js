@@ -14,6 +14,7 @@ const http = require('http');
 const WebSocket = require('ws');
 require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') });
 const archiverAccounts = require('./src/config/flowmusicArchiverAccounts.json');
+const { buildRetrievalIndex, searchRetrievalIndex } = require('./src/services/mmssRetrievalIndex.js');
 
 const app = express();
 const server = http.createServer(app);
@@ -83,6 +84,7 @@ app.post('/api/mistral/chat', async (req, res) => {
         messages: req.body?.messages || [],
         temperature: req.body?.temperature ?? 0.7,
         max_tokens: req.body?.max_tokens ?? 4096,
+        response_format: req.body?.response_format,
       }),
     });
 
@@ -198,6 +200,37 @@ app.post('/api/mmss/mistral-preset', async (req, res) => {
     await writeJsonFileSafe(MMSS_MISTRAL_PRESET_PATH, payload);
     console.log(`[MMSS] mistral-preset updated at ${payload.updatedAt}`);
     res.json({ ok: true, updatedAt: payload.updatedAt });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/mmss/retrieval-candidates', async (req, res) => {
+  try {
+    const payload = await readJsonFileSafe(MMSS_LIBRARY_STATE_PATH, {
+      promptLibrary: null,
+      updatedAt: null,
+    });
+    const promptLibrary = payload?.promptLibrary || { blocks: [] };
+    const query = {
+      prompt: req.body?.prompt || '',
+      queries: Array.isArray(req.body?.queries) ? req.body.queries : [],
+      blockRoles: Array.isArray(req.body?.blockRoles) ? req.body.blockRoles : [],
+      limit: Number(req.body?.limit) || 8,
+    };
+    const pinnedIds = Array.isArray(req.body?.pinnedIds) ? req.body.pinnedIds : [];
+    const index = buildRetrievalIndex(promptLibrary);
+    const items = searchRetrievalIndex(index, query, { pinnedIds });
+
+    console.log(
+      `[MMSS] retrieval-candidates: ${items.length} hit(s) from ${index.length} block(s) for ${query.queries.length || 1} query source(s)`,
+    );
+    res.json({
+      items,
+      total: items.length,
+      indexedBlocks: index.length,
+      updatedAt: payload?.updatedAt || null,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

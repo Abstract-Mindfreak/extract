@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MMSS Retrieval Candidate",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "description",
+    "category",
+    "tags",
+    "blockRoleHints",
+    "operatorSet",
+    "metricSet",
+    "keyPathSet",
+    "structuralDepth",
+    "structuralWidth",
+    "sourcePath"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "category": { "type": "string" },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "blockRoleHints": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "operatorSet": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "metricSet": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "keyPathSet": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "structuralDepth": { "type": "number" },
+    "structuralWidth": { "type": "number" },
+    "sourcePath": { "type": "string" },
+    "scoreBreakdown": {
+      "type": "object",
+      "properties": {
+        "lexical": { "type": "number" },
+        "structural": { "type": "number" },
+        "role": { "type": "number" },
+        "mmss": { "type": "number" },
+        "manual": { "type": "number" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "examples": [
+    {
+      "id": "block_operator_field",
+      "name": "Operator Field",
+      "description": "MMSS operator template for recursive assembly",
+      "category": "operator",
+      "tags": ["operator", "recursive", "mmss"],
+      "blockRoleHints": ["operator", "principle"],
+      "operatorSet": ["⇛ᶠ", "↦ₚ"],
+      "metricSet": ["V", "S", "D_f"],
+      "keyPathSet": ["system.operator", "metrics.v", "metrics.s"],
+      "structuralDepth": 4,
+      "structuralWidth": 9,
+      "sourcePath": "promptLibrary.blocks[].payload.data"
+    }
+  ]
+}

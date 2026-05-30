@@ -16,6 +16,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { generateWithGemini, generateWithMistral, planMistralLibraryQueries, type MistralLibraryPlan } from '../services/aiService';
 import { cn } from '../lib/utils';
+import { injectMetaRules, type MmssMetricsContract } from '../services/mmssMetaInjector';
 import { JSONBlock, JSONType, blocksToJson, chunkJSON, createDefaultBlock, jsonToBlocks } from '../types';
 import { BlockNode } from './BlockNode';
 import { BlockPalette } from './BlockPalette';
@@ -28,6 +29,16 @@ const DEFAULT_MMSS_META_RULES = [
   'Preserve MMSS meta-formulas and relation operators when they match the selected context.',
   'Respect MMSS JSON construction rules: explicit hierarchy, reusable principles, operator traceability, and measurable output fields.',
 ];
+const MMSS_METRICS_CONTRACT: MmssMetricsContract = {
+  requiredMetrics: ['V', 'N', 'S', 'D_f', 'G_S', 'R_T'],
+  operatorFamilies: ['relation', 'projection', 'constraint', 'transformation'],
+  principleTags: ['schema', 'principle', 'operator', 'example', 'metrics', 'rule'],
+  qualityExpectations: {
+    explicitHierarchy: true,
+    operatorTraceability: true,
+    measurableOutputFields: true,
+  },
+};
 
 type MmssPromptBlock = {
   id: string;
@@ -42,6 +53,17 @@ type RankedBlock = {
   score: number;
   reasons: string[];
   roleMatches: string[];
+};
+
+type RetrievalCandidateResponse = {
+  id: string;
+  name?: string;
+  description?: string;
+  tags?: string[];
+  payload?: unknown;
+  score?: number;
+  reasons?: string[];
+  roleMatches?: string[];
 };
 
 type PipelineStep = 'plan' | 'preview' | 'approve' | 'generate';
@@ -111,6 +133,7 @@ export const MainEditor: React.FC = () => {
   const [pipelineStep, setPipelineStep] = useState<PipelineStep>('plan');
   const [includeMmssMeta, setIncludeMmssMeta] = useState(DEFAULT_PRESET.includeMmssMeta);
   const [isSavingPreset, setIsSavingPreset] = useState(false);
+  const [fetchedCandidateBlocks, setFetchedCandidateBlocks] = useState<RankedBlock[]>([]);
 
   useEffect(() => {
     const saved = localStorage.getItem('json_genesis_project');
@@ -306,9 +329,89 @@ export const MainEditor: React.FC = () => {
   const resetPipeline = () => {
     setMistralPlan(EMPTY_PLAN);
     setApprovedBlockIds([]);
+    setFetchedCandidateBlocks([]);
     setPipelineStep('plan');
     appendAiEvent('Mistral pipeline reset');
   };
+
+  const fetchCandidates = async (plan: MistralLibraryPlan = mistralPlan) => {
+    try {
+      const response = await fetch(`${MMSS_BRIDGE_API_BASE}/retrieval-candidates`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: aiPrompt,
+          queries: dedupeStrings([...plan.queries, librarySearchQuery.trim()]).filter(Boolean),
+          blockRoles: plan.blockRoles,
+          limit: Math.max(rankedLimit + manualPinnedBlockIds.length + 2, rankedLimit),
+          pinnedIds: manualPinnedBlockIds,
+        }),
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const payload = await response.json();
+      const items = Array.isArray(payload?.items) ? payload.items : [];
+      const nextCandidates = items.map((item: RetrievalCandidateResponse) => ({
+        block: {
+          id: item.id,
+          name: item.name,
+          description: item.description,
+          tags: item.tags || [],
+          payload: { data: item.payload ?? {} },
+        },
+        score: Number(item.score) || 0,
+        reasons: Array.isArray(item.reasons) ? item.reasons : [],
+        roleMatches: Array.isArray(item.roleMatches) ? item.roleMatches : [],
+      }));
+      setFetchedCandidateBlocks(nextCandidates);
+      appendAiEvent(`Fetched backend candidates: ${nextCandidates.length}`);
+      return nextCandidates;
+    } catch (error) {
+      setFetchedCandidateBlocks([]);
+      appendAiEvent(`Backend retrieval fallback: ${error instanceof Error ? error.message : 'unknown error'}`);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    if (mistralPipelineMode !== 'search-plan') return;
+    if (!mistralPlan.queries.length && !librarySearchQuery.trim()) return;
+    void (async () => {
+      try {
+        const response = await fetch(`${MMSS_BRIDGE_API_BASE}/retrieval-candidates`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt: aiPrompt,
+            queries: dedupeStrings([...mistralPlan.queries, librarySearchQuery.trim()]).filter(Boolean),
+            blockRoles: mistralPlan.blockRoles,
+            limit: Math.max(rankedLimit + manualPinnedBlockIds.length + 2, rankedLimit),
+            pinnedIds: manualPinnedBlockIds,
+          }),
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const payload = await response.json();
+        const items = Array.isArray(payload?.items) ? payload.items : [];
+        setFetchedCandidateBlocks(
+          items.map((item: RetrievalCandidateResponse) => ({
+            block: {
+              id: item.id,
+              name: item.name,
+              description: item.description,
+              tags: item.tags || [],
+              payload: { data: item.payload ?? {} },
+            },
+            score: Number(item.score) || 0,
+            reasons: Array.isArray(item.reasons) ? item.reasons : [],
+            roleMatches: Array.isArray(item.roleMatches) ? item.roleMatches : [],
+          })),
+        );
+      } catch (_error) {
+        setFetchedCandidateBlocks([]);
+      }
+    })();
+  }, [mistralPipelineMode, mistralPlan.queries, mistralPlan.blockRoles, librarySearchQuery, rankedLimit, manualPinnedBlockIds, aiPrompt]);
 
   const allSearchTokens = useMemo(() => {
     const promptTokens = tokenize(aiPrompt);
@@ -385,8 +488,11 @@ export const MainEditor: React.FC = () => {
   );
 
   const candidateBlocks = useMemo(
-    () => rankedBlocks.slice(0, Math.max(rankedLimit + manualPinnedBlockIds.length + 2, rankedLimit)),
-    [rankedBlocks, rankedLimit, manualPinnedBlockIds.length],
+    () =>
+      fetchedCandidateBlocks.length
+        ? fetchedCandidateBlocks
+        : rankedBlocks.slice(0, Math.max(rankedLimit + manualPinnedBlockIds.length + 2, rankedLimit)),
+    [fetchedCandidateBlocks, rankedBlocks, rankedLimit, manualPinnedBlockIds.length],
   );
 
   const approvedContextBlocks = useMemo(() => {
@@ -409,19 +515,10 @@ export const MainEditor: React.FC = () => {
     ).slice(0, MAX_CONTEXT_BLOCKS);
   }, [mistralPipelineMode, approvedContextBlocks, candidateBlocks, manualPinnedBlockIds, rankedLimit]);
 
-  const mmssMetaContext = useMemo(() => {
-    if (!includeMmssMeta) return null;
-    return {
-      requiredMetrics: ['V', 'N', 'S', 'D_f', 'G_S', 'R_T'],
-      defaultRules: DEFAULT_MMSS_META_RULES,
-      planPrinciples: mistralPlan.principles,
-      metaDirectives: mistralPlan.metaDirectives,
-    };
-  }, [includeMmssMeta, mistralPlan]);
-
   const relevantLibraryContext = useMemo(
     () =>
       JSON.stringify(
+        injectMetaRules(
         {
           summary: mmssLibrarySummary,
           pipeline: {
@@ -434,7 +531,6 @@ export const MainEditor: React.FC = () => {
             blockRoles: mistralPlan.blockRoles,
             principles: mistralPlan.principles,
           },
-          mmssMeta: mmssMetaContext,
           relevantBlocks: selectedContextBlocks.map((block) => ({
             id: block.id,
             name: block.name,
@@ -443,6 +539,14 @@ export const MainEditor: React.FC = () => {
             payload: block.payload?.data ?? {},
           })),
         },
+        MMSS_METRICS_CONTRACT,
+        {
+          includeMetaRules: includeMmssMeta,
+          additionalRules: DEFAULT_MMSS_META_RULES,
+          principles: mistralPlan.principles,
+          directives: mistralPlan.metaDirectives,
+        },
+      ),
         null,
         2,
       ),
@@ -454,8 +558,8 @@ export const MainEditor: React.FC = () => {
       approvedBlockIds,
       manualPinnedBlockIds,
       mistralPlan,
-      mmssMetaContext,
       selectedContextBlocks,
+      includeMmssMeta,
     ],
   );
 
@@ -606,6 +710,7 @@ export const MainEditor: React.FC = () => {
         appendAiEvent(message);
       });
       setMistralPlan(plan);
+      await fetchCandidates(plan);
       setPipelineStep('preview');
       appendAiEvent(`Mistral queries: ${plan.queries.join(' | ') || 'none'}`);
       appendAiEvent(`Mistral roles: ${plan.blockRoles.join(', ') || 'none'}`);

@@ -1,0 +1,26 @@
+{
+  "contractName": "MMSS Genesis Minimal Metrics Contract",
+  "version": "1.0.0",
+  "requiredMetrics": ["V", "N", "S", "D_f", "G_S", "R_T"],
+  "operatorFamilies": [
+    "logical_entailment",
+    "fractal_entailment",
+    "projection",
+    "temporal_generation",
+    "recursive_merge"
+  ],
+  "principleTags": [
+    "mmss",
+    "meta_formula",
+    "operator",
+    "metric_driven",
+    "self_correction",
+    "hierarchical"
+  ],
+  "qualityExpectations": {
+    "requireOperatorTraceability": true,
+    "requireMetricVisibility": true,
+    "preferStructuredHierarchy": true,
+    "preferReusablePrinciples": true
+  }
+}
