@@ -1700,9 +1700,33 @@ function App() {
                 <item.icon size={18} />
               </button>
             ))}
+            <button
+              className="workspace-rail__btn"
+              onClick={() => {
+                focusWorkspaceSection("archives");
+                setTimeout(() => {
+                  const importButton = document.querySelector('.archives-header .btn-primary');
+                  if (importButton) importButton.click();
+                }, 500);
+              }}
+              title="Import Archive Data"
+            >
+              <Archive size={18} />
+            </button>
+            <button
+              className="workspace-rail__btn"
+              onClick={() => {
+                handleLoadLibrary();
+                setTimeout(() => {
+                  handleImportNormalizedPromptAssets();
+                }, 300);
+              }}
+              title="Import Session Blocks"
+            >
+              <Database size={18} />
+            </button>
           </div>
         </aside>
-
         <aside className={`workspace-drawer ${expandedPanel ? "is-open" : ""}`}>
           <div className="workspace-drawer__head">
             <div>
@@ -1895,9 +1919,24 @@ function App() {
               <Boxes size={18} />
               <span>{activeTopbarLabel}</span>
             </div>
-            <div className="template-topbar__seed">
-              <Sparkles size={14} />
-              <span>{activeSeedLabel}</span>
+            <div className="template-topbar__center">
+              <div className="template-topbar__seed">
+                <Sparkles size={14} />
+                <span>{activeSeedLabel}</span>
+              </div>
+              <div className="core-shell-nav template-mode-switcher">
+                {APP_TABS.map((tab, index) => (
+                  <button
+                    key={tab.id}
+                    className={`core-shell-pill template-mode-pill ${activeTab === tab.id ? "active" : ""}`}
+                    onClick={() => focusWorkspaceSection(tab.id)}
+                  >
+                    <span className="core-shell-pill__index">0{index + 1}</span>
+                    <strong>{tab.label}</strong>
+                    <span>{tab.summary}</span>
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="template-topbar__actions">
               <div className="template-topbar__badge">
@@ -1910,20 +1949,6 @@ function App() {
               </div>
             </div>
           </header>
-
-          <div className="core-shell-nav template-mode-switcher">
-            {APP_TABS.map((tab, index) => (
-              <button
-                key={tab.id}
-                className={`core-shell-pill template-mode-pill ${activeTab === tab.id ? "active" : ""}`}
-                onClick={() => focusWorkspaceSection(tab.id)}
-              >
-                <span className="core-shell-pill__index">0{index + 1}</span>
-                <strong>{tab.label}</strong>
-                <span>{tab.summary}</span>
-              </button>
-            ))}
-          </div>
 
           <div className="workspace-core-grid template-stage-grid">
             <div className="template-stage-column">
@@ -2340,5 +2365,8 @@ async function fetchWithTimeout(url, timeoutMs, options = {}) {
 }
 
 export default App;
+
+
+
 
 
