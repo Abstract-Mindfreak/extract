@@ -12,6 +12,7 @@ function JsonBlockList({
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [tagFilter, setTagFilter] = useState("all");
   const [sourceFilter, setSourceFilter] = useState("all");
+  const [showAll, setShowAll] = useState(false);
 
   const categories = useMemo(
     () => ["all", ...new Set(blocks.map((block) => block.category).filter(Boolean))],
@@ -34,6 +35,8 @@ function JsonBlockList({
       return matchesSearch && matchesCategory && matchesTag && matchesSource;
     });
   }, [blocks, categoryFilter, search, sourceFilter, tagFilter]);
+
+  const displayedBlocks = showAll ? visibleBlocks : visibleBlocks.slice(0, 6);
 
   return (
     <div className="json-block-list">
@@ -65,7 +68,7 @@ function JsonBlockList({
       </div>
 
       <div className="library-list-items">
-        {visibleBlocks.map((block) => (
+        {displayedBlocks.map((block) => (
           <div
             key={block.id}
             className={`library-block-card ${selectedBlockId === block.id ? "active" : ""}`}
@@ -112,6 +115,14 @@ function JsonBlockList({
           </div>
         ))}
       </div>
+
+      {visibleBlocks.length > 6 ? (
+        <div className="library-list-footer">
+          <button type="button" onClick={() => setShowAll((current) => !current)}>
+            {showAll ? "Show Less" : `View All (${visibleBlocks.length})`}
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

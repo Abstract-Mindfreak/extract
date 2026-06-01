@@ -3,6 +3,7 @@ import { GoogleGenAI } from "@google/genai";
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 const MISTRAL_API_KEY = (import.meta as any).env.VITE_MISTRAL_API_KEY || "";
 const MISTRAL_PROXY_URL = "http://localhost:3456/api/mistral/chat";
+type MistralProxyMode = 'plan' | 'generate' | 'validate';
 
 // Re-initialize for each call to ensure latest key is used if it changes
 const getAi = () => new GoogleGenAI({ apiKey: GEMINI_API_KEY });
@@ -81,6 +82,76 @@ function parseJsonFromMistralPayload(payload: any, sourceLabel: string) {
   }
 }
 
+async function callMistralProxy(
+  mode: MistralProxyMode,
+  prompt: string,
+  overrides: {
+    model?: string;
+    temperature?: number;
+    max_tokens?: number;
+  } = {},
+) {
+  const response = await fetch(MISTRAL_PROXY_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      mode,
+      prompt,
+      model: overrides.model || "mistral-small-latest",
+      temperature: overrides.temperature,
+      max_tokens: overrides.max_tokens,
+    }),
+  });
+
+  const proxyText = await response.text();
+  const proxyData = proxyText ? JSON.parse(proxyText) : {};
+  if (!response.ok) {
+    throw new Error(proxyData?.error || `Mistral proxy failed with HTTP ${response.status}`);
+  }
+  return proxyData;
+}
+
+async function callMistralDirect(
+  mode: MistralProxyMode,
+  prompt: string,
+  overrides: {
+    model?: string;
+    temperature?: number;
+    max_tokens?: number;
+  } = {},
+) {
+  const modeDefaults = {
+    plan: { temperature: 0.2, max_tokens: 1200 },
+    generate: { temperature: 0.4, max_tokens: 4096 },
+    validate: { temperature: 0.15, max_tokens: 1800 },
+  } as const;
+
+  const defaults = modeDefaults[mode];
+  const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${MISTRAL_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: overrides.model || "mistral-small-latest",
+      messages: [{ role: "user", content: prompt }],
+      temperature: overrides.temperature ?? defaults.temperature,
+      max_tokens: overrides.max_tokens ?? defaults.max_tokens,
+      response_format: { type: "json_object" }
+    })
+  });
+
+  const responseText = await response.text();
+  const data = responseText ? JSON.parse(responseText) : {};
+  if (!response.ok) {
+    throw new Error(data?.error?.message || data?.message || `Mistral ${mode} failed with HTTP ${response.status}`);
+  }
+  return data;
+}
+
 export async function generateWithGemini(prompt: string, structure?: string, options?: GenOptions) {
   try {
     options?.onProgress?.('Preparing Gemini request');
@@ -140,49 +211,22 @@ Return JSON strictly.`;
 
     if (!MISTRAL_API_KEY) {
       options?.onProgress?.('Sending prompt to local Mistral proxy');
-      const proxyResponse = await fetch(MISTRAL_PROXY_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "mistral-small-latest",
-          messages: [{ role: "user", content: fullPrompt }],
-          temperature: 0.4,
-          max_tokens: 4096,
-          response_format: { type: "json_object" },
-        })
-      });
-
       options?.onProgress?.('Parsing Mistral proxy response');
-      const proxyText = await proxyResponse.text();
-      const proxyData = proxyText ? JSON.parse(proxyText) : {};
-      if (!proxyResponse.ok) {
-        throw new Error(proxyData?.error || `Mistral proxy failed with HTTP ${proxyResponse.status}`);
-      }
+      const proxyData = await callMistralProxy('generate', fullPrompt, {
+        model: "mistral-small-latest",
+        temperature: 0.4,
+        max_tokens: 4096,
+      });
       return parseJsonFromMistralPayload(proxyData, 'Mistral proxy');
     }
 
     options?.onProgress?.('Sending prompt to Mistral');
-    const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${MISTRAL_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "mistral-small-latest",
-        messages: [{ role: "user", content: fullPrompt }],
-        response_format: { type: "json_object" }
-      })
-    });
-
     options?.onProgress?.('Parsing Mistral response');
-    const responseText = await response.text();
-    const data = responseText ? JSON.parse(responseText) : {};
-    if (!response.ok) {
-      throw new Error(data?.error?.message || data?.message || `Mistral request failed with HTTP ${response.status}`);
-    }
+    const data = await callMistralDirect('generate', fullPrompt, {
+      model: "mistral-small-latest",
+      temperature: 0.4,
+      max_tokens: 4096,
+    });
     return parseJsonFromMistralPayload(data, 'Mistral');
   } catch (err) {
     console.error("Mistral Error:", err);
@@ -207,52 +251,52 @@ Library Summary: ${librarySummary}
     onProgress?.('Planning Mistral library queries');
 
     if (!MISTRAL_API_KEY) {
-      const proxyResponse = await fetch(MISTRAL_PROXY_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "mistral-small-latest",
-          messages: [{ role: "user", content: planningPrompt }],
-          temperature: 0.2,
-          max_tokens: 1200,
-          response_format: { type: "json_object" },
-        })
+      const proxyData = await callMistralProxy('plan', planningPrompt, {
+        model: "mistral-small-latest",
+        temperature: 0.2,
+        max_tokens: 1200,
       });
-
-      const proxyText = await proxyResponse.text();
-      const proxyData = proxyText ? JSON.parse(proxyText) : {};
-      if (!proxyResponse.ok) {
-        throw new Error(proxyData?.error || `Mistral proxy failed with HTTP ${proxyResponse.status}`);
-      }
-
       return normalizePlan(parseJsonFromMistralPayload(proxyData, 'Mistral plan proxy'));
     }
 
-    const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${MISTRAL_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "mistral-small-latest",
-        messages: [{ role: "user", content: planningPrompt }],
-        response_format: { type: "json_object" }
-      })
+    const data = await callMistralDirect('plan', planningPrompt, {
+      model: "mistral-small-latest",
+      temperature: 0.2,
+      max_tokens: 1200,
     });
-
-    const responseText = await response.text();
-    const data = responseText ? JSON.parse(responseText) : {};
-    if (!response.ok) {
-      throw new Error(data?.error?.message || data?.message || `Mistral planning failed with HTTP ${response.status}`);
-    }
     return normalizePlan(parseJsonFromMistralPayload(data, 'Mistral plan'));
   } catch (err) {
     console.error("Mistral Plan Error:", err);
     throw err;
   }
+}
+
+export async function validateWithMistral(generatedJson: unknown, mmssContextSummary: string) {
+  const validationPrompt = `You are validating an MMSS JSON generation result.
+Return strict JSON with keys: valid, issues, warnings, strengths, suggestedFixes.
+
+MMSS Context Summary:
+${mmssContextSummary}
+
+Generated JSON:
+${JSON.stringify(generatedJson, null, 2)}
+`;
+
+  if (!MISTRAL_API_KEY) {
+    const proxyData = await callMistralProxy('validate', validationPrompt, {
+      model: "mistral-small-latest",
+      temperature: 0.15,
+      max_tokens: 1800,
+    });
+    return parseJsonFromMistralPayload(proxyData, 'Mistral validate proxy');
+  }
+
+  const data = await callMistralDirect('validate', validationPrompt, {
+    model: "mistral-small-latest",
+    temperature: 0.15,
+    max_tokens: 1800,
+  });
+  return parseJsonFromMistralPayload(data, 'Mistral validate');
 }
 
 function normalizePlan(raw: any): MistralLibraryPlan {

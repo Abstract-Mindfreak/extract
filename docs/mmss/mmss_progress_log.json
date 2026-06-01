@@ -3,7 +3,7 @@
     "project": "Flowmusic MMSS Genesis",
     "startDate": "2026-05-15",
     "owner": "human_designer_researcher",
-    "sourceTaskBoardFile": "TASKBOArd.md"
+    "sourceTaskBoardFile": "TASKBOARD.md"
   },
   "sessions": [
     {
@@ -55,6 +55,185 @@
         "BE-004",
         "MMSS-003",
         "TEST-002"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "focusTasks": [
+        "ARCH-002",
+        "BE-001",
+        "UI-001",
+        "MMSS-001",
+        "MMSS-002"
+      ],
+      "notes": "Foundation-задачи PHASE_1 частично закрыты: schema, metrics contract, meta injector и базовый retrieval backend уже существуют. Теперь фокус смещается на отделение backend-first retrieval, reranking breakdown и quality-report для generation.",
+      "changes": [
+        {
+          "taskId": "ARCH-002",
+          "oldStatus": "in_progress",
+          "newStatus": "done",
+          "comment": "Canonical retrieval candidate schema зафиксирована и используется как опорный контракт для дальнейшего retrieval слоя."
+        },
+        {
+          "taskId": "BE-001",
+          "oldStatus": "in_progress",
+          "newStatus": "done",
+          "comment": "In-memory index builder добавлен; базовая индексация блоков для retrieval работает."
+        },
+        {
+          "taskId": "UI-001",
+          "oldStatus": "in_progress",
+          "newStatus": "in_progress",
+          "comment": "UI уже использует fetchCandidates и bridge retrieval, но pipeline еще нужно дочистить до полностью backend-driven поведения и явного score breakdown."
+        },
+        {
+          "taskId": "MMSS-001",
+          "oldStatus": "in_progress",
+          "newStatus": "done",
+          "comment": "Minimal MMSS metrics contract вынесен в docs/mmss/mmss-metrics-contract.json и используется как основа для следующих validation-задач."
+        },
+        {
+          "taskId": "MMSS-002",
+          "oldStatus": "in_progress",
+          "newStatus": "done",
+          "comment": "MMSS meta-rules injector вынесен в отдельный сервис и подключен к generation context."
+        }
+      ],
+      "nextSuggestedFocus": [
+        "ARCH-003",
+        "BE-002",
+        "BE-003",
+        "UI-002",
+        "BE-004",
+        "MMSS-003",
+        "TEST-002"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "focusTasks": [
+        "ARCH-003",
+        "BE-002",
+        "BE-003"
+      ],
+      "notes": "Вторая сессия PHASE_1 была посвящена отделению retrieval backend от UI и выносу reranking в отдельный серверный модуль. Теперь json-genesis использует backend response как основной источник candidate blocks.",
+      "changes": [
+        {
+          "taskId": "ARCH-003",
+          "oldStatus": "todo",
+          "newStatus": "in_progress",
+          "comment": "MainEditor очищен от дублирующего локального ranking/fallback path и переведен на единый backend-driven поток retrieval candidates."
+        },
+        {
+          "taskId": "BE-002",
+          "oldStatus": "todo",
+          "newStatus": "in_progress",
+          "comment": "Endpoint /api/mmss/retrieval-candidates теперь возвращает не только items, но и query meta: tokens, roles, pinnedIds, limit и totalMatches."
+        },
+        {
+          "taskId": "BE-003",
+          "oldStatus": "todo",
+          "newStatus": "in_progress",
+          "comment": "Scoring и reranking вынесены в отдельный модуль mmssRetrievalReranker.js с breakdown lexical/structural/role/mmss/manual."
+        }
+      ],
+      "nextSuggestedFocus": [
+        "UI-002",
+        "BE-004",
+        "MMSS-003",
+        "TEST-002",
+        "TEST-003"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "focusTasks": [
+        "BE-004",
+        "UI-002",
+        "MMSS-003"
+      ],
+      "notes": "Следующая сессия PHASE_1 была посвящена формализации Mistral proxy contract и усилению управляемости synthesis path. На proxy-слое появились явные режимы plan/generate/validate, а в json-genesis добавлены retrieval tokens и первый MMSS quality report.",
+      "changes": [
+        {
+          "taskId": "BE-004",
+          "oldStatus": "todo",
+          "newStatus": "in_progress",
+          "comment": "Mistral proxy в archiver-server.js получил mode-profiles для plan/generate/validate, status endpoint теперь показывает supportedModes, а aiService использует явные mode-aware вызовы вместо свободного raw payload path."
+        },
+        {
+          "taskId": "UI-002",
+          "oldStatus": "todo",
+          "newStatus": "in_progress",
+          "comment": "В MainEditor добавлены Retrieval Tokens и уже видимый score breakdown на candidate blocks, так что backend retrieval стал заметно прозрачнее для ручного контроля."
+        },
+        {
+          "taskId": "MMSS-003",
+          "oldStatus": "todo",
+          "newStatus": "in_progress",
+          "comment": "Добавлен первый локальный MMSS quality report: score, issues, detected metrics, missing metrics, operator families и structural checks. Это еще не финальный validation gate, но базовый отчет уже работает."
+        }
+      ],
+      "nextSuggestedFocus": [
+        "MMSS-003",
+        "UI-003",
+        "TEST-002",
+        "TEST-003",
+        "BE-005"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "focusTasks": [
+        "UI-003",
+        "MMSS-003"
+      ],
+      "notes": "Эта сессия довела generation-side observability дальше: теперь после synthesis сохраняется явный debug trace, а для Mistral generation запускается отдельная post-generation validation стадия поверх локального quality-report.",
+      "changes": [
+        {
+          "taskId": "UI-003",
+          "oldStatus": "todo",
+          "newStatus": "in_progress",
+          "comment": "В MainEditor добавлен отдельный блок Generation Debug Trace с model/mode, prompt, rules, retrieval tokens, context blocks, plan queries и block roles. Это делает generation path заметно прозрачнее."
+        },
+        {
+          "taskId": "MMSS-003",
+          "oldStatus": "in_progress",
+          "newStatus": "in_progress",
+          "comment": "Помимо локального MMSS quality report теперь для Mistral generation выполняется post-generation validate step через validateWithMistral(), и его issues/warnings/strengths/suggestedFixes показываются в trace."
+        }
+      ],
+      "nextSuggestedFocus": [
+        "BE-005",
+        "TEST-002",
+        "TEST-003",
+        "MMSS-004"
+      ]
+    },
+    {
+      "date": "2026-06-01",
+      "focusTasks": [
+        "BE-005",
+        "MMSS-003"
+      ],
+      "notes": "Серверный MMSS validation слой добавлен в bridge. Теперь json-genesis может получать authoritative report от Node endpoint и сопоставлять его с локальным quality report и Mistral post-validation.",
+      "changes": [
+        {
+          "taskId": "BE-005",
+          "oldStatus": "todo",
+          "newStatus": "in_progress",
+          "comment": "В archiver-server добавлен endpoint /api/mmss/validate-json и выделен сервис mmssQualityReport.js. Endpoint проверяет структуру, metrics и operator families и возвращает server-side report."
+        },
+        {
+          "taskId": "MMSS-003",
+          "oldStatus": "in_progress",
+          "newStatus": "in_progress",
+          "comment": "MainEditor теперь вызывает server validation после generation и показывает server validation status alongside local MMSS quality report."
+        }
+      ],
+      "nextSuggestedFocus": [
+        "TEST-002",
+        "TEST-003",
+        "MMSS-004"
       ]
     }
   ]

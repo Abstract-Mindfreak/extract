@@ -1,17 +1,7 @@
-function tokenize(input) {
-  return String(input || "")
-    .toLowerCase()
-    .split(/[^a-zа-я0-9_]+/i)
-    .map((token) => token.trim())
-    .filter((token) => token.length >= 2);
-}
+const { rerankCandidates } = require('./mmssRetrievalReranker.js');
 
-function dedupe(items) {
-  return Array.from(new Set((items || []).filter(Boolean)));
-}
-
-function collectKeys(value, prefix = "", seen = new Set()) {
-  if (!value || typeof value !== "object") return [];
+function collectKeys(value, prefix = '', seen = new Set()) {
+  if (!value || typeof value !== 'object') return [];
   if (Array.isArray(value)) {
     return value.flatMap((item, index) => collectKeys(item, `${prefix}[${index}]`, seen));
   }
@@ -29,7 +19,7 @@ function collectKeys(value, prefix = "", seen = new Set()) {
 }
 
 function getJsonDepth(value) {
-  if (!value || typeof value !== "object") return 0;
+  if (!value || typeof value !== 'object') return 0;
   if (Array.isArray(value)) {
     return 1 + Math.max(0, ...value.map((item) => getJsonDepth(item)));
   }
@@ -37,7 +27,7 @@ function getJsonDepth(value) {
 }
 
 function getStructuralWidth(value) {
-  if (!value || typeof value !== "object") return 0;
+  if (!value || typeof value !== 'object') return 0;
   if (Array.isArray(value)) {
     return value.length;
   }
@@ -45,27 +35,27 @@ function getStructuralWidth(value) {
 }
 
 function extractMetricSet(payloadText) {
-  const metrics = ["V", "N", "S", "D_f", "G_S", "R_T"];
+  const metrics = ['V', 'N', 'S', 'D_f', 'G_S', 'R_T'];
   return metrics.filter((metric) => payloadText.includes(metric.toLowerCase()));
 }
 
 function extractOperatorSet(payloadText) {
-  return ["⇛ᶠ", "↦ₚ", "⊢ᵠ", "⧴ᵗ", "operator", "formula"].filter((operator) =>
+  return ['operator', 'formula', 'projection', 'constraint', 'relation', 'transformation'].filter((operator) =>
     payloadText.includes(operator.toLowerCase()),
   );
 }
 
 function inferBlockRoleHints(block, payloadKeys, payloadText) {
   const haystack = [block.name, block.description, ...(block.tags || []), ...payloadKeys, payloadText]
-    .join(" ")
+    .join(' ')
     .toLowerCase();
 
   const roleMatchers = {
-    schema: ["schema", "structure", "skeleton"],
-    principle: ["principle", "rule", "logic"],
-    operator: ["operator", "formula", "projection"],
-    example: ["example", "sample", "demo"],
-    metrics: ["metric", "metrics", "v", "d_f", "g_s"],
+    schema: ['schema', 'structure', 'skeleton'],
+    principle: ['principle', 'rule', 'logic'],
+    operator: ['operator', 'formula', 'projection', 'constraint', 'relation'],
+    example: ['example', 'sample', 'demo'],
+    metrics: ['metric', 'metrics', 'v', 'd_f', 'g_s', 'r_t'],
   };
 
   return Object.entries(roleMatchers)
@@ -81,8 +71,8 @@ function buildRetrievalCandidate(block) {
   return {
     id: block.id,
     name: block.name || block.id,
-    description: block.description || "",
-    category: block.category || "unknown",
+    description: block.description || '',
+    category: block.category || 'unknown',
     tags: Array.isArray(block.tags) ? block.tags : [],
     blockRoleHints: inferBlockRoleHints(block, keyPathSet, payloadText),
     operatorSet: extractOperatorSet(payloadText),
@@ -90,7 +80,7 @@ function buildRetrievalCandidate(block) {
     keyPathSet,
     structuralDepth: getJsonDepth(payload),
     structuralWidth: getStructuralWidth(payload),
-    sourcePath: "promptLibrary.blocks[].payload.data",
+    sourcePath: 'promptLibrary.blocks[].payload.data',
     payload,
   };
 }
@@ -100,74 +90,8 @@ function buildRetrievalIndex(promptLibrary) {
   return blocks.map(buildRetrievalCandidate);
 }
 
-function scoreCandidate(candidate, query, options = {}) {
-  const tokens = dedupe([
-    ...tokenize(query?.prompt || ""),
-    ...(query?.queries || []).flatMap(tokenize),
-    ...(query?.blockRoles || []).flatMap(tokenize),
-  ]);
-
-  const roleSet = (query?.blockRoles || []).map((role) => String(role).toLowerCase());
-  const haystackText = [
-    candidate.name,
-    candidate.description,
-    ...(candidate.tags || []),
-    ...(candidate.keyPathSet || []),
-    ...(candidate.operatorSet || []),
-    ...(candidate.metricSet || []),
-  ]
-    .join(" ")
-    .toLowerCase();
-
-  let lexical = 0;
-  let structural = 0;
-  let role = 0;
-  let mmss = 0;
-  let manual = 0;
-  const reasons = [];
-
-  tokens.forEach((token) => {
-    let score = 0;
-    if (String(candidate.name).toLowerCase().includes(token)) score += 7;
-    if (String(candidate.description).toLowerCase().includes(token)) score += 4;
-    if ((candidate.tags || []).some((tag) => String(tag).toLowerCase().includes(token))) score += 5;
-    if ((candidate.keyPathSet || []).some((key) => key.includes(token))) score += 4;
-    if (haystackText.includes(token)) score += 2;
-    lexical += score;
-    if (score > 0) reasons.push(`${token}:${score}`);
-  });
-
-  if (candidate.structuralDepth >= 4) structural += 2;
-  if (candidate.structuralWidth >= 6) structural += 2;
-  if ((candidate.metricSet || []).length) mmss += 3;
-  if ((candidate.operatorSet || []).length) mmss += 3;
-
-  roleSet.forEach((roleHint) => {
-    if ((candidate.blockRoleHints || []).some((entry) => entry.toLowerCase().includes(roleHint))) {
-      role += 6;
-    }
-  });
-
-  if ((options.pinnedIds || []).includes(candidate.id)) {
-    manual += 50;
-    reasons.push("pinned");
-  }
-
-  return {
-    ...candidate,
-    score: lexical + structural + role + mmss + manual,
-    scoreBreakdown: { lexical, structural, role, mmss, manual },
-    reasons,
-    roleMatches: (candidate.blockRoleHints || []).filter((entry) => roleSet.includes(entry.toLowerCase())),
-  };
-}
-
 function searchRetrievalIndex(index, query, options = {}) {
-  return index
-    .map((candidate) => scoreCandidate(candidate, query, options))
-    .filter((candidate) => candidate.score > 0 || (options.pinnedIds || []).includes(candidate.id))
-    .sort((left, right) => right.score - left.score || left.name.localeCompare(right.name))
-    .slice(0, Math.max(1, Number(query?.limit) || 8));
+  return rerankCandidates(index, query, options);
 }
 
 module.exports = {

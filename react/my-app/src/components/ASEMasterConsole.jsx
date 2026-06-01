@@ -9,7 +9,9 @@ import {
   Code2,
   Database,
   Download,
+  ExternalLink,
   FileAudio,
+  FolderPlus,
   GitMerge,
   Key,
   Music,
@@ -220,7 +222,7 @@ const DEFAULT_HYPER_PARAMS = {
   temporalRes: 1.618,
 };
 
-export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBuilder }) {
+export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBuilder, onSaveToLibrary }) {
   const [currentVariation, setCurrentVariation] = useState("unified");
   const [showVariationMenu, setShowVariationMenu] = useState(false);
   const [selectedModeIds, setSelectedModeIds] = useState(DEFAULT_UNIFIED_SELECTION);
@@ -929,6 +931,7 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
                 selectedVariationEntries={selectedVariationEntries}
                 draggedModeId={draggedModeId}
                 onSendToSequenceBuilder={onSendToSequenceBuilder}
+                onSaveToLibrary={onSaveToLibrary}
                 reorderUnifiedMode={reorderUnifiedMode}
                 setConfigName={setConfigName}
                 setCurrentVariation={setCurrentVariation}
@@ -975,7 +978,27 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
 
           {activeTab === "data" ? (
             <div className="bg-black border border-cyan-900 rounded-xl p-6">
-              <SectionHeader icon={<Terminal size={18} />} title="Full Data Stream" />
+              <div className="flex items-center justify-between gap-3">
+                <SectionHeader icon={<Terminal size={18} />} title="Full Data Stream" />
+                <button
+                  onClick={() =>
+                    onSaveToLibrary?.(jsonLog, {
+                      name: "ASE Full Data Stream",
+                      description: "Imported from ASE Console data tab",
+                      category: "ase_data_stream",
+                      tags: ["ase_console", "data_stream", "json_log"],
+                      color: "#ff9fd4",
+                      icon: "ase",
+                      source: "ase_console_data",
+                      activateLibraryPanel: true,
+                    })
+                  }
+                  className="ase-ui-btn ase-ui-btn--ghost ui-action-btn ui-action-btn--library"
+                >
+                  <FolderPlus size={14} />
+                  Save to Library
+                </button>
+              </div>
               <pre className="mt-4 p-4 bg-[#050505] rounded text-[10px] font-mono text-cyan-600/80 whitespace-pre-wrap overflow-auto max-h-[60vh]">
                 {jsonLog}
               </pre>
@@ -1024,6 +1047,7 @@ function UnifiedRack({
   selectedModeIds,
   selectedVariationEntries,
   onSendToSequenceBuilder,
+  onSaveToLibrary,
   reorderUnifiedMode,
   setConfigName,
   setCurrentVariation,
@@ -1224,11 +1248,33 @@ function UnifiedRack({
       <div className="ase-workbench__hero-toolbar">
         <button onClick={enableAllModes} className="ase-ui-btn ase-ui-btn--ghost">Select all</button>
         <button onClick={clearSelectedModes} className="ase-ui-btn ase-ui-btn--muted">Clear selected</button>
-        <button onClick={copyUnifiedJson} className="ase-ui-btn ase-ui-btn--ghost">Copy JSON</button>
+        <button onClick={copyUnifiedJson} className="ase-ui-btn ase-ui-btn--ghost ui-action-btn ui-action-btn--export">
+          <Download size={14} />
+          Copy JSON
+        </button>
+        <button
+          onClick={() =>
+            onSaveToLibrary?.(unifiedConfig, {
+              name: unifiedConfig.masterConsole?.name || "ASE Unified Console",
+              description: "Imported from ASE Unified Console",
+              category: "ase_unified",
+              tags: ["ase_console", "unified_json", "mmss"],
+              color: "#ff8bd6",
+              icon: "ase",
+              source: "ase_console_unified",
+              activateLibraryPanel: true,
+            })
+          }
+          className="ase-ui-btn ase-ui-btn--ghost ui-action-btn ui-action-btn--library"
+        >
+          <FolderPlus size={14} />
+          Save to Library
+        </button>
         <button
           onClick={() => onSendToSequenceBuilder && onSendToSequenceBuilder(unifiedConfig)}
-          className="ase-ui-btn ase-ui-btn--primary"
+          className="ase-ui-btn ase-ui-btn--primary ui-action-btn ui-action-btn--send"
         >
+          <ExternalLink size={14} />
           Send to Builder
         </button>
       </div>
@@ -1619,9 +1665,28 @@ function UnifiedRack({
                   title="Unified JSON Preview" 
                   icon={<Code2 size={14} />}
                   actions={
-                    <button onClick={() => setShowJsonPreview(!showJsonPreview)} className="ase-ui-btn ase-ui-btn--ghost">
-                      {showJsonPreview ? "HIDE" : "SHOW"}
-                    </button>
+                    <>
+                      <button
+                        onClick={() =>
+                          onSaveToLibrary?.(unifiedConfig, {
+                            name: unifiedConfig.masterConsole?.name || "ASE Unified Console",
+                            description: "Imported from ASE Unified JSON preview",
+                            category: "ase_unified_preview",
+                            tags: ["ase_console", "json_preview", "mmss"],
+                            color: "#ff8bd6",
+                            icon: "ase",
+                            source: "ase_console_preview",
+                          })
+                        }
+                        className="ase-ui-btn ase-ui-btn--ghost ui-action-btn ui-action-btn--library"
+                      >
+                        <FolderPlus size={14} />
+                        Save to Library
+                      </button>
+                      <button onClick={() => setShowJsonPreview(!showJsonPreview)} className="ase-ui-btn ase-ui-btn--ghost">
+                        {showJsonPreview ? "HIDE" : "SHOW"}
+                      </button>
+                    </>
                   }
                 >
                   {showJsonPreview ? (

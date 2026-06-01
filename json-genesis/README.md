@@ -1,20 +1,57 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# `json-genesis`
 
-# Run and deploy your AI Studio app
+`json-genesis` — отдельное приложение для генерации и редактирования JSON/MMSS-структур с AI-пайплайном.
 
-This contains everything you need to run your app locally.
+## Назначение
 
-View your app in AI Studio: https://ai.studio/apps/db42250c-47a6-4aa5-9bd8-b1791ac03687
+- импорт и просмотр MMSS library из `react/my-app`
+- retrieval candidate flow для Mistral
+- approve/pin workflow
+- generation JSON через Mistral/Gemini
+- экспорт и обратная передача результата в основной shell
 
-## Run Locally
+## Текущий статус
 
-**Prerequisites:**  Node.js
+Поддерживается multi-step pipeline:
 
+- `plan`
+- `preview`
+- `approve`
+- `generate`
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Также поддерживаются:
+
+- `approved context`
+- `Mistral preset` в `localStorage` и bridge
+- `Include MMSS Meta Rules`
+- инспектор полного library block без перезагрузки
+
+## Команды
+
+```bash
+npm install
+npm run dev
+npm run lint
+npm run build
+```
+
+## Локальная интеграция
+
+По умолчанию приложение работает вместе с bridge-сервером из `react/my-app`:
+
+- MMSS bridge: `http://localhost:3456/api/mmss`
+- Mistral proxy: `http://localhost:3456/api/mistral/*`
+- JSON Hero local: `http://localhost:8787`
+
+## Важные файлы
+
+- `src/components/MainEditor.tsx` — главный UI и Mistral pipeline
+- `src/services/aiService.ts` — вызовы моделей и parsing ответов
+- `src/services/mmssMetaInjector.ts` — MMSS meta-rules injector
+- `src/mmss/mmssRetrievalCandidate.schema.json` — schema retrieval candidate
+
+## Ограничения и договоренности
+
+- Retrieval и scoring постепенно выносятся в backend-driven flow.
+- `json-genesis` не должен самовольно подтягивать старые Electron/legacy скрипты из `prompt-db-local` в core runtime.
+- Любые интеграции с legacy-скриптами должны идти как отдельные adapters, а не как обязательная зависимость UI.

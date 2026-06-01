@@ -14,9 +14,10 @@ import {
   Upload,
 } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
-import { generateWithGemini, generateWithMistral, planMistralLibraryQueries, type MistralLibraryPlan } from '../services/aiService';
+import { generateWithGemini, generateWithMistral, planMistralLibraryQueries, validateWithMistral, type MistralLibraryPlan } from '../services/aiService';
 import { cn } from '../lib/utils';
 import { injectMetaRules, type MmssMetricsContract } from '../services/mmssMetaInjector';
+import { buildMmssQualityReport, type MmssQualityReport } from '../services/mmssValidation';
 import { JSONBlock, JSONType, blocksToJson, chunkJSON, createDefaultBlock, jsonToBlocks } from '../types';
 import { BlockNode } from './BlockNode';
 import { BlockPalette } from './BlockPalette';
@@ -53,6 +54,13 @@ type RankedBlock = {
   score: number;
   reasons: string[];
   roleMatches: string[];
+  scoreBreakdown?: {
+    lexical: number;
+    structural: number;
+    role: number;
+    mmss: number;
+    manual: number;
+  };
 };
 
 type RetrievalCandidateResponse = {
@@ -64,6 +72,23 @@ type RetrievalCandidateResponse = {
   score?: number;
   reasons?: string[];
   roleMatches?: string[];
+  scoreBreakdown?: RankedBlock['scoreBreakdown'];
+};
+
+type RetrievalCandidatesPayload = {
+  items?: RetrievalCandidateResponse[];
+  total?: number;
+  indexedBlocks?: number;
+  updatedAt?: string | null;
+  query?: {
+    prompt?: string;
+    queries?: string[];
+    blockRoles?: string[];
+    tokens?: string[];
+    limit?: number;
+    pinnedIds?: string[];
+    totalMatches?: number;
+  };
 };
 
 type PipelineStep = 'plan' | 'preview' | 'approve' | 'generate';
@@ -75,6 +100,30 @@ type PipelinePreset = {
   assemblyRules: string;
   manualPinnedBlockIds: string[];
   approvedBlockIds: string[];
+};
+
+type GenerationTrace = {
+  timestamp: string;
+  model: 'gemini' | 'mistral';
+  mode: 'augment' | 'rewrite' | 'skeleton';
+  prompt: string;
+  assemblyRules: string;
+  includeMmssMeta: boolean;
+  contextBlockNames: string[];
+  retrievalTokens: string[];
+  approvedBlockIds: string[];
+  pinnedBlockIds: string[];
+  planQueries: string[];
+  blockRoles: string[];
+  qualityScore?: number;
+  qualityValid?: boolean;
+  mistralValidation?: {
+    valid?: boolean;
+    issues?: string[];
+    warnings?: string[];
+    strengths?: string[];
+    suggestedFixes?: string[];
+  } | null;
 };
 
 const EMPTY_PLAN: MistralLibraryPlan = {
@@ -134,6 +183,11 @@ export const MainEditor: React.FC = () => {
   const [includeMmssMeta, setIncludeMmssMeta] = useState(DEFAULT_PRESET.includeMmssMeta);
   const [isSavingPreset, setIsSavingPreset] = useState(false);
   const [fetchedCandidateBlocks, setFetchedCandidateBlocks] = useState<RankedBlock[]>([]);
+  const [lastRetrievalMeta, setLastRetrievalMeta] = useState<RetrievalCandidatesPayload['query'] | null>(null);
+  const [qualityReport, setQualityReport] = useState<MmssQualityReport | null>(null);
+  const [serverQualityReport, setServerQualityReport] = useState<MmssQualityReport | null>(null);
+  const [generationTrace, setGenerationTrace] = useState<GenerationTrace | null>(null);
+  const [isValidatingGeneration, setIsValidatingGeneration] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('json_genesis_project');
@@ -194,6 +248,15 @@ export const MainEditor: React.FC = () => {
     }, 4000);
     return () => window.clearInterval(intervalId);
   }, [lastLibrarySyncAt, lastGenesisHandoffAt]);
+
+  useEffect(() => {
+    try {
+      const report = buildMmssQualityReport(blocksToJson(root), MMSS_METRICS_CONTRACT);
+      setQualityReport(report);
+    } catch (_error) {
+      setQualityReport(null);
+    }
+  }, [root]);
 
   const appendAiEvent = (message: string) => {
     setAiEventLog((prev) => [`${new Date().toLocaleTimeString()}: ${message}`, ...prev].slice(0, 24));
@@ -326,15 +389,33 @@ export const MainEditor: React.FC = () => {
     }
   };
 
+  const requestServerQualityReport = async (json: unknown) => {
+    const response = await fetch(`${MMSS_BRIDGE_API_BASE}/validate-json`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        json,
+        contract: MMSS_METRICS_CONTRACT,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    const payload = await response.json();
+    return payload?.report as MmssQualityReport;
+  };
+
   const resetPipeline = () => {
     setMistralPlan(EMPTY_PLAN);
     setApprovedBlockIds([]);
     setFetchedCandidateBlocks([]);
+    setLastRetrievalMeta(null);
+    setGenerationTrace(null);
     setPipelineStep('plan');
     appendAiEvent('Mistral pipeline reset');
   };
 
-  const fetchCandidates = async (plan: MistralLibraryPlan = mistralPlan) => {
+  const fetchCandidates = async (plan: MistralLibraryPlan = mistralPlan, silent = false) => {
     try {
       const response = await fetch(`${MMSS_BRIDGE_API_BASE}/retrieval-candidates`, {
         method: 'POST',
@@ -349,7 +430,7 @@ export const MainEditor: React.FC = () => {
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-      const payload = await response.json();
+      const payload = (await response.json()) as RetrievalCandidatesPayload;
       const items = Array.isArray(payload?.items) ? payload.items : [];
       const nextCandidates = items.map((item: RetrievalCandidateResponse) => ({
         block: {
@@ -362,13 +443,18 @@ export const MainEditor: React.FC = () => {
         score: Number(item.score) || 0,
         reasons: Array.isArray(item.reasons) ? item.reasons : [],
         roleMatches: Array.isArray(item.roleMatches) ? item.roleMatches : [],
+        scoreBreakdown: item.scoreBreakdown,
       }));
       setFetchedCandidateBlocks(nextCandidates);
-      appendAiEvent(`Fetched backend candidates: ${nextCandidates.length}`);
+      setLastRetrievalMeta(payload.query || null);
+      if (!silent) {
+        appendAiEvent(`Fetched backend candidates: ${nextCandidates.length}`);
+      }
       return nextCandidates;
     } catch (error) {
       setFetchedCandidateBlocks([]);
-      appendAiEvent(`Backend retrieval fallback: ${error instanceof Error ? error.message : 'unknown error'}`);
+      setLastRetrievalMeta(null);
+      appendAiEvent(`Backend retrieval failed: ${error instanceof Error ? error.message : 'unknown error'}`);
       return [];
     }
   };
@@ -376,123 +462,24 @@ export const MainEditor: React.FC = () => {
   useEffect(() => {
     if (mistralPipelineMode !== 'search-plan') return;
     if (!mistralPlan.queries.length && !librarySearchQuery.trim()) return;
-    void (async () => {
-      try {
-        const response = await fetch(`${MMSS_BRIDGE_API_BASE}/retrieval-candidates`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            prompt: aiPrompt,
-            queries: dedupeStrings([...mistralPlan.queries, librarySearchQuery.trim()]).filter(Boolean),
-            blockRoles: mistralPlan.blockRoles,
-            limit: Math.max(rankedLimit + manualPinnedBlockIds.length + 2, rankedLimit),
-            pinnedIds: manualPinnedBlockIds,
-          }),
-        });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-        const payload = await response.json();
-        const items = Array.isArray(payload?.items) ? payload.items : [];
-        setFetchedCandidateBlocks(
-          items.map((item: RetrievalCandidateResponse) => ({
-            block: {
-              id: item.id,
-              name: item.name,
-              description: item.description,
-              tags: item.tags || [],
-              payload: { data: item.payload ?? {} },
-            },
-            score: Number(item.score) || 0,
-            reasons: Array.isArray(item.reasons) ? item.reasons : [],
-            roleMatches: Array.isArray(item.roleMatches) ? item.roleMatches : [],
-          })),
-        );
-      } catch (_error) {
-        setFetchedCandidateBlocks([]);
-      }
-    })();
+    void fetchCandidates(mistralPlan, true);
   }, [mistralPipelineMode, mistralPlan.queries, mistralPlan.blockRoles, librarySearchQuery, rankedLimit, manualPinnedBlockIds, aiPrompt]);
 
-  const allSearchTokens = useMemo(() => {
-    const promptTokens = tokenize(aiPrompt);
-    const manualTokens = tokenize(librarySearchQuery);
-    const planTokens = mistralPlan.queries.flatMap((query) => tokenize(query));
-    const roleTokens = mistralPlan.blockRoles.flatMap((role) => tokenize(role));
-    const principleTokens = mistralPlan.principles.flatMap((item) => tokenize(item));
-    return dedupeStrings([...promptTokens, ...manualTokens, ...planTokens, ...roleTokens, ...principleTokens]);
-  }, [aiPrompt, librarySearchQuery, mistralPlan]);
-
-  const buildRankedBlocks = (tokens: string[]): RankedBlock[] =>
-    mmssPromptBlocks
-      .map((block) => {
-        const rawPayload = block.payload?.data ?? {};
-        const name = (block.name || '').toLowerCase();
-        const description = (block.description || '').toLowerCase();
-        const tags = Array.isArray(block.tags) ? block.tags.map((tag) => tag.toLowerCase()) : [];
-        const payloadText = safeJsonSnippet(rawPayload, 2400).toLowerCase();
-        const payloadKeys = collectKeys(rawPayload);
-        const payloadDepth = getJsonDepth(rawPayload);
-        const roleMatches: string[] = [];
-        let score = 0;
-        const reasons: string[] = [];
-
-        tokens.forEach((token) => {
-          let tokenScore = 0;
-          if (name.includes(token)) tokenScore += 7;
-          if (description.includes(token)) tokenScore += 4;
-          if (tags.some((tag) => tag.includes(token))) tokenScore += 5;
-          if (payloadKeys.some((key) => key.includes(token))) tokenScore += 4;
-          if (payloadText.includes(token)) tokenScore += 2;
-          if (tokenScore > 0) reasons.push(`${token}:${tokenScore}`);
-          score += tokenScore;
-        });
-
-        mistralPlan.blockRoles.forEach((role) => {
-          const roleToken = role.toLowerCase();
-          const roleMatched =
-            name.includes(roleToken) ||
-            description.includes(roleToken) ||
-            tags.some((tag) => tag.includes(roleToken)) ||
-            payloadKeys.some((key) => key.includes(roleToken));
-          if (roleMatched) {
-            score += 6;
-            roleMatches.push(role);
-          }
-        });
-
-        if (payloadDepth >= 4) {
-          score += 2;
-          reasons.push(`depth:${payloadDepth}`);
-        }
-        if (payloadKeys.length >= 12) {
-          score += 2;
-          reasons.push(`keys:${payloadKeys.length}`);
-        }
-        if (containsMmssMeta(rawPayload)) {
-          score += 4;
-          reasons.push('mmss-meta');
-        }
-        if (manualPinnedBlockIds.includes(block.id)) {
-          score += 50;
-          reasons.push('pinned');
-        }
-
-        return { block, score, reasons, roleMatches };
-      })
-      .filter((entry) => entry.score > 0 || manualPinnedBlockIds.includes(entry.block.id))
-      .sort((left, right) => right.score - left.score || (left.block.name || '').localeCompare(right.block.name || ''));
-
-  const rankedBlocks = useMemo(
-    () => buildRankedBlocks(allSearchTokens),
-    [allSearchTokens, mmssPromptBlocks, manualPinnedBlockIds, mistralPlan.blockRoles],
+  const localQueryTokens = useMemo(
+    () =>
+      dedupeStrings([
+        ...tokenize(aiPrompt),
+        ...tokenize(librarySearchQuery),
+        ...mistralPlan.queries.flatMap((query) => tokenize(query)),
+        ...mistralPlan.blockRoles.flatMap((role) => tokenize(role)),
+        ...mistralPlan.principles.flatMap((item) => tokenize(item)),
+      ]),
+    [aiPrompt, librarySearchQuery, mistralPlan],
   );
 
   const candidateBlocks = useMemo(
-    () =>
-      fetchedCandidateBlocks.length
-        ? fetchedCandidateBlocks
-        : rankedBlocks.slice(0, Math.max(rankedLimit + manualPinnedBlockIds.length + 2, rankedLimit)),
-    [fetchedCandidateBlocks, rankedBlocks, rankedLimit, manualPinnedBlockIds.length],
+    () => fetchedCandidateBlocks,
+    [fetchedCandidateBlocks],
   );
 
   const approvedContextBlocks = useMemo(() => {
@@ -524,7 +511,7 @@ export const MainEditor: React.FC = () => {
           pipeline: {
             mode: mistralPipelineMode,
             step: pipelineStep,
-            queryTokens: allSearchTokens,
+            queryTokens: lastRetrievalMeta?.tokens || localQueryTokens,
             approvedBlockIds,
             pinnedBlockIds: manualPinnedBlockIds,
             mistralQueries: mistralPlan.queries,
@@ -554,7 +541,8 @@ export const MainEditor: React.FC = () => {
       mmssLibrarySummary,
       mistralPipelineMode,
       pipelineStep,
-      allSearchTokens,
+      lastRetrievalMeta,
+      localQueryTokens,
       approvedBlockIds,
       manualPinnedBlockIds,
       mistralPlan,
@@ -699,6 +687,7 @@ export const MainEditor: React.FC = () => {
             description: block.description,
             tags: block.tags || [],
             payloadKeys: collectKeys(block.payload?.data ?? {}).slice(0, 24),
+            payloadPreview: safeJsonSnippet(block.payload?.data ?? {}, 320),
             hasMmssMeta: containsMmssMeta(block.payload?.data ?? {}),
           })),
         },
@@ -764,6 +753,66 @@ export const MainEditor: React.FC = () => {
           ? await generateWithGemini(aiPrompt, currentStructure, options)
           : await generateWithMistral(aiPrompt, currentStructure, options);
 
+      const nextQualityReport = buildMmssQualityReport(result, MMSS_METRICS_CONTRACT);
+      setQualityReport(nextQualityReport);
+      let nextServerQualityReport: MmssQualityReport | null = null;
+      let nextMistralValidation: GenerationTrace['mistralValidation'] = null;
+
+      try {
+        nextServerQualityReport = await requestServerQualityReport(result);
+        setServerQualityReport(nextServerQualityReport);
+        appendAiEvent(`Server MMSS validation: ${nextServerQualityReport.valid ? 'valid' : 'review needed'} (${nextServerQualityReport.score})`);
+      } catch (serverValidationError) {
+        setServerQualityReport(null);
+        appendAiEvent(`Server MMSS validation failed: ${serverValidationError instanceof Error ? serverValidationError.message : 'unknown error'}`);
+      }
+
+      if (aiModel === 'mistral') {
+        try {
+          setIsValidatingGeneration(true);
+          setAiStatusText('Validating generated MMSS JSON');
+          appendAiEvent('Running Mistral post-generation validation');
+          const validation = await validateWithMistral(result, relevantLibraryContext);
+          nextMistralValidation = {
+            valid: Boolean(validation?.valid),
+            issues: Array.isArray(validation?.issues) ? validation.issues.map(String) : [],
+            warnings: Array.isArray(validation?.warnings) ? validation.warnings.map(String) : [],
+            strengths: Array.isArray(validation?.strengths) ? validation.strengths.map(String) : [],
+            suggestedFixes: Array.isArray(validation?.suggestedFixes) ? validation.suggestedFixes.map(String) : [],
+          };
+          appendAiEvent(`Mistral validation: ${nextMistralValidation.valid ? 'valid' : 'review needed'}`);
+        } catch (validationError) {
+          nextMistralValidation = {
+            valid: false,
+            issues: [`Validation failed: ${validationError instanceof Error ? validationError.message : 'unknown error'}`],
+            warnings: [],
+            strengths: [],
+            suggestedFixes: [],
+          };
+          appendAiEvent(`Mistral validation failed: ${validationError instanceof Error ? validationError.message : 'unknown error'}`);
+        } finally {
+          setIsValidatingGeneration(false);
+        }
+      }
+
+      setGenerationTrace({
+        timestamp: new Date().toISOString(),
+        model: aiModel,
+        mode: genMode,
+        prompt: aiPrompt,
+        assemblyRules: mergedRules,
+        includeMmssMeta,
+        contextBlockNames: selectedNames,
+        retrievalTokens: lastRetrievalMeta?.tokens || localQueryTokens,
+        approvedBlockIds,
+        pinnedBlockIds: manualPinnedBlockIds,
+        planQueries: mistralPlan.queries,
+        blockRoles: mistralPlan.blockRoles,
+        qualityScore: nextServerQualityReport?.score ?? nextQualityReport.score,
+        qualityValid: nextServerQualityReport?.valid ?? nextQualityReport.valid,
+        mistralValidation: nextMistralValidation,
+      });
+
       setRoot(jsonToBlocks(result));
       setAiStatusText('Completed');
       appendAiEvent('Canvas updated from AI output');
@@ -772,6 +821,7 @@ export const MainEditor: React.FC = () => {
       setAiStatusText('Failed');
       appendAiEvent(`Error: ${error instanceof Error ? error.message : 'unknown error'}`);
     } finally {
+      setIsValidatingGeneration(false);
       setIsGenerating(false);
     }
   };
@@ -1071,6 +1121,7 @@ export const MainEditor: React.FC = () => {
                 <InfoList title="MMSS Principles" items={mistralPlan.principles} empty="No extracted principles yet." />
                 <InfoList title="Meta Directives" items={mistralPlan.metaDirectives} empty="No meta directives yet." />
                 <InfoList title="Blocks Sent to Mistral" items={lastSentBlockNames} empty="No context blocks sent yet." />
+                <InfoList title="Retrieval Tokens" items={lastRetrievalMeta?.tokens || []} empty="No backend retrieval tokens yet." />
               </div>
             </section>
 
@@ -1113,6 +1164,11 @@ export const MainEditor: React.FC = () => {
                         </div>
                       </div>
                       <div className="mt-2 text-[9px] text-zinc-600 font-mono break-words">{entry.reasons.join(' · ') || 'manual only'}</div>
+                      {entry.scoreBreakdown ? (
+                        <div className="mt-1 text-[9px] text-zinc-500 font-mono">
+                          L:{entry.scoreBreakdown.lexical} S:{entry.scoreBreakdown.structural} R:{entry.scoreBreakdown.role} M:{entry.scoreBreakdown.mmss} P:{entry.scoreBreakdown.manual}
+                        </div>
+                      ) : null}
                       {!!entry.roleMatches.length && <div className="mt-1 text-[9px] text-indigo-300 font-mono">roles: {entry.roleMatches.join(', ')}</div>}
                     </div>
                   );
@@ -1130,6 +1186,99 @@ export const MainEditor: React.FC = () => {
               <pre className="bg-black/30 p-4 rounded-xl border border-white/5 text-[10px] text-zinc-400 whitespace-pre-wrap overflow-hidden max-h-72 overflow-y-auto custom-scrollbar">
                 {mmssRelevantPreview}
               </pre>
+            </section>
+
+            <section className="border border-white/5 rounded-xl bg-black/20 p-4">
+              <div className="flex items-center justify-between gap-4 mb-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">MMSS Quality Report</p>
+                <p className={cn('text-[10px] font-mono', qualityReport?.valid ? 'text-emerald-300' : 'text-amber-300')}>
+                  {qualityReport ? `${qualityReport.score}/100` : 'n/a'}
+                </p>
+              </div>
+              {qualityReport ? (
+                <div className="space-y-3">
+                  <div className="text-[11px] text-zinc-300">{qualityReport.summary}</div>
+                  {serverQualityReport ? (
+                    <div className="text-[10px] text-cyan-300 font-mono">
+                      server validation: {serverQualityReport.valid ? 'valid' : 'review needed'} ({serverQualityReport.score}/100)
+                    </div>
+                  ) : null}
+                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-zinc-500">
+                    <div>depth: {qualityReport.structural.depth}</div>
+                    <div>nodes: {qualityReport.structural.nodeCount}</div>
+                    <div>metrics: {qualityReport.detectedMetrics.join(', ') || 'none'}</div>
+                    <div>operators: {qualityReport.detectedOperatorFamilies.join(', ') || 'none'}</div>
+                  </div>
+                  <div className="text-[10px] text-zinc-600 font-mono">
+                    missing metrics: {qualityReport.missingMetrics.join(', ') || 'none'}
+                  </div>
+                  <div className="space-y-1">
+                    {qualityReport.issues.length ? qualityReport.issues.map((issue) => (
+                      <div key={issue} className="text-[10px] text-amber-300/90 font-mono">{issue}</div>
+                    )) : <div className="text-[10px] text-emerald-300 font-mono">No MMSS quality issues detected.</div>}
+                  </div>
+                  {serverQualityReport?.issues?.length ? (
+                    <div className="space-y-1 pt-1 border-t border-white/5">
+                      {serverQualityReport.issues.map((issue) => (
+                        <div key={`server_${issue}`} className="text-[10px] text-cyan-300/90 font-mono">{issue}</div>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              ) : (
+                <div className="text-[11px] text-zinc-600 font-mono">No quality report yet.</div>
+              )}
+            </section>
+
+            <section className="border border-white/5 rounded-xl bg-black/20 p-4">
+              <div className="flex items-center justify-between gap-4 mb-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Generation Debug Trace</p>
+                <p className="text-[10px] font-mono text-zinc-600">
+                  {generationTrace ? new Date(generationTrace.timestamp).toLocaleTimeString() : 'no trace'}
+                </p>
+              </div>
+              {generationTrace ? (
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-zinc-500">
+                    <div>model: {generationTrace.model}</div>
+                    <div>mode: {generationTrace.mode}</div>
+                    <div>quality: {generationTrace.qualityScore ?? 'n/a'}</div>
+                    <div>mmss meta: {generationTrace.includeMmssMeta ? 'on' : 'off'}</div>
+                    <div>approved: {generationTrace.approvedBlockIds.length}</div>
+                    <div>pinned: {generationTrace.pinnedBlockIds.length}</div>
+                  </div>
+                  <div className="text-[10px] text-zinc-400 font-mono break-words">
+                    prompt: {generationTrace.prompt || 'none'}
+                  </div>
+                  <div className="text-[10px] text-zinc-500 font-mono break-words">
+                    rules: {generationTrace.assemblyRules || 'none'}
+                  </div>
+                  <InfoList title="Trace Context Blocks" items={generationTrace.contextBlockNames} empty="No context blocks sent." />
+                  <InfoList title="Trace Plan Queries" items={generationTrace.planQueries} empty="No plan queries used." />
+                  <InfoList title="Trace Block Roles" items={generationTrace.blockRoles} empty="No block roles used." />
+                  <InfoList title="Trace Retrieval Tokens" items={generationTrace.retrievalTokens} empty="No retrieval tokens recorded." />
+                  <div className="border border-white/5 rounded-lg bg-black/20 p-3">
+                    <div className="text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500 mb-2">Mistral Validation</div>
+                    {isValidatingGeneration ? (
+                      <div className="text-[10px] text-cyan-300 font-mono">Validation in progress...</div>
+                    ) : generationTrace.mistralValidation ? (
+                      <div className="space-y-2">
+                        <div className={cn('text-[10px] font-mono', generationTrace.mistralValidation.valid ? 'text-emerald-300' : 'text-amber-300')}>
+                          {generationTrace.mistralValidation.valid ? 'valid' : 'review needed'}
+                        </div>
+                        <InfoList title="Validation Strengths" items={generationTrace.mistralValidation.strengths || []} empty="No strengths returned." />
+                        <InfoList title="Validation Warnings" items={generationTrace.mistralValidation.warnings || []} empty="No warnings returned." />
+                        <InfoList title="Validation Issues" items={generationTrace.mistralValidation.issues || []} empty="No issues returned." />
+                        <InfoList title="Suggested Fixes" items={generationTrace.mistralValidation.suggestedFixes || []} empty="No fixes suggested." />
+                      </div>
+                    ) : (
+                      <div className="text-[10px] text-zinc-600 font-mono">No Mistral validation recorded for this trace.</div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-[11px] text-zinc-600 font-mono">No generation trace yet.</div>
+              )}
             </section>
 
             <section className="border border-white/5 rounded-xl bg-black/20 p-4">

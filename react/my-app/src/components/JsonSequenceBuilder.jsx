@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Copy, FolderPlus, Save } from "lucide-react";
 
 const PANEL_APPEARANCE_STORAGE_KEY = "mmss.sequenceBuilderAppearance.v1";
 const DEFAULT_PANEL_APPEARANCE = {
@@ -40,6 +41,7 @@ function JsonSequenceBuilder({
   onGeneratePresetComposition,
   onCopyPreview,
   onSavePreviewFile,
+  onSaveToLibrary,
   onBatchExport,
 }) {
   const [sequenceName, setSequenceName] = useState("");
@@ -348,8 +350,32 @@ function JsonSequenceBuilder({
               Save composition as sequence
             </button>
             <div className="sequence-save-actions">
-              <button onClick={() => onCopyPreview(activeComposition.combinedJson)}>Copy JSON Preview</button>
-              <button onClick={() => onSavePreviewFile(activeComposition.combinedJson)}>Save JSON File</button>
+              <button className="ui-action-btn ui-action-btn--export" onClick={() => onCopyPreview(activeComposition.combinedJson)}>
+                <Copy size={14} />
+                Copy JSON Preview
+              </button>
+              <button className="ui-action-btn ui-action-btn--neutral" onClick={() => onSavePreviewFile(activeComposition.combinedJson)}>
+                <Save size={14} />
+                Save JSON File
+              </button>
+              <button
+                className="ui-action-btn ui-action-btn--library"
+                onClick={() =>
+                  onSaveToLibrary?.(activeComposition.combinedJson, {
+                    name: sequenceName.trim() || "Sequence Preview Import",
+                    description: sequenceDescription.trim() || "Imported from JsonSequenceBuilder preview",
+                    category: "sequence_preview",
+                    tags: ["sequence_builder", "preview", activeComposition.mergeStrategy].filter(Boolean),
+                    color: "#8fcfff",
+                    icon: "sequence",
+                    source: "json_sequence_builder",
+                    activateLibraryPanel: true,
+                  })
+                }
+              >
+                <FolderPlus size={14} />
+                Save to Library
+              </button>
             </div>
           </div>
 
@@ -360,6 +386,23 @@ function JsonSequenceBuilder({
                   <strong>JSON Preview</strong>
                   <span>Live combined output for the current composition.</span>
                 </div>
+                <button
+                  className="ui-action-btn ui-action-btn--library"
+                  onClick={() =>
+                    onSaveToLibrary?.(activeComposition.combinedJson, {
+                      name: sequenceName.trim() || "Composition Preview",
+                      description: sequenceDescription.trim() || "Imported from composition preview",
+                      category: "composition_preview",
+                      tags: ["sequence_builder", "composition", activeComposition.mergeStrategy].filter(Boolean),
+                      color: "#8fcfff",
+                      icon: "preview",
+                      source: "json_sequence_builder",
+                    })
+                  }
+                >
+                  <FolderPlus size={14} />
+                  Save to Library
+                </button>
               </div>
               <pre className="json-preview">{JSON.stringify(activeComposition.combinedJson, null, 2)}</pre>
             </div>

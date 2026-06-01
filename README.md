@@ -1,253 +1,71 @@
-# FlowMusic.app Archiver & MMSS Producer Station
+# Flowmusic MMSS Workspace
 
-A comprehensive system for archiving tracks from FlowMusic.app and managing them through the MMSS (Multi-Modal Synthesis System) Producer Station interface.
+Основные рабочие приложения в этом репозитории:
 
-## Primary App Focus
+- `react/my-app` — основной shell для `Prompt Library`, `ASE Console`, `Archives`, `JSON Genesis bridge`
+- `json-genesis` — отдельный Vite/React редактор и Mistral/Gemini pipeline для JSON/MMSS
 
-The current main application for product work and UI rebuild is:
+`prompt-db-local`, `flowmusic-archiver`, `jsonhero-web` и другие каталоги остаются в репозитории как вспомогательные или legacy-слои, но не являются главным UI-контуром.
 
-- `react/my-app`
+## Актуальная структура
 
-Use this app as the default target for development, testing, and interface changes.
-
-`prompt-db-local` remains in the repository as a separate Electron-based project, but it is not the primary UI target for the current rebuild flow.
-
-## 📁 Project Structure
-
-```
+```text
 extract/
-├── flowmusic-archiver/     # Node.js archiver for FlowMusic.app
-│   ├── archiver.mjs           # Main archiver script with Playwright
-│   ├── TECHNICAL_REFERENCE.md   # Technical documentation
-│   └── ...
-├── prompt-db-local/            # Local prompt database
-│   └── database/
-│       ├── clips/              # Generated clips database
-│       ├── system/             # System configuration
-│       └── ...
-└── react/my-app/               # React application (MMSS Producer Station)
-    ├── src/
-    │   ├── components/         # UI components including ASE Console
-    │   ├── services/          # API services including ProducerArchiverService
-    │   └── mmss/              # MMSS audio engine
-    └── archiver-server.js     # Backend server for archiver API
+├─ react/my-app/        # основной React shell
+├─ json-genesis/        # standalone JSON Genesis
+├─ prompt-db-local/     # legacy / optional scripts and research tooling
+├─ docs/mmss/           # taskboard, progress log, MMSS docs
+└─ gitprojects/         # внешние встроенные git-проекты
 ```
 
-## 🎵 FlowMusic.app Archiver
+## Что сейчас считается основным
 
-Automated archiving system for FlowMusic.app tracks using Playwright browser automation.
+- В `react/my-app` поддерживаются только:
+  - `Prompt Library`
+  - `ASE Console`
+  - `Archives`
+  - `JSON Genesis`
+- `Service Health` теперь проверяется вручную из `System State`.
+- `Magnetic Builder` удален из runtime shell.
+- `StageCanvas`, `MatrixEditor`, `IntentComposer`, `CompactTransportBar`, `PrismaticCoreDock` удалены из приложения и считаются вынесенными в репозиторную "корзину".
 
-### Features
-- Multi-account support (up to 5 accounts)
-- Automatic authentication via browser cookies
-- Parallel downloading with rate limiting
-- Incremental updates (only new tracks)
-- WebSocket and HTTP API for real-time status
+Важно:
+- Эти удаленные поверхности не нужно возвращать без явного запроса.
+- Если что-то из них когда-либо снова понадобится, восстанавливать это нужно осознанно из git-истории, а не включать случайно через layout или shell-навигацию.
 
-### Usage
-```bash
-cd flowmusic-archiver
-npm install
-node archiver.mjs --account 1 --headful
-```
+## Быстрый запуск
 
-See [flowmusic-archiver/TECHNICAL_REFERENCE.md](flowmusic-archiver/TECHNICAL_REFERENCE.md) for detailed documentation.
+### `react/my-app`
 
-## 🎛️ MMSS Producer Station
-
-React-based audio workstation for managing and playing archived tracks.
-
-### Features
-- **ASE Console**: Autonomous Symbolic Engine for intelligent track management
-- **Producer Archiver Panel**: UI for controlling the archiver from the browser
-- **Multi-account support**: Manage multiple FlowMusic.app accounts
-- **Real-time sync**: WebSocket connection to archiver backend
-- **MMSS Audio Engine**: Advanced audio playback with timeline visualization
-
-### Usage
 ```bash
 cd react/my-app
 npm install
-npm start          # Start React app
-npm run archiver:server  # Start archiver backend (in another terminal)
+npm run archiver:server
+npm start
 ```
 
-### Default Settings
-- Music playback is **paused** on startup
-- Default tab: **ASE Console**
-- Default panel: **Producer Archiver**
+### `json-genesis`
 
-## 🔌 Integration
-
-The React app communicates with the archiver via:
-- **HTTP API** at `http://localhost:3456/api`
-- **WebSocket** at `ws://localhost:3456`
-
-## 🔒 Security Notes
-
-- Authentication tokens are stored locally (not in Git)
-- Downloaded tracks are excluded from version control
-- HAR files with session data are ignored
-- See `.gitignore` for full list
-
-## 🚀 Quick Start
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Abstract-Mindfreak/extract.git
-   cd extract
-   ```
-
-2. **Install dependencies**
-   ```bash
-   cd flowmusic-archiver && npm install
-   cd ../react/my-app && npm install
-   ```
-
-3. **Start the archiver server**
-   ```bash
-   cd react/my-app
-   npm run archiver:server
-   ```
-
-4. **Start the React app** (in another terminal)
-   ```bash
-   cd react/my-app
-   npm start
-   ```
-
-5. **Log in to FlowMusic.app** through the archiver panel in the UI
-
-## 📝 Requirements
-
-- Node.js 18+
-- Chrome/Chromium browser
-- npm or yarn
-
-## 📄 License
-
-MIT License - See individual subdirectories for specific licensing.
-
----
-
----
-
-# 🇷🇺 FlowMusic.app Архиватор и MMSS Producer Station
-
-Комплексная система для архивирования треков с FlowMusic.app и управления ими через интерфейс MMSS (Multi-Modal Synthesis System) Producer Station.
-
-## 📁 Структура проекта
-
-```
-extract/
-├── flowmusic-archiver/     # Node.js архиватор для FlowMusic.app
-│   ├── archiver.mjs           # Основной скрипт архиватора с Playwright
-│   ├── TECHNICAL_REFERENCE.md   # Техническая документация
-│   └── ...
-├── prompt-db-local/            # Локальная база данных промптов
-│   └── database/
-│       ├── clips/              # База данных сгенерированных клипов
-│       ├── system/             # Системная конфигурация
-│       └── ...
-└── react/my-app/               # React приложение (MMSS Producer Station)
-    ├── src/
-    │   ├── components/         # UI компоненты включая ASE Console
-    │   ├── services/          # API сервисы включая ProducerArchiverService
-    │   └── mmss/              # MMSS аудио движок
-    └── archiver-server.js     # Бэкенд сервер для API архиватора
-```
-
-## 🎵 Архиватор FlowMusic.app
-
-Система автоматического архивирования треков с FlowMusic.app с использованием браузерной автоматизации Playwright.
-
-### Возможности
-- Поддержка нескольких аккаунтов (до 5 аккаунтов)
-- Автоматическая аутентификация через cookies браузера
-- Параллельная загрузка с ограничением скорости
-- Инкрементальные обновления (только новые треки)
-- WebSocket и HTTP API для статуса в реальном времени
-
-### Использование
 ```bash
-cd flowmusic-archiver
+cd json-genesis
 npm install
-node archiver.mjs --account 1 --headful
+npm run dev
 ```
 
-Подробная документация: [flowmusic-archiver/TECHNICAL_REFERENCE.md](flowmusic-archiver/TECHNICAL_REFERENCE.md)
+## Bridge и локальные сервисы
 
-## 🎛️ MMSS Producer Station
+- MMSS bridge / Mistral proxy: `http://localhost:3456`
+- JSON Hero local: `http://localhost:8787`
+- `react/my-app` синхронизирует библиотеку с `json-genesis` через `/api/mmss/*`
 
-React-базированная аудио-станция для управления и воспроизведения архивированных треков.
+## Документы проекта
 
-### Возможности
-- **ASE Console**: Автономный Символический Движок для интеллектуального управления треками
-- **Панель Архиватора Producer**: UI для управления архиватором из браузера
-- **Поддержка нескольких аккаунтов**: Управление несколькими аккаунтами FlowMusic.app
-- **Синхронизация в реальном времени**: WebSocket соединение с бэкендом архиватора
-- **MMSS Audio Engine**: Продвинутое аудио воспроизведение с визуализацией таймлайна
+- `TASKBOArd.md` — operational task board
+- `docs/mmss/mmss_progress_log.json` — журнал выполнения
+- `docs/mmss/mmss-metrics-contract.json` — MMSS metrics contract
 
-### Использование
-```bash
-cd react/my-app
-npm install
-npm start          # Запуск React приложения
-npm run archiver:server  # Запуск бэкенда архиватора (в другом терминале)
-```
+## Правило для следующих агентных правок
 
-### Настройки по умолчанию
-- Музыка **на паузе** при запуске
-- Вкладка по умолчанию: **ASE Console**
-- Панель по умолчанию: **Producer Archiver**
-
-## 🔌 Интеграция
-
-React приложение коммуницирует с архиватором через:
-- **HTTP API** на `http://localhost:3456/api`
-- **WebSocket** на `ws://localhost:3456`
-
-## 🔒 Примечания по безопасности
-
-- Токены аутентификации хранятся локально (не в Git)
-- Загруженные треки исключены из версионного контроля
-- HAR файлы с данными сессии игнорируются
-- Полный список см. в `.gitignore`
-
-## 🚀 Быстрый старт
-
-1. **Клонирование репозитория**
-   ```bash
-   git clone https://github.com/Abstract-Mindfreak/extract.git
-   cd extract
-   ```
-
-2. **Установка зависимостей**
-   ```bash
-   cd flowmusic-archiver && npm install
-   cd ../react/my-app && npm install
-   ```
-
-3. **Запуск сервера архиватора**
-   ```bash
-   cd react/my-app
-   npm run archiver:server
-   ```
-
-4. **Запуск React приложения** (в другом терминале)
-   ```bash
-   cd react/my-app
-   npm start
-   ```
-
-5. **Вход в FlowMusic.app** через панель архиватора в UI
-
-## 📝 Требования
-
-- Node.js 18+
-- Браузер Chrome/Chromium
-- npm или yarn
-
-## 📄 Лицензия
-
-MIT License - Смотрите отдельные поддиректории для специфичных лицензий.
+- Не возвращать в приложение `Magnetic Builder`, `StageCanvas`, `MatrixEditor`, `IntentComposer`, `CompactTransportBar`, `PrismaticCoreDock`.
+- Не считать старые performance/magnetic поверхности частью текущего UX.
+- Любые новые правки UI нужно делать вокруг текущих четырех режимов shell.

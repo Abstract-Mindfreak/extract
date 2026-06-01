@@ -15,6 +15,7 @@ const WebSocket = require('ws');
 require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') });
 const archiverAccounts = require('./src/config/flowmusicArchiverAccounts.json');
 const { buildRetrievalIndex, searchRetrievalIndex } = require('./src/services/mmssRetrievalIndex.js');
+const { buildMmssQualityReport } = require('./src/services/mmssQualityReport.js');
 
 const app = express();
 const server = http.createServer(app);
@@ -26,11 +27,38 @@ const PRODUCER_BASE_URL = 'https://www.flowmusic.app';
 const PRODUCER_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36';
 const MISTRAL_API_BASE = 'https://api.mistral.ai/v1';
 const MISTRAL_MODEL = process.env.MISTRAL_MODEL || 'mistral-large-latest';
+const MISTRAL_MODE_PROFILES = {
+  plan: {
+    temperature: 0.2,
+    max_tokens: 1400,
+    response_format: { type: 'json_object' },
+  },
+  generate: {
+    temperature: 0.4,
+    max_tokens: 4096,
+    response_format: { type: 'json_object' },
+  },
+  validate: {
+    temperature: 0.15,
+    max_tokens: 1800,
+    response_format: { type: 'json_object' },
+  },
+};
 const MMSS_BRIDGE_DIR = path.join(__dirname, 'tmp');
 const MMSS_LIBRARY_STATE_PATH = path.join(MMSS_BRIDGE_DIR, 'mmss-library-state.json');
 const MMSS_GENESIS_HANDOFF_PATH = path.join(MMSS_BRIDGE_DIR, 'mmss-genesis-handoff.json');
 const MMSS_IMPORT_QUEUE_PATH = path.join(MMSS_BRIDGE_DIR, 'mmss-import-queue.json');
 const MMSS_MISTRAL_PRESET_PATH = path.join(MMSS_BRIDGE_DIR, 'mmss-mistral-preset.json');
+const DEFAULT_MMSS_METRICS_CONTRACT = {
+  requiredMetrics: ['V', 'N', 'S', 'D_f', 'G_S', 'R_T'],
+  operatorFamilies: ['relation', 'projection', 'constraint', 'transformation'],
+  principleTags: ['schema', 'principle', 'operator', 'example', 'metrics', 'rule'],
+  qualityExpectations: {
+    explicitHierarchy: true,
+    operatorTraceability: true,
+    measurableOutputFields: true,
+  },
+};
 
 // Middleware
 app.use(cors());
@@ -62,6 +90,7 @@ app.get('/api/mistral/status', (_req, res) => {
     available: hasKey,
     source: hasKey ? 'server_env' : 'missing',
     defaultModel: MISTRAL_MODEL,
+    supportedModes: Object.keys(MISTRAL_MODE_PROFILES),
   });
 });
 
@@ -73,19 +102,36 @@ app.post('/api/mistral/chat', async (req, res) => {
   }
 
   try {
+    const mode = normalizeMistralMode(req.body?.mode);
+    const profile = MISTRAL_MODE_PROFILES[mode];
+    const messages = normalizeMistralMessages(req.body);
+
+    if (!messages.length) {
+      res.status(400).json({
+        error: `Mistral proxy requires either messages[] or prompt for mode "${mode}"`,
+      });
+      return;
+    }
+
+    const outboundPayload = {
+      model: req.body?.model || MISTRAL_MODEL,
+      messages,
+      temperature: req.body?.temperature ?? profile.temperature,
+      max_tokens: req.body?.max_tokens ?? profile.max_tokens,
+      response_format: req.body?.response_format || profile.response_format,
+    };
+
+    console.log(
+      `[MISTRAL] mode=${mode} model=${outboundPayload.model} messages=${messages.length} temp=${outboundPayload.temperature} max_tokens=${outboundPayload.max_tokens}`,
+    );
+
     const response = await fetch(`${MISTRAL_API_BASE}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`,
       },
-      body: JSON.stringify({
-        model: req.body?.model || MISTRAL_MODEL,
-        messages: req.body?.messages || [],
-        temperature: req.body?.temperature ?? 0.7,
-        max_tokens: req.body?.max_tokens ?? 4096,
-        response_format: req.body?.response_format,
-      }),
+      body: JSON.stringify(outboundPayload),
     });
 
     const responseText = await response.text();
@@ -220,16 +266,47 @@ app.post('/api/mmss/retrieval-candidates', async (req, res) => {
     };
     const pinnedIds = Array.isArray(req.body?.pinnedIds) ? req.body.pinnedIds : [];
     const index = buildRetrievalIndex(promptLibrary);
-    const items = searchRetrievalIndex(index, query, { pinnedIds });
+    const result = searchRetrievalIndex(index, query, { pinnedIds });
+    const items = Array.isArray(result?.items) ? result.items : [];
+    const meta = result?.meta || {};
 
     console.log(
-      `[MMSS] retrieval-candidates: ${items.length} hit(s) from ${index.length} block(s) for ${query.queries.length || 1} query source(s)`,
+      `[MMSS] retrieval-candidates: ${items.length} hit(s) from ${index.length} block(s); tokens=${Array.isArray(meta.tokens) ? meta.tokens.length : 0}; roles=${Array.isArray(meta.blockRoles) ? meta.blockRoles.length : 0}`,
     );
     res.json({
       items,
       total: items.length,
       indexedBlocks: index.length,
+      query: meta,
       updatedAt: payload?.updatedAt || null,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/mmss/validate-json', async (req, res) => {
+  try {
+    const payload = req.body?.json;
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+      res.status(400).json({ error: 'Validation requires a JSON object payload in body.json' });
+      return;
+    }
+
+    const contract = {
+      ...DEFAULT_MMSS_METRICS_CONTRACT,
+      ...(req.body?.contract || {}),
+    };
+    const report = buildMmssQualityReport(payload, contract);
+
+    console.log(
+      `[MMSS] validate-json: valid=${report.valid} score=${report.score} metrics=${report.detectedMetrics.length} operators=${report.detectedOperatorFamilies.length}`,
+    );
+
+    res.json({
+      ok: true,
+      report,
+      validatedAt: new Date().toISOString(),
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -287,6 +364,21 @@ function resolveAccountDir(account) {
 
 function findAccount(accountId) {
   return DEFAULT_ACCOUNTS.find((item) => item.id === accountId);
+}
+
+function normalizeMistralMode(input) {
+  const value = String(input || 'generate').toLowerCase();
+  return Object.prototype.hasOwnProperty.call(MISTRAL_MODE_PROFILES, value) ? value : 'generate';
+}
+
+function normalizeMistralMessages(body = {}) {
+  if (Array.isArray(body?.messages) && body.messages.length) {
+    return body.messages;
+  }
+  if (typeof body?.prompt === 'string' && body.prompt.trim()) {
+    return [{ role: 'user', content: body.prompt }];
+  }
+  return [];
 }
 
 async function scanTrackDirectory(accountId, trackDirPath) {

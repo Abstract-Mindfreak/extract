@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { Download, FolderPlus, Redo2, Save, Wand2, Undo2 } from "lucide-react";
 import { createEntityId } from "../mmss/promptLibrary";
 
 const EMPTY_DATA = {
   prompt: "",
 };
 
-function JsonBlockEditor({ block, onSave, onExport }) {
+function JsonBlockEditor({ block, onSave, onSaveToLibrary, onExport }) {
   const [form, setForm] = useState(createDraft(block));
   const [jsonHistory, setJsonHistory] = useState([]);
   const [jsonFuture, setJsonFuture] = useState([]);
@@ -84,6 +85,46 @@ function JsonBlockEditor({ block, onSave, onExport }) {
     });
   }
 
+  function handleSaveToLibrary() {
+    if (!parsedPayload || !onSaveToLibrary) return;
+    onSaveToLibrary(
+      {
+        id: form.id || createEntityId("block"),
+        name: form.name.trim() || "Imported JSON Block",
+        description: form.description.trim(),
+        category: form.category.trim() || "general",
+        tags: form.tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean),
+        payload: {
+          type: "flowmusic.app_prompt",
+          version: "1.0",
+          data: parsedPayload,
+        },
+        ui: {
+          color: form.color,
+          icon: form.icon,
+          boundButtonId: block?.ui?.boundButtonId ?? null,
+        },
+      },
+      {
+        name: form.name.trim() || "Imported JSON Block",
+        description: form.description.trim(),
+        category: form.category.trim() || "general",
+        tags: form.tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean),
+        color: form.color,
+        icon: form.icon,
+        source: "json_block_editor",
+        activateLibraryPanel: true,
+        preserveExistingId: true,
+      }
+    );
+  }
+
   return (
     <div className="json-block-editor">
       <div className="editor-grid">
@@ -125,16 +166,27 @@ function JsonBlockEditor({ block, onSave, onExport }) {
 
       <div className="editor-toolbar">
         <button onClick={handleUndo} disabled={!canUndo}>
+          <Undo2 size={14} />
           Undo
         </button>
         <button onClick={handleRedo} disabled={!canRedo}>
+          <Redo2 size={14} />
           Redo
         </button>
-        <button onClick={handleFormat}>Format JSON</button>
-        <button onClick={handleSave} className="accent-action">
+        <button onClick={handleFormat}>
+          <Wand2 size={14} />
+          Format JSON
+        </button>
+        <button onClick={handleSave} className="accent-action ui-action-btn ui-action-btn--neutral">
+          <Save size={14} />
           Save
         </button>
-        <button onClick={() => onExport(parsedPayload ? JSON.parse(form.payloadText) : EMPTY_DATA, form.name)}>
+        <button onClick={handleSaveToLibrary} disabled={!parsedPayload} className="ui-action-btn ui-action-btn--library">
+          <FolderPlus size={14} />
+          Save to Library
+        </button>
+        <button onClick={() => onExport(parsedPayload ? JSON.parse(form.payloadText) : EMPTY_DATA, form.name)} className="ui-action-btn ui-action-btn--export">
+          <Download size={14} />
           Export Block
         </button>
       </div>

@@ -4,13 +4,18 @@ import {
   Boxes,
   ChevronRight,
   Database,
+  Download,
+  ExternalLink,
+  FolderPlus,
   LayoutTemplate,
   Library,
+  RefreshCw,
+  Rocket,
+  Save,
   Settings,
   Sparkles,
   Workflow,
   X,
-  Magnet,
   FileJson,
 } from "lucide-react";
 import "./App.css";
@@ -21,7 +26,6 @@ import JsonBlockList from "./components/JsonBlockList";
 import JsonSequenceBuilder from "./components/JsonSequenceBuilder";
 import PromptLogicBlocklyPanel from "./components/PromptLogicBlocklyPanel";
 import SectionCard from "./components/SectionCard";
-import { MMSSWidget } from "./components/MMSSWidget";
 import { createInitialState } from "./mmss/config";
 import {
   DEFAULT_BLOCKLY_WORKSPACE_XML,
@@ -55,16 +59,16 @@ const APP_TABS = [
     summary: "Archive import and browsing",
   },
   {
-    id: "magnetic",
-    label: "Magnetic Builder",
-    summary: "MMSS magnetic field simulation",
-  },
-  {
     id: "json_genesis",
     label: "JSON Genesis",
     summary: "AI-powered JSON structure editor",
   },
 ];
+
+// Legacy runtime surfaces intentionally removed from the shell:
+// Magnetic Builder, StageCanvas, MatrixEditor, IntentComposer,
+// CompactTransportBar, and PrismaticCoreDock must not be reintroduced
+// without an explicit user request.
 
 const HERO_METRICS = [
   { id: "active_mode", label: "Active mode" },
@@ -83,7 +87,6 @@ const PROMPT_PANEL_DEFAULT_ORDER = [
   "json_sequence_builder",
   "json_bindings_panel",
 ];
-const SERVICE_POLL_INTERVAL_MS = 15000;
 const MMSS_BRIDGE_API_BASE = "http://localhost:3456/api/mmss";
 const PROMPT_LIBRARY_PANEL_META = {
   json_block_list: {
@@ -113,7 +116,6 @@ function App() {
     prompt_library: null,
     ase_console: null,
     archives: null,
-    magnetic: null,
     json_genesis: null,
   });
   const [expandedPanel, setExpandedPanel] = useState(null);
@@ -127,9 +129,8 @@ function App() {
   const [promptPanelOrder, setPromptPanelOrder] = useState(loadStoredPromptPanelOrder);
   const [activePromptPanel, setActivePromptPanel] = useState(loadStoredPromptActivePanel);
   const [serviceHealth, setServiceHealth] = useState({
-    magnetic: { online: false, label: "Offline", detail: "http://localhost:8001/state" },
-    mistral: { online: false, label: "Offline", detail: "http://localhost:3456/api/mistral/status" },
-    jsonhero: { online: false, label: "Offline", detail: "http://localhost:8787" },
+    mistral: { online: false, label: "Unchecked", detail: "http://localhost:3456/api/mistral/status" },
+    jsonhero: { online: false, label: "Unchecked", detail: "http://localhost:8787" },
   });
 
   // Bridge object intentionally captures current render state.
@@ -162,48 +163,6 @@ function App() {
       dispatch({ type: "toggle_orbit", enabled: false });
     }
   }, [activeTab, state.transport.playing, state.orbit.enabled]);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const updateServiceHealth = async () => {
-      const [magnetic, mistral, jsonhero] = await Promise.all([
-        probeJsonEndpoint("http://localhost:8001/state", (payload) => ({
-          online: true,
-          label: `Online · day ${payload?.day ?? "?"}`,
-          detail: payload?.phase ? `phase: ${payload.phase}` : "http://localhost:8001/state",
-        })),
-        probeJsonEndpoint("http://localhost:3456/api/mistral/status", (payload) => ({
-          online: !!payload?.configured,
-          label: payload?.configured ? "Online · env key" : "Offline",
-          detail: payload?.defaultModel || "http://localhost:3456/api/mistral/status",
-        })),
-        probeTextEndpoint("http://localhost:8787", () => ({
-          online: true,
-          label: "Online",
-          detail: "http://localhost:8787",
-        })),
-      ]);
-
-      if (!cancelled) {
-        setServiceHealth({
-          magnetic,
-          mistral,
-          jsonhero,
-        });
-      }
-    };
-
-    void updateServiceHealth();
-    const intervalId = window.setInterval(() => {
-      void updateServiceHealth();
-    }, SERVICE_POLL_INTERVAL_MS);
-
-    return () => {
-      cancelled = true;
-      window.clearInterval(intervalId);
-    };
-  }, []);
 
   useEffect(() => {
     if (!libraryReady) {
@@ -447,6 +406,128 @@ function App() {
       ? "PROMPT_BLOCK_UPDATE"
       : "PROMPT_BLOCK_CREATE";
     dispatch({ type: actionType, block });
+  }
+
+  function handleSaveJsonToLibrary(payload, options = {}) {
+    const {
+      name,
+      description = "",
+      category = "imported_json",
+      tags = [],
+      color = "#9be0ff",
+      icon = "json",
+      source = "ui_json_import",
+      activateLibraryPanel = false,
+      preserveExistingId = false,
+    } = options;
+
+    if (!libraryReady) {
+      handleLoadLibrary();
+    }
+
+    let parsedPayload = payload;
+    if (typeof parsedPayload === "string") {
+      try {
+        parsedPayload = JSON.parse(parsedPayload);
+      } catch (error) {
+        dispatch({
+          type: "append_log",
+          message: `Save to library failed: invalid JSON string (${error.message}).`,
+        });
+        return;
+      }
+    }
+
+    if (!parsedPayload || typeof parsedPayload !== "object" || Array.isArray(parsedPayload)) {
+      dispatch({
+        type: "append_log",
+        message: "Save to library skipped: payload must be a JSON object.",
+      });
+      return;
+    }
+
+    const isFullBlockShape =
+      parsedPayload.payload &&
+      typeof parsedPayload.payload === "object" &&
+      Object.prototype.hasOwnProperty.call(parsedPayload.payload, "data");
+
+    const block = isFullBlockShape
+      ? {
+          ...parsedPayload,
+          id:
+            preserveExistingId && parsedPayload.id
+              ? parsedPayload.id
+              : parsedPayload.id || createEntityId("block"),
+          name: parsedPayload.name || name || "Imported JSON Block",
+          description: parsedPayload.description || description,
+          category: parsedPayload.category || category,
+          tags: Array.isArray(parsedPayload.tags) ? parsedPayload.tags : tags,
+          payload: {
+            type: parsedPayload.payload.type || "flowmusic.app_prompt",
+            version: parsedPayload.payload.version || "1.0",
+            data: parsedPayload.payload.data,
+          },
+          ui: {
+            color: parsedPayload.ui?.color || color,
+            icon: parsedPayload.ui?.icon || icon,
+            boundButtonId: parsedPayload.ui?.boundButtonId ?? null,
+          },
+          sourceMeta: {
+            ...(parsedPayload.sourceMeta || {}),
+            source: parsedPayload.sourceMeta?.source || source,
+            importedAt: new Date().toISOString(),
+          },
+        }
+      : {
+          id: createEntityId("block"),
+          name: name || `Imported JSON ${new Date().toLocaleTimeString()}`,
+          description,
+          category,
+          tags: Array.isArray(tags) ? tags : [],
+          payload: {
+            type: "flowmusic.app_prompt",
+            version: "1.0",
+            data: parsedPayload,
+          },
+          ui: {
+            color,
+            icon,
+            boundButtonId: null,
+          },
+          sourceMeta: {
+            source,
+            importedAt: new Date().toISOString(),
+          },
+        };
+
+    const exists = state.promptLibrary.blocks.some((entry) => entry.id === block.id);
+    dispatch({
+      type: exists ? "PROMPT_BLOCK_UPDATE" : "PROMPT_BLOCK_CREATE",
+      block,
+    });
+
+    if (activateLibraryPanel) {
+      setActiveTab("prompt_library");
+      setActivePromptPanel("json_block_editor");
+    }
+
+    dispatch({
+      type: "append_log",
+      message: `Saved JSON to library as "${block.name}".`,
+    });
+  }
+
+  function handleQuickSaveStreamPreview() {
+    handleSaveJsonToLibrary(streamPreviewPayload, {
+      name: `${activeModeMeta.label} Stream ${new Date().toLocaleTimeString()}`,
+      description: `Quick saved from ${activeModeMeta.label} stream preview`,
+      category: "stream_preview",
+      tags: [activeTab, "stream_preview", "quick_save"].filter(Boolean),
+      color: "#7adfa2",
+      icon: "stream",
+      source: `stream_${activeTab}`,
+      activateLibraryPanel: false,
+    });
   }
 
   function handlePrepareBind(bindingMode, targetId) {
@@ -889,13 +970,30 @@ function App() {
       node.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }
+  async function handleCheckServiceStatus() {
+    const [mistral, jsonhero] = await Promise.all([
+      probeJsonEndpoint("http://localhost:3456/api/mistral/status", (payload) => ({
+        online: !!payload?.configured,
+        label: payload?.configured ? "Online / env key" : "Offline",
+        detail: payload?.defaultModel || "http://localhost:3456/api/mistral/status",
+      })),
+      probeTextEndpoint("http://localhost:8787", () => ({
+        online: true,
+        label: "Online",
+        detail: "http://localhost:8787",
+      })),
+    ]);
+    setServiceHealth({
+      mistral,
+      jsonhero,
+    });
+  }
 
   const drawerItems = [
     { id: "overview", icon: LayoutTemplate, label: "Workspace" },
     { id: "prompt_library", icon: Library, label: "Prompt Tools" },
     { id: "ase_console", icon: Workflow, label: "ASE Flow" },
     { id: "archives", icon: Archive, label: "Archives" },
-    { id: "magnetic", icon: Magnet, label: "Magnetic" },
     { id: "json_genesis", icon: FileJson, label: "JSON Genesis" },
     { id: "system", icon: Settings, label: "System State" },
   ];
@@ -930,7 +1028,6 @@ function App() {
     };
   });
   const serviceCards = [
-    { id: "magnetic", name: "Magnetic", ...serviceHealth.magnetic },
     { id: "mistral", name: "Mistral", ...serviceHealth.mistral },
     { id: "jsonhero", name: "JSON Hero", ...serviceHealth.jsonhero },
   ];
@@ -945,10 +1042,6 @@ function App() {
 
     if (activeTab === "archives") {
       return "Archive workspace is online. Import local Flowmusic data, inspect sessions, and keep archive flows inside the same shell.";
-    }
-
-    if (activeTab === "magnetic") {
-      return "Magnetic Builder is active. Simulate field evolution with charge, spin, wavelength, and stability metrics. Backend running on port 8001.";
     }
 
     if (activeTab === "json_genesis") {
@@ -988,16 +1081,6 @@ function App() {
         selectedSequence: activeSequence?.name || null,
         checkpoints: state.mmss.checkpoints.slice(-4),
         logs: activityLogs.slice(0, 4),
-      };
-    }
-
-    if (activeTab === "magnetic") {
-      return {
-        mode: "magnetic",
-        backend: "FastAPI",
-        port: 8001,
-        features: ["field_simulation", "charge_metrics", "spin_dynamics", "phase_transitions"],
-        state: "persistent_json",
       };
     }
 
@@ -1055,21 +1138,17 @@ function App() {
       ? "ASE_CONSOLE_X10"
       : activeTab === "prompt_library"
         ? "PROMPT_LIBRARY"
-        : activeTab === "magnetic"
-          ? "MAGNETIC_BUILDER"
-          : activeTab === "json_genesis"
-            ? "JSON_GENESIS"
-            : "ARCHIVE_WORKSPACE";
+        : activeTab === "json_genesis"
+          ? "JSON_GENESIS"
+          : "ARCHIVE_WORKSPACE";
   const activeSeedLabel =
     activeTab === "ase_console"
       ? "@_TOTAL_INIT"
       : activeTab === "prompt_library"
         ? `@_${(activePromptPanelMeta.label || "PANEL").replace(/\s+/g, "_").toUpperCase()}`
-        : activeTab === "magnetic"
-          ? "@_MAGNETIC_FIELD"
-          : activeTab === "json_genesis"
-            ? "@_JSON_SYNTHESIS"
-            : "@_FLOWMUSIC_ARCHIVE";
+        : activeTab === "json_genesis"
+          ? "@_JSON_SYNTHESIS"
+          : "@_FLOWMUSIC_ARCHIVE";
 
   function toggleDrawerPanel(panelId) {
     setExpandedPanel((current) => (current === panelId ? null : panelId));
@@ -1247,6 +1326,7 @@ function App() {
                             <JsonBlockEditor
                               block={selectedBlock}
                               onSave={handlePromptBlockSave}
+                              onSaveToLibrary={handleSaveJsonToLibrary}
                               onExport={(payload, name) => handleExportPayload(payload, `${name || "block"}_payload`)}
                             />
                           </SectionCard>
@@ -1330,6 +1410,7 @@ function App() {
                               onGeneratePresetComposition={handleGeneratePresetComposition}
                               onCopyPreview={(payload) => handleExportPayload(payload, "json_preview")}
                               onSavePreviewFile={handleSavePreviewFile}
+                              onSaveToLibrary={handleSaveJsonToLibrary}
                               onBatchExport={handleBatchExportByFormula}
                             />
                           </SectionCard>
@@ -1446,6 +1527,7 @@ function App() {
           </div>
           <ASEMasterConsole
             onSendToSequenceBuilder={handleApplyAseUnifiedToSequenceBuilder}
+            onSaveToLibrary={handleSaveJsonToLibrary}
             onSaveToDatabase={(config) => {
               const existing = JSON.parse(localStorage.getItem(ASE_DB_STORAGE_KEY) || "[]");
               const updated = [...existing, { ...config, savedAt: new Date().toISOString() }];
@@ -1501,56 +1583,6 @@ function App() {
             </div>
           </div>
           <ArchivesPage />
-        </div>
-      </section>
-    );
-  }
-
-  function renderMagneticStage() {
-    return (
-      <section
-        ref={(node) => { sectionRefs.current.magnetic = node; }}
-        className="workspace-surface workspace-surface--magnetic is-focused template-stage-panel"
-      >
-        <div className="workspace-surface__head">
-          <div>
-            <span className="workspace-surface__eyebrow">Core Mode 04</span>
-            <h3>Magnetic Builder</h3>
-            <p>MMSS magnetic field simulation with charge, spin, wavelength, and stability metrics.</p>
-          </div>
-          <button className="workspace-surface__action" onClick={() => setExpandedPanel("magnetic")}>
-            Open Controls
-          </button>
-        </div>
-
-        <div className="workspace-magnetic-shell">
-          <div className="workspace-surface__summary">
-            <div className="workspace-summary-card">
-              <span>Backend</span>
-              <strong>{serviceHealth.magnetic.online ? "FastAPI · online" : "FastAPI · offline"}</strong>
-            </div>
-            <div className="workspace-summary-card">
-              <span>State</span>
-              <strong>{serviceHealth.magnetic.detail}</strong>
-            </div>
-            <div className="workspace-summary-card">
-              <span>Phases</span>
-              <strong>harmonic → wave → pulse → void</strong>
-            </div>
-          </div>
-          <div className="mode-shell-head mode-shell-head--magnetic">
-            <div>
-              <strong>Magnetic Workspace</strong>
-              <span>Interactive field simulation with real-time canvas visualization.</span>
-            </div>
-            <div className="mode-shell-status">
-              <span>Port 8001</span>
-              <span>{serviceHealth.magnetic.label}</span>
-            </div>
-          </div>
-          <div style={{ padding: 20 }}>
-            <MMSSWidget mode="magnetic" title="🧲 MMSS: Магнитное поле" />
-          </div>
         </div>
       </section>
     );
@@ -1656,9 +1688,6 @@ function App() {
     if (activeTab === "archives") {
       return renderArchivesStage();
     }
-    if (activeTab === "magnetic") {
-      return renderMagneticStage();
-    }
     if (activeTab === "json_genesis") {
       return renderJsonGenesisStage();
     }
@@ -1743,7 +1772,7 @@ function App() {
               <div className="drawer-stack">
                 <SectionCard title="Workspace Focus" subtitle="Current rebuild direction">
                   <div className="drawer-metric-grid">
-                    <div className="drawer-metric-card"><span>Modes</span><strong>5 Core</strong></div>
+                    <div className="drawer-metric-card"><span>Modes</span><strong>4 Core</strong></div>
                     <div className="drawer-metric-card"><span>Prompt Blocks</span><strong>{state.promptLibrary.blocks.length}</strong></div>
                     <div className="drawer-metric-card"><span>Sequences</span><strong>{state.promptLibrary.sequences.length}</strong></div>
                     <div className="drawer-metric-card"><span>ASE Saves</span><strong>{aseConfigCount}</strong></div>
@@ -1849,26 +1878,6 @@ function App() {
               </div>
             ) : null}
 
-            {expandedPanel === "magnetic" ? (
-              <div className="drawer-stack">
-                <SectionCard title="Magnetic Tools" subtitle="Field simulation controls">
-                  <div className="drawer-link-list">
-                    <button onClick={() => focusWorkspaceSection("magnetic")}>
-                      <strong>Open Magnetic workspace</strong>
-                      <ChevronRight size={14} />
-                    </button>
-                  </div>
-                </SectionCard>
-                <SectionCard title="Magnetic Focus" subtitle="FastAPI backend on port 8001">
-                  <div className="drawer-note-list">
-                    <div><strong>Backend:</strong> FastAPI (uvicorn)</div>
-                    <div><strong>State file:</strong> mmss_state.json</div>
-                    <div><strong>Metrics:</strong> charge, spin, wavelength, stability</div>
-                    <div><strong>Phases:</strong> harmonic → wave → pulse → void</div>
-                  </div>
-                </SectionCard>
-              </div>
-            ) : null}
 
             {expandedPanel === "json_genesis" ? (
               <div className="drawer-stack">
@@ -1904,9 +1913,28 @@ function App() {
                 <SectionCard title="Rebuild Status" subtitle="Current direction of the UI rewrite">
                   <div className="drawer-note-list">
                     <div><Sparkles size={14} /> Single-page shell is active</div>
-                    <div><Database size={14} /> Prompt/ASE/Archives/Magnetic/JSON Genesis are preserved</div>
-                    <div><Workflow size={14} /> Legacy prismatic/performance surface is detached</div>
+                    <div><Database size={14} /> Prompt Library, ASE, Archives, and JSON Genesis are preserved</div>
+                    <div><Workflow size={14} /> Stage/Matrix/Intent/Transport/Prismatic/Magnetic are detached from runtime</div>
                   </div>
+                </SectionCard>
+                <SectionCard title="Service Health" subtitle="Manual status check only">
+                  <div className="template-service-list">
+                    {serviceCards.map((service) => (
+                      <div
+                        key={service.id}
+                        className={`template-service-item ${service.online ? "is-online" : "is-offline"}`}
+                      >
+                        <div className="template-service-item__head">
+                          <span>{service.name}</span>
+                          <strong>{service.label}</strong>
+                        </div>
+                        <small>{service.detail}</small>
+                      </div>
+                    ))}
+                  </div>
+                  <button className="workspace-surface__action" onClick={handleCheckServiceStatus}>
+                    Check Status
+                  </button>
                 </SectionCard>
               </div>
             ) : null}
@@ -1919,24 +1947,9 @@ function App() {
               <Boxes size={18} />
               <span>{activeTopbarLabel}</span>
             </div>
-            <div className="template-topbar__center">
-              <div className="template-topbar__seed">
-                <Sparkles size={14} />
-                <span>{activeSeedLabel}</span>
-              </div>
-              <div className="core-shell-nav template-mode-switcher">
-                {APP_TABS.map((tab, index) => (
-                  <button
-                    key={tab.id}
-                    className={`core-shell-pill template-mode-pill ${activeTab === tab.id ? "active" : ""}`}
-                    onClick={() => focusWorkspaceSection(tab.id)}
-                  >
-                    <span className="core-shell-pill__index">0{index + 1}</span>
-                    <strong>{tab.label}</strong>
-                    <span>{tab.summary}</span>
-                  </button>
-                ))}
-              </div>
+            <div className="template-topbar__seed">
+              <Sparkles size={14} />
+              <span>{activeSeedLabel}</span>
             </div>
             <div className="template-topbar__actions">
               <div className="template-topbar__badge">
@@ -1984,31 +1997,20 @@ function App() {
                 ))}
               </div>
 
-              <div className="template-stream-card template-stream-card--services">
-                <div className="template-stream-card__eyebrow">
-                  <Boxes size={12} />
-                  <span>Service Health</span>
-                </div>
-                <div className="template-service-list">
-                  {serviceCards.map((service) => (
-                    <div
-                      key={service.id}
-                      className={`template-service-item ${service.online ? "is-online" : "is-offline"}`}
-                    >
-                      <div className="template-service-item__head">
-                        <span>{service.name}</span>
-                        <strong>{service.label}</strong>
-                      </div>
-                      <small>{service.detail}</small>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
               <div className="template-stream-card template-stream-card--json">
                 <div className="template-stream-card__eyebrow">
-                  <Database size={12} />
-                  <span>Unified Preview</span>
+                  <div className="template-stream-card__eyebrow-main">
+                    <Database size={12} />
+                    <span>Unified Preview</span>
+                  </div>
+                  <button
+                    className="ui-action-btn ui-action-btn--library ui-action-btn--icon"
+                    onClick={handleQuickSaveStreamPreview}
+                    title="Quick Save to Library"
+                    aria-label="Quick Save to Library"
+                  >
+                    <FolderPlus size={14} />
+                  </button>
                 </div>
                 <pre>{streamPreviewText}</pre>
               </div>
@@ -2045,11 +2047,33 @@ function App() {
                   {activeTab === "prompt_library" && !libraryReady ? "LOAD LIBRARY" : `OPEN ${activeModeMeta.label.toUpperCase()}`}
                 </button>
                 <div className="template-stream-actions__row">
-                  <button onClick={() => handleExportPayload(streamPreviewPayload, `${activeModeMeta.label}_preview`)}>
+                  <button className="ui-action-btn ui-action-btn--export" onClick={() => handleExportPayload(streamPreviewPayload, `${activeModeMeta.label}_preview`)}>
+                    <Download size={14} />
                     Copy Preview
                   </button>
-                  <button onClick={() => handleSavePreviewFile(streamPreviewPayload)}>
+                  <button className="ui-action-btn ui-action-btn--neutral" onClick={() => handleSavePreviewFile(streamPreviewPayload)}>
+                    <Save size={14} />
                     Save JSON
+                  </button>
+                </div>
+                <div className="template-stream-actions__row">
+                  <button className="ui-action-btn ui-action-btn--library" onClick={handleQuickSaveStreamPreview}>
+                    <FolderPlus size={14} />
+                    Quick Save
+                  </button>
+                  <button className="ui-action-btn ui-action-btn--open" onClick={() => handleOpenInJsonHero(streamPreviewPayload, "Stream preview")}>
+                    <ExternalLink size={14} />
+                    JSON Hero
+                  </button>
+                </div>
+                <div className="template-stream-actions__row">
+                  <button className="ui-action-btn ui-action-btn--send" onClick={() => handlePushPreviewToGenesis()}>
+                    <Rocket size={14} />
+                    Send Preview
+                  </button>
+                  <button className="ui-action-btn ui-action-btn--open" onClick={handleCheckServiceStatus}>
+                    <RefreshCw size={14} />
+                    Check Status
                   </button>
                 </div>
               </div>
@@ -2365,6 +2389,7 @@ async function fetchWithTimeout(url, timeoutMs, options = {}) {
 }
 
 export default App;
+
 
 
 
