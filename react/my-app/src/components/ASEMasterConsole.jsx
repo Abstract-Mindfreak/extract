@@ -899,8 +899,12 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
                       prismaticCoreData,
                       onSyncChange: handleSyncChange,
                       onASEDataChange: handleASEDataChange,
+                      onQuickSaveToLibrary: onSaveToLibrary,
                     })
-                  : React.createElement(ASE_VARIATIONS[currentVariation].component)}
+                  : React.createElement(ASE_VARIATIONS[currentVariation].component, {
+                      onQuickSaveToLibrary: onSaveToLibrary,
+                      onSaveToLibrary,
+                    })}
               </div>
             ) : (
               <UnifiedRack

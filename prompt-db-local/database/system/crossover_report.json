@@ -1,75 +1,83 @@
 {
-  "generated_count": 9,
+  "generated_count": 10,
   "crossovers": [
     {
-      "id": "cross_a46",
+      "id": "cross_60c7",
       "parents": [
-        "meta_220",
-        "97"
+        "meta_150",
+        "40"
       ],
       "strategy": "shared_domain_merge"
     },
     {
-      "id": "cross_3915",
+      "id": "cross_769c",
       "parents": [
-        "47",
-        "80"
-      ],
-      "strategy": "shared_domain_merge"
-    },
-    {
-      "id": "cross_259a",
-      "parents": [
-        "meta_145",
-        "meta_282"
-      ],
-      "strategy": "shared_domain_merge"
-    },
-    {
-      "id": "cross_5f05",
-      "parents": [
-        "83",
-        "meta_330"
-      ],
-      "strategy": "shared_domain_merge"
-    },
-    {
-      "id": "cross_3bab",
-      "parents": [
-        "meta_125",
-        "meta_165"
-      ],
-      "strategy": "shared_domain_merge"
-    },
-    {
-      "id": "cross_13a2",
-      "parents": [
-        "54",
-        "89"
+        "104",
+        "22"
       ],
       "strategy": "params_union"
     },
     {
-      "id": "cross_6357",
+      "id": "cross_f29c",
       "parents": [
-        "meta_174",
-        "105"
+        "99",
+        "11"
       ],
       "strategy": "shared_domain_merge"
     },
     {
-      "id": "cross_2975",
+      "id": "cross_81a6",
       "parents": [
-        "97",
-        "18"
+        "meta_123",
+        "104"
+      ],
+      "strategy": "shared_domain_merge"
+    },
+    {
+      "id": "cross_5cd",
+      "parents": [
+        "meta_289",
+        "102"
+      ],
+      "strategy": "shared_domain_merge"
+    },
+    {
+      "id": "cross_c4c2",
+      "parents": [
+        "meta_225",
+        "meta_127"
       ],
       "strategy": "params_union"
     },
     {
-      "id": "cross_6613",
+      "id": "cross_58fa",
       "parents": [
-        "meta_149",
-        "meta_269"
+        "meta_173",
+        "43"
+      ],
+      "strategy": "shared_domain_merge"
+    },
+    {
+      "id": "cross_2e93",
+      "parents": [
+        "86",
+        "47"
+      ],
+      "strategy": "shared_domain_merge"
+    },
+    {
+      "id": "cross_b013",
+      "parents": [
+        "45",
+        "100"
+      ],
+      "strategy": "shared_domain_merge"
+    },
+    {
+      "id": "cross_dce6",
+      "parents": [
+        "14",
+        "meta_149"
       ],
       "strategy": "shared_domain_merge"
     }

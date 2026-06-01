@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Cpu, Dna, GitMerge, Brain, Download, Trash2, Activity, Target, Zap, Terminal, Code2 } from "lucide-react";
+import React, { useCallback, useEffect, useState } from "react";
+import { Cpu, Dna, GitMerge, Brain, Download, Trash2, Activity, Target, Zap, Terminal, Code2, FolderPlus, RefreshCw } from "lucide-react";
 import { usePythonGenerationLayer } from "../../services/PythonGenerationLayer";
 import { DEFAULT_RULES } from "../../services/PythonBridge";
 
-export default function GenerationEnginePanel() {
+const MMSS_LIBRARY_STATE_ENDPOINT = "http://localhost:3456/api/mmss/library-state";
+
+export default function GenerationEnginePanel({ onSaveToLibrary }) {
   const genLayer = usePythonGenerationLayer();
+  const { buildGenerationRuntimeFromPromptLibrary } = genLayer;
   
   // State
   const [intent, setIntent] = useState("industrial texture with spatial diffusion");
@@ -18,6 +21,8 @@ export default function GenerationEnginePanel() {
   const [blockIndex, setBlockIndex] = useState(null);
   const [graph, setGraph] = useState(null);
   const [embeddings, setEmbeddings] = useState(null);
+  const [libraryStats, setLibraryStats] = useState({ blockCount: 0, domains: [], layers: [] });
+  const [librarySyncState, setLibrarySyncState] = useState("loading");
   
   // Results
   const [generationResult, setGenerationResult] = useState(null);
@@ -29,56 +34,34 @@ export default function GenerationEnginePanel() {
   const [crossovers, setCrossovers] = useState([]);
   const [selfRules, setSelfRules] = useState(null);
 
-  // Initialize with sample data
+  const syncPromptLibrary = useCallback(async () => {
+    try {
+      setLibrarySyncState("loading");
+      const response = await fetch(MMSS_LIBRARY_STATE_ENDPOINT);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      const payload = await response.json();
+      const promptBlocks = Array.isArray(payload?.promptLibrary?.blocks) ? payload.promptLibrary.blocks : [];
+      const runtime = buildGenerationRuntimeFromPromptLibrary(promptBlocks);
+      setBlockIndex(runtime.blockIndex);
+      setGraph(runtime.graph);
+      setEmbeddings(runtime.embeddings);
+      setLibraryStats(runtime.stats);
+      setLibrarySyncState(runtime.stats.blockCount ? "ready" : "empty");
+    } catch (error) {
+      console.error("Failed to load Prompt Library into Python Generation Layer", error);
+      setBlockIndex({ blocks: {} });
+      setGraph({ edges: {} });
+      setEmbeddings({ blocks: {} });
+      setLibraryStats({ blockCount: 0, domains: [], layers: [] });
+      setLibrarySyncState("error");
+    }
+  }, [buildGenerationRuntimeFromPromptLibrary]);
+
   useEffect(() => {
-    // Create sample block index for demo
-    const sampleBlocks = {};
-    const domains_list = ["Rhythm", "Timbre", "Space", "Logic", "Math"];
-    const phases = ["emergence", "stabilization", "shift", "collapse"];
-    
-    for (let i = 1; i <= 50; i++) {
-      const domain = domains_list[i % domains_list.length];
-      sampleBlocks[`block_${i.toString().padStart(3, '0')}`] = {
-        domain,
-        layer: (i % 5) + 1,
-        priority: 0.3 + Math.random() * 0.7,
-        confidence: 0.5 + Math.random() * 0.5,
-        phase: phases[i % phases.length],
-        tags: [domain.toLowerCase(), `layer${(i % 5) + 1}`, phases[i % phases.length]],
-        mutation_ready: Math.random() > 0.5,
-        crossover_ready: Math.random() > 0.5,
-        params: { frequency: 440 + i * 10, amplitude: 0.5 + Math.random() * 0.5 },
-        intent: `Sample ${domain} block ${i}`
-      };
-    }
-    
-    setBlockIndex({ blocks: sampleBlocks });
-    
-    // Create sample graph
-    const sampleEdges = {};
-    for (const bid of Object.keys(sampleBlocks)) {
-      const edges = [];
-      const numEdges = 1 + Math.floor(Math.random() * 4);
-      for (let j = 0; j < numEdges; j++) {
-        const targetIdx = Math.floor(Math.random() * 50) + 1;
-        edges.push({ target: `block_${targetIdx.toString().padStart(3, '0')}`, weight: Math.random() });
-      }
-      sampleEdges[bid] = edges;
-    }
-    setGraph({ edges: sampleEdges });
-    
-    // Create sample embeddings
-    const sampleEmbeddings = { blocks: {} };
-    for (const bid of Object.keys(sampleBlocks)) {
-      const vector = {};
-      const terms = ["rhythm", "timbre", "space", "logic", "texture", "industrial", "ambient"];
-      for (const term of terms) {
-        vector[term] = Math.random();
-      }
-      sampleEmbeddings.blocks[bid] = { vector };
-    }
-    setEmbeddings(sampleEmbeddings);
-  }, []);
+    void syncPromptLibrary();
+  }, [syncPromptLibrary]);
 
   const handleBuild = async (version = "v1") => {
     if (!blockIndex) return;
@@ -101,14 +84,15 @@ export default function GenerationEnginePanel() {
       config.embeddings = embeddings;
     }
     
-    // Simulate async generation
-    setTimeout(() => {
-      const result = version === "v3" 
-        ? genLayer.buildV3(config)
-        : genLayer.build(config);
-      
-      setGenerationResult(result);
-      setIsGenerating(false);
+    window.setTimeout(async () => {
+      try {
+        const result = version === "v3"
+          ? await genLayer.buildV3(config)
+          : await genLayer.build(config);
+        setGenerationResult(result);
+      } finally {
+        setIsGenerating(false);
+      }
     }, 500);
   };
 
@@ -144,6 +128,18 @@ export default function GenerationEnginePanel() {
   const clearMemory = () => {
     localStorage.removeItem("mmss.generation.memory_v3");
     alert("Memory cleared");
+  };
+
+  const quickSaveResultToLibrary = () => {
+    if (!generationResult) return;
+    onSaveToLibrary?.(generationResult, {
+      name: `Python Generation ${new Date().toLocaleTimeString()}`,
+      description: `Quick saved from Python Generation Layer intent: ${intent}`,
+      category: "python_generation",
+      tags: ["python_generation", "quick_save", ...domains.map((domain) => domain.toLowerCase())],
+      color: "#7adfa2",
+      icon: "builder",
+    });
   };
 
   const toggleDomain = (d) => {
@@ -184,11 +180,21 @@ export default function GenerationEnginePanel() {
                 <span>Mutation: READY</span>
                 <span className="text-pink-900">/</span>
                 <span>Crossover: READY</span>
+                <span className="text-pink-900">/</span>
+                <span>{librarySyncState === "ready" ? `Library: ${libraryStats.blockCount}` : `Library: ${librarySyncState.toUpperCase()}`}</span>
               </div>
             </div>
           </div>
           
           <div className="flex gap-2">
+            <button
+              onClick={() => void syncPromptLibrary()}
+              className="px-3 py-1 text-[10px] font-bold border border-emerald-500/30 text-emerald-300 bg-emerald-950/20 rounded flex items-center gap-2"
+              title="Sync Prompt Library into Python Generation Layer"
+            >
+              <RefreshCw size={12} />
+              LIBRARY
+            </button>
             {["builder", "mutation", "crossover", "self-rules", "memory"].map(tab => (
               <button 
                 key={tab}
@@ -206,6 +212,9 @@ export default function GenerationEnginePanel() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="bg-black border border-cyan-900 rounded-xl p-6 space-y-4">
               <SectionHeader icon={<Target size={14}/>} title="BUILDER_CONFIG" />
+              <div className="rounded border border-emerald-900/40 bg-emerald-950/10 px-3 py-2 text-[10px] text-emerald-300">
+                Source: shared Prompt Library · {libraryStats.blockCount} blocks · domains {libraryStats.domains.join(", ") || "n/a"}
+              </div>
               
               <div className="space-y-4">
                 <div>
@@ -354,6 +363,13 @@ export default function GenerationEnginePanel() {
                 className="mt-4 w-full py-2 border border-cyan-700 text-cyan-600 hover:bg-cyan-950 font-bold text-xs rounded transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 <Download size={12}/> EXPORT RESULT
+              </button>
+              <button
+                onClick={quickSaveResultToLibrary}
+                disabled={!generationResult}
+                className="mt-3 w-full py-2 border border-emerald-700 text-emerald-300 hover:bg-emerald-950/40 font-bold text-xs rounded transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                <FolderPlus size={12}/> QUICK SAVE TO LIBRARY
               </button>
             </div>
           </div>

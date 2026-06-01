@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Activity, Layers, Radio, Move, Wind, ZapOff, Terminal, Code2, SlidersHorizontal, BrainCircuit, GitMerge, RefreshCw, Search, Download, FileAudio, History, Wifi, ArrowRightLeft } from "lucide-react";
+import { Activity, Layers, Radio, Move, Wind, ZapOff, Terminal, Code2, SlidersHorizontal, BrainCircuit, GitMerge, RefreshCw, Search, Download, FileAudio, History, Wifi, ArrowRightLeft, FolderPlus } from "lucide-react";
 
 // Audio Sync Modes
 export const SYNC_MODES = {
@@ -9,7 +9,7 @@ export const SYNC_MODES = {
   BIDIRECTIONAL: "bidirectional"
 };
 
-export default function DecompositionAudio({ syncMode = SYNC_MODES.OFF, onSyncChange, prismaticCoreData = null, onASEDataChange }) {
+export default function DecompositionAudio({ syncMode = SYNC_MODES.OFF, onSyncChange, prismaticCoreData = null, onASEDataChange, onQuickSaveToLibrary }) {
   const syncControlsDisabled = true;
   const [phiSync] = useState(true);
   const [logicStack, setLogicStack] = useState(["G_BASE", "Φ_DIV", "Q_GRAV", "M_SHIFT", "Ψ_RECUR", "Δ_COLLAPSE", "Σ_SYNTH", "H_ANNIHILATE", "Ψ_INJECT", "∇_DENSITY", "⧴_DRIFT", "↦_MAP"]);
@@ -509,7 +509,26 @@ export default function DecompositionAudio({ syncMode = SYNC_MODES.OFF, onSyncCh
                     <Terminal size={14} className="text-pink-500" />
                     <span className="text-[10px] font-bold text-pink-500 uppercase tracking-widest">Master_Data_Stream</span>
                   </div>
-                  <Radio size={12} className="text-pink-900 animate-pulse" />
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onQuickSaveToLibrary?.(jsonLog, {
+                          name: "ASE Audio Decomposer Master Data Stream",
+                          description: "Quick saved from ASE AUDIO DECOMPOSER v6.AUDIO_ENGINE Master_Data_Stream",
+                          category: "ase_audio_stream",
+                          tags: ["ase_console", "audio_decomposer", "master_data_stream", "quick_save"],
+                          color: "#7adfa2",
+                          icon: "ase",
+                        })
+                      }
+                      className="p-2 rounded border border-emerald-500/20 bg-emerald-950/20 text-emerald-300 hover:bg-emerald-900/30 transition-colors"
+                      title="Quick Save to Library"
+                    >
+                      <FolderPlus size={12} />
+                    </button>
+                    <Radio size={12} className="text-pink-900 animate-pulse" />
+                  </div>
                 </div>
                 <div className="p-4 flex-1 text-[10px] font-mono text-pink-400/70 whitespace-pre overflow-y-auto custom-scrollbar">
                    {jsonLog}

@@ -2,11 +2,13 @@ import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import {
   Archive,
   Boxes,
+  ChevronLeft,
   ChevronRight,
   Database,
   Download,
   ExternalLink,
   FolderPlus,
+  GripVertical,
   LayoutTemplate,
   Library,
   RefreshCw,
@@ -18,6 +20,7 @@ import {
   X,
   FileJson,
 } from "lucide-react";
+import { useTranslation, Trans } from "react-i18next";
 import "./App.css";
 import ASEMasterConsole from "./components/ASEMasterConsole";
 import JsonBindingsPanel from "./components/JsonBindingsPanel";
@@ -88,6 +91,7 @@ const PROMPT_PANEL_DEFAULT_ORDER = [
   "json_bindings_panel",
 ];
 const MMSS_BRIDGE_API_BASE = "http://localhost:3456/api/mmss";
+const TEMPLATE_STREAM_SIDEBAR_STORAGE_KEY = "mmss.templateStreamSidebar.v1";
 const PROMPT_LIBRARY_PANEL_META = {
   json_block_list: {
     label: "Block Library",
@@ -111,7 +115,20 @@ const PROMPT_LIBRARY_PANEL_META = {
   },
 };
 
+function loadStoredTemplateStreamSidebar() {
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(TEMPLATE_STREAM_SIDEBAR_STORAGE_KEY) || "{}");
+    return {
+      collapsed: Boolean(parsed.collapsed),
+      width: Number.isFinite(parsed.width) ? Math.min(620, Math.max(320, parsed.width)) : 420,
+    };
+  } catch {
+    return { collapsed: false, width: 420 };
+  }
+}
+
 function App() {
+  const { t } = useTranslation();
   const sectionRefs = useRef({
     prompt_library: null,
     ase_console: null,
@@ -128,10 +145,12 @@ function App() {
   const [libraryReady, setLibraryReady] = useState(false);
   const [promptPanelOrder, setPromptPanelOrder] = useState(loadStoredPromptPanelOrder);
   const [activePromptPanel, setActivePromptPanel] = useState(loadStoredPromptActivePanel);
+  const [streamSidebar, setStreamSidebar] = useState(loadStoredTemplateStreamSidebar);
   const [serviceHealth, setServiceHealth] = useState({
     mistral: { online: false, label: "Unchecked", detail: "http://localhost:3456/api/mistral/status" },
     jsonhero: { online: false, label: "Unchecked", detail: "http://localhost:8787" },
   });
+  const streamSidebarResizeRef = useRef(null);
 
   // Bridge object intentionally captures current render state.
   /* eslint-disable react-hooks/exhaustive-deps */
@@ -147,6 +166,38 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem(PROMPT_ACTIVE_PANEL_STORAGE_KEY, activePromptPanel);
   }, [activePromptPanel]);
+
+  useEffect(() => {
+    window.localStorage.setItem(TEMPLATE_STREAM_SIDEBAR_STORAGE_KEY, JSON.stringify(streamSidebar));
+  }, [streamSidebar]);
+
+  useEffect(() => {
+    const handlePointerMove = (event) => {
+      const resizeState = streamSidebarResizeRef.current;
+      if (!resizeState?.active) return;
+      const nextWidth = window.innerWidth - event.clientX;
+      setStreamSidebar((current) => ({
+        ...current,
+        collapsed: false,
+        width: Math.min(620, Math.max(320, nextWidth)),
+      }));
+    };
+
+    const handlePointerUp = () => {
+      if (!streamSidebarResizeRef.current?.active) return;
+      streamSidebarResizeRef.current = null;
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    };
+
+    window.addEventListener("mousemove", handlePointerMove);
+    window.addEventListener("mouseup", handlePointerUp);
+
+    return () => {
+      window.removeEventListener("mousemove", handlePointerMove);
+      window.removeEventListener("mouseup", handlePointerUp);
+    };
+  }, []);
 
   useEffect(() => {
     if (!libraryReady) {
@@ -378,6 +429,15 @@ function App() {
     state.promptLibrary.blocks.find((block) => block.id === state.promptLibrary.selectedBlockId) || null;
   const activePromptPanelMeta =
     PROMPT_LIBRARY_PANEL_META[activePromptPanel] || PROMPT_LIBRARY_PANEL_META.json_block_list;
+  const translatedTabs = useMemo(
+    () =>
+      APP_TABS.map((tab) => ({
+        ...tab,
+        label: t(`tabs.${tab.id}`),
+        summary: t(`summary.${tab.id}`),
+      })),
+    [t],
+  );
   const aseConfigCount = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem(ASE_DB_STORAGE_KEY) || "[]").length;
@@ -515,6 +575,22 @@ function App() {
       type: "append_log",
       message: `Saved JSON to library as "${block.name}".`,
     });
+  }
+
+  function toggleTemplateStreamSidebar() {
+    setStreamSidebar((current) => ({
+      ...current,
+      collapsed: !current.collapsed,
+    }));
+  }
+
+  function startTemplateStreamSidebarResize(event) {
+    streamSidebarResizeRef.current = {
+      active: true,
+      startX: event.clientX,
+    };
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
   }
 
   function handleQuickSaveStreamPreview() {
@@ -1010,7 +1086,7 @@ function App() {
     if (metric.id === "active_mode") {
       return {
         ...metric,
-        value: APP_TABS.find((tab) => tab.id === activeTab)?.label || "Workspace",
+        value: translatedTabs.find((tab) => tab.id === activeTab)?.label || "Workspace",
       };
     }
 
@@ -1031,7 +1107,7 @@ function App() {
     { id: "mistral", name: "Mistral", ...serviceHealth.mistral },
     { id: "jsonhero", name: "JSON Hero", ...serviceHealth.jsonhero },
   ];
-  const activeModeMeta = APP_TABS.find((tab) => tab.id === activeTab) || APP_TABS[0];
+  const activeModeMeta = translatedTabs.find((tab) => tab.id === activeTab) || translatedTabs[0];
   const streamFeedback = useMemo(() => {
     if (activeTab === "prompt_library") {
       if (!libraryReady) {
@@ -1164,7 +1240,10 @@ function App() {
           <div>
             <span className="workspace-surface__eyebrow">Core Mode 01</span>
             <h3>Prompt Library</h3>
-            <p>Blocks, sequences, bindings, and unified JSON composition stay accessible here.</p>
+            
+            <Trans i18nKey="description">
+              <p>Blocks, sequences, bindings, and unified JSON composition stay accessible here.</p>
+            </Trans>
           </div>
           <button className="workspace-surface__action" onClick={() => setExpandedPanel("prompt_library")}>
             Open Tools
@@ -1780,7 +1859,7 @@ function App() {
                 </SectionCard>
                 <SectionCard title="Quick Jumps" subtitle="Move around the workspace">
                   <div className="drawer-link-list">
-                    {APP_TABS.map((tab) => (
+                    {translatedTabs.map((tab) => (
                       <button key={`drawer-${tab.id}`} onClick={() => focusWorkspaceSection(tab.id)}>
                         <div>
                           <strong>{tab.label}</strong>
@@ -1905,7 +1984,7 @@ function App() {
                 <SectionCard title="System State" subtitle="Current shell status">
                   <div className="drawer-metric-grid">
                     <div className="drawer-metric-card"><span>Library</span><strong>{libraryReady ? "Ready" : "Idle"}</strong></div>
-                    <div className="drawer-metric-card"><span>Focused mode</span><strong>{APP_TABS.find((tab) => tab.id === activeTab)?.label}</strong></div>
+                    <div className="drawer-metric-card"><span>Focused mode</span><strong>{translatedTabs.find((tab) => tab.id === activeTab)?.label}</strong></div>
                     <div className="drawer-metric-card"><span>Drawer</span><strong>{expandedPanel || "Closed"}</strong></div>
                     <div className="drawer-metric-card"><span>State</span><strong>{state.initialized ? "Initialized" : "Boot"}</strong></div>
                   </div>
@@ -1968,22 +2047,49 @@ function App() {
               {renderActiveStageSection()}
             </div>
 
-            <aside className="template-stream-sidebar">
+            <aside
+              className={`template-stream-sidebar ${streamSidebar.collapsed ? "is-collapsed" : ""}`}
+              style={{ width: streamSidebar.collapsed ? 58 : streamSidebar.width }}
+            >
+              <button
+                type="button"
+                className="template-stream-sidebar__resize-handle"
+                onMouseDown={startTemplateStreamSidebarResize}
+                aria-label={t("stream.resize")}
+                title={t("stream.resize")}
+              >
+                <GripVertical size={14} />
+              </button>
               <div className="template-stream-sidebar__head">
                 <div className="template-stream-sidebar__title">
                   <ChevronRight size={16} />
                   <span>{activeModeMeta.label.toUpperCase()} STREAM</span>
                 </div>
-                <div className="template-stream-sidebar__status">
-                  <span className="template-stream-sidebar__dot" />
-                  <strong>{activeTab === "ase_console" ? "ACTIVE STREAM" : "SYNCED"}</strong>
+                <div className="template-stream-sidebar__controls">
+                  {!streamSidebar.collapsed ? (
+                    <div className="template-stream-sidebar__status">
+                      <span className="template-stream-sidebar__dot" />
+                      <strong>{activeTab === "ase_console" ? t("stream.active") : t("stream.synced")}</strong>
+                    </div>
+                  ) : null}
+                  <button
+                    type="button"
+                    className="template-stream-sidebar__toggle"
+                    onClick={toggleTemplateStreamSidebar}
+                    aria-label={streamSidebar.collapsed ? t("stream.show_sidebar") : t("stream.hide_sidebar")}
+                    title={streamSidebar.collapsed ? t("stream.show_sidebar") : t("stream.hide_sidebar")}
+                  >
+                    {streamSidebar.collapsed ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+                  </button>
                 </div>
               </div>
 
+              {!streamSidebar.collapsed ? (
+              <>
               <div className="template-stream-card template-stream-card--feedback">
                 <div className="template-stream-card__eyebrow">
                   <Sparkles size={12} />
-                  <span>Orchestrator Feedback</span>
+                  <span>{t("stream.feedback")}</span>
                 </div>
                 <p>{streamFeedback}</p>
               </div>
@@ -2001,13 +2107,13 @@ function App() {
                 <div className="template-stream-card__eyebrow">
                   <div className="template-stream-card__eyebrow-main">
                     <Database size={12} />
-                    <span>Unified Preview</span>
+                    <span>{t("stream.unified_preview")}</span>
                   </div>
                   <button
                     className="ui-action-btn ui-action-btn--library ui-action-btn--icon"
                     onClick={handleQuickSaveStreamPreview}
-                    title="Quick Save to Library"
-                    aria-label="Quick Save to Library"
+                    title={t("library.quick_save")}
+                    aria-label={t("library.quick_save")}
                   >
                     <FolderPlus size={14} />
                   </button>
@@ -2044,12 +2150,12 @@ function App() {
                     setExpandedPanel(activeTab);
                   }}
                 >
-                  {activeTab === "prompt_library" && !libraryReady ? "LOAD LIBRARY" : `OPEN ${activeModeMeta.label.toUpperCase()}`}
+                  {activeTab === "prompt_library" && !libraryReady ? t("stream.load_library") : `${t("stream.view_mode")} ${activeModeMeta.label.toUpperCase()}`}
                 </button>
                 <div className="template-stream-actions__row">
                   <button className="ui-action-btn ui-action-btn--export" onClick={() => handleExportPayload(streamPreviewPayload, `${activeModeMeta.label}_preview`)}>
                     <Download size={14} />
-                    Copy Preview
+                    {t("stream.copy_preview")}
                   </button>
                   <button className="ui-action-btn ui-action-btn--neutral" onClick={() => handleSavePreviewFile(streamPreviewPayload)}>
                     <Save size={14} />
@@ -2059,11 +2165,11 @@ function App() {
                 <div className="template-stream-actions__row">
                   <button className="ui-action-btn ui-action-btn--library" onClick={handleQuickSaveStreamPreview}>
                     <FolderPlus size={14} />
-                    Quick Save
+                    {t("stream.quick_save")}
                   </button>
                   <button className="ui-action-btn ui-action-btn--open" onClick={() => handleOpenInJsonHero(streamPreviewPayload, "Stream preview")}>
                     <ExternalLink size={14} />
-                    JSON Hero
+                    {t("stream.open_jsonhero")}
                   </button>
                 </div>
                 <div className="template-stream-actions__row">
@@ -2073,10 +2179,16 @@ function App() {
                   </button>
                   <button className="ui-action-btn ui-action-btn--open" onClick={handleCheckServiceStatus}>
                     <RefreshCw size={14} />
-                    Check Status
+                    {t("status.check")}
                   </button>
                 </div>
               </div>
+              </>
+              ) : (
+                <div className="template-stream-sidebar__collapsed-body">
+                  <span>{activeModeMeta.label}</span>
+                </div>
+              )}
             </aside>
           </div>
         </div>

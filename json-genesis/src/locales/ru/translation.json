@@ -1,0 +1,15 @@
+{
+  "main.sync_mmss": "Синхронизировать MMSS",
+  "main.save_to_mmss": "Сохранить в MMSS",
+  "main.import_to_library": "Импорт в библиотеку",
+  "main.import_to_root": "Импорт в корень",
+  "main.quality_report": "Отчет качества MMSS",
+  "main.debug_trace": "Трассировка генерации",
+  "main.retrieval_tokens": "Токены retrieval",
+  "main.library_inspector": "Инспектор библиотечного блока",
+  "main.generate_approved": "Генерировать с подтвержденным контекстом",
+  "main.commit_storage": "Сохранить в storage",
+  "main.no_block_selected": "Блок не выбран",
+  "block.boolean.true": "true",
+  "block.boolean.false": "false"
+}

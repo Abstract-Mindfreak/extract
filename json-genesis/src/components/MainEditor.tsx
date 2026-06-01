@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Activity,
   Box,
@@ -154,6 +155,7 @@ const dedupeStrings = (items: string[]) => Array.from(new Set(items.filter(Boole
 const safeJsonSnippet = (value: unknown, maxLength = 1600) => JSON.stringify(value ?? {}).slice(0, maxLength);
 
 export const MainEditor: React.FC = () => {
+  const { t } = useTranslation();
   const [root, setRoot] = useState<JSONBlock>(createDefaultBlock('object', 'root'));
   const [projectName, setProjectName] = useState('Industrial_Sublime_v4');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -863,11 +865,11 @@ export const MainEditor: React.FC = () => {
           </label>
           <button onClick={() => setImportToLib((prev) => !prev)} className="px-4 py-1.5 rounded bg-zinc-900/70 text-zinc-300 text-[10px] font-bold uppercase border border-white/5 flex items-center gap-2">
             <Box size={12} />
-            {importToLib ? 'Import to Library' : 'Import to Root'}
+            {importToLib ? t('main.import_to_library') : t('main.import_to_root')}
           </button>
           <button onClick={() => void requestMmssLibrary()} className="px-4 py-1.5 rounded bg-cyan-950/30 text-cyan-300 text-[10px] font-bold uppercase border border-cyan-500/20 flex items-center gap-2">
             <Layers size={12} />
-            Sync MMSS
+            {t('main.sync_mmss')}
           </button>
           <button onClick={() => void pullGenesisHandoff()} className="px-4 py-1.5 rounded bg-indigo-950/30 text-indigo-300 text-[10px] font-bold uppercase border border-indigo-500/20 flex items-center gap-2">
             <Download size={12} />
@@ -875,7 +877,7 @@ export const MainEditor: React.FC = () => {
           </button>
           <button onClick={() => void saveRootToMmssLibrary()} className="px-4 py-1.5 rounded bg-emerald-950/30 text-emerald-300 text-[10px] font-bold uppercase border border-emerald-500/20 flex items-center gap-2">
             <Save size={12} />
-            Save to MMSS
+            {t('main.save_to_mmss')}
           </button>
           <button onClick={handleExport} className="px-6 py-2 rounded-lg bg-orange-600 text-[10px] font-black text-bg-deep uppercase">
             Export JSON
@@ -1190,7 +1192,7 @@ export const MainEditor: React.FC = () => {
 
             <section className="border border-white/5 rounded-xl bg-black/20 p-4">
               <div className="flex items-center justify-between gap-4 mb-3">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">MMSS Quality Report</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">{t('main.quality_report')}</p>
                 <p className={cn('text-[10px] font-mono', qualityReport?.valid ? 'text-emerald-300' : 'text-amber-300')}>
                   {qualityReport ? `${qualityReport.score}/100` : 'n/a'}
                 </p>
@@ -1232,7 +1234,7 @@ export const MainEditor: React.FC = () => {
 
             <section className="border border-white/5 rounded-xl bg-black/20 p-4">
               <div className="flex items-center justify-between gap-4 mb-3">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Generation Debug Trace</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">{t('main.debug_trace')}</p>
                 <p className="text-[10px] font-mono text-zinc-600">
                   {generationTrace ? new Date(generationTrace.timestamp).toLocaleTimeString() : 'no trace'}
                 </p>
@@ -1283,8 +1285,8 @@ export const MainEditor: React.FC = () => {
 
             <section className="border border-white/5 rounded-xl bg-black/20 p-4">
               <div className="flex items-center justify-between gap-4 mb-3">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Library Block Inspector</p>
-                <p className="text-[10px] font-mono text-zinc-600">{selectedLibraryBlock?.name || 'No block selected'}</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">{t('main.library_inspector')}</p>
+                <p className="text-[10px] font-mono text-zinc-600">{selectedLibraryBlock?.name || t('main.no_block_selected')}</p>
               </div>
               <div className="text-[10px] text-zinc-500 mb-3">
                 Click any library block on the left or any candidate block here to inspect its full payload without reloading the page.
@@ -1301,10 +1303,10 @@ export const MainEditor: React.FC = () => {
               disabled={isGenerating || !aiPrompt || !approvedBlockIds.length || aiModel !== 'mistral' || mistralPipelineMode !== 'search-plan'}
               className="w-full py-4 bg-emerald-500 text-bg-deep text-[10px] font-black rounded-xl uppercase tracking-[0.2em] shadow-xl disabled:opacity-30"
             >
-              Generate with Approved Context
+              {t('main.generate_approved')}
             </button>
             <button onClick={saveToLocal} className="w-full py-4 bg-white text-bg-deep text-[10px] font-black rounded-xl uppercase tracking-[0.2em] shadow-xl">
-              Commit to Storage
+              {t('main.commit_storage')}
             </button>
           </div>
         </aside>

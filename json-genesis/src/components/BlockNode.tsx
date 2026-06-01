@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useTranslation } from 'react-i18next';
 import { 
   Braces, 
   List, 
@@ -79,6 +80,7 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
   tagColorMap = {},
   depth = 0 
 }) => {
+  const { t } = useTranslation();
   const config = TYPE_CONFIG[block.type];
   const Icon = config.icon;
   const tagColor = tagColorMap[block.key];
@@ -168,8 +170,8 @@ export const BlockNode: React.FC<BlockNodeProps> = ({
                 onChange={handleValueChange}
                 className="bg-transparent border-none text-pink-400 text-xs font-mono outline-none cursor-pointer hover:text-pink-300 transition-colors"
               >
-                <option value="true" className="bg-bg-panel text-pink-400">true</option>
-                <option value="false" className="bg-bg-panel text-pink-400">false</option>
+                <option value="true" className="bg-white text-black">{t('block.boolean.true')}</option>
+                <option value="false" className="bg-white text-black">{t('block.boolean.false')}</option>
               </select>
             )}
             {(block.type === 'object' || block.type === 'array') && (

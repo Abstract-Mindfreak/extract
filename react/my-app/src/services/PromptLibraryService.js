@@ -1,4 +1,6 @@
 const PROMPT_LIBRARY_PATH = '/library/prompt-library-blocks';
+const MMSS_LIBRARY_STATE_ENDPOINT = 'http://localhost:3456/api/mmss/library-state';
+const PROMPT_LIBRARY_BLOCKS_ENDPOINT = 'http://localhost:3456/api/prompt-library/blocks';
 
 class PromptLibraryService {
   constructor() {
@@ -11,8 +13,19 @@ class PromptLibraryService {
     if (this.loaded) return this.blocks;
 
     try {
-      // Try to load from backend API first
-      const response = await fetch('/api/prompt-library/blocks');
+      const response = await fetch(MMSS_LIBRARY_STATE_ENDPOINT);
+      if (response.ok) {
+        const data = await response.json();
+        this.blocks = data?.promptLibrary?.blocks || [];
+        this.loaded = true;
+        return this.blocks;
+      }
+    } catch (error) {
+      console.warn('Failed to load MMSS library state, trying block endpoint:', error);
+    }
+
+    try {
+      const response = await fetch(PROMPT_LIBRARY_BLOCKS_ENDPOINT);
       if (response.ok) {
         const data = await response.json();
         this.blocks = data.blocks || [];
@@ -20,7 +33,7 @@ class PromptLibraryService {
         return this.blocks;
       }
     } catch (error) {
-      console.warn('Failed to load from API, trying direct file access:', error);
+      console.warn('Failed to load prompt library blocks endpoint, trying direct file access:', error);
     }
 
     // Fallback: try to load from local library directory

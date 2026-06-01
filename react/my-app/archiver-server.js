@@ -49,6 +49,7 @@ const MMSS_LIBRARY_STATE_PATH = path.join(MMSS_BRIDGE_DIR, 'mmss-library-state.j
 const MMSS_GENESIS_HANDOFF_PATH = path.join(MMSS_BRIDGE_DIR, 'mmss-genesis-handoff.json');
 const MMSS_IMPORT_QUEUE_PATH = path.join(MMSS_BRIDGE_DIR, 'mmss-import-queue.json');
 const MMSS_MISTRAL_PRESET_PATH = path.join(MMSS_BRIDGE_DIR, 'mmss-mistral-preset.json');
+const PROMPT_DB_LOCAL_LIBRARY_MIRROR_PATH = path.join(__dirname, '..', '..', 'prompt-db-local', 'shared', 'react-prompt-library.json');
 const DEFAULT_MMSS_METRICS_CONTRACT = {
   requiredMetrics: ['V', 'N', 'S', 'D_f', 'G_S', 'R_T'],
   operatorFamilies: ['relation', 'projection', 'constraint', 'transformation'],
@@ -79,7 +80,7 @@ async function readJsonFileSafe(filePath, fallback) {
 }
 
 async function writeJsonFileSafe(filePath, payload) {
-  await ensureMmssBridgeDir();
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
   await fs.writeFile(filePath, JSON.stringify(payload, null, 2), 'utf8');
 }
 
@@ -154,6 +155,19 @@ app.get('/api/mmss/library-state', async (_req, res) => {
   res.json(payload);
 });
 
+app.get('/api/prompt-library/blocks', async (_req, res) => {
+  const payload = await readJsonFileSafe(MMSS_LIBRARY_STATE_PATH, {
+    promptLibrary: { blocks: [], sequences: [] },
+    updatedAt: null,
+  });
+  const promptLibrary = payload?.promptLibrary || { blocks: [], sequences: [] };
+  res.json({
+    blocks: Array.isArray(promptLibrary.blocks) ? promptLibrary.blocks : [],
+    sequences: Array.isArray(promptLibrary.sequences) ? promptLibrary.sequences : [],
+    updatedAt: payload?.updatedAt || null,
+  });
+});
+
 app.post('/api/mmss/library-state', async (req, res) => {
   try {
     const payload = {
@@ -161,6 +175,7 @@ app.post('/api/mmss/library-state', async (req, res) => {
       updatedAt: new Date().toISOString(),
     };
     await writeJsonFileSafe(MMSS_LIBRARY_STATE_PATH, payload);
+    await writeJsonFileSafe(PROMPT_DB_LOCAL_LIBRARY_MIRROR_PATH, payload);
     const blockCount = Array.isArray(payload.promptLibrary?.blocks) ? payload.promptLibrary.blocks.length : 0;
     const sequenceCount = Array.isArray(payload.promptLibrary?.sequences) ? payload.promptLibrary.sequences.length : 0;
     console.log(`[MMSS] library-state updated: ${blockCount} block(s), ${sequenceCount} sequence(s) at ${payload.updatedAt}`);

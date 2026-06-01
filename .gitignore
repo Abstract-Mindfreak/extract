@@ -37,7 +37,8 @@ flowmusic-archiver/producer_login_ready
 flowmusic-archiver/flowmusic_backup_*/
 !flowmusic-archiver/flowmusic_backup_*/.gitkeep
 flowmusic-archiver/producer_backup_*/
-
+prompt-db-local/database/system/generated_blocks/
+prompt-db-local/database/blocks/
 # Archive files
 *.rar
 *.zip

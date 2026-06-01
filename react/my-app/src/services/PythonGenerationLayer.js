@@ -74,6 +74,150 @@ export function updateMemory(blocks, intent) {
   return memory;
 }
 
+export function normalizePromptLibraryBlock(block, index = 0) {
+  const payload = block?.payload?.data || {};
+  const tags = Array.isArray(block?.tags) ? block.tags.filter(Boolean) : [];
+  const keyPaths = Object.keys(payload || {});
+  const serialized = JSON.stringify(payload).toLowerCase();
+  const lowerCategory = String(block?.category || '').toLowerCase();
+  const lowerTags = tags.map((tag) => String(tag).toLowerCase());
+  const lowerName = String(block?.name || '').toLowerCase();
+  const domain = inferDomainFromPromptBlock({ lowerCategory, lowerTags, lowerName, serialized });
+  const layer = inferLayerFromPromptBlock(payload, lowerTags, index);
+  const priority = clampNumber(
+    payload?.priority ??
+      payload?.metrics?.V ??
+      payload?.V ??
+      payload?.weight ??
+      0.55,
+    0.1,
+    1,
+  );
+  const confidence = clampNumber(
+    payload?.confidence ??
+      payload?.metrics?.N ??
+      payload?.N ??
+      0.68,
+    0.1,
+    1,
+  );
+  const phase =
+    payload?.phase ||
+    lowerTags.find((tag) => ["emergence", "stabilization", "shift", "collapse"].includes(tag)) ||
+    "stabilization";
+
+  return {
+    id: block?.id || `prompt_block_${index}`,
+    domain,
+    layer,
+    priority,
+    confidence,
+    phase,
+    tags: Array.from(new Set([...tags, block?.category, ...keyPaths].filter(Boolean))),
+    mutation_ready: true,
+    crossover_ready: true,
+    params: payload?.params || payload?.metrics || {},
+    intent: block?.description || block?.name || `Prompt Library ${domain} block`,
+    payload,
+    sourcePromptBlock: block,
+  };
+}
+
+export function buildGenerationRuntimeFromPromptLibrary(promptBlocks = []) {
+  const normalizedBlocks = promptBlocks.map((block, index) => normalizePromptLibraryBlock(block, index));
+  const blocks = {};
+  const embeddings = { blocks: {} };
+  const edges = {};
+
+  for (const block of normalizedBlocks) {
+    blocks[block.id] = block;
+    embeddings.blocks[block.id] = {
+      vector: buildQueryVector(
+        [
+          block.intent,
+          block.domain,
+          block.phase,
+          ...(block.tags || []),
+          JSON.stringify(block.payload || {}),
+        ].join(" "),
+      ),
+    };
+  }
+
+  for (const block of normalizedBlocks) {
+    const neighbors = normalizedBlocks
+      .filter((candidate) => candidate.id !== block.id)
+      .map((candidate) => ({
+        target: candidate.id,
+        weight: scorePromptLibraryNeighbor(block, candidate),
+      }))
+      .filter((candidate) => candidate.weight > 0.18)
+      .sort((left, right) => right.weight - left.weight)
+      .slice(0, 4);
+    edges[block.id] = neighbors;
+  }
+
+  return {
+    blockIndex: { blocks },
+    graph: { edges },
+    embeddings,
+    stats: {
+      blockCount: normalizedBlocks.length,
+      domains: Array.from(new Set(normalizedBlocks.map((block) => block.domain))),
+      layers: Array.from(new Set(normalizedBlocks.map((block) => block.layer))).sort((a, b) => a - b),
+    },
+  };
+}
+
+function inferDomainFromPromptBlock({ lowerCategory, lowerTags, lowerName, serialized }) {
+  if (hasAnyToken([lowerCategory, lowerName, serialized, ...lowerTags], ["rhythm", "tempo", "beat", "groove"])) {
+    return "Rhythm";
+  }
+  if (hasAnyToken([lowerCategory, lowerName, serialized, ...lowerTags], ["timbre", "texture", "tone", "harmonic"])) {
+    return "Timbre";
+  }
+  if (hasAnyToken([lowerCategory, lowerName, serialized, ...lowerTags], ["space", "stereo", "field", "ambient"])) {
+    return "Space";
+  }
+  if (hasAnyToken([lowerCategory, lowerName, serialized, ...lowerTags], ["logic", "rule", "operator", "schema"])) {
+    return "Logic";
+  }
+  return "Math";
+}
+
+function inferLayerFromPromptBlock(payload, lowerTags, index) {
+  const directLayer = Number(payload?.layer ?? payload?.meta?.layer);
+  if (Number.isFinite(directLayer) && directLayer >= 1 && directLayer <= 5) {
+    return directLayer;
+  }
+  const taggedLayer = lowerTags.find((tag) => /^layer[1-5]$/.test(tag));
+  if (taggedLayer) {
+    return Number(taggedLayer.replace("layer", ""));
+  }
+  return (index % 5) + 1;
+}
+
+function scorePromptLibraryNeighbor(source, target) {
+  let score = 0;
+  if (source.domain === target.domain) score += 0.4;
+  if (Math.abs(source.layer - target.layer) <= 1) score += 0.25;
+  const sourceTags = new Set((source.tags || []).map((tag) => String(tag).toLowerCase()));
+  const targetTags = new Set((target.tags || []).map((tag) => String(tag).toLowerCase()));
+  const overlap = [...sourceTags].filter((tag) => targetTags.has(tag)).length;
+  score += Math.min(overlap / 6, 0.35);
+  return Number(score.toFixed(3));
+}
+
+function hasAnyToken(haystack, needles) {
+  return haystack.some((item) => needles.some((needle) => String(item).includes(needle)));
+}
+
+function clampNumber(value, min, max) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) return min;
+  return Math.min(max, Math.max(min, numeric));
+}
+
 // =========================
 // TEXT UTILS (builder.py)
 // =========================
@@ -746,6 +890,10 @@ export function usePythonGenerationLayer() {
     
     // AI Generation
     generateBlocksWithAI,
+
+    // Prompt Library bridge
+    buildGenerationRuntimeFromPromptLibrary,
+    normalizePromptLibraryBlock,
     
     // Utils
     normalizeText,
