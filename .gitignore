@@ -39,6 +39,8 @@ flowmusic-archiver/flowmusic_backup_*/
 flowmusic-archiver/producer_backup_*/
 prompt-db-local/database/system/generated_blocks/
 prompt-db-local/database/blocks/
+prompt-db-local/shared/
+
 # Archive files
 *.rar
 *.zip
@@ -59,6 +61,7 @@ source/
 
 # React local data (imported tracks)
 react/my-app/public/local-data/
+
 
 # Logs
 *.log
