@@ -4,6 +4,7 @@ function JsonBlockList({
   blocks,
   selectedBlockId,
   onSelect,
+  onOpenInNewTab,
   onDuplicate,
   onDelete,
   onPrepareBind,
@@ -76,6 +77,12 @@ function JsonBlockList({
             onDragStart={(event) => {
               event.dataTransfer.setData("text/plain", block.id);
             }}
+            onMouseDown={(event) => {
+              if (event.button === 1 && onOpenInNewTab) {
+                event.preventDefault();
+                onOpenInNewTab(block.id);
+              }
+            }}
             onClick={() => onSelect(block.id)}
           >
             <div className="library-block-head">
@@ -108,6 +115,11 @@ function JsonBlockList({
               ))}
             </div>
             <div className="library-block-actions">
+              {onOpenInNewTab ? (
+                <button onClick={(event) => { event.stopPropagation(); onOpenInNewTab(block.id); }}>
+                  New Tab
+                </button>
+              ) : null}
               <button onClick={(event) => { event.stopPropagation(); onDuplicate(block.id); }}>Duplicate</button>
               <button onClick={(event) => { event.stopPropagation(); onPrepareBind("block", block.id); }}>Bind</button>
               <button onClick={(event) => { event.stopPropagation(); onDelete(block.id); }}>Delete</button>

@@ -2,18 +2,10 @@ import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import {
   Archive,
   Boxes,
-  ChevronLeft,
   ChevronRight,
   Database,
-  Download,
-  ExternalLink,
-  FolderPlus,
-  GripVertical,
   LayoutTemplate,
   Library,
-  RefreshCw,
-  Rocket,
-  Save,
   Settings,
   Sparkles,
   Workflow,
@@ -22,11 +14,13 @@ import {
 } from "lucide-react";
 import { useTranslation, Trans } from "react-i18next";
 import "./App.css";
-import ASEMasterConsole from "./components/ASEMasterConsole";
+import AseIdeWorkspace from "./components/AseIdeWorkspace";
+import AppModeWorkspace from "./components/AppModeWorkspace";
 import JsonBindingsPanel from "./components/JsonBindingsPanel";
 import JsonBlockEditor from "./components/JsonBlockEditor";
 import JsonBlockList from "./components/JsonBlockList";
 import JsonSequenceBuilder from "./components/JsonSequenceBuilder";
+import PromptIdeWorkspace from "./components/PromptIdeWorkspace";
 import PromptLogicBlocklyPanel from "./components/PromptLogicBlocklyPanel";
 import SectionCard from "./components/SectionCard";
 import { createInitialState } from "./mmss/config";
@@ -91,7 +85,6 @@ const PROMPT_PANEL_DEFAULT_ORDER = [
   "json_bindings_panel",
 ];
 const MMSS_BRIDGE_API_BASE = "http://localhost:3456/api/mmss";
-const TEMPLATE_STREAM_SIDEBAR_STORAGE_KEY = "mmss.templateStreamSidebar.v1";
 const PROMPT_LIBRARY_PANEL_META = {
   json_block_list: {
     label: "Block Library",
@@ -115,18 +108,6 @@ const PROMPT_LIBRARY_PANEL_META = {
   },
 };
 
-function loadStoredTemplateStreamSidebar() {
-  try {
-    const parsed = JSON.parse(window.localStorage.getItem(TEMPLATE_STREAM_SIDEBAR_STORAGE_KEY) || "{}");
-    return {
-      collapsed: Boolean(parsed.collapsed),
-      width: Number.isFinite(parsed.width) ? Math.min(620, Math.max(320, parsed.width)) : 420,
-    };
-  } catch {
-    return { collapsed: false, width: 420 };
-  }
-}
-
 function App() {
   const { t } = useTranslation();
   const sectionRefs = useRef({
@@ -143,14 +124,13 @@ function App() {
     () => createInitialState({ __empty: true })
   );
   const [libraryReady, setLibraryReady] = useState(false);
+  const [, setAseConfigRevision] = useState(0);
   const [promptPanelOrder, setPromptPanelOrder] = useState(loadStoredPromptPanelOrder);
   const [activePromptPanel, setActivePromptPanel] = useState(loadStoredPromptActivePanel);
-  const [streamSidebar, setStreamSidebar] = useState(loadStoredTemplateStreamSidebar);
   const [serviceHealth, setServiceHealth] = useState({
     mistral: { online: false, label: "Unchecked", detail: "http://localhost:3456/api/mistral/status" },
     jsonhero: { online: false, label: "Unchecked", detail: "http://localhost:8787" },
   });
-  const streamSidebarResizeRef = useRef(null);
 
   // Bridge object intentionally captures current render state.
   /* eslint-disable react-hooks/exhaustive-deps */
@@ -166,38 +146,6 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem(PROMPT_ACTIVE_PANEL_STORAGE_KEY, activePromptPanel);
   }, [activePromptPanel]);
-
-  useEffect(() => {
-    window.localStorage.setItem(TEMPLATE_STREAM_SIDEBAR_STORAGE_KEY, JSON.stringify(streamSidebar));
-  }, [streamSidebar]);
-
-  useEffect(() => {
-    const handlePointerMove = (event) => {
-      const resizeState = streamSidebarResizeRef.current;
-      if (!resizeState?.active) return;
-      const nextWidth = window.innerWidth - event.clientX;
-      setStreamSidebar((current) => ({
-        ...current,
-        collapsed: false,
-        width: Math.min(620, Math.max(320, nextWidth)),
-      }));
-    };
-
-    const handlePointerUp = () => {
-      if (!streamSidebarResizeRef.current?.active) return;
-      streamSidebarResizeRef.current = null;
-      document.body.style.cursor = "";
-      document.body.style.userSelect = "";
-    };
-
-    window.addEventListener("mousemove", handlePointerMove);
-    window.addEventListener("mouseup", handlePointerUp);
-
-    return () => {
-      window.removeEventListener("mousemove", handlePointerMove);
-      window.removeEventListener("mouseup", handlePointerUp);
-    };
-  }, []);
 
   useEffect(() => {
     if (!libraryReady) {
@@ -438,13 +386,15 @@ function App() {
       })),
     [t],
   );
-  const aseConfigCount = useMemo(() => {
+  const aseConfigs = (() => {
     try {
-      return JSON.parse(localStorage.getItem(ASE_DB_STORAGE_KEY) || "[]").length;
+      const parsed = JSON.parse(localStorage.getItem(ASE_DB_STORAGE_KEY) || "[]");
+      return Array.isArray(parsed) ? parsed : [];
     } catch {
-      return 0;
+      return [];
     }
-  }, []);
+  })();
+  const aseConfigCount = aseConfigs.length;
   const promptPanelIndex = useMemo(
     () =>
       promptPanelOrder.reduce((map, panelId, index) => {
@@ -466,6 +416,24 @@ function App() {
       ? "PROMPT_BLOCK_UPDATE"
       : "PROMPT_BLOCK_CREATE";
     dispatch({ type: actionType, block });
+  }
+
+  function handleChangeBlockJson(blockId, payloadText) {
+    const block = state.promptLibrary.blocks.find((entry) => entry.id === blockId);
+    if (!block) {
+      throw new Error("Block not found");
+    }
+
+    const parsedPayload = JSON.parse(payloadText || "{}");
+    handlePromptBlockSave({
+      ...block,
+      payload: {
+        ...(block.payload || {}),
+        type: block.payload?.type || "flowmusic.app_prompt",
+        version: block.payload?.version || "1.0",
+        data: parsedPayload,
+      },
+    });
   }
 
   function handleSaveJsonToLibrary(payload, options = {}) {
@@ -575,22 +543,6 @@ function App() {
       type: "append_log",
       message: `Saved JSON to library as "${block.name}".`,
     });
-  }
-
-  function toggleTemplateStreamSidebar() {
-    setStreamSidebar((current) => ({
-      ...current,
-      collapsed: !current.collapsed,
-    }));
-  }
-
-  function startTemplateStreamSidebarResize(event) {
-    streamSidebarResizeRef.current = {
-      active: true,
-      startX: event.clientX,
-    };
-    document.body.style.cursor = "col-resize";
-    document.body.style.userSelect = "none";
   }
 
   function handleQuickSaveStreamPreview() {
@@ -1013,6 +965,14 @@ function App() {
     setPromptPanelOrder(next);
   }
 
+  function handleSaveAseConfigToDatabase(config) {
+    const existing = JSON.parse(localStorage.getItem(ASE_DB_STORAGE_KEY) || "[]");
+    const updated = [...existing, { ...config, savedAt: new Date().toISOString() }];
+    localStorage.setItem(ASE_DB_STORAGE_KEY, JSON.stringify(updated));
+    setAseConfigRevision((value) => value + 1);
+    dispatch({ type: "append_log", message: `ASE config "${config.name}" saved to database.` });
+  }
+
   function handleBatchExportByFormula(formulaInput, modeFromUi, tagPreset) {
     const batch = parseBatchFormula(formulaInput, modeFromUi);
     const scopedBlocks = filterBlocksByPreset(state.promptLibrary.blocks, tagPreset);
@@ -1231,6 +1191,195 @@ function App() {
   }
 
   function renderPromptLibraryStage() {
+    return (
+      <section
+        ref={(node) => { sectionRefs.current.prompt_library = node; }}
+        className="workspace-surface workspace-surface--library is-focused template-stage-panel"
+      >
+        <div className="workspace-surface__head">
+          <div>
+            <span className="workspace-surface__eyebrow">Core Mode 01</span>
+            <h3>Prompt Library</h3>
+            <Trans i18nKey="description">
+              <p>Blocks, sequences, bindings, and unified JSON composition stay accessible here.</p>
+            </Trans>
+          </div>
+          <button className="workspace-surface__action" onClick={() => setExpandedPanel("prompt_library")}>
+            Open Tools
+          </button>
+        </div>
+
+        <div className="workspace-surface__summary">
+          <div className="workspace-summary-card">
+            <span>Focused panel</span>
+            <strong>IDE Workspace</strong>
+          </div>
+          <div className="workspace-summary-card">
+            <span>Active composition</span>
+            <strong>{state.promptLibrary.activeComposition?.blockIds?.length || 0} block(s)</strong>
+          </div>
+          <div className="workspace-summary-card">
+            <span>Merge strategy</span>
+            <strong>{state.promptLibrary.activeComposition?.mergeStrategy || "merge_deep"}</strong>
+          </div>
+        </div>
+
+        <div className="tab-view prompt-library-view">
+          <div className="prompt-library-shell">
+            <div className="prompt-library-topbar">
+              <div className="prompt-library-topbar__head">
+                <div>
+                  <strong>Prompt Workspace</strong>
+                  <span>
+                    {state.promptLibrary.blocks.length} block(s), {state.promptLibrary.sequences.length} sequence(s)
+                  </span>
+                </div>
+                <div className="prompt-library-status">
+                  <span>{libraryReady ? "Ready" : "Idle"}</span>
+                  <span>IDE Workspace</span>
+                </div>
+              </div>
+              <div className="row">
+                <button onClick={handleLoadLibrary} disabled={libraryReady}>
+                  {libraryReady ? "Library Ready" : "Load Library"}
+                </button>
+                <button onClick={handleImportNormalizedPromptAssets}>
+                  Import Session Blocks
+                </button>
+                <button
+                  onClick={() => {
+                    setPromptPanelOrder(PROMPT_PANEL_DEFAULT_ORDER);
+                    setActivePromptPanel(PROMPT_PANEL_DEFAULT_ORDER[0]);
+                  }}
+                >
+                  Reset Layout
+                </button>
+                <button onClick={() => dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_CLEAR" })}>
+                  Clear Composition
+                </button>
+              </div>
+            </div>
+
+            {libraryReady ? (
+              <PromptIdeWorkspace
+                bindingsProps={{
+                  bindings: state.promptLibrary.bindings,
+                  bindingMode: state.promptLibrary.bindingMode,
+                  sequencePressMode: state.promptLibrary.sequencePressMode,
+                  blocks: state.promptLibrary.blocks,
+                  sequences: state.promptLibrary.sequences,
+                  selectedBlockId: state.promptLibrary.selectedBlockId,
+                  selectedSequenceId: state.promptLibrary.selectedSequenceId,
+                  activeComposition: state.promptLibrary.activeComposition,
+                  onSetBindingMode: (bindingMode) =>
+                    dispatch({ type: "PROMPT_SET_BINDING_MODE", bindingMode }),
+                  onSetSequencePressMode: (sequencePressMode) =>
+                    dispatch({ type: "PROMPT_SET_SEQUENCE_PRESS_MODE", sequencePressMode }),
+                  onBindButton: (buttonId, bindingType, targetId) =>
+                    dispatch({ type: "PROMPT_BIND_BUTTON", buttonId, bindingType, targetId }),
+                  onTriggerButton: (buttonId) => dispatch({ type: "PROMPT_TRIGGER_BUTTON", buttonId }),
+                  onClearComposition: () => dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_CLEAR" }),
+                  onSaveCompositionAsSequence: () =>
+                    dispatch({
+                      type: "PROMPT_SAVE_COMPOSITION_AS_SEQUENCE",
+                      name: `Composition ${state.promptLibrary.sequences.length + 1}`,
+                      description: "Saved from binding panel",
+                    }),
+                  onExportComposition: (payload, label) => handleExportPayload(payload, label),
+                  onPrepareBind: handlePrepareBind,
+                  onImportLibrary: handleImportLibrary,
+                  onExportLibrary: handleExportLibrary,
+                  onExportBlocksAsFiles: handleExportBlocksAsFiles,
+                  onLoadLibrary: handleLoadLibrary,
+                  libraryReady,
+                }}
+                blocklyProps={{
+                  blocks: state.promptLibrary.blocks,
+                  sequences: state.promptLibrary.sequences,
+                  sourceJson:
+                    selectedBlock?.payload?.data ||
+                    state.promptLibrary.activeComposition.combinedJson?.data ||
+                    state.promptLibrary.activeComposition.combinedJson,
+                  initialContext: state.promptLibrary.activeComposition.context || DEFAULT_BLOCKLY_CONTEXT,
+                  initialWorkspaceXml:
+                    state.promptLibrary.activeComposition.blocklyWorkspaceXml ||
+                    DEFAULT_BLOCKLY_WORKSPACE_XML,
+                  onWorkspaceXmlChange: (workspaceXml) =>
+                    dispatch({
+                      type: "PROMPT_ACTIVE_COMPOSITION_SET_FROM_BLOCKLY",
+                      blockIds: state.promptLibrary.activeComposition.blockIds,
+                      mergeStrategy: state.promptLibrary.activeComposition.mergeStrategy,
+                      workspaceXml,
+                      context: state.promptLibrary.activeComposition.context || DEFAULT_BLOCKLY_CONTEXT,
+                    }),
+                  onSetActiveComposition: handleSetActiveCompositionFromBlockly,
+                  onClearActiveComposition: () => dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_CLEAR" }),
+                }}
+                blocks={state.promptLibrary.blocks}
+                logs={state.mmss?.logs || []}
+                onChangeBlockJson={handleChangeBlockJson}
+                onDeleteBlock={(blockId) => dispatch({ type: "PROMPT_BLOCK_DELETE", blockId })}
+                onDuplicateBlock={(blockId) => dispatch({ type: "PROMPT_BLOCK_DUPLICATE", blockId })}
+                onExportBlock={(payload, name) => handleExportPayload(payload, `${name || "block"}_payload`)}
+                onPrepareBind={handlePrepareBind}
+                onSaveBlock={handlePromptBlockSave}
+                onSaveToLibrary={handleSaveJsonToLibrary}
+                onSelectBlock={(blockId) => dispatch({ type: "PROMPT_SELECT_BLOCK", blockId })}
+                selectedBlock={selectedBlock}
+                selectedBlockId={state.promptLibrary.selectedBlockId}
+                sequenceBuilderProps={{
+                  blocks: state.promptLibrary.blocks,
+                  sequences: state.promptLibrary.sequences,
+                  selectedSequenceId: state.promptLibrary.selectedSequenceId,
+                  activeComposition: state.promptLibrary.activeComposition,
+                  onSelectSequence: (sequenceId) =>
+                    dispatch({ type: "PROMPT_SELECT_SEQUENCE", sequenceId }),
+                  onDeleteSequence: (sequenceId) => dispatch({ type: "PROMPT_SEQUENCE_DELETE", sequenceId }),
+                  onAddBlock: (blockId) =>
+                    dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_ADD_BLOCK", blockId }),
+                  onRemoveBlock: (index) =>
+                    dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_REMOVE_BLOCK", index }),
+                  onReorder: (fromIndex, toIndex) =>
+                    dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_REORDER", fromIndex, toIndex }),
+                  onSetMergeStrategy: (mergeStrategy) =>
+                    dispatch({ type: "PROMPT_SET_MERGE_STRATEGY", mergeStrategy }),
+                  onSaveCompositionAsSequence: (name, description) =>
+                    dispatch({ type: "PROMPT_SAVE_COMPOSITION_AS_SEQUENCE", name, description }),
+                  onExportSequence: (payload, label) => handleExportPayload(payload, label),
+                  onGeneratePresetComposition: handleGeneratePresetComposition,
+                  onCopyPreview: (payload) => handleExportPayload(payload, "json_preview"),
+                  onSavePreviewFile: handleSavePreviewFile,
+                  onSaveToLibrary: handleSaveJsonToLibrary,
+                  onBatchExport: handleBatchExportByFormula,
+                }}
+                workspaceProps={{
+                  libraryReady,
+                  onClearComposition: () => dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_CLEAR" }),
+                  onImportSessionBlocks: handleImportNormalizedPromptAssets,
+                  onLoadLibrary: handleLoadLibrary,
+                  onResetLayout: () => {
+                    window.localStorage.removeItem("mmss.ide.workspace.v1");
+                    window.location.reload();
+                  },
+                }}
+              />
+            ) : (
+              <SectionCard
+                title="Prompt Library Idle"
+                subtitle="Library data stays unloaded until explicit activation"
+              >
+                <p>
+                  Click <strong>Load Library</strong> to open prompt panels, imports, exports, and sequence tools
+                  inside the unified workspace.
+                </p>
+              </SectionCard>
+            )}
+          </div>
+        </div>
+      </section>
+    );
+
+    // eslint-disable-next-line no-unreachable
     return (
       <section
         ref={(node) => { sectionRefs.current.prompt_library = node; }}
@@ -1597,22 +1746,42 @@ function App() {
           <div className="mode-shell-head mode-shell-head--ase">
             <div>
               <strong>ASE Workspace</strong>
-              <span>Unified modules, pipeline order, and direct MMSS builder handoff.</span>
+              <span>ASE workspace now runs inside flexlayout-react with movable tabs, borders, and popout support.</span>
             </div>
             <div className="mode-shell-status">
               <span>{aseConfigCount} saved configs</span>
-              <span>Builder linked</span>
+              <span>Flex layout active</span>
             </div>
           </div>
-          <ASEMasterConsole
-            onSendToSequenceBuilder={handleApplyAseUnifiedToSequenceBuilder}
-            onSaveToLibrary={handleSaveJsonToLibrary}
-            onSaveToDatabase={(config) => {
-              const existing = JSON.parse(localStorage.getItem(ASE_DB_STORAGE_KEY) || "[]");
-              const updated = [...existing, { ...config, savedAt: new Date().toISOString() }];
-              localStorage.setItem(ASE_DB_STORAGE_KEY, JSON.stringify(updated));
-              dispatch({ type: "append_log", message: `ASE config "${config.name}" saved to database.` });
+          <AseIdeWorkspace
+            activeComposition={activeComposition}
+            activeModeLabel={activeModeMeta.label}
+            aseConfigs={aseConfigs}
+            heroMetrics={heroMetrics}
+            logs={state.mmss?.logs || []}
+            onCheckServiceStatus={handleCheckServiceStatus}
+            onExportPreview={handleExportPayload}
+            onOpenInJsonHero={handleOpenInJsonHero}
+            onOpenPromptLibrary={() => {
+              setActiveTab("prompt_library");
+              setActivePromptPanel("json_block_list");
             }}
+            onOpenSequenceBuilder={() => {
+              setActiveTab("prompt_library");
+              setActivePromptPanel("json_sequence_builder");
+            }}
+            onPushPreviewToGenesis={handlePushPreviewToGenesis}
+            onQuickSavePreview={handleQuickSaveStreamPreview}
+            onSaveToDatabase={handleSaveAseConfigToDatabase}
+            onSaveToLibrary={handleSaveJsonToLibrary}
+            onSavePreviewFile={handleSavePreviewFile}
+            onSendToSequenceBuilder={handleApplyAseUnifiedToSequenceBuilder}
+            promptBlockCount={state.promptLibrary.blocks.length}
+            sequenceCount={state.promptLibrary.sequences.length}
+            serviceHealth={serviceHealth}
+            streamFeedback={streamFeedback}
+            streamPreviewPayload={streamPreviewPayload}
+            streamPreviewText={streamPreviewText}
           />
         </div>
       </section>
@@ -1758,19 +1927,6 @@ function App() {
         </div>
       </section>
     );
-  }
-
-  function renderActiveStageSection() {
-    if (activeTab === "prompt_library") {
-      return renderPromptLibraryStage();
-    }
-    if (activeTab === "archives") {
-      return renderArchivesStage();
-    }
-    if (activeTab === "json_genesis") {
-      return renderJsonGenesisStage();
-    }
-    return renderAseStage();
   }
 
   return (
@@ -2042,155 +2198,30 @@ function App() {
             </div>
           </header>
 
-          <div className="workspace-core-grid template-stage-grid">
-            <div className="template-stage-column">
-              {renderActiveStageSection()}
-            </div>
-
-            <aside
-              className={`template-stream-sidebar ${streamSidebar.collapsed ? "is-collapsed" : ""}`}
-              style={{ width: streamSidebar.collapsed ? 58 : streamSidebar.width }}
-            >
-              <button
-                type="button"
-                className="template-stream-sidebar__resize-handle"
-                onMouseDown={startTemplateStreamSidebarResize}
-                aria-label={t("stream.resize")}
-                title={t("stream.resize")}
-              >
-                <GripVertical size={14} />
-              </button>
-              <div className="template-stream-sidebar__head">
-                <div className="template-stream-sidebar__title">
-                  <ChevronRight size={16} />
-                  <span>{activeModeMeta.label.toUpperCase()} STREAM</span>
-                </div>
-                <div className="template-stream-sidebar__controls">
-                  {!streamSidebar.collapsed ? (
-                    <div className="template-stream-sidebar__status">
-                      <span className="template-stream-sidebar__dot" />
-                      <strong>{activeTab === "ase_console" ? t("stream.active") : t("stream.synced")}</strong>
-                    </div>
-                  ) : null}
-                  <button
-                    type="button"
-                    className="template-stream-sidebar__toggle"
-                    onClick={toggleTemplateStreamSidebar}
-                    aria-label={streamSidebar.collapsed ? t("stream.show_sidebar") : t("stream.hide_sidebar")}
-                    title={streamSidebar.collapsed ? t("stream.show_sidebar") : t("stream.hide_sidebar")}
-                  >
-                    {streamSidebar.collapsed ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
-                  </button>
-                </div>
-              </div>
-
-              {!streamSidebar.collapsed ? (
-              <>
-              <div className="template-stream-card template-stream-card--feedback">
-                <div className="template-stream-card__eyebrow">
-                  <Sparkles size={12} />
-                  <span>{t("stream.feedback")}</span>
-                </div>
-                <p>{streamFeedback}</p>
-              </div>
-
-              <div className="template-stream-metrics">
-                {heroMetrics.map((metric) => (
-                  <div key={metric.id} className="template-stream-metric">
-                    <span>{metric.label}</span>
-                    <strong>{metric.value}</strong>
-                  </div>
-                ))}
-              </div>
-
-              <div className="template-stream-card template-stream-card--json">
-                <div className="template-stream-card__eyebrow">
-                  <div className="template-stream-card__eyebrow-main">
-                    <Database size={12} />
-                    <span>{t("stream.unified_preview")}</span>
-                  </div>
-                  <button
-                    className="ui-action-btn ui-action-btn--library ui-action-btn--icon"
-                    onClick={handleQuickSaveStreamPreview}
-                    title={t("library.quick_save")}
-                    aria-label={t("library.quick_save")}
-                  >
-                    <FolderPlus size={14} />
-                  </button>
-                </div>
-                <pre>{streamPreviewText}</pre>
-              </div>
-
-              <div className="template-stream-card template-stream-card--logs">
-                <div className="template-stream-card__eyebrow">
-                  <Workflow size={12} />
-                  <span>Recent Activity</span>
-                </div>
-                <div className="template-stream-log-list">
-                  {activityLogs.length ? (
-                    activityLogs.map((entry, index) => (
-                      <div key={`${entry}-${index}`} className="template-stream-log-item">
-                        {entry}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="template-stream-log-item is-empty">No activity yet.</div>
-                  )}
-                </div>
-              </div>
-
-              <div className="template-stream-actions">
-                <button
-                  className="template-stream-actions__primary"
-                  onClick={() => {
-                    if (activeTab === "prompt_library" && !libraryReady) {
-                      handleLoadLibrary();
-                      return;
-                    }
-                    setExpandedPanel(activeTab);
-                  }}
-                >
-                  {activeTab === "prompt_library" && !libraryReady ? t("stream.load_library") : `${t("stream.view_mode")} ${activeModeMeta.label.toUpperCase()}`}
-                </button>
-                <div className="template-stream-actions__row">
-                  <button className="ui-action-btn ui-action-btn--export" onClick={() => handleExportPayload(streamPreviewPayload, `${activeModeMeta.label}_preview`)}>
-                    <Download size={14} />
-                    {t("stream.copy_preview")}
-                  </button>
-                  <button className="ui-action-btn ui-action-btn--neutral" onClick={() => handleSavePreviewFile(streamPreviewPayload)}>
-                    <Save size={14} />
-                    Save JSON
-                  </button>
-                </div>
-                <div className="template-stream-actions__row">
-                  <button className="ui-action-btn ui-action-btn--library" onClick={handleQuickSaveStreamPreview}>
-                    <FolderPlus size={14} />
-                    {t("stream.quick_save")}
-                  </button>
-                  <button className="ui-action-btn ui-action-btn--open" onClick={() => handleOpenInJsonHero(streamPreviewPayload, "Stream preview")}>
-                    <ExternalLink size={14} />
-                    {t("stream.open_jsonhero")}
-                  </button>
-                </div>
-                <div className="template-stream-actions__row">
-                  <button className="ui-action-btn ui-action-btn--send" onClick={() => handlePushPreviewToGenesis()}>
-                    <Rocket size={14} />
-                    Send Preview
-                  </button>
-                  <button className="ui-action-btn ui-action-btn--open" onClick={handleCheckServiceStatus}>
-                    <RefreshCw size={14} />
-                    {t("status.check")}
-                  </button>
-                </div>
-              </div>
-              </>
-              ) : (
-                <div className="template-stream-sidebar__collapsed-body">
-                  <span>{activeModeMeta.label}</span>
-                </div>
-              )}
-            </aside>
-          </div>
+          <AppModeWorkspace
+            activeModeLabel={activeModeMeta.label}
+            activeTab={activeTab}
+            activityLogs={activityLogs}
+            heroMetrics={heroMetrics}
+            onCheckServiceStatus={handleCheckServiceStatus}
+            onExportPreview={handleExportPayload}
+            onOpenInJsonHero={handleOpenInJsonHero}
+            onPushPreviewToGenesis={handlePushPreviewToGenesis}
+            onQuickSavePreview={handleQuickSaveStreamPreview}
+            onSavePreviewFile={handleSavePreviewFile}
+            onSelectMode={(modeId) => {
+              setActiveTab(modeId);
+              setExpandedPanel(null);
+            }}
+            renderAse={renderAseStage}
+            renderArchives={renderArchivesStage}
+            renderJsonGenesis={renderJsonGenesisStage}
+            renderPromptLibrary={renderPromptLibraryStage}
+            serviceHealth={serviceHealth}
+            streamFeedback={streamFeedback}
+            streamPreviewPayload={streamPreviewPayload}
+            streamPreviewText={streamPreviewText}
+          />
         </div>
       </main>
     </div>

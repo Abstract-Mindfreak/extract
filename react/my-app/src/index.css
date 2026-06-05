@@ -1,3 +1,5 @@
+@import "flexlayout-react/style/combined.css";
+
 * {
   box-sizing: border-box;
 }

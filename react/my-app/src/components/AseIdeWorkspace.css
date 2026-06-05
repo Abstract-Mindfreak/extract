@@ -1,0 +1,111 @@
+.ase-ide-shell {
+  min-height: 900px;
+}
+
+.ase-flex-panel {
+  background: rgba(10, 14, 22, 0.82);
+  border: 1px solid rgba(103, 232, 249, 0.14);
+  border-radius: 20px;
+}
+
+.ase-handoff-grid,
+.ase-service-list,
+.ase-config-list {
+  display: grid;
+  gap: 12px;
+}
+
+.ase-handoff-grid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.ase-handoff-card,
+.ase-service-card,
+.ase-config-card {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(103, 232, 249, 0.12);
+}
+
+.ase-handoff-card span,
+.ase-handoff-card small,
+.ase-service-card span,
+.ase-service-card small,
+.ase-config-card span,
+.ase-config-card small {
+  display: block;
+}
+
+.ase-handoff-card span,
+.ase-handoff-card small,
+.ase-service-card span,
+.ase-service-card small,
+.ase-config-card span,
+.ase-config-card small {
+  color: #9eb0c8;
+}
+
+.ase-handoff-card strong,
+.ase-service-card strong,
+.ase-config-card strong {
+  display: block;
+  margin: 6px 0;
+}
+
+.ase-service-card.is-online {
+  border-color: rgba(74, 222, 128, 0.26);
+}
+
+.ase-service-card.is-offline {
+  border-color: rgba(248, 113, 113, 0.22);
+}
+
+.ase-json-panel {
+  padding-bottom: 12px;
+}
+
+.ase-feedback-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(103, 232, 249, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.ase-feedback-card p {
+  margin: 0;
+  color: #dfe7f3;
+  line-height: 1.45;
+}
+
+.ase-stream-preview {
+  min-height: 720px;
+  margin: 0;
+  padding: 16px;
+  overflow: auto;
+  border-radius: 16px;
+  border: 1px solid rgba(103, 232, 249, 0.14);
+  background: rgba(4, 9, 15, 0.84);
+  color: #dfe7f3;
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ase-ide-popout {
+  height: 100vh;
+}
+
+.flexlayout__theme_alpha_light .ase-flex-panel,
+.flexlayout__theme_alpha_light .ase-handoff-card,
+.flexlayout__theme_alpha_light .ase-service-card,
+.flexlayout__theme_alpha_light .ase-config-card,
+.flexlayout__theme_alpha_light .ase-stream-preview {
+  background: rgba(255, 255, 255, 0.92);
+  color: #0d1726;
+}

@@ -14,24 +14,61 @@ export default function PlayerBar() {
   const { currentTrack, setCurrentTrack, filteredTracks } = useTrackStore();
 
   useEffect(() => {
-    if (currentTrack && audioRef.current) {
-      audioRef.current.src = currentTrack.audioUrl;
-      audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {
-        // Auto-play blocked
+    let cancelled = false;
+
+    async function syncTrackPlayback() {
+      if (!currentTrack || !audioRef.current) {
         setIsPlaying(false);
-      });
+        setCurrentTime(0);
+        setDuration(0);
+        return;
+      }
+
+      const audio = audioRef.current;
+      setIsPlaying(false);
+      setCurrentTime(0);
+      setDuration(0);
+
+      if (audio.src !== currentTrack.audioUrl) {
+        audio.pause();
+        audio.src = currentTrack.audioUrl;
+        audio.load();
+      }
+
+      try {
+        await audio.play();
+        if (!cancelled) {
+          setIsPlaying(true);
+        }
+      } catch (error) {
+        if (!cancelled && error?.name !== 'AbortError') {
+          setIsPlaying(false);
+        }
+      }
     }
+
+    void syncTrackPlayback();
+
+    return () => {
+      cancelled = true;
+    };
   }, [currentTrack]);
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     if (!audioRef.current || !currentTrack) return;
     
     if (isPlaying) {
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
-      audioRef.current.play();
-      setIsPlaying(true);
+      try {
+        await audioRef.current.play();
+        setIsPlaying(true);
+      } catch (error) {
+        if (error?.name !== 'AbortError') {
+          setIsPlaying(false);
+        }
+      }
     }
   };
 
