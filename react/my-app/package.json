@@ -27,11 +27,12 @@
     "eject": "react-scripts eject",
     "sync:server": "node sync-server/server.js",
     "archiver:server": "node archiver-server.js",
+    "agent:server": "..\\..\\venv\\Scripts\\python.exe -m uvicorn react_agent.flowmusic_agent_server:app --reload --port 8766 --app-dir ..\\..",
     "json:genesis:dev": "cd ../../json-genesis && npm run dev",
     "jsonhero:dev": "cd ../../gitprojects/jsonhero-web && npm run build && npm start",
     "import": "ts-node scripts/import-cli.ts",
     "mmss:magnetic:server": "..\\..\\venv\\Scripts\\python.exe -m uvicorn main:app --reload --port 8001 --app-dir ..\\..\\mmss-magnetic-server",
-    "dev:full": "concurrently \"npm start\" \"npm run archiver:server\" \"npm run mmss:magnetic:server\" \"npm run json:genesis:dev\" \"npm run jsonhero:dev\""
+    "dev:full": "concurrently \"npm start\" \"npm run archiver:server\" \"npm run agent:server\" \"npm run mmss:magnetic:server\" \"npm run json:genesis:dev\" \"npm run jsonhero:dev\""
   },
   "devDependencies": {
     "concurrently": "^8.0.0",

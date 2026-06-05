@@ -384,6 +384,8 @@ function StreamLogsPanel({ activityLogs }) {
 function ServicesPanel({ onCheckServiceStatus, serviceHealth }) {
   const services = [
     { id: "mistral", name: "Mistral", ...serviceHealth.mistral },
+    { id: "ollama", name: "Ollama", ...serviceHealth.ollama },
+    { id: "agents", name: "Flowmusic Agents", ...serviceHealth.agents },
     { id: "jsonhero", name: "JSON Hero", ...serviceHealth.jsonhero },
   ];
 

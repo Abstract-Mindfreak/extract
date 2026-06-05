@@ -27,6 +27,9 @@ const PRODUCER_BASE_URL = 'https://www.flowmusic.app';
 const PRODUCER_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36';
 const MISTRAL_API_BASE = 'https://api.mistral.ai/v1';
 const MISTRAL_MODEL = process.env.MISTRAL_MODEL || 'mistral-large-latest';
+const OLLAMA_API_BASE = process.env.OLLAMA_API_BASE || 'http://127.0.0.1:11434/api';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'gemma3:4b';
+const FLOWMUSIC_AGENT_API_BASE = process.env.FLOWMUSIC_AGENT_API_BASE || 'http://127.0.0.1:8766';
 const MISTRAL_MODE_PROFILES = {
   plan: {
     temperature: 0.2,
@@ -65,10 +68,6 @@ const DEFAULT_MMSS_METRICS_CONTRACT = {
 app.use(cors());
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
-
-async function ensureMmssBridgeDir() {
-  await fs.mkdir(MMSS_BRIDGE_DIR, { recursive: true });
-}
 
 async function readJsonFileSafe(filePath, fallback) {
   try {
@@ -144,6 +143,81 @@ app.post('/api/mistral/chat', async (req, res) => {
     res.type('application/json').send(responseText);
   } catch (error) {
     res.status(500).json({ error: error.message || 'Mistral proxy request failed' });
+  }
+});
+
+app.get('/api/ollama/status', async (_req, res) => {
+  try {
+    const response = await fetch(`${OLLAMA_API_BASE}/tags`);
+    const payload = await response.json();
+    if (!response.ok) {
+      res.status(response.status).json({ error: payload });
+      return;
+    }
+
+    const models = Array.isArray(payload?.models) ? payload.models : [];
+    const modelNames = models
+      .map((item) => item?.model || item?.name)
+      .filter(Boolean);
+    res.json({
+      configured: true,
+      available: true,
+      source: 'local_ollama',
+      defaultModel: OLLAMA_MODEL,
+      recommendedModel: 'gemma3:4b',
+      models: modelNames,
+      hasGemma: modelNames.some((name) => String(name).startsWith('gemma')),
+      note: 'Local Ollama endpoint detected. The current wired Gemma family target is gemma3.',
+    });
+  } catch (error) {
+    res.status(503).json({
+      configured: false,
+      available: false,
+      source: 'missing',
+      defaultModel: OLLAMA_MODEL,
+      error: error.message || 'Ollama status request failed',
+    });
+  }
+});
+
+app.get('/api/agents/status', async (_req, res) => {
+  try {
+    const response = await fetch(`${FLOWMUSIC_AGENT_API_BASE}/health`);
+    const payload = await response.json();
+    if (!response.ok) {
+      res.status(response.status).json(payload);
+      return;
+    }
+    res.json(payload);
+  } catch (error) {
+    res.status(503).json({
+      available: false,
+      provider: 'ollama',
+      default_model: OLLAMA_MODEL,
+      error: error.message || 'Flowmusic agent service unavailable',
+    });
+  }
+});
+
+app.post('/api/agents/generate-flowmusic', async (req, res) => {
+  try {
+    const response = await fetch(`${FLOWMUSIC_AGENT_API_BASE}/generate-flowmusic`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(req.body || {}),
+    });
+    const raw = await response.text();
+    if (!response.ok) {
+      res.status(response.status).type('application/json').send(raw);
+      return;
+    }
+    res.type('application/json').send(raw);
+  } catch (error) {
+    res.status(503).json({
+      error: error.message || 'Flowmusic agent service unavailable',
+    });
   }
 });
 

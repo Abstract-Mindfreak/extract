@@ -129,6 +129,8 @@ function App() {
   const [activePromptPanel, setActivePromptPanel] = useState(loadStoredPromptActivePanel);
   const [serviceHealth, setServiceHealth] = useState({
     mistral: { online: false, label: "Unchecked", detail: "http://localhost:3456/api/mistral/status" },
+    ollama: { online: false, label: "Unchecked", detail: "http://localhost:3456/api/ollama/status" },
+    agents: { online: false, label: "Unchecked", detail: "http://localhost:3456/api/agents/status" },
     jsonhero: { online: false, label: "Unchecked", detail: "http://localhost:8787" },
   });
 
@@ -1007,11 +1009,21 @@ function App() {
     }
   }
   async function handleCheckServiceStatus() {
-    const [mistral, jsonhero] = await Promise.all([
+    const [mistral, ollama, agents, jsonhero] = await Promise.all([
       probeJsonEndpoint("http://localhost:3456/api/mistral/status", (payload) => ({
         online: !!payload?.configured,
         label: payload?.configured ? "Online / env key" : "Offline",
         detail: payload?.defaultModel || "http://localhost:3456/api/mistral/status",
+      })),
+      probeJsonEndpoint("http://localhost:3456/api/ollama/status", (payload) => ({
+        online: !!payload?.available,
+        label: payload?.available ? "Online / local" : "Offline",
+        detail: payload?.defaultModel || "http://localhost:3456/api/ollama/status",
+      })),
+      probeJsonEndpoint("http://localhost:3456/api/agents/status", (payload) => ({
+        online: payload?.available !== false,
+        label: payload?.available === false ? "Offline" : "Online / pydantic",
+        detail: payload?.default_model || payload?.recommended_model || "http://localhost:3456/api/agents/status",
       })),
       probeTextEndpoint("http://localhost:8787", () => ({
         online: true,
@@ -1021,6 +1033,8 @@ function App() {
     ]);
     setServiceHealth({
       mistral,
+      ollama,
+      agents,
       jsonhero,
     });
   }
@@ -1065,6 +1079,8 @@ function App() {
   });
   const serviceCards = [
     { id: "mistral", name: "Mistral", ...serviceHealth.mistral },
+    { id: "ollama", name: "Ollama", ...serviceHealth.ollama },
+    { id: "agents", name: "Flowmusic Agents", ...serviceHealth.agents },
     { id: "jsonhero", name: "JSON Hero", ...serviceHealth.jsonhero },
   ];
   const activeModeMeta = translatedTabs.find((tab) => tab.id === activeTab) || translatedTabs[0];

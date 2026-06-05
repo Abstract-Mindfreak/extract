@@ -18,6 +18,7 @@ import {
   Workflow,
 } from "lucide-react";
 import ASEMasterConsole from "./ASEMasterConsole";
+import FlowmusicAgentPanel from "./ase-variations/flowmusic-agent-panel";
 import GenerationEnginePanel from "./ase-variations/generation-engine-panel";
 import { useAseWorkspaceStore } from "../hooks/useAseWorkspaceStore";
 import "./PromptIdeWorkspace.css";
@@ -142,6 +143,14 @@ function buildDefaultLayout() {
               enableClose: false,
               icon: "python-generation",
             },
+            {
+              id: "ase-flowmusic-agents-tab",
+              type: "tab",
+              name: "Flowmusic Agents",
+              component: "flowmusic-agents",
+              enableClose: false,
+              icon: "flowmusic-agents",
+            },
           ],
         },
         {
@@ -248,6 +257,10 @@ export default function AseIdeWorkspace(props) {
 
     if (component === "python-generation") {
       return <GenerationEnginePanel onSaveToLibrary={props.onSaveToLibrary} />;
+    }
+
+    if (component === "flowmusic-agents") {
+      return <FlowmusicAgentPanel onSaveToLibrary={props.onSaveToLibrary} />;
     }
 
     if (component === "saved-configs") {
@@ -470,6 +483,8 @@ function AseSavedConfigsPanel({ aseConfigs }) {
 function AseServicesPanel({ onCheckServiceStatus, serviceHealth }) {
   const services = [
     { id: "mistral", name: "Mistral", ...serviceHealth.mistral },
+    { id: "ollama", name: "Ollama", ...serviceHealth.ollama },
+    { id: "agents", name: "Flowmusic Agents", ...serviceHealth.agents },
     { id: "jsonhero", name: "JSON Hero", ...serviceHealth.jsonhero },
   ];
 
@@ -647,6 +662,8 @@ function resolveTabIcon(icon) {
       return <Sparkles {...common} />;
     case "python-generation":
       return <Database {...common} />;
+    case "flowmusic-agents":
+      return <Sparkles {...common} />;
     case "database":
       return <Database {...common} />;
     case "metrics":

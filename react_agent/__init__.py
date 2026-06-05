@@ -9,6 +9,7 @@ from .models import (
     TaskResult,
     VerificationStep,
 )
+from .flowmusic_agent_models import FlowmusicAgentRequest, FlowmusicGenerationResponse, OllamaProviderConfig
 
 __all__ = [
     "AgentTask",
@@ -20,4 +21,7 @@ __all__ = [
     "ReactComponent",
     "TaskResult",
     "VerificationStep",
+    "FlowmusicAgentRequest",
+    "FlowmusicGenerationResponse",
+    "OllamaProviderConfig",
 ]
