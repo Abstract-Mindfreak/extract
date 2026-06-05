@@ -1,0 +1,48 @@
+{
+  "task_id": "task-flex-001",
+  "task_type": "workspace_integration",
+  "description": "Add a new movable diagnostics panel to the ASE workspace in react/my-app and keep the root flexlayout shell consistent.",
+  "target_files": [
+    "react/my-app/src/components/AseIdeWorkspace.jsx",
+    "react/my-app/src/components/AseIdeWorkspace.css",
+    "react/my-app/src/App.js"
+  ],
+  "target_components": [
+    "AseIdeWorkspace",
+    "ASEMasterConsole"
+  ],
+  "acceptance_criteria": [
+    "The panel is a real flexlayout-react tab or border tab.",
+    "The panel can be moved between flexlayout areas.",
+    "The app still builds with npm run build."
+  ],
+  "constraints": [
+    {
+      "kind": "path_scope",
+      "value": "Edit only files inside react/my-app unless the task explicitly requires more."
+    },
+    {
+      "kind": "architecture",
+      "value": "Do not introduce a second workspace system outside flexlayout-react."
+    }
+  ],
+  "suggested_edits": [
+    {
+      "file_path": "react/my-app/src/components/AseIdeWorkspace.jsx",
+      "operation": "insert",
+      "description": "Register the new diagnostics panel in the ASE flexlayout model."
+    }
+  ],
+  "verification": [
+    {
+      "kind": "build",
+      "command": "npm run build",
+      "description": "Verify the project still compiles.",
+      "expected_result": "Build completes successfully."
+    }
+  ],
+  "context": {
+    "project": "MMSS React shell",
+    "app_root": "react/my-app"
+  }
+}
