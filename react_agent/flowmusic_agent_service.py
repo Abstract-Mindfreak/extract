@@ -622,6 +622,8 @@ Use these tools to gather context and information before planning the track stru
                 return payload["core_concept"]
             if "description" in payload:
                 return payload["description"]
+        if agent == "normalizer" and "prompt" in payload and isinstance(payload["prompt"], dict):
+            return payload["prompt"]
         return payload
 
     async def _run_step(
@@ -693,9 +695,11 @@ Use these tools to gather context and information before planning the track stru
                     )
                     final_response.raise_for_status()
                     final_data = final_response.json()
-                    payload = json.loads(final_data["choices"][0]["message"]["content"])
+                    content = final_data["choices"][0]["message"].get("content", "{}")
+                    payload = json.loads(content) if content else {}
                 else:
-                    payload = json.loads(message.get("content", "{}"))
+                    content = message.get("content", "{}")
+                    payload = json.loads(content) if content else {}
             else:
                 payload = await client.generate_structured(
                     model=request.provider.model,
