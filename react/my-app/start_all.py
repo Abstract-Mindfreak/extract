@@ -15,7 +15,7 @@ project_root = os.path.dirname(parent_dir)
 archiver_cmd = "npm run archiver:server"
 react_cmd = "npm start"
 flowmusic_agent_cmd = f"{project_root}\\venv\\Scripts\\python.exe -m uvicorn react_agent.flowmusic_agent_server:app --reload --port 8766 --app-dir {project_root}"
-extract_agent_cmd = f"{project_root}\\venv\\Scripts\\python.exe -m uvicorn extract_agent.server:app --reload --port 8000 --app-dir {project_root}"
+extract_agent_cmd = f"{project_root}\\venv\\Scripts\\python.exe -m uvicorn extract_agent.server:app --reload --port 8002 --app-dir {project_root}"
 
 print("Запуск archiver server, React приложения, Flowmusic Agent и Extract Agent...")
 print(f"Рабочая директория: {current_dir}")
