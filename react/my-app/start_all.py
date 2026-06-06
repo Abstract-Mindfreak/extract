@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Запуск archiver server, React приложения и Flowmusic Agent в отдельных терминалах
+Запуск archiver server, React приложения, Flowmusic Agent и Extract Agent в отдельных терминалах
 """
 import subprocess
 import os
@@ -15,10 +15,12 @@ project_root = os.path.dirname(parent_dir)
 archiver_cmd = "npm run archiver:server"
 react_cmd = "npm start"
 flowmusic_agent_cmd = f"{project_root}\\venv\\Scripts\\python.exe -m uvicorn react_agent.flowmusic_agent_server:app --reload --port 8766 --app-dir {project_root}"
+extract_agent_cmd = f"{project_root}\\venv\\Scripts\\python.exe -m uvicorn extract_agent.server:app --reload --port 8000 --app-dir {project_root}"
 
-print("Запуск archiver server, React приложения и Flowmusic Agent...")
+print("Запуск archiver server, React приложения, Flowmusic Agent и Extract Agent...")
 print(f"Рабочая директория: {current_dir}")
 print(f"Родительская директория: {parent_dir}")
+print(f"Корневая директория проекта: {project_root}")
 
 # Запуск archiver server в новом терминале
 archiver_process = subprocess.Popen(
@@ -38,7 +40,13 @@ flowmusic_agent_process = subprocess.Popen(
     creationflags=subprocess.CREATE_NEW_CONSOLE
 )
 
-print("Все три процесса запущены в отдельных терминалах.")
+# Запуск Extract Agent в новом терминале
+extract_agent_process = subprocess.Popen(
+    ["powershell.exe", "-NoExit", "-Command", extract_agent_cmd],
+    creationflags=subprocess.CREATE_NEW_CONSOLE
+)
+
+print("Все четыре процесса запущены в отдельных терминалах.")
 print("Нажмите Enter для закрытия скрипта (процессы продолжат работу)...")
 input()
 
