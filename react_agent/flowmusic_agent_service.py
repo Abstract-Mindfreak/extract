@@ -604,8 +604,23 @@ Use these tools to gather context and information before planning the track stru
     def _flatten_mistral_response(self, payload: dict, agent: str) -> dict:
         if agent == "planner":
             if "track_plan" in payload:
-                return payload["track_plan"]
+                flattened = payload["track_plan"]
+                if "title" not in flattened and "genre" in flattened:
+                    genre = flattened["genre"]
+                    if isinstance(genre, dict):
+                        primary_genre = genre.get("primary", "Untitled")
+                        secondary_genre = genre.get("secondary", "")
+                        title = f"{primary_genre} {secondary_genre}".strip() or "Untitled Track"
+                        flattened["title"] = title
+                return flattened
             if "genre" in payload and len(payload) == 1:
+                if "title" not in payload:
+                    genre = payload["genre"]
+                    if isinstance(genre, dict):
+                        primary_genre = genre.get("primary", "Untitled")
+                        secondary_genre = genre.get("secondary", "")
+                        title = f"{primary_genre} {secondary_genre}".strip() or "Untitled Track"
+                        payload["title"] = title
                 return payload
         if agent == "composer":
             if "track" in payload:
@@ -696,10 +711,10 @@ Use these tools to gather context and information before planning the track stru
                     final_response.raise_for_status()
                     final_data = final_response.json()
                     content = final_data["choices"][0]["message"].get("content", "{}")
-                    payload = json.loads(content) if content else {}
+                    payload = json.loads(content) if content and content.strip() else {}
                 else:
                     content = message.get("content", "{}")
-                    payload = json.loads(content) if content else {}
+                    payload = json.loads(content) if content and content.strip() else {}
             else:
                 payload = await client.generate_structured(
                     model=request.provider.model,
