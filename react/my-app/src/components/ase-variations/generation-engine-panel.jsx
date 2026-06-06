@@ -114,6 +114,91 @@ export default function GenerationEnginePanel({ onSaveToLibrary }) {
     setSelfRules(rules);
   };
 
+  const exportMutations = () => {
+    if (!mutations.length) return;
+    const blob = new Blob([JSON.stringify({ meta: { type: "mutations", count: mutations.length }, mutations }, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `mutations_${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const quickSaveMutationsToLibrary = () => {
+    if (!mutations.length) return;
+    const payload = {
+      meta: {
+        type: "flowmusic.app_prompt",
+        version: "1.0",
+        data: { mode: "mutation", origin: "python_generation_layer" }
+      },
+      blocks: mutations
+    };
+    onSaveToLibrary?.(payload, {
+      name: `Mutation Set ${new Date().toLocaleTimeString()}`,
+      description: `${mutations.length} mutations from Python Generation Layer`,
+      category: "mutation",
+      tags: ["mutation", "python_generation", ...domains.map((domain) => domain.toLowerCase())],
+      color: "#f472b6",
+      icon: "zap",
+    });
+  };
+
+  const exportCrossovers = () => {
+    if (!crossovers.length) return;
+    const blob = new Blob([JSON.stringify({ meta: { type: "crossovers", count: crossovers.length }, crossovers }, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `crossovers_${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const quickSaveCrossoversToLibrary = () => {
+    if (!crossovers.length) return;
+    const payload = {
+      meta: {
+        type: "flowmusic.app_prompt",
+        version: "1.0",
+        data: { mode: "crossover", origin: "python_generation_layer" }
+      },
+      blocks: crossovers
+    };
+    onSaveToLibrary?.(payload, {
+      name: `Crossover Set ${new Date().toLocaleTimeString()}`,
+      description: `${crossovers.length} crossovers from Python Generation Layer`,
+      category: "crossover",
+      tags: ["crossover", "python_generation", ...domains.map((domain) => domain.toLowerCase())],
+      color: "#a78bfa",
+      icon: "git_merge",
+    });
+  };
+
+  const exportSelfRules = () => {
+    if (!selfRules) return;
+    const blob = new Blob([JSON.stringify(selfRules, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `self_rules_${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const quickSaveSelfRulesToLibrary = () => {
+    if (!selfRules) return;
+    onSaveToLibrary?.(selfRules, {
+      name: `Self Rules ${new Date().toLocaleTimeString()}`,
+      description: `${selfRules.generated_rules?.length || 0} rules from Python Generation Layer`,
+      category: "self_rules",
+      tags: ["self_rules", "python_generation", ...domains.map((domain) => domain.toLowerCase())],
+      color: "#fbbf24",
+      icon: "brain",
+    });
+  };
+
   const exportResult = () => {
     if (!generationResult) return;
     const blob = new Blob([JSON.stringify(generationResult, null, 2)], { type: "application/json" });
@@ -419,6 +504,21 @@ export default function GenerationEnginePanel({ onSaveToLibrary }) {
                   <div className="text-cyan-900 italic">Run mutation engine to see results...</div>
                 )}
               </div>
+              
+              <button
+                onClick={exportMutations}
+                disabled={!mutations.length}
+                className="mt-4 w-full py-2 border border-cyan-700 text-cyan-600 hover:bg-cyan-950 font-bold text-xs rounded transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                <Download size={12}/> EXPORT RESULT
+              </button>
+              <button
+                onClick={quickSaveMutationsToLibrary}
+                disabled={!mutations.length}
+                className="mt-3 w-full py-2 border border-emerald-700 text-emerald-300 hover:bg-emerald-950/40 font-bold text-xs rounded transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                <FolderPlus size={12}/> QUICK SAVE TO LIBRARY
+              </button>
             </div>
           </div>
         )}
@@ -469,6 +569,21 @@ export default function GenerationEnginePanel({ onSaveToLibrary }) {
                   <div className="text-cyan-900 italic">Run crossover engine to see results...</div>
                 )}
               </div>
+              
+              <button
+                onClick={exportCrossovers}
+                disabled={!crossovers.length}
+                className="mt-4 w-full py-2 border border-cyan-700 text-cyan-600 hover:bg-cyan-950 font-bold text-xs rounded transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                <Download size={12}/> EXPORT RESULT
+              </button>
+              <button
+                onClick={quickSaveCrossoversToLibrary}
+                disabled={!crossovers.length}
+                className="mt-3 w-full py-2 border border-emerald-700 text-emerald-300 hover:bg-emerald-950/40 font-bold text-xs rounded transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                <FolderPlus size={12}/> QUICK SAVE TO LIBRARY
+              </button>
             </div>
           </div>
         )}
@@ -521,6 +636,21 @@ export default function GenerationEnginePanel({ onSaveToLibrary }) {
                   <div className="text-cyan-900 italic">Run self-rule engine to see results...</div>
                 )}
               </div>
+              
+              <button
+                onClick={exportSelfRules}
+                disabled={!selfRules}
+                className="mt-4 w-full py-2 border border-cyan-700 text-cyan-600 hover:bg-cyan-950 font-bold text-xs rounded transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                <Download size={12}/> EXPORT RESULT
+              </button>
+              <button
+                onClick={quickSaveSelfRulesToLibrary}
+                disabled={!selfRules}
+                className="mt-3 w-full py-2 border border-emerald-700 text-emerald-300 hover:bg-emerald-950/40 font-bold text-xs rounded transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                <FolderPlus size={12}/> QUICK SAVE TO LIBRARY
+              </button>
             </div>
           </div>
         )}
