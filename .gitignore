@@ -61,6 +61,7 @@ source/
 
 # React local data (imported tracks)
 react/my-app/public/local-data/
+/abstract-mind-lab/
 
 
 # Logs

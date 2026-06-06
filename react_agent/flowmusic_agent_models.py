@@ -5,10 +5,10 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 
-class OllamaProviderConfig(BaseModel):
-    provider: Literal["ollama"] = "ollama"
-    base_url: str = Field(default="http://127.0.0.1:11434/api")
-    model: str = Field(default="gemma3:4b")
+class MistralProviderConfig(BaseModel):
+    provider: Literal["mistral"] = "mistral"
+    base_url: str = Field(default="https://api.mistral.ai/v1")
+    model: str = Field(default="mistral-large-latest")
     temperature: float = Field(default=0.35, ge=0.0, le=2.0)
     timeout_seconds: float = Field(default=120.0, ge=5.0, le=600.0)
 
@@ -24,7 +24,7 @@ class FlowmusicAgentRequest(BaseModel):
     output_language: str = Field(default="en")
     include_library_context: bool = Field(default=True)
     library_limit: int = Field(default=6, ge=0, le=12)
-    provider: OllamaProviderConfig = Field(default_factory=OllamaProviderConfig)
+    provider: MistralProviderConfig = Field(default_factory=MistralProviderConfig)
 
 
 class ContextBlockSummary(BaseModel):
@@ -97,6 +97,7 @@ class AgentPassTrace(BaseModel):
     status: Literal["ok", "fallback", "error"]
     summary: str
     payload: dict
+    tools_used: list[str] = Field(default_factory=list)
 
 
 class FlowmusicPromptPayload(BaseModel):
@@ -126,7 +127,7 @@ class FlowmusicGenerationResponse(BaseModel):
     model: str
     request: FlowmusicAgentRequest
     context_blocks: list[ContextBlockSummary] = Field(default_factory=list)
+    archive_tracks: list[dict] = Field(default_factory=list)
     traces: list[AgentPassTrace] = Field(default_factory=list)
     final_payload: FlowmusicPromptPayload
     library_block: dict
-

@@ -9,7 +9,7 @@ from .models import (
     TaskResult,
     VerificationStep,
 )
-from .flowmusic_agent_models import FlowmusicAgentRequest, FlowmusicGenerationResponse, OllamaProviderConfig
+from .flowmusic_agent_models import FlowmusicAgentRequest, FlowmusicGenerationResponse, MistralProviderConfig
 
 __all__ = [
     "AgentTask",
@@ -23,5 +23,5 @@ __all__ = [
     "VerificationStep",
     "FlowmusicAgentRequest",
     "FlowmusicGenerationResponse",
-    "OllamaProviderConfig",
+    "MistralProviderConfig",
 ]

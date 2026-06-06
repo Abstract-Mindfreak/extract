@@ -1,0 +1,13 @@
+{
+  "base_dir": ".",
+  "accounts": {
+    "1": "flowmusic_backup_1",
+    "2": "flowmusic_backup_2",
+    "3": "flowmusic_backup_3",
+    "4": "flowmusic_backup_4"
+  },
+  "default_artist": "AbstractMindfreak",
+  "description_max_bytes": 1024,
+  "logs_dir": "scripts/sync-audio-meta/logs",
+  "resume_state_file": "scripts/sync-audio-meta/state.json"
+}

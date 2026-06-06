@@ -20,8 +20,8 @@ export default function FlowmusicAgentPanel({ onSaveToLibrary }) {
   const [negativeText, setNegativeText] = useState("cheesy EDM lead, lo-fi mud, overcrowded top end");
   const [includeLibraryContext, setIncludeLibraryContext] = useState(true);
   const [libraryLimit, setLibraryLimit] = useState(6);
-  const [model, setModel] = useState("gemma3:4b");
-  const [status, setStatus] = useState({ loading: true, error: "", ollama: null, agent: null });
+  const [model, setModel] = useState("mistral-large-latest");
+  const [status, setStatus] = useState({ loading: true, error: "", mistral: null, agent: null });
   const [result, setResult] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -37,8 +37,8 @@ export default function FlowmusicAgentPanel({ onSaveToLibrary }) {
     library_limit: libraryLimit,
     output_language: "en",
     provider: {
-      provider: "ollama",
-      base_url: "http://127.0.0.1:11434/api",
+      provider: "mistral",
+      base_url: "https://api.mistral.ai/v1",
       model,
       temperature: 0.35,
       timeout_seconds: 120,
@@ -61,24 +61,16 @@ export default function FlowmusicAgentPanel({ onSaveToLibrary }) {
 
     const loadStatus = async () => {
       try {
-        const [ollama, agent] = await Promise.all([
-          orchestrator.getOllamaStatus(),
+        const [mistral, agent] = await Promise.all([
+          orchestrator.getMistralStatus(),
           orchestrator.getFlowmusicAgentStatus(),
         ]);
         if (!cancelled) {
-          setStatus({ loading: false, error: "", ollama, agent });
-          if (Array.isArray(ollama?.models) && ollama.models.includes("gemma3:4b")) {
-            setModel("gemma3:4b");
-          } else if (Array.isArray(ollama?.models) && ollama.models.length) {
-            const firstGemma = ollama.models.find((item) => String(item).startsWith("gemma"));
-            if (firstGemma) {
-              setModel(firstGemma);
-            }
-          }
+          setStatus({ loading: false, error: "", mistral, agent });
         }
       } catch (error) {
         if (!cancelled) {
-          setStatus({ loading: false, error: error.message, ollama: null, agent: null });
+          setStatus({ loading: false, error: error.message, mistral: null, agent: null });
         }
       }
     };
@@ -87,7 +79,7 @@ export default function FlowmusicAgentPanel({ onSaveToLibrary }) {
     return () => {
       cancelled = true;
     };
-  }, [orchestrator]);
+  }, []);
 
   const handleGenerate = async () => {
     setIsGenerating(true);
@@ -109,28 +101,27 @@ export default function FlowmusicAgentPanel({ onSaveToLibrary }) {
     });
   };
 
-  const availableModels = Array.isArray(status.ollama?.models) ? status.ollama.models : [];
+  const availableModels = ["mistral-large-latest", "mistral-medium", "mistral-small", "open-mistral-7b"];
 
   return (
     <div className="ide-panel-shell ase-flex-panel">
       <div className="ide-panel-header">
         <div>
           <strong>Flowmusic Agents</strong>
-          <span>Planner, composer, critic, and normalizer coordinated through Pydantic + local Ollama.</span>
+          <span>Planner, composer, critic, and normalizer coordinated through Pydantic + Mistral AI.</span>
         </div>
       </div>
 
       <div className="ase-feedback-card">
         <Bot size={14} />
         <p>
-          Local provider: <strong>{model}</strong>. The current Ollama Gemma target is <strong>gemma3</strong>;
-          if you asked for Gemma 4, this panel intentionally falls back to the official Gemma family entry that is available.
+          Local provider: <strong>{model}</strong>. Using Mistral AI API for structured generation.
         </p>
       </div>
 
       <div className="ide-workspace-summary-grid">
-        <StatusMetric label="Ollama" value={status.loading ? "Checking" : status.ollama?.available ? "Online" : "Offline"} />
-        <StatusMetric label="Agent API" value={status.loading ? "Checking" : status.agent?.available === false ? "Offline" : "Online"} />
+        <StatusMetric label="Mistral" value={status.loading ? "Checking" : status.mistral?.api_key_configured ? "Configured" : "Not Configured"} />
+        <StatusMetric label="Agent API" value={status.loading ? "Checking" : status.agent?.status === "ok" ? "Online" : "Offline"} />
         <StatusMetric label="Models" value={String(availableModels.length || 0)} />
         <StatusMetric label="Context" value={includeLibraryContext ? `${libraryLimit} blocks` : "Disabled"} />
       </div>
@@ -226,8 +217,12 @@ export default function FlowmusicAgentPanel({ onSaveToLibrary }) {
           body={result?.context_blocks?.length ? result.context_blocks.map((entry) => entry.name).join(", ") : "No context selected yet."}
         />
         <ResultCard
+          title="Archive Tracks"
+          body={result?.archive_tracks?.length ? result.archive_tracks.map((entry) => entry.title).join(", ") : "No archive context yet."}
+        />
+        <ResultCard
           title="Planner/Composer"
-          body={result?.traces?.length ? result.traces.map((trace) => `${trace.agent}: ${trace.status}`).join(" | ") : "No agent trace yet."}
+          body={result?.traces?.length ? result.traces.map((trace) => `${trace.agent}: ${trace.status}${trace.tools_used?.length ? ` [${trace.tools_used.join(", ")}]` : ""}`).join(" | ") : "No agent trace yet."}
         />
         <ResultCard
           title="Final Title"
