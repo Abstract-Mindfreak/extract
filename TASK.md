@@ -1,183 +1,44 @@
+Предыстория и задача:
+Мы интегрируем логи сессий нейросети (LLM-диалогов) из JSON-файлов архива в нашу реляционную базу данных PostgreSQL. Файлы сессий находятся по пути `flowmusic-archiver/**/sessions/*.json`. 
+Нам нужно реализовать гибридный подход: метаданные сессии вынести в индексируемые колонки, весь массив переписки сохранить «как есть» в бинарное поле JSONB, а связь между сессиями и существующими музыкальными треками реализовать через таблицу-мост (многие-ко-многим), используя поле `linked_clip_ids` из JSON.
 
-```markdown
-# TASK: Исправление работы LLM Агента и принудительного вызова инструментов (Mistral Tool Calling Fix)
+Используемый стек: Python 3.11+, SQLModel (SQLAlchemy), PostgreSQL.
 
-## 1. Описание проблемы
-В текущей реализации проекта `extract` ИИ-агент на базе Mistral игнорирует переданные ему инструменты (tools) и возвращает обычный текст вместо структурированного вызова функций. Это ломает слой оркестрации и делает невозможным автоматическое выполнение локальных действий.
+Твоя задача — пошагово выполнить следующие изменения в проекте:
 
-## 2. Цель задачи
-Переработать слой интеграции с Mistral API, промпты и Pydantic-модели таким образом, чтобы модель гарантированно возвращала валидный структурированный JSON, который затем автоматически валидируется через Pydantic и передается на выполнение в локальное приложение.
+1. ОБНОВЛЕНИЕ МОДЕЛЕЙ ДАННЫХ
+В файле `database/models.py` добавь две новые модели и обнови существующую модель `Song`:
+- Модель `SessionSongLink` (таблица `session_song_links`): связующая таблица для связи многие-ко-многим между `chat_sessions` и `songs`. Поля `session_id` и `song_id` являются первичными и внешними ключами с `ondelete="CASCADE"`.
+- Модель `ChatSession` (таблица `chat_sessions`):
+    * `id`: uuid.UUID (primary_key=True, index=True, мапится на `conversation_id` из JSON).
+    * `title`: Optional[str] (index=True)
+    * `user_id`: Optional[uuid.UUID] (index=True)
+    * `project_id`: Optional[uuid.UUID]
+    * `created_at`: datetime (index=True)
+    * `captured_at`: datetime (index=True)
+    * `full_payload`: Dict[str, Any] — должно использовать тип `Column(JSONB)` из `sqlalchemy.dialects.postgresql`.
+    * `songs`: связь `Relationship` к модели `Song` через `link_model=SessionSongLink`.
+- В существующую модель `Song` добавь обратную связь:
+    * `sessions: List["ChatSession"] = Relationship(back_populates="songs", link_model=SessionSongLink)`
 
----
+2. СОЗДАНИЕ ETL-СКРИПТА ДЛЯ ИМПОРТА
+Создай новый файл `scripts/import_sessions.py`. Скрипт должен:
+- Рекурсивно обходить директорию `flowmusic-archiver` (путь брать из переменной окружения `FLOWMUSIC_ARCHIVER_PATH` с дефолтом `flowmusic-archiver`) и искать все файлы внутри папок `sessions/*.json`.
+- Парсить JSON. Использовать `conversation_id` как ID сессии.
+- Быть идемпотентным: если сессия с таким ID уже есть в БД, старую запись нужно удалить (или обновить), чтобы избежать конфликтов primary key при повторных запусках.
+- Корректно парсить даты ISO 8601 (строки вида `2025-11-20T15:30:00Z` должны безопасно преобразовываться в `datetime` с таймзоной UTC).
+- Связывать сессию с треками из `linked.linked_clip_ids`. **Важно:** связь в `SessionSongLink` записывать только в том случае, если `clip_id` физически существует в таблице `songs` (проверять через `select(Song)`), иначе пропускать этот конкретный линк и выводить предупреждение в лог, чтобы не падать по Foreign Key Error.
+- Пакетировать коммиты (делать `db_session.commit()` каждые 50-100 обработанных файлов для оптимизации скорости).
 
-## 3. Пошаговый план реализации
+3. ДОБАВЛЕНИЕ ПОСТГРЕС-ИНДЕКСОВ
+Добавь генерацию индексов в базу данных. Если вы используете миграции Alembic, сгенерируй миграцию. Если БД инициализируется через `init_db()`, убедись, что выполняются следующие SQL-команды или настройки индексов SQLModel:
+- GIN-индекс на поле `full_payload` таблицы `chat_sessions` для быстрого поиска по внутренностям JSON.
+- Стандартный B-tree индекс на `user_id`.
 
-### Шаг 3.1: Модернизация Pydantic схем (Файл схем/моделей)
-Необходимо убедиться, что схемы четко описывают намерения и содержат поле для цепочки рассуждений (Chain-of-Thought), что критически важно для качества работы Mistral.
+План действий для тебя:
+1. Проанализируй текущую структуру файлов `database/models.py` и `database/connection.py`.
+2. Напиши код изменений в `database/models.py`.
+3. Создай скрипт `scripts/import_sessions.py`.
+4. Запусти скрипт или предоставь инструкции по его тестированию.
 
-Создать или полностью обновить существующие модели до следующего вида:
-
-```python
-from pydantic import BaseModel, Field
-from typing import Literal, Optional, Dict, Any
-
-class ExtractionAction(BaseModel):
-    action_type: Literal["extract_text", "extract_links", "download_file", "screenshot"] = Field(
-        ..., 
-        description="Тип действия по извлечению данных, которое необходимо выполнить."
-    )
-    target_url: str = Field(
-        ..., 
-        description="Полный URL-адрес веб-страницы или путь к источнику для обработки."
-    )
-    parameters: Optional[Dict[str, Any]] = Field(
-        default_factory=dict, 
-        description="Дополнительные параметры, такие как селекторы, глубина парсинга или формат."
-    )
-
-class AgentResponseSchema(BaseModel):
-    reasoning: str = Field(
-        ..., 
-        description="Пошаговое логическое обоснование того, почему выбрано именно это действие."
-    )
-    action_required: bool = Field(
-        ..., 
-        description="Флаг, указывающий, требуется ли выполнение локального инструмента (True/False)."
-    )
-    command: Optional[ExtractionAction] = Field(
-        default=None, 
-        description="Объект команды с параметрами. Обязателен, если action_required равен True."
-    )
-
-```
-
-### Шаг 3.2: Переработка Оркестратора и вызова Mistral API
-
-Для обеспечения 100% стабильности Mistral мы переводим агента на работу через **JSON Mode (`response_format={"type": "json_object"}`)**, так как нативный `tools` в неоригинальных клиентах или меньших моделях часто игнорируется. В системный промпт жестко зашивается схема Pydantic.
-
-Обновить код оркестратора (модуль взаимодействия с LLM):
-
-```python
-import json
-from mistralai import Mistral
-from schemas import AgentResponseSchema
-
-class MistralAgentOrchestrator:
-    def __init__(self, api_key: str, model_name: str = "mistral-large-latest"):
-        self.client = Mistral(api_key=api_key)
-        self.model_name = model_name
-
-    def generate_agent_decision(self, user_query: str) -> dict:
-        # Извлекаем чистую JSON-схему из Pydantic модели
-        json_schema_str = json.dumps(AgentResponseSchema.model_json_schema(), ensure_ascii=False)
-        
-        system_prompt = (
-            "Ты — интеллектуальный агент-оркестратор для приложения по извлечению данных (extract).\n"
-            "Твоя задача — проанализировать запрос пользователя и строго определить, какой инструмент нужно вызвать.\n"
-            "Ты должен отвечать ТОЛЬКО в формате JSON.\n"
-            f"Ответ должен строго соответствовать следующей JSON-схеме:\n{json_schema_str}\n"
-            "Запрещено добавлять любой текст до или после JSON-объекта. Не пиши пояснений в теле ответа, "
-            "используй для этого исключительно поле 'reasoning' внутри JSON."
-        )
-
-        messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": f"Запрос пользователя: {user_query}"}
-        ]
-
-        # Выполняем запрос к API с принудительным JSON-форматом
-        response = self.client.chat.complete(
-            model=self.model_name,
-            messages=messages,
-            response_format={"type": "json_object"}
-        )
-
-        raw_content = response.choices[0].message.content
-        
-        # Валидация сырого ответа через Pydantic
-        try:
-            validated_response = AgentResponseSchema.model_validate_json(raw_content)
-        except Exception as validation_error:
-            # Предохранитель на случай некорректного JSON от модели
-            raise ValueError(f"Ошибка валидации ответа модели: {str(validation_error)}. Сырой ответ: {raw_content}")
-
-        return self.execute_orchestration(validated_response)
-
-    def execute_orchestration(self, agent_decision: AgentResponseSchema) -> dict:
-        if not agent_decision.action_required or not agent_decision.command:
-            return {
-                "status": "skipped",
-                "reasoning": agent_decision.reasoning,
-                "result": "Модель решила, что вызов инструментов не требуется."
-            }
-
-        cmd = agent_decision.command
-        
-        # Слой диспетчеризации вызовов реальных инструментов приложения
-        if cmd.action_type == "extract_links":
-            execution_result = f"Успешно запущен сбор ссылок с ресурса {cmd.target_url} с параметрами {cmd.parameters}"
-        elif cmd.action_type == "extract_text":
-            execution_result = f"Успешно запущен сбор текстового контента с ресурса {cmd.target_url}"
-        elif cmd.action_type == "download_file":
-            execution_result = f"Скачивание файла по адресу {cmd.target_url} инициировано."
-        elif cmd.action_type == "screenshot":
-            execution_result = f"Создание скриншота страницы {cmd.target_url} запущено."
-        else:
-            execution_result = f"Неизвестный тип действия: {cmd.action_type}"
-
-        return {
-            "status": "success",
-            "reasoning": agent_decision.reasoning,
-            "action_executed": cmd.action_type,
-            "target": cmd.target_url,
-            "details": execution_result
-        }
-
-```
-
-### Шаг 3.3: Обновление FastAPI Endpoint
-
-Необходимо связать новый оркестратор с эндпоинтом FastAPI, обеспечив корректную обработку ошибок.
-
-```python
-import os
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from orchestrator import MistralAgentOrchestrator
-
-app = FastAPI(title="Extract Data Agent API", version="1.0.0")
-
-# Инициализация оркестратора. API-ключ берется из переменных окружения
-MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "mock-key-if-testing")
-orchestrator = MistralAgentOrchestrator(api_key=MISTRAL_API_KEY)
-
-class UserPromptRequest(BaseModel):
-    prompt: str
-
-@app.post("/api/v1/agent/run")
-async def run_agent_command(request: UserPromptRequest):
-    if not request.prompt.strip():
-        raise HTTPException(status_code=400, detail="Запрос пользователя не может быть пустым.")
-    
-    try:
-        result = orchestrator.generate_agent_decision(request.prompt)
-        return result
-    except ValueError as val_err:
-        raise HTTPException(status_code=422, detail=str(val_err))
-    except Exception as err:
-        raise HTTPException(status_code=500, detail=f"Внутренняя ошибка сервера при работе агента: {str(err)}")
-
-```
-
----
-
-## 4. Критерии приемки задачи (Definition of Done)
-
-1. **Отсутствие синтаксических ошибок:** Код полностью написан на Python 3.10+, отсутствуют заглушки вида `pass` или `...` в критических узлах.
-2. **Гарантированный JSON:** Изменен тип запроса к Mistral на работу через `json_object`.
-3. **Pydantic Валидация:** Ответ от Mistral успешно преобразуется в объект `AgentResponseSchema`. Если модель возвращает невалидную структуру, генерируется понятное исключение, а не падение сервера.
-4. **Рабочий Эндпоинт:** Маршрут `/api/v1/agent/run` успешно принимает POST-запросы и возвращает структурированный ответ с полями `status`, `reasoning` и `details`.
-
-```
-
-```
+Действуй аккуратно, пиши чистый код, обрабатывай исключения `ValueError` при конвертации UUID и логируй процесс выполнения.
