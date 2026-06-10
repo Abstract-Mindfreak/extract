@@ -16,6 +16,23 @@ require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') });
 const archiverAccounts = require('./src/config/flowmusicArchiverAccounts.json');
 const { buildRetrievalIndex, searchRetrievalIndex } = require('./src/services/mmssRetrievalIndex.js');
 const { buildMmssQualityReport } = require('./src/services/mmssQualityReport.js');
+const {
+  DATABASE_URL,
+  clearSettings,
+  clearEntities,
+  countEntities,
+  deleteEntity,
+  deleteSetting,
+  getEntity,
+  getSetting,
+  getStatus: getDatabaseStatus,
+  listEntities,
+  listSettings,
+  setSetting,
+  setSettings,
+  upsertEntities,
+  upsertEntity,
+} = require('./server/postgresPersistence.js');
 
 const app = express();
 const server = http.createServer(app);
@@ -69,6 +86,176 @@ app.use(cors());
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
+app.get('/api/database/status', async (_req, res) => {
+  try {
+    const payload = await getDatabaseStatus();
+    res.json({
+      ...payload,
+      configured: true,
+      source: 'postgresql',
+    });
+  } catch (error) {
+    res.status(503).json({
+      available: false,
+      configured: false,
+      source: 'postgresql',
+      databaseUrl: DATABASE_URL,
+      error: error.message || 'Database unavailable',
+    });
+  }
+});
+
+app.get('/api/persistence/settings/:scope', async (req, res) => {
+  try {
+    const values = await listSettings(req.params.scope);
+    res.json({ scope: req.params.scope, values });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/persistence/settings/:scope/:settingKey', async (req, res) => {
+  try {
+    const stored = await getSetting(req.params.scope, req.params.settingKey);
+    res.json({
+      scope: req.params.scope,
+      key: req.params.settingKey,
+      value: stored?.value ?? null,
+      updatedAt: stored?.updatedAt ?? null,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/persistence/settings/:scope', async (req, res) => {
+  try {
+    const values = req.body?.values && typeof req.body.values === 'object' ? req.body.values : {};
+    const updated = await setSettings(req.params.scope, values);
+    res.json({ ok: true, scope: req.params.scope, values: updated });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/persistence/settings/:scope/:settingKey', async (req, res) => {
+  try {
+    const stored = await setSetting(req.params.scope, req.params.settingKey, req.body?.value ?? null);
+    res.json({
+      ok: true,
+      scope: req.params.scope,
+      key: req.params.settingKey,
+      value: stored.value,
+      updatedAt: stored.updatedAt,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/persistence/settings/:scope/:settingKey', async (req, res) => {
+  try {
+    await deleteSetting(req.params.scope, req.params.settingKey);
+    res.json({ ok: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/persistence/settings/:scope', async (req, res) => {
+  try {
+    await clearSettings(req.params.scope);
+    res.json({ ok: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/persistence/entities/:scope', async (req, res) => {
+  try {
+    const items = await listEntities(req.params.scope);
+    res.json({
+      scope: req.params.scope,
+      items: items.map((item) => item.payload),
+      total: items.length,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/persistence/entities/:scope/:entityKey', async (req, res) => {
+  try {
+    const entity = await getEntity(req.params.scope, req.params.entityKey);
+    if (!entity) {
+      res.status(404).json({ error: 'Entity not found' });
+      return;
+    }
+    res.json(entity.payload);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/persistence/entities/:scope/batch', async (req, res) => {
+  try {
+    const items = Array.isArray(req.body?.items) ? req.body.items : [];
+    const keyField = req.body?.keyField || 'id';
+    const stored = await upsertEntities(req.params.scope, items, keyField);
+    res.json({
+      ok: true,
+      total: stored.length,
+      items: stored.map((item) => item.payload),
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/persistence/entities/:scope/:entityKey', async (req, res) => {
+  try {
+    const stored = await upsertEntity(req.params.scope, req.params.entityKey, req.body?.item ?? req.body ?? {});
+    res.json({
+      ok: true,
+      item: stored.payload,
+      updatedAt: stored.updatedAt,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/persistence/entities/:scope/:entityKey', async (req, res) => {
+  try {
+    await deleteEntity(req.params.scope, req.params.entityKey);
+    res.json({ ok: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/persistence/entities/:scope', async (req, res) => {
+  try {
+    await clearEntities(req.params.scope);
+    res.json({ ok: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/persistence/stats', async (_req, res) => {
+  try {
+    const scopes = ['tracks', 'sessions', 'fragments', 'raw_prompts', 'prompt_blocks', 'prompt_sequences', 'accounts'];
+    const counts = {};
+    for (const scope of scopes) {
+      counts[scope] = await countEntities(scope);
+    }
+    res.json(counts);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 async function readJsonFileSafe(filePath, fallback) {
   try {
     const raw = await fs.readFile(filePath, 'utf8');
@@ -81,6 +268,36 @@ async function readJsonFileSafe(filePath, fallback) {
 async function writeJsonFileSafe(filePath, payload) {
   await fs.mkdir(path.dirname(filePath), { recursive: true });
   await fs.writeFile(filePath, JSON.stringify(payload, null, 2), 'utf8');
+}
+
+async function readDbSettingWithFallback(scope, settingKey, fallback, filePath) {
+  try {
+    const stored = await getSetting(scope, settingKey);
+    if (stored && typeof stored.value !== 'undefined') {
+      return stored.value;
+    }
+  } catch (_error) {
+    // fall through to file fallback
+  }
+
+  if (filePath) {
+    const fileValue = await readJsonFileSafe(filePath, fallback);
+    try {
+      await setSetting(scope, settingKey, fileValue);
+    } catch (_error) {
+      // noop
+    }
+    return fileValue;
+  }
+
+  return fallback;
+}
+
+async function writeDbSettingWithMirror(scope, settingKey, payload, filePath) {
+  await setSetting(scope, settingKey, payload);
+  if (filePath) {
+    await writeJsonFileSafe(filePath, payload);
+  }
 }
 
 app.get('/api/mistral/status', (_req, res) => {
@@ -180,6 +397,51 @@ app.get('/api/ollama/status', async (_req, res) => {
   }
 });
 
+app.post('/api/ollama/generate', async (req, res) => {
+  try {
+    const { model, prompt, stream, options } = req.body || {};
+    const targetModel = model || OLLAMA_MODEL;
+    
+    console.log(
+      `[OLLAMA] model=${targetModel} stream=${stream} temp=${options?.temperature} num_predict=${options?.num_predict}`,
+    );
+    console.log(`[OLLAMA] Target URL: ${OLLAMA_API_BASE}/generate`);
+
+    const response = await fetch(`${OLLAMA_API_BASE}/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: targetModel,
+        prompt,
+        stream: stream || false,
+        options: options || {},
+      }),
+    });
+
+    const responseText = await response.text();
+    console.log('[OLLAMA] Raw response length:', responseText.length);
+    console.log('[OLLAMA] Response status:', response.status);
+    
+    if (!response.ok) {
+      console.error('[OLLAMA] Error response:', responseText);
+      res.status(response.status).json({ error: responseText });
+      return;
+    }
+
+    res.type('application/json').send(responseText);
+  } catch (error) {
+    console.error('[OLLAMA] Request failed:', error);
+    console.error('[OLLAMA] Error details:', error.message);
+    console.error('[OLLAMA] OLLAMA_API_BASE:', OLLAMA_API_BASE);
+    res.status(500).json({ 
+      error: error.message || 'Ollama proxy request failed',
+      details: 'Make sure Ollama is running on the configured endpoint'
+    });
+  }
+});
+
 app.get('/api/agents/status', async (_req, res) => {
   try {
     const response = await fetch(`${FLOWMUSIC_AGENT_API_BASE}/health`);
@@ -222,10 +484,10 @@ app.post('/api/agents/generate-flowmusic', async (req, res) => {
 });
 
 app.get('/api/mmss/library-state', async (_req, res) => {
-  const payload = await readJsonFileSafe(MMSS_LIBRARY_STATE_PATH, {
+  const payload = await readDbSettingWithFallback('mmss', 'library-state', {
     promptLibrary: null,
     updatedAt: null,
-  });
+  }, MMSS_LIBRARY_STATE_PATH);
   res.json(payload);
 });
 
@@ -248,7 +510,7 @@ app.post('/api/mmss/library-state', async (req, res) => {
       promptLibrary: req.body?.promptLibrary || null,
       updatedAt: new Date().toISOString(),
     };
-    await writeJsonFileSafe(MMSS_LIBRARY_STATE_PATH, payload);
+    await writeDbSettingWithMirror('mmss', 'library-state', payload, MMSS_LIBRARY_STATE_PATH);
     await writeJsonFileSafe(PROMPT_DB_LOCAL_LIBRARY_MIRROR_PATH, payload);
     const blockCount = Array.isArray(payload.promptLibrary?.blocks) ? payload.promptLibrary.blocks.length : 0;
     const sequenceCount = Array.isArray(payload.promptLibrary?.sequences) ? payload.promptLibrary.sequences.length : 0;
@@ -260,11 +522,11 @@ app.post('/api/mmss/library-state', async (req, res) => {
 });
 
 app.get('/api/mmss/genesis-handoff', async (_req, res) => {
-  const payload = await readJsonFileSafe(MMSS_GENESIS_HANDOFF_PATH, {
+  const payload = await readDbSettingWithFallback('mmss', 'genesis-handoff', {
     json: null,
     source: null,
     updatedAt: null,
-  });
+  }, MMSS_GENESIS_HANDOFF_PATH);
   res.json(payload);
 });
 
@@ -275,7 +537,7 @@ app.post('/api/mmss/genesis-handoff', async (req, res) => {
       source: req.body?.source ?? 'my-app',
       updatedAt: new Date().toISOString(),
     };
-    await writeJsonFileSafe(MMSS_GENESIS_HANDOFF_PATH, payload);
+    await writeDbSettingWithMirror('mmss', 'genesis-handoff', payload, MMSS_GENESIS_HANDOFF_PATH);
     console.log(`[MMSS] genesis-handoff updated from ${payload.source} at ${payload.updatedAt}`);
     res.json({ ok: true, updatedAt: payload.updatedAt });
   } catch (error) {
@@ -284,13 +546,13 @@ app.post('/api/mmss/genesis-handoff', async (req, res) => {
 });
 
 app.get('/api/mmss/import-queue', async (_req, res) => {
-  const queue = await readJsonFileSafe(MMSS_IMPORT_QUEUE_PATH, []);
+  const queue = await readDbSettingWithFallback('mmss', 'import-queue', [], MMSS_IMPORT_QUEUE_PATH);
   res.json({ items: queue });
 });
 
 app.post('/api/mmss/import-queue', async (req, res) => {
   try {
-    const queue = await readJsonFileSafe(MMSS_IMPORT_QUEUE_PATH, []);
+    const queue = await readDbSettingWithFallback('mmss', 'import-queue', [], MMSS_IMPORT_QUEUE_PATH);
     const nextItem = {
       id: `import_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
       json: req.body?.json ?? null,
@@ -298,7 +560,7 @@ app.post('/api/mmss/import-queue', async (req, res) => {
       createdAt: new Date().toISOString(),
     };
     queue.push(nextItem);
-    await writeJsonFileSafe(MMSS_IMPORT_QUEUE_PATH, queue);
+    await writeDbSettingWithMirror('mmss', 'import-queue', queue, MMSS_IMPORT_QUEUE_PATH);
     console.log(`[MMSS] import queued from ${nextItem.source}: ${nextItem.id}`);
     res.json({ ok: true, item: nextItem });
   } catch (error) {
@@ -309,9 +571,9 @@ app.post('/api/mmss/import-queue', async (req, res) => {
 app.post('/api/mmss/import-queue/ack', async (req, res) => {
   try {
     const ids = Array.isArray(req.body?.ids) ? req.body.ids : [];
-    const queue = await readJsonFileSafe(MMSS_IMPORT_QUEUE_PATH, []);
+    const queue = await readDbSettingWithFallback('mmss', 'import-queue', [], MMSS_IMPORT_QUEUE_PATH);
     const nextQueue = queue.filter((item) => !ids.includes(item.id));
-    await writeJsonFileSafe(MMSS_IMPORT_QUEUE_PATH, nextQueue);
+    await writeDbSettingWithMirror('mmss', 'import-queue', nextQueue, MMSS_IMPORT_QUEUE_PATH);
     res.json({ ok: true, removed: ids.length });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -319,10 +581,10 @@ app.post('/api/mmss/import-queue/ack', async (req, res) => {
 });
 
 app.get('/api/mmss/mistral-preset', async (_req, res) => {
-  const payload = await readJsonFileSafe(MMSS_MISTRAL_PRESET_PATH, {
+  const payload = await readDbSettingWithFallback('mmss', 'mistral-preset', {
     preset: null,
     updatedAt: null,
-  });
+  }, MMSS_MISTRAL_PRESET_PATH);
   res.json(payload);
 });
 
@@ -332,7 +594,7 @@ app.post('/api/mmss/mistral-preset', async (req, res) => {
       preset: req.body?.preset ?? null,
       updatedAt: new Date().toISOString(),
     };
-    await writeJsonFileSafe(MMSS_MISTRAL_PRESET_PATH, payload);
+    await writeDbSettingWithMirror('mmss', 'mistral-preset', payload, MMSS_MISTRAL_PRESET_PATH);
     console.log(`[MMSS] mistral-preset updated at ${payload.updatedAt}`);
     res.json({ ok: true, updatedAt: payload.updatedAt });
   } catch (error) {
@@ -342,10 +604,10 @@ app.post('/api/mmss/mistral-preset', async (req, res) => {
 
 app.post('/api/mmss/retrieval-candidates', async (req, res) => {
   try {
-    const payload = await readJsonFileSafe(MMSS_LIBRARY_STATE_PATH, {
+    const payload = await readDbSettingWithFallback('mmss', 'library-state', {
       promptLibrary: null,
       updatedAt: null,
-    });
+    }, MMSS_LIBRARY_STATE_PATH);
     const promptLibrary = payload?.promptLibrary || { blocks: [] };
     const query = {
       prompt: req.body?.prompt || '',

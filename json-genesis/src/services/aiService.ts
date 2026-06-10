@@ -3,6 +3,8 @@ import { GoogleGenAI } from "@google/genai";
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 const MISTRAL_API_KEY = (import.meta as any).env.VITE_MISTRAL_API_KEY || "";
 const MISTRAL_PROXY_URL = "http://localhost:3456/api/mistral/chat";
+const OLLAMA_PROXY_URL = "http://localhost:3456/api/ollama/generate";
+const OLLAMA_MODEL = (import.meta as any).env.VITE_OLLAMA_MODEL || "gemma2b-mmss-dense";
 type MistralProxyMode = 'plan' | 'generate' | 'validate';
 
 // Re-initialize for each call to ensure latest key is used if it changes
@@ -230,6 +232,75 @@ Return JSON strictly.`;
     return parseJsonFromMistralPayload(data, 'Mistral');
   } catch (err) {
     console.error("Mistral Error:", err);
+    throw err;
+  }
+}
+
+export async function generateWithOllama(prompt: string, structure?: string, options?: GenOptions) {
+  try {
+    options?.onProgress?.('Preparing Ollama request');
+    const modeInstruction = {
+      augment: "Fill in missing values or extend with new meaningful keys.",
+      rewrite: "Completely recreate JSON.",
+      skeleton: "Only structure/keys, values should be null/0."
+    }[options?.mode || 'augment'];
+
+    const fullPrompt = `Mode: ${options?.mode || 'augment'}
+Rules: ${options?.rules || 'None'}
+MMSS Library Context: ${options?.libraryContext || 'None'}
+Context: ${structure || 'None'}
+Action: ${prompt}
+Instruction: ${modeInstruction}
+Return JSON strictly.`;
+
+    options?.onProgress?.('Sending prompt to Ollama');
+    const response = await fetch(OLLAMA_PROXY_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: OLLAMA_MODEL,
+        prompt: fullPrompt,
+        stream: false,
+        options: {
+          temperature: 0.4,
+          num_predict: 4096,
+        },
+      }),
+    });
+
+    const responseText = await response.text();
+    console.log('[Ollama] Raw response:', responseText);
+    
+    if (!response.ok) {
+      throw new Error(`Ollama request failed with HTTP ${response.status}: ${responseText}`);
+    }
+
+    if (!responseText || responseText.trim() === '') {
+      throw new Error('Ollama returned empty response');
+    }
+
+    const data = JSON.parse(responseText);
+    const rawContent = data?.response || '';
+    console.log('[Ollama] Extracted content:', rawContent);
+    
+    const normalizedContent = rawContent
+      .replace(/^```json\s*/i, '')
+      .replace(/^```\s*/i, '')
+      .replace(/\s*```$/i, '')
+      .trim();
+
+    options?.onProgress?.('Parsing Ollama response');
+    try {
+      return JSON.parse(normalizedContent);
+    } catch (error) {
+      throw new Error(
+        `Ollama returned non-JSON content: ${error instanceof Error ? error.message : 'parse failed'} :: ${normalizedContent.slice(0, 400)}`,
+      );
+    }
+  } catch (err) {
+    console.error("Ollama Error:", err);
     throw err;
   }
 }

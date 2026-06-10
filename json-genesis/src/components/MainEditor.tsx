@@ -15,7 +15,7 @@ import {
   Upload,
 } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
-import { generateWithGemini, generateWithMistral, planMistralLibraryQueries, validateWithMistral, type MistralLibraryPlan } from '../services/aiService';
+import { generateWithGemini, generateWithMistral, generateWithOllama, planMistralLibraryQueries, validateWithMistral, type MistralLibraryPlan } from '../services/aiService';
 import { cn } from '../lib/utils';
 import { injectMetaRules, type MmssMetricsContract } from '../services/mmssMetaInjector';
 import { buildMmssQualityReport, type MmssQualityReport } from '../services/mmssValidation';
@@ -105,7 +105,7 @@ type PipelinePreset = {
 
 type GenerationTrace = {
   timestamp: string;
-  model: 'gemini' | 'mistral';
+  model: 'gemini' | 'mistral' | 'ollama';
   mode: 'augment' | 'rewrite' | 'skeleton';
   prompt: string;
   assemblyRules: string;
@@ -161,7 +161,7 @@ export const MainEditor: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isPlanningContext, setIsPlanningContext] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
-  const [aiModel, setAiModel] = useState<'gemini' | 'mistral'>('gemini');
+  const [aiModel, setAiModel] = useState<'gemini' | 'mistral' | 'ollama'>('gemini');
   const [genMode, setGenMode] = useState<'augment' | 'rewrite' | 'skeleton'>('augment');
   const [assemblyRules, setAssemblyRules] = useState(DEFAULT_PRESET.assemblyRules);
   const [aiEventLog, setAiEventLog] = useState<string[]>([]);
@@ -753,7 +753,9 @@ export const MainEditor: React.FC = () => {
       const result =
         aiModel === 'gemini'
           ? await generateWithGemini(aiPrompt, currentStructure, options)
-          : await generateWithMistral(aiPrompt, currentStructure, options);
+          : aiModel === 'mistral'
+            ? await generateWithMistral(aiPrompt, currentStructure, options)
+            : await generateWithOllama(aiPrompt, currentStructure, options);
 
       const nextQualityReport = buildMmssQualityReport(result, MMSS_METRICS_CONTRACT);
       setQualityReport(nextQualityReport);
@@ -990,10 +992,11 @@ export const MainEditor: React.FC = () => {
               {[
                 { id: 'gemini', label: 'Gemini 3-Flash', desc: 'Fast multimodal reasoning' },
                 { id: 'mistral', label: 'Mistral Large 2', desc: 'Precision structural output' },
+                { id: 'ollama', label: 'Локальная Gemma4 e2b Ollama', desc: 'gemma2b-mmss-dense' },
               ].map((model) => (
                 <button
                   key={model.id}
-                  onClick={() => setAiModel(model.id as 'gemini' | 'mistral')}
+                  onClick={() => setAiModel(model.id as 'gemini' | 'mistral' | 'ollama')}
                   className={cn(
                     'w-full flex flex-col p-4 rounded-xl border transition-all text-left',
                     aiModel === model.id ? 'bg-zinc-800/50 border-orange-500/30 shadow-lg' : 'bg-black/20 border-white/5 opacity-70',

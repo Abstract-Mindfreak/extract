@@ -19,6 +19,7 @@ import {
 import JsonBindingsPanel from "./JsonBindingsPanel";
 import JsonBlockEditor from "./JsonBlockEditor";
 import JsonBlockList from "./JsonBlockList";
+import PromptLibraryTopbar from "./PromptLibraryTopbar";
 import PromptLogicBlocklyPanel from "./PromptLogicBlocklyPanel";
 import {
   PromptWorkspacePanel,
@@ -42,6 +43,22 @@ function buildDefaultLayout() {
       tabSetEnableCloseButton: false,
     },
     borders: [
+      {
+        type: "border",
+        location: "top",
+        selected: 0,
+        size: 100,
+        children: [
+          {
+            id: "ide-topbar-tab",
+            type: "tab",
+            name: "Topbar",
+            component: "topbar",
+            enableClose: false,
+            icon: "topbar",
+          },
+        ],
+      },
       {
         type: "border",
         location: "bottom",
@@ -306,6 +323,25 @@ export default function PromptIdeWorkspace(props) {
 
   const factory = (node) => {
     const component = node.getComponent();
+
+    if (component === "topbar") {
+      return (
+        <PromptLibraryTopbar
+          blocks={blocks}
+          sequences={props.sequenceBuilderProps?.sequences || []}
+          libraryReady={props.workspaceProps?.libraryReady || false}
+          activePromptPanelMeta={{
+            label: "IDE Workspace",
+            subtitle: "Unified prompt library workspace",
+          }}
+          onLoadLibrary={props.workspaceProps?.onLoadLibrary}
+          onImportSessionBlocks={props.workspaceProps?.onImportSessionBlocks}
+          onResetLayout={props.workspaceProps?.onResetLayout}
+          onSetActivePromptPanel={() => {}}
+          onClearComposition={props.sequenceBuilderProps?.onClearComposition}
+        />
+      );
+    }
 
     if (component === "block-list") {
       return (
@@ -730,6 +766,8 @@ function resolveTabIcon(icon) {
       return <Boxes {...common} />;
     case "graph":
       return <Workflow {...common} />;
+    case "topbar":
+      return <Boxes {...common} />;
     default:
       return <Boxes {...common} />;
   }

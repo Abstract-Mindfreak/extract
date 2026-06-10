@@ -30,14 +30,13 @@ import {
   createEntityId,
   parsePromptImportText,
   exportPromptLibraryFile,
-  loadPromptLibraryState,
-  savePromptLibraryState,
 } from "./mmss/promptLibrary";
 import { mmssReducer } from "./mmss/reducer";
 import { DEFAULT_BLOCKLY_CONTEXT } from "./mmss/promptTypes";
 import { getThemePalette } from "./mmss/utils";
 import ArchivesPage from "./components/ArchivesPage";
 import storageService from "./services/StorageService";
+import appPersistenceService from "./services/AppPersistenceService";
 
 const APP_TABS = [
   {
@@ -74,9 +73,6 @@ const HERO_METRICS = [
   { id: "library_status", label: "Library status" },
 ];
 
-const PROMPT_PANEL_ORDER_STORAGE_KEY = "mmss.promptPanelOrder.v1";
-const PROMPT_ACTIVE_PANEL_STORAGE_KEY = "mmss.promptActivePanel.v1";
-const ASE_DB_STORAGE_KEY = "mmss.ase.database.v1";
 const PROMPT_PANEL_DEFAULT_ORDER = [
   "json_block_list",
   "prompt_logic_blockly",
@@ -124,11 +120,13 @@ function App() {
     () => createInitialState({ __empty: true })
   );
   const [libraryReady, setLibraryReady] = useState(false);
-  const [, setAseConfigRevision] = useState(0);
-  const [promptPanelOrder, setPromptPanelOrder] = useState(loadStoredPromptPanelOrder);
-  const [activePromptPanel, setActivePromptPanel] = useState(loadStoredPromptActivePanel);
+  const [aseConfigs, setAseConfigs] = useState([]);
+  const [uiStateHydrated, setUiStateHydrated] = useState(false);
+  const [promptPanelOrder, setPromptPanelOrder] = useState(PROMPT_PANEL_DEFAULT_ORDER);
+  const [activePromptPanel, setActivePromptPanel] = useState(PROMPT_PANEL_DEFAULT_ORDER[0]);
   const [serviceHealth, setServiceHealth] = useState({
     mistral: { online: false, label: "Unchecked", detail: "http://localhost:3456/api/mistral/status" },
+    database: { online: false, label: "Unchecked", detail: "postgresql://mind_user:mindfreak@localhost:5432/abstract_mind_db" },
     ollama: { online: false, label: "Unchecked", detail: "http://localhost:3456/api/ollama/status" },
     agents: { online: false, label: "Unchecked", detail: "http://localhost:3456/api/agents/status" },
     jsonhero: { online: false, label: "Unchecked", detail: "http://localhost:8787" },
@@ -137,21 +135,56 @@ function App() {
   // Bridge object intentionally captures current render state.
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
-    if (!libraryReady) return;
-    savePromptLibraryState(state.promptLibrary);
-  }, [state.promptLibrary, libraryReady]);
+    if (!uiStateHydrated) return;
+    void appPersistenceService.setSetting("app_ui", "promptPanelOrder", promptPanelOrder);
+  }, [promptPanelOrder, uiStateHydrated]);
 
   useEffect(() => {
-    window.localStorage.setItem(PROMPT_PANEL_ORDER_STORAGE_KEY, JSON.stringify(promptPanelOrder));
-  }, [promptPanelOrder]);
+    if (!uiStateHydrated) return;
+    void appPersistenceService.setSetting("app_ui", "activePromptPanel", activePromptPanel);
+  }, [activePromptPanel, uiStateHydrated]);
 
   useEffect(() => {
-    window.localStorage.setItem(PROMPT_ACTIVE_PANEL_STORAGE_KEY, activePromptPanel);
-  }, [activePromptPanel]);
+    let cancelled = false;
+
+    const loadUiState = async () => {
+      try {
+        const [storedOrder, storedPanel, storedConfigs] = await Promise.all([
+          appPersistenceService.getSetting("app_ui", "promptPanelOrder", PROMPT_PANEL_DEFAULT_ORDER),
+          appPersistenceService.getSetting("app_ui", "activePromptPanel", PROMPT_PANEL_DEFAULT_ORDER[0]),
+          appPersistenceService.getSetting("ase", "database", []),
+        ]);
+
+        if (cancelled) return;
+
+        if (Array.isArray(storedOrder)) {
+          const valid = PROMPT_PANEL_DEFAULT_ORDER.filter((item) => storedOrder.includes(item));
+          if (valid.length === PROMPT_PANEL_DEFAULT_ORDER.length) {
+            setPromptPanelOrder(valid);
+          }
+        }
+
+        if (PROMPT_PANEL_DEFAULT_ORDER.includes(storedPanel)) {
+          setActivePromptPanel(storedPanel);
+        }
+
+        setAseConfigs(Array.isArray(storedConfigs) ? storedConfigs : []);
+      } finally {
+        if (!cancelled) {
+          setUiStateHydrated(true);
+        }
+      }
+    };
+
+    void loadUiState();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (!libraryReady) {
-      handleLoadLibrary();
+      void handleLoadLibrary();
     }
   }, [libraryReady]);
 
@@ -200,7 +233,7 @@ function App() {
         }
 
         if (!libraryReady) {
-          handleLoadLibrary();
+          await handleLoadLibrary();
         }
 
         const ackIds = [];
@@ -258,7 +291,7 @@ function App() {
         };
       },
       async ensureLibraryReady() {
-        handleLoadLibrary();
+        await handleLoadLibrary();
         return {
           ok: true,
           libraryReady: true,
@@ -267,7 +300,7 @@ function App() {
       },
       async addBlocksFromInput({ text } = {}) {
         if (!libraryReady) {
-          handleLoadLibrary();
+          await handleLoadLibrary();
         }
         const sourceText = String(text || "");
         const parsedImport = parsePromptImportText(sourceText);
@@ -304,7 +337,7 @@ function App() {
       },
       async generateBatch(request = {}) {
         if (!libraryReady) {
-          handleLoadLibrary();
+          await handleLoadLibrary();
         }
         const scopedBlocks = filterBlocksByPreset(
           state.promptLibrary.blocks,
@@ -388,14 +421,6 @@ function App() {
       })),
     [t],
   );
-  const aseConfigs = (() => {
-    try {
-      const parsed = JSON.parse(localStorage.getItem(ASE_DB_STORAGE_KEY) || "[]");
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
-  })();
   const aseConfigCount = aseConfigs.length;
   const promptPanelIndex = useMemo(
     () =>
@@ -452,7 +477,7 @@ function App() {
     } = options;
 
     if (!libraryReady) {
-      handleLoadLibrary();
+      void handleLoadLibrary();
     }
 
     let parsedPayload = payload;
@@ -569,9 +594,18 @@ function App() {
     });
   }
 
-  function handleLoadLibrary() {
+  async function handleLoadLibrary() {
     if (libraryReady) return;
-    const restored = loadPromptLibraryState();
+    let restored = null;
+    try {
+      const response = await fetch(`${MMSS_BRIDGE_API_BASE}/library-state`);
+      if (response.ok) {
+        const payload = await response.json();
+        restored = payload?.promptLibrary || null;
+      }
+    } catch (_error) {
+      restored = null;
+    }
     dispatch({
       type: "PROMPT_IMPORT_LIBRARY",
       payload: restored || {},
@@ -587,7 +621,7 @@ function App() {
         ? [filesInput]
         : [];
     if (!files.length) return;
-    if (!libraryReady) handleLoadLibrary();
+    if (!libraryReady) await handleLoadLibrary();
 
     let importedCount = 0;
     for (const file of files) {
@@ -625,7 +659,7 @@ function App() {
   }
 
   async function handleImportNormalizedPromptAssets() {
-    if (!libraryReady) handleLoadLibrary();
+    if (!libraryReady) await handleLoadLibrary();
 
     try {
       const [storedBlocks, storedSequences] = await Promise.all([
@@ -752,7 +786,7 @@ function App() {
 
   async function handlePushLibraryToGenesis() {
     if (!libraryReady) {
-      handleLoadLibrary();
+      void handleLoadLibrary();
     }
     try {
       const response = await fetch(`${MMSS_BRIDGE_API_BASE}/library-state`, {
@@ -849,7 +883,7 @@ function App() {
     }
 
     if (!libraryReady) {
-      handleLoadLibrary();
+          void handleLoadLibrary();
     }
 
     const modeBlocks = unifiedConfig.modes.map((mode, index) => {
@@ -967,11 +1001,10 @@ function App() {
     setPromptPanelOrder(next);
   }
 
-  function handleSaveAseConfigToDatabase(config) {
-    const existing = JSON.parse(localStorage.getItem(ASE_DB_STORAGE_KEY) || "[]");
-    const updated = [...existing, { ...config, savedAt: new Date().toISOString() }];
-    localStorage.setItem(ASE_DB_STORAGE_KEY, JSON.stringify(updated));
-    setAseConfigRevision((value) => value + 1);
+  async function handleSaveAseConfigToDatabase(config) {
+    const updated = [...aseConfigs, { ...config, savedAt: new Date().toISOString() }];
+    setAseConfigs(updated);
+    await appPersistenceService.setSetting("ase", "database", updated);
     dispatch({ type: "append_log", message: `ASE config "${config.name}" saved to database.` });
   }
 
@@ -1009,7 +1042,12 @@ function App() {
     }
   }
   async function handleCheckServiceStatus() {
-    const [mistral, ollama, agents, jsonhero] = await Promise.all([
+    const [database, mistral, ollama, agents, jsonhero] = await Promise.all([
+      probeJsonEndpoint("http://localhost:3456/api/database/status", (payload) => ({
+        online: !!payload?.available,
+        label: payload?.available ? "Online / postgres" : "Offline",
+        detail: payload?.databaseUrl || "postgresql://mind_user:mindfreak@localhost:5432/abstract_mind_db",
+      })),
       probeJsonEndpoint("http://localhost:3456/api/mistral/status", (payload) => ({
         online: !!payload?.configured,
         label: payload?.configured ? "Online / env key" : "Offline",
@@ -1032,6 +1070,7 @@ function App() {
       })),
     ]);
     setServiceHealth({
+      database,
       mistral,
       ollama,
       agents,
@@ -1078,6 +1117,7 @@ function App() {
     };
   });
   const serviceCards = [
+    { id: "database", name: "PostgreSQL", ...serviceHealth.database },
     { id: "mistral", name: "Mistral", ...serviceHealth.mistral },
     { id: "ollama", name: "Ollama", ...serviceHealth.ollama },
     { id: "agents", name: "Flowmusic Agents", ...serviceHealth.agents },
@@ -1242,40 +1282,6 @@ function App() {
 
         <div className="tab-view prompt-library-view">
           <div className="prompt-library-shell">
-            <div className="prompt-library-topbar">
-              <div className="prompt-library-topbar__head">
-                <div>
-                  <strong>Prompt Workspace</strong>
-                  <span>
-                    {state.promptLibrary.blocks.length} block(s), {state.promptLibrary.sequences.length} sequence(s)
-                  </span>
-                </div>
-                <div className="prompt-library-status">
-                  <span>{libraryReady ? "Ready" : "Idle"}</span>
-                  <span>IDE Workspace</span>
-                </div>
-              </div>
-              <div className="row">
-                <button onClick={handleLoadLibrary} disabled={libraryReady}>
-                  {libraryReady ? "Library Ready" : "Load Library"}
-                </button>
-                <button onClick={handleImportNormalizedPromptAssets}>
-                  Import Session Blocks
-                </button>
-                <button
-                  onClick={() => {
-                    setPromptPanelOrder(PROMPT_PANEL_DEFAULT_ORDER);
-                    setActivePromptPanel(PROMPT_PANEL_DEFAULT_ORDER[0]);
-                  }}
-                >
-                  Reset Layout
-                </button>
-                <button onClick={() => dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_CLEAR" })}>
-                  Clear Composition
-                </button>
-              </div>
-            </div>
-
             {libraryReady ? (
               <PromptIdeWorkspace
                 bindingsProps={{
@@ -1373,8 +1379,8 @@ function App() {
                   onClearComposition: () => dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_CLEAR" }),
                   onImportSessionBlocks: handleImportNormalizedPromptAssets,
                   onLoadLibrary: handleLoadLibrary,
-                  onResetLayout: () => {
-                    window.localStorage.removeItem("mmss.ide.workspace.v1");
+                  onResetLayout: async () => {
+                    await appPersistenceService.removeSetting("zustand", "mmss.ide.workspace.v1");
                     window.location.reload();
                   },
                 }}
@@ -1432,40 +1438,6 @@ function App() {
 
         <div className="tab-view prompt-library-view">
           <div className="prompt-library-shell">
-            <div className="prompt-library-topbar">
-              <div className="prompt-library-topbar__head">
-                <div>
-                  <strong>Prompt Workspace</strong>
-                  <span>
-                    {state.promptLibrary.blocks.length} block(s), {state.promptLibrary.sequences.length} sequence(s)
-                  </span>
-                </div>
-                <div className="prompt-library-status">
-                  <span>{libraryReady ? "Ready" : "Idle"}</span>
-                  <span>{activePromptPanelMeta.label}</span>
-                </div>
-              </div>
-              <div className="row">
-                <button onClick={handleLoadLibrary} disabled={libraryReady}>
-                  {libraryReady ? "Library Ready" : "Load Library"}
-                </button>
-                <button onClick={handleImportNormalizedPromptAssets}>
-                  Import Session Blocks
-                </button>
-                <button
-                  onClick={() => {
-                    setPromptPanelOrder(PROMPT_PANEL_DEFAULT_ORDER);
-                    setActivePromptPanel(PROMPT_PANEL_DEFAULT_ORDER[0]);
-                  }}
-                >
-                  Reset Layout
-                </button>
-                <button onClick={() => dispatch({ type: "PROMPT_ACTIVE_COMPOSITION_CLEAR" })}>
-                  Clear Composition
-                </button>
-              </div>
-            </div>
-
             {libraryReady ? (
               <div className="prompt-library-workbench">
                 <aside className="prompt-panel-sidebar">
@@ -1996,9 +1968,9 @@ function App() {
             <button
               className="workspace-rail__btn"
               onClick={() => {
-                handleLoadLibrary();
+                void handleLoadLibrary();
                 setTimeout(() => {
-                  handleImportNormalizedPromptAssets();
+                  void handleImportNormalizedPromptAssets();
                 }, 300);
               }}
               title="Import Session Blocks"
@@ -2449,31 +2421,6 @@ function filterBlocksByPreset(blocks, tagPreset) {
     }
     return true;
   });
-}
-
-function loadStoredPromptPanelOrder() {
-  try {
-    const raw = window.localStorage.getItem(PROMPT_PANEL_ORDER_STORAGE_KEY);
-    if (!raw) return PROMPT_PANEL_DEFAULT_ORDER;
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return PROMPT_PANEL_DEFAULT_ORDER;
-    const valid = PROMPT_PANEL_DEFAULT_ORDER.filter((item) => parsed.includes(item));
-    if (valid.length !== PROMPT_PANEL_DEFAULT_ORDER.length) {
-      return PROMPT_PANEL_DEFAULT_ORDER;
-    }
-    return valid;
-  } catch (error) {
-    return PROMPT_PANEL_DEFAULT_ORDER;
-  }
-}
-
-function loadStoredPromptActivePanel() {
-  try {
-    const raw = window.localStorage.getItem(PROMPT_ACTIVE_PANEL_STORAGE_KEY);
-    return PROMPT_PANEL_DEFAULT_ORDER.includes(raw) ? raw : PROMPT_PANEL_DEFAULT_ORDER[0];
-  } catch (error) {
-    return PROMPT_PANEL_DEFAULT_ORDER[0];
-  }
 }
 
 function downloadTextFile(fileName, text) {
