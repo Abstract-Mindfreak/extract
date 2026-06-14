@@ -20,6 +20,8 @@ import {
 import ASEMasterConsole from "./ASEMasterConsole";
 import FlowmusicAgentPanel from "./ase-variations/flowmusic-agent-panel";
 import GenerationEnginePanel from "./ase-variations/generation-engine-panel";
+import LocalRagPanel from "./ase-variations/local-rag-panel";
+import MMSSMutatorPanel from "./ase-variations/mmss-mutator-panel";
 import { useAseWorkspaceStore } from "../hooks/useAseWorkspaceStore";
 import "./PromptIdeWorkspace.css";
 import "./AseIdeWorkspace.css";
@@ -196,11 +198,50 @@ function normalizeTheme(uiTheme) {
   return "flexlayout__theme_dark";
 }
 
+function ensureWorkspaceTab(layoutJson, tabConfig) {
+  const nextLayout = layoutJson || buildDefaultLayout();
+  const centerTabset = nextLayout?.layout?.children?.find(
+    (child) => child?.id === "ase-center-tabset",
+  );
+  if (!centerTabset) return nextLayout;
+
+  const exists = Array.isArray(centerTabset.children)
+    && centerTabset.children.some((child) => child?.component === tabConfig.component);
+
+  if (!exists) {
+    centerTabset.children = [...(centerTabset.children || []), tabConfig];
+  }
+
+  return nextLayout;
+}
+
 export default function AseIdeWorkspace(props) {
   const workspaceStore = useAseWorkspaceStore();
   const layoutRef = useRef(null);
   const [model] = useState(() =>
-    Model.fromJson(workspaceStore.layoutSnapshot || buildDefaultLayout())
+    Model.fromJson(
+      [
+        {
+          id: "ase-mmss-mutator-tab",
+          type: "tab",
+          name: "Мутатор MMSS",
+          component: "mmss-mutator",
+          enableClose: false,
+          icon: "mmss-mutator",
+        },
+        {
+          id: "ase-local-rag-tab",
+          type: "tab",
+          name: "Local LLM RAG",
+          component: "local-rag",
+          enableClose: false,
+          icon: "local-rag",
+        },
+      ].reduce(
+        (layoutJson, tabConfig) => ensureWorkspaceTab(layoutJson, tabConfig),
+        workspaceStore.layoutSnapshot || buildDefaultLayout(),
+      ),
+    )
   );
 
   const activityLogs = useMemo(
@@ -257,6 +298,14 @@ export default function AseIdeWorkspace(props) {
 
     if (component === "python-generation") {
       return <GenerationEnginePanel onSaveToLibrary={props.onSaveToLibrary} />;
+    }
+
+    if (component === "mmss-mutator") {
+      return <MMSSMutatorPanel onSaveToLibrary={props.onSaveToLibrary} />;
+    }
+
+    if (component === "local-rag") {
+      return <LocalRagPanel />;
     }
 
     if (component === "flowmusic-agents") {
@@ -482,6 +531,7 @@ function AseSavedConfigsPanel({ aseConfigs }) {
 
 function AseServicesPanel({ onCheckServiceStatus, serviceHealth }) {
   const services = [
+    { id: "database", name: "PostgreSQL", ...serviceHealth.database },
     { id: "mistral", name: "Mistral", ...serviceHealth.mistral },
     { id: "ollama", name: "Ollama", ...serviceHealth.ollama },
     { id: "agents", name: "Flowmusic Agents", ...serviceHealth.agents },
@@ -661,6 +711,10 @@ function resolveTabIcon(icon) {
     case "feedback":
       return <Sparkles {...common} />;
     case "python-generation":
+      return <Database {...common} />;
+    case "mmss-mutator":
+      return <Database {...common} />;
+    case "local-rag":
       return <Database {...common} />;
     case "flowmusic-agents":
       return <Sparkles {...common} />;

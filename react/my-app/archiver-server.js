@@ -11,11 +11,27 @@ const path = require('path');
 const fs = require('fs/promises');
 const { existsSync } = require('fs');
 const http = require('http');
+const https = require('https');
 const WebSocket = require('ws');
-require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') });
+require('dotenv').config({ path: path.join(__dirname, '.env'), override: true });
+require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env'), override: true });
 const archiverAccounts = require('./src/config/flowmusicArchiverAccounts.json');
 const { buildRetrievalIndex, searchRetrievalIndex } = require('./src/services/mmssRetrievalIndex.js');
 const { buildMmssQualityReport } = require('./src/services/mmssQualityReport.js');
+const { executeReadOnlyQuery } = require('./db');
+const {
+  ANSWER_MODEL: LOCAL_RAG_ANSWER_MODEL,
+  EMBEDDING_MODEL: LOCAL_RAG_EMBEDDING_MODEL,
+  answerWithRag: answerWithLocalRag,
+  buildPromptContext: buildLocalRagPromptContext,
+  cancelJob: cancelLocalRagJob,
+  gatherStats: gatherLocalRagStats,
+  getEmbeddingDimension: getLocalRagEmbeddingDimension,
+  getJobStatus: getLocalRagJobStatus,
+  normalizeDatabaseIdentifier: normalizeLocalRagDatabase,
+  searchRag: searchLocalRag,
+  startVectorizationJob: startLocalRagVectorizationJob,
+} = require('./server/localRagService.js');
 const {
   DATABASE_URL,
   clearSettings,
@@ -46,6 +62,8 @@ const MISTRAL_API_BASE = 'https://api.mistral.ai/v1';
 const MISTRAL_MODEL = process.env.MISTRAL_MODEL || 'mistral-large-latest';
 const OLLAMA_API_BASE = process.env.OLLAMA_API_BASE || 'http://127.0.0.1:11434/api';
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'gemma3:4b';
+const OLLAMA_REQUEST_TIMEOUT_MS = Number(process.env.OLLAMA_REQUEST_TIMEOUT_MS || 600000);
+const OLLAMA_ALLOW_FALLBACK_HOSTS = process.env.OLLAMA_ALLOW_FALLBACK_HOSTS === '1';
 const FLOWMUSIC_AGENT_API_BASE = process.env.FLOWMUSIC_AGENT_API_BASE || 'http://127.0.0.1:8766';
 const MISTRAL_MODE_PROFILES = {
   plan: {
@@ -80,11 +98,255 @@ const DEFAULT_MMSS_METRICS_CONTRACT = {
     measurableOutputFields: true,
   },
 };
+const MMSS_ONTOLOGY_SEED_PATH = path.join(__dirname, '..', '..', 'database', 'seeds', 'mmss_ontology_seed.json');
+const DEBUG_OLLAMA = process.env.DEBUG_OLLAMA !== '0';
+
+function stripWrappingQuotes(value) {
+  if (!value) return value;
+  const first = value[0];
+  const last = value[value.length - 1];
+  if ((first === '"' && last === '"') || (first === '\'' && last === '\'')) {
+    return value.slice(1, -1);
+  }
+  return value;
+}
+
+function readEnvFile(filePath) {
+  const env = {};
+  try {
+    const text = require('fs').readFileSync(filePath, 'utf8');
+    for (const rawLine of text.split(/\r?\n/u)) {
+      const line = rawLine.trim();
+      if (!line || line.startsWith('#')) continue;
+      const separator = line.indexOf('=');
+      if (separator <= 0) continue;
+      const key = line.slice(0, separator).trim();
+      if (!key) continue;
+      env[key] = stripWrappingQuotes(line.slice(separator + 1).trim());
+    }
+  } catch (_error) {
+    return env;
+  }
+  return env;
+}
+
+function buildFreshRuntimeEnv() {
+  const rootEnv = readEnvFile(path.join(__dirname, '..', '..', '.env'));
+  const appEnv = readEnvFile(path.join(__dirname, '.env'));
+  return {
+    ...process.env,
+    ...appEnv,
+    ...rootEnv,
+  };
+}
 
 // Middleware
 app.use(cors());
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+
+function createTraceId(prefix = 'req') {
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function debugLog(scope, traceId, message, extra = null) {
+  if (!DEBUG_OLLAMA && scope.startsWith('OLLAMA')) {
+    return;
+  }
+
+  const head = `[${scope}]${traceId ? ` [${traceId}]` : ''} ${message}`;
+  if (extra == null) {
+    console.log(head);
+    return;
+  }
+  console.log(head, extra);
+}
+
+function toPreview(value, maxLength = 600) {
+  const text = typeof value === 'string' ? value : JSON.stringify(value);
+  return text.length > maxLength ? `${text.slice(0, maxLength)}…` : text;
+}
+
+function extractSqlBlock(content) {
+  const match = String(content || '').match(/```sql\s*([\s\S]*?)```/i);
+  return match?.[1]?.trim() || null;
+}
+
+function buildOllamaDatabaseFollowUpPrompt(originalPrompt, sql, rows) {
+  return `${originalPrompt}
+
+The following SQL query was executed successfully:
+\`\`\`sql
+${sql}
+\`\`\`
+
+Database result:
+${JSON.stringify(rows, null, 2)}
+
+Now generate the final answer as JSON only.
+Do not emit SQL.
+Do not emit markdown.
+Do not add explanations before or after JSON.`;
+}
+
+function getOllamaApiCandidates() {
+  const normalized = String(OLLAMA_API_BASE || '').replace(/\/+$/, '');
+  const candidates = [normalized];
+
+  if (!OLLAMA_ALLOW_FALLBACK_HOSTS) {
+    return candidates.filter(Boolean);
+  }
+
+  if (!normalized.includes('127.0.0.1:11434')) {
+    candidates.push('http://127.0.0.1:11434/api');
+  }
+
+  if (!normalized.includes('localhost:11434')) {
+    candidates.push('http://localhost:11434/api');
+  }
+
+  return Array.from(new Set(candidates.filter(Boolean)));
+}
+
+async function fetchOllamaJson(pathname, payload) {
+  const candidates = getOllamaApiCandidates();
+  let lastError = null;
+  const traceId = payload?.traceId || createTraceId('ollama');
+
+  for (const baseUrl of candidates) {
+    const targetUrl = `${baseUrl}${pathname}`;
+    try {
+      const url = new URL(targetUrl);
+      const transport = url.protocol === 'https:' ? https : http;
+      const body = JSON.stringify(payload);
+
+      debugLog('OLLAMA', traceId, `POST ${targetUrl}`, {
+        model: payload?.model,
+        stream: payload?.stream,
+        promptChars: String(payload?.prompt || '').length,
+        bodyBytes: Buffer.byteLength(body),
+        timeoutMs: OLLAMA_REQUEST_TIMEOUT_MS,
+        options: payload?.options || {},
+      });
+
+      const response = await new Promise((resolve, reject) => {
+        const request = transport.request(
+          {
+            protocol: url.protocol,
+            hostname: url.hostname,
+            port: url.port,
+            path: `${url.pathname}${url.search}`,
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Content-Length': Buffer.byteLength(body),
+            },
+            timeout: OLLAMA_REQUEST_TIMEOUT_MS,
+          },
+          (incoming) => {
+            const chunks = [];
+            incoming.on('data', (chunk) => chunks.push(chunk));
+            incoming.on('end', () => {
+              resolve({
+                statusCode: incoming.statusCode || 500,
+                body: Buffer.concat(chunks).toString('utf8'),
+              });
+            });
+          },
+        );
+
+        request.on('timeout', () => {
+          request.destroy(new Error(`Request timeout after ${OLLAMA_REQUEST_TIMEOUT_MS}ms`));
+        });
+        request.on('error', (error) => reject(error));
+        request.write(body);
+        request.end();
+      });
+
+      const responseText = response.body || '';
+      debugLog('OLLAMA', traceId, `Response from ${targetUrl}`, {
+        status: response.statusCode,
+        responseChars: responseText.length,
+        preview: toPreview(responseText, 300),
+      });
+
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        return {
+          ok: false,
+          status: response.statusCode,
+          text: responseText,
+          url: targetUrl,
+          traceId,
+        };
+      }
+
+      return {
+        ok: true,
+        status: response.statusCode,
+        text: responseText,
+        url: targetUrl,
+        traceId,
+      };
+    } catch (error) {
+      lastError = { error, url: targetUrl };
+      debugLog('OLLAMA', traceId, `Transport failure for ${targetUrl}`, {
+        name: error?.name || 'Error',
+        message: error?.message || String(error),
+        code: error?.code || null,
+        cause: error?.cause?.message || error?.cause || null,
+      });
+    }
+  }
+
+  if (lastError) {
+    const detail = {
+      lastTarget: lastError.url,
+      name: lastError.error?.name || 'Error',
+      message: lastError.error?.message || 'unknown error',
+      code: lastError.error?.code || null,
+      cause: lastError.error?.cause?.message || lastError.error?.cause || null,
+      traceId,
+    };
+    throw new Error(`All Ollama endpoints failed. ${JSON.stringify(detail)}`);
+  }
+
+  throw new Error('No Ollama endpoint candidates available');
+}
+
+async function resolveOllamaModelName(requestedModel) {
+  const rawModel = String(requestedModel || OLLAMA_MODEL || '').trim();
+  if (!rawModel) {
+    return OLLAMA_MODEL;
+  }
+
+  const candidates = getOllamaApiCandidates();
+  for (const baseUrl of candidates) {
+    try {
+      const response = await fetch(`${baseUrl}/tags`);
+      const payload = await response.json();
+      if (!response.ok) continue;
+
+      const models = Array.isArray(payload?.models) ? payload.models : [];
+      const modelNames = models
+        .map((item) => item?.model || item?.name)
+        .filter(Boolean)
+        .map(String);
+
+      if (modelNames.includes(rawModel)) {
+        return rawModel;
+      }
+
+      const latestVariant = `${rawModel}:latest`;
+      if (modelNames.includes(latestVariant)) {
+        return latestVariant;
+      }
+    } catch (_error) {
+      // noop, fetchOllamaJson will provide the final transport error later
+    }
+  }
+
+  return rawModel;
+}
 
 app.get('/api/database/status', async (_req, res) => {
   try {
@@ -101,6 +363,174 @@ app.get('/api/database/status', async (_req, res) => {
       source: 'postgresql',
       databaseUrl: DATABASE_URL,
       error: error.message || 'Database unavailable',
+    });
+  }
+});
+
+app.post('/api/db/query', async (req, res) => {
+  try {
+    const sql = typeof req.body?.sql === 'string' ? req.body.sql : '';
+    const database = typeof req.body?.database === 'string' ? req.body.database : 'default';
+    if (!sql.trim()) {
+      res.status(400).json({ error: 'SQL query required' });
+      return;
+    }
+
+    console.log(`[DB] Executing query on ${database}: ${sql.slice(0, 200)}`);
+    const rows = await executeReadOnlyQuery(sql, database);
+    res.json({
+      success: true,
+      rowCount: rows.length,
+      data: rows,
+      database,
+    });
+  } catch (error) {
+    console.error('[DB] Error:', error.message || error);
+    res.status(500).json({ error: error.message || 'Database query failed' });
+  }
+});
+
+app.get('/api/rag/status', async (req, res) => {
+  try {
+    const database = normalizeLocalRagDatabase(req.query.database);
+    const stats = await gatherLocalRagStats(database);
+    res.json({
+      success: true,
+      data: stats,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to load local RAG status',
+    });
+  }
+});
+
+app.get('/api/rag/job/:jobId', async (req, res) => {
+  const job = getLocalRagJobStatus(req.params.jobId);
+  if (!job) {
+    return res.status(404).json({
+      success: false,
+      error: 'RAG job not found',
+    });
+  }
+
+  res.json({
+    success: true,
+    data: job,
+  });
+});
+
+app.post('/api/rag/job/:jobId/cancel', async (req, res) => {
+  const job = cancelLocalRagJob(req.params.jobId);
+  if (!job) {
+    return res.status(404).json({
+      success: false,
+      error: 'RAG job not found',
+    });
+  }
+
+  res.json({
+    success: true,
+    data: job,
+  });
+});
+
+app.post('/api/rag/vectorize', async (req, res) => {
+  try {
+    const job = await startLocalRagVectorizationJob({
+      database: req.body?.database,
+      batchSize: req.body?.batchSize,
+      sourceTables: req.body?.sourceTables,
+    });
+    res.json({
+      success: true,
+      data: {
+        ...job,
+        embeddingModel: LOCAL_RAG_EMBEDDING_MODEL,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to start vectorization job',
+    });
+  }
+});
+
+app.post('/api/rag/search', async (req, res) => {
+  try {
+    const payload = await searchLocalRag({
+      database: req.body?.database,
+      query: req.body?.query,
+      topK: req.body?.topK,
+      sourceTables: req.body?.sourceTables,
+      sourceScopes: req.body?.sourceScopes,
+      queryBudget: req.body?.queryBudget,
+      mode: req.body?.mode,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to run local RAG search',
+    });
+  }
+});
+
+app.post('/api/rag/context', async (req, res) => {
+  try {
+    const payload = await buildLocalRagPromptContext({
+      database: req.body?.database,
+      query: req.body?.query,
+      topK: req.body?.topK,
+      sourceTables: req.body?.sourceTables,
+      sourceScopes: req.body?.sourceScopes,
+      queryBudget: req.body?.queryBudget,
+      filterProfile: req.body?.filterProfile,
+      includeRelationLayer: req.body?.includeRelationLayer,
+      mode: req.body?.mode,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to build RAG context',
+    });
+  }
+});
+
+app.post('/api/rag/answer', async (req, res) => {
+  try {
+    const payload = await answerWithLocalRag({
+      database: req.body?.database,
+      query: req.body?.query,
+      topK: req.body?.topK,
+      sourceTables: req.body?.sourceTables,
+      sourceScopes: req.body?.sourceScopes,
+      queryBudget: req.body?.queryBudget,
+      filterProfile: req.body?.filterProfile,
+      includeRelationLayer: req.body?.includeRelationLayer,
+      mode: req.body?.mode,
+      model: req.body?.model || LOCAL_RAG_ANSWER_MODEL,
+      systemPrompt: req.body?.systemPrompt,
+      temperature: req.body?.temperature,
+      numCtx: req.body?.numCtx,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to generate local RAG answer',
     });
   }
 });
@@ -399,44 +829,106 @@ app.get('/api/ollama/status', async (_req, res) => {
 
 app.post('/api/ollama/generate', async (req, res) => {
   try {
-    const { model, prompt, stream, options } = req.body || {};
-    const targetModel = model || OLLAMA_MODEL;
+    const traceId = createTraceId('ollama');
+    const { model, prompt, stream, options, context } = req.body || {};
+    const targetModel = await resolveOllamaModelName(model || OLLAMA_MODEL);
+    const dbEnabled = Boolean(context?.enableDB);
     
-    console.log(
-      `[OLLAMA] model=${targetModel} stream=${stream} temp=${options?.temperature} num_predict=${options?.num_predict}`,
-    );
-    console.log(`[OLLAMA] Target URL: ${OLLAMA_API_BASE}/generate`);
-
-    const response = await fetch(`${OLLAMA_API_BASE}/generate`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: targetModel,
-        prompt,
-        stream: stream || false,
-        options: options || {},
-      }),
+    debugLog('OLLAMA', traceId, 'Incoming /api/ollama/generate', {
+      requestedModel: model || OLLAMA_MODEL,
+      targetModel,
+      stream,
+      dbEnabled,
+      promptChars: String(prompt || '').length,
+      promptPreview: toPreview(prompt, 300),
+      options: options || {},
+    });
+    const firstPass = await fetchOllamaJson('/generate', {
+      model: targetModel,
+      prompt,
+      stream: stream || false,
+      options: options || {},
+      traceId,
     });
 
-    const responseText = await response.text();
-    console.log('[OLLAMA] Raw response length:', responseText.length);
-    console.log('[OLLAMA] Response status:', response.status);
-    
-    if (!response.ok) {
-      console.error('[OLLAMA] Error response:', responseText);
-      res.status(response.status).json({ error: responseText });
+    if (!firstPass.ok) {
+      console.error('[OLLAMA] Error response:', firstPass.text);
+      res.status(firstPass.status).json({
+        error: firstPass.text,
+        targetUrl: firstPass.url,
+        model: targetModel,
+        traceId,
+      });
       return;
     }
 
-    res.type('application/json').send(responseText);
+    const payload = firstPass.text ? JSON.parse(firstPass.text) : {};
+    const detectedSql = dbEnabled ? extractSqlBlock(payload?.response) : null;
+
+    if (!detectedSql) {
+      debugLog('OLLAMA', traceId, 'Returning first-pass response without SQL tool call', {
+        responsePreview: toPreview(payload?.response || '', 300),
+      });
+      res.json({
+        ...payload,
+        targetModel,
+        traceId,
+      });
+      return;
+    }
+
+    debugLog('OLLAMA', traceId, 'SQL bridge activated', {
+      sql: detectedSql.slice(0, 400),
+    });
+
+    const dbRows = await executeReadOnlyQuery(detectedSql);
+    debugLog('DB', traceId, 'SQL query result ready', {
+      rowCount: dbRows.length,
+      preview: toPreview(dbRows, 300),
+    });
+    const followUp = await fetchOllamaJson('/generate', {
+      model: targetModel,
+      prompt: buildOllamaDatabaseFollowUpPrompt(prompt, detectedSql, dbRows),
+      stream: false,
+      options: options || {},
+      traceId,
+    });
+
+    if (!followUp.ok) {
+      console.error('[OLLAMA] Follow-up error response:', followUp.text);
+      res.status(followUp.status).json({
+        error: followUp.text,
+        targetUrl: followUp.url,
+        model: targetModel,
+        traceId,
+      });
+      return;
+    }
+
+    const followUpPayload = followUp.text ? JSON.parse(followUp.text) : {};
+    debugLog('OLLAMA', traceId, 'Returning follow-up response after SQL tool call', {
+      responsePreview: toPreview(followUpPayload?.response || '', 300),
+      rowCount: dbRows.length,
+    });
+    res.json({
+      ...followUpPayload,
+      toolCall: {
+        used: true,
+        sql: detectedSql,
+        rowCount: dbRows.length,
+      },
+      targetModel,
+      traceId,
+    });
   } catch (error) {
     console.error('[OLLAMA] Request failed:', error);
     console.error('[OLLAMA] Error details:', error.message);
     console.error('[OLLAMA] OLLAMA_API_BASE:', OLLAMA_API_BASE);
     res.status(500).json({ 
       error: error.message || 'Ollama proxy request failed',
+      targetCandidates: getOllamaApiCandidates(),
+      requestedModel: req.body?.model || OLLAMA_MODEL,
+      promptChars: String(req.body?.prompt || '').length,
       details: 'Make sure Ollama is running on the configured endpoint'
     });
   }
@@ -489,6 +981,23 @@ app.get('/api/mmss/library-state', async (_req, res) => {
     updatedAt: null,
   }, MMSS_LIBRARY_STATE_PATH);
   res.json(payload);
+});
+
+app.get('/api/mmss/ontology', async (_req, res) => {
+  try {
+    const raw = await fs.readFile(MMSS_ONTOLOGY_SEED_PATH, 'utf8');
+    const data = JSON.parse(raw);
+    res.json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    console.error('Failed to read MMSS ontology seed', error);
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to read MMSS ontology seed',
+    });
+  }
 });
 
 app.get('/api/prompt-library/blocks', async (_req, res) => {
@@ -1158,7 +1667,7 @@ app.post('/api/accounts/:accountId/start', (req, res) => {
   }
 
   const env = {
-    ...process.env,
+    ...buildFreshRuntimeEnv(),
     FLOWMUSIC_AUTH_STATE: path.join(ARCHIVER_PATH, account.authStateFile),
     FLOWMUSIC_OUTPUT_DIR: path.join(ARCHIVER_PATH, account.outputDir),
     PRODUCER_AUTH_STATE: path.join(ARCHIVER_PATH, account.authStateFile),
