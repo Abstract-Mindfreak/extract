@@ -33,13 +33,24 @@ Thumbs.db
 
 # Personal data - FlowMusic.app Archiver
 flowmusic-archiver/producer_auth_*.json
+flowmusic-archiver/producer_auth*.json
 flowmusic-archiver/producer_login_ready
 flowmusic-archiver/flowmusic_backup_*/
 !flowmusic-archiver/flowmusic_backup_*/.gitkeep
 flowmusic-archiver/producer_backup_*/
+flowmusic-archiver/scripts/sync-audio-meta/state.json
+flowmusic-archiver/scripts/sync-audio-meta/logs/
+flowmusic-archiver/scripts/sync-audio-meta/lib/__pycache__/
 prompt-db-local/database/system/generated_blocks/
 prompt-db-local/database/blocks/
 prompt-db-local/shared/
+flowmusic_auth_*.json
+flowmusic_auth_2.json
+flowmusic-archiver/flowmusic_auth_1.json
+flowmusic-archiver/flowmusic_auth_2.json
+flowmusic-archiver/flowmusic_auth_3.json
+flowmusic-archiver/flowmusic_auth_4.json
+*flowmusic_auth*.json
 
 # Archive files
 *.rar
@@ -62,6 +73,7 @@ source/
 # React local data (imported tracks)
 react/my-app/public/local-data/
 /abstract-mind-lab/
+/invariants_extractor/
 
 
 # Logs
@@ -80,3 +92,11 @@ temp/
 *.sqlite
 *.sqlite3
 *.db
+database/seeds/mmss_ontology_seed_part3.json
+database/seeds/mmss_ontology_seed_part4.json
+database/seeds/mmss_ontology_seed_part5.json
+database/seeds/mmss_ontology_seed_part6.json
+database/seeds/mmss_ontology_seed_part7.json
+database/seeds/mmss_ontology_seed_part8.json
+database/seeds/mmss_ontology_seed_part9.json
+database/seeds/mmss_ontology_seed.json

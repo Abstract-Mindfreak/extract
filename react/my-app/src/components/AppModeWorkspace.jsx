@@ -7,6 +7,7 @@ import {
   ExternalLink,
   FileJson,
   FolderPlus,
+  LayoutTemplate,
   RefreshCw,
   Rocket,
   Settings2,
@@ -15,6 +16,14 @@ import {
   Workflow,
 } from "lucide-react";
 import { useAppModeWorkspaceStore } from "../hooks/useAppModeWorkspaceStore";
+import { useAseWorkspaceStore } from "../hooks/useAseWorkspaceStore";
+import { useArchivesWorkspaceStore } from "../hooks/useArchivesWorkspaceStore";
+import { useIdeWorkspaceStore } from "../hooks/useIdeWorkspaceStore";
+import flexLayoutWorkspaceService, {
+  detectScreenProfile,
+  FLEX_WORKSPACE_OPTIONS,
+  SCREEN_PROFILE_OPTIONS,
+} from "../services/FlexLayoutWorkspaceService";
 import "./PromptIdeWorkspace.css";
 import "./AseIdeWorkspace.css";
 
@@ -23,6 +32,15 @@ const MODE_TAB_IDS = {
   ase_console: "mode-ase-console-tab",
   archives: "mode-archives-tab",
   json_genesis: "mode-json-genesis-tab",
+};
+
+const LAYOUT_MANAGER_TAB = {
+  id: "app-layout-manager-tab",
+  type: "tab",
+  name: "Layout Profiles",
+  component: "layout-manager",
+  enableClose: false,
+  icon: "layout-manager",
 };
 
 function buildDefaultLayout() {
@@ -98,6 +116,7 @@ function buildDefaultLayout() {
             enableClose: false,
             icon: "services",
           },
+          LAYOUT_MANAGER_TAB,
         ],
       },
     ],
@@ -130,7 +149,7 @@ function buildDefaultLayout() {
             {
               id: MODE_TAB_IDS.archives,
               type: "tab",
-              name: "Archives",
+              name: "Локальная медиатека",
               component: "mode-archives",
               enableClose: false,
               icon: "archives",
@@ -150,10 +169,86 @@ function buildDefaultLayout() {
   };
 }
 
+function ensureLayoutManagerTab(layoutJson) {
+  const nextLayout = layoutJson || buildDefaultLayout();
+  const bottomBorder = Array.isArray(nextLayout?.borders)
+    ? nextLayout.borders.find((border) => border?.location === "bottom")
+    : null;
+
+  if (!bottomBorder) {
+    nextLayout.borders = [
+      ...(Array.isArray(nextLayout?.borders) ? nextLayout.borders : []),
+      {
+        type: "border",
+        location: "bottom",
+        selected: 0,
+        size: 230,
+        children: [LAYOUT_MANAGER_TAB],
+      },
+    ];
+    return nextLayout;
+  }
+
+  const exists = Array.isArray(bottomBorder.children)
+    && bottomBorder.children.some((child) => child?.component === "layout-manager");
+
+  if (!exists) {
+    bottomBorder.children = [...(bottomBorder.children || []), LAYOUT_MANAGER_TAB];
+  }
+
+  return nextLayout;
+}
+
 export default function AppModeWorkspace(props) {
   const workspaceStore = useAppModeWorkspaceStore();
-  const [model] = useState(() =>
-    Model.fromJson(workspaceStore.layoutSnapshot || buildDefaultLayout())
+  const initialLegacySnapshot = useMemo(
+    () => workspaceStore.layoutSnapshot,
+    []
+  );
+  const [model, setModel] = useState(() =>
+    Model.fromJson(ensureLayoutManagerTab(workspaceStore.layoutSnapshot || buildDefaultLayout()))
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const hydrateLayout = async () => {
+      const resolved = await flexLayoutWorkspaceService.loadEffectiveLayout({
+        workspaceId: "app_mode_workspace",
+        fallbackLayout: buildDefaultLayout(),
+        legacySnapshot: initialLegacySnapshot,
+      });
+      if (!cancelled && resolved?.layoutJson) {
+        const nextLayout = ensureLayoutManagerTab(resolved.layoutJson);
+        setModel(Model.fromJson(nextLayout));
+        useAppModeWorkspaceStore.getState().setLayoutSnapshot(nextLayout);
+      }
+    };
+
+    void hydrateLayout();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(
+    () =>
+      flexLayoutWorkspaceService.subscribe((event) => {
+        if (event.workspaceId !== "app_mode_workspace") return;
+
+        if (event.type === "apply" && event.layoutJson) {
+          const nextLayout = ensureLayoutManagerTab(event.layoutJson);
+          setModel(Model.fromJson(nextLayout));
+          useAppModeWorkspaceStore.getState().setLayoutSnapshot(nextLayout);
+        }
+
+        if (event.type === "reset") {
+          const nextLayout = ensureLayoutManagerTab(buildDefaultLayout());
+          setModel(Model.fromJson(nextLayout));
+          useAppModeWorkspaceStore.getState().setLayoutSnapshot(nextLayout);
+        }
+      }),
+    []
   );
 
   useEffect(() => {
@@ -222,6 +317,9 @@ export default function AppModeWorkspace(props) {
         />
       );
     }
+    if (component === "layout-manager") {
+      return <LayoutProfilesPanel activeTab={props.activeTab} />;
+    }
 
     return <div className="ide-panel-shell">Unknown shell panel: {component}</div>;
   };
@@ -242,7 +340,12 @@ export default function AppModeWorkspace(props) {
           return action;
         }}
         onModelChange={(nextModel) => {
-          workspaceStore.setLayoutSnapshot(nextModel.toJson());
+          const nextJson = ensureLayoutManagerTab(nextModel.toJson());
+          workspaceStore.setLayoutSnapshot(nextJson);
+          void flexLayoutWorkspaceService.persistAutoLayout({
+            workspaceId: "app_mode_workspace",
+            layoutJson: nextJson,
+          });
         }}
         onRenderTab={(node, renderValues) => {
           renderValues.leading = resolveTabIcon(node.getConfig()?.icon);
@@ -383,6 +486,7 @@ function StreamLogsPanel({ activityLogs }) {
 
 function ServicesPanel({ onCheckServiceStatus, serviceHealth }) {
   const services = [
+    { id: "database", name: "PostgreSQL", ...serviceHealth.database },
     { id: "mistral", name: "Mistral", ...serviceHealth.mistral },
     { id: "ollama", name: "Ollama", ...serviceHealth.ollama },
     { id: "agents", name: "Flowmusic Agents", ...serviceHealth.agents },
@@ -413,6 +517,288 @@ function ServicesPanel({ onCheckServiceStatus, serviceHealth }) {
   );
 }
 
+function LayoutProfilesPanel({ activeTab }) {
+  const appStore = useAppModeWorkspaceStore();
+  const promptStore = useIdeWorkspaceStore();
+  const aseStore = useAseWorkspaceStore();
+  const archivesStore = useArchivesWorkspaceStore();
+  const activeWorkspaceId = resolveWorkspaceIdByMode(activeTab);
+  const [screenProfile, setScreenProfile] = useState(() => detectScreenProfile());
+  const [workspaceId, setWorkspaceId] = useState(activeWorkspaceId);
+  const [presetName, setPresetName] = useState("manual");
+  const [presets, setPresets] = useState([]);
+  const [isBusy, setIsBusy] = useState(false);
+  const [status, setStatus] = useState("");
+
+  useEffect(() => {
+    setWorkspaceId(activeWorkspaceId);
+  }, [activeWorkspaceId]);
+
+  const refreshPresets = async () => {
+    const items = await flexLayoutWorkspaceService.listPresets();
+    setPresets(items);
+  };
+
+  useEffect(() => {
+    void refreshPresets();
+  }, []);
+
+  const workspaceStateMap = useMemo(
+    () => ({
+      app_mode_workspace: {
+        layoutJson: appStore.layoutSnapshot,
+        uiTheme: null,
+        fontScale: null,
+      },
+      prompt_ide_workspace: {
+        layoutJson: promptStore.layoutSnapshot,
+        uiTheme: promptStore.uiTheme,
+        fontScale: promptStore.fontScale,
+      },
+      ase_workspace: {
+        layoutJson: aseStore.layoutSnapshot,
+        uiTheme: aseStore.uiTheme,
+        fontScale: aseStore.fontScale,
+      },
+      local_media_library: {
+        layoutJson: archivesStore.layoutSnapshot,
+        uiTheme: null,
+        fontScale: null,
+      },
+    }),
+    [
+      appStore.layoutSnapshot,
+      archivesStore.layoutSnapshot,
+      aseStore.fontScale,
+      aseStore.layoutSnapshot,
+      aseStore.uiTheme,
+      promptStore.fontScale,
+      promptStore.layoutSnapshot,
+      promptStore.uiTheme,
+    ]
+  );
+
+  const presetOptions = useMemo(() => {
+    const names = new Set();
+    presets
+      .filter((item) => item.workspaceId === workspaceId && item.screenProfile === screenProfile)
+      .forEach((item) => names.add(item.presetName));
+    names.add(presetName || "manual");
+    return Array.from(names).sort((left, right) => left.localeCompare(right));
+  }, [presetName, presets, screenProfile, workspaceId]);
+
+  const saveCurrentWorkspace = async () => {
+    const workspaceState = workspaceStateMap[workspaceId];
+    if (!workspaceState?.layoutJson) {
+      setStatus("Нет layout snapshot для выбранного workspace.");
+      return;
+    }
+    setIsBusy(true);
+    try {
+      await flexLayoutWorkspaceService.savePreset({
+        workspaceId,
+        screenProfile,
+        presetName,
+        layoutJson: workspaceState.layoutJson,
+        uiTheme: workspaceState.uiTheme,
+        fontScale: workspaceState.fontScale,
+      });
+      await refreshPresets();
+      setStatus(`Сохранен preset ${presetName} для ${resolveWorkspaceLabel(workspaceId)}.`);
+    } catch (error) {
+      setStatus(error?.message || "Не удалось сохранить preset.");
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
+  const saveAllWorkspaces = async () => {
+    setIsBusy(true);
+    try {
+      for (const option of FLEX_WORKSPACE_OPTIONS) {
+        const workspaceState = workspaceStateMap[option.value];
+        if (!workspaceState?.layoutJson) continue;
+        await flexLayoutWorkspaceService.savePreset({
+          workspaceId: option.value,
+          screenProfile,
+          presetName,
+          layoutJson: workspaceState.layoutJson,
+          uiTheme: workspaceState.uiTheme,
+          fontScale: workspaceState.fontScale,
+        });
+      }
+      await refreshPresets();
+      setStatus(`Сохранены все workspace-пресеты для профиля ${screenProfile}.`);
+    } catch (error) {
+      setStatus(error?.message || "Не удалось сохранить все workspace-пресеты.");
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
+  const applyCurrentWorkspace = async () => {
+    setIsBusy(true);
+    try {
+      await flexLayoutWorkspaceService.applyPreset({
+        workspaceId,
+        screenProfile,
+        presetName,
+      });
+      setStatus(`Применен preset ${presetName} для ${resolveWorkspaceLabel(workspaceId)}.`);
+    } catch (error) {
+      setStatus(error?.message || "Не удалось применить preset.");
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
+  const applyAllWorkspaces = async () => {
+    setIsBusy(true);
+    try {
+      const results = await flexLayoutWorkspaceService.applyPresetToAll({
+        workspaceIds: FLEX_WORKSPACE_OPTIONS.map((option) => option.value),
+        screenProfile,
+        presetName,
+      });
+      const appliedCount = results.filter((item) => item.ok).length;
+      const failedCount = results.length - appliedCount;
+      setStatus(`Применено: ${appliedCount}, пропущено: ${failedCount}.`);
+    } catch (error) {
+      setStatus(error?.message || "Не удалось применить presets для всех workspace.");
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
+  const resetAllWorkspaces = async () => {
+    setIsBusy(true);
+    try {
+      await flexLayoutWorkspaceService.resetAllWorkspaces(
+        FLEX_WORKSPACE_OPTIONS.map((option) => option.value)
+      );
+      await refreshPresets();
+      setStatus("Все flexlayout-пресеты сброшены к базовой раскладке.");
+    } catch (error) {
+      setStatus(error?.message || "Не удалось сбросить presets.");
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
+  return (
+    <div className="ide-panel-shell ase-flex-panel">
+      <div className="ide-panel-header">
+        <div>
+          <strong>Layout Profiles</strong>
+          <span>Сохранение, применение и сброс flexlayout-состояний для всех ключевых workspace.</span>
+        </div>
+      </div>
+      <div className="ide-settings-form">
+        <label>
+          <span>Screen Profile</span>
+          <select value={screenProfile} onChange={(event) => setScreenProfile(event.target.value)}>
+            {SCREEN_PROFILE_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <span>Workspace</span>
+          <select value={workspaceId} onChange={(event) => setWorkspaceId(event.target.value)}>
+            {FLEX_WORKSPACE_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <span>Preset</span>
+          <input
+            list="layout-profile-presets"
+            onChange={(event) => setPresetName(event.target.value || "manual")}
+            placeholder="manual"
+            type="text"
+            value={presetName}
+          />
+          <datalist id="layout-profile-presets">
+            {presetOptions.map((option) => (
+              <option key={option} value={option} />
+            ))}
+          </datalist>
+        </label>
+      </div>
+
+      <div className="ide-workspace-summary-grid">
+        <div className="ide-workspace-metric-card">
+          <span>Current Mode</span>
+          <strong>{resolveWorkspaceLabel(activeWorkspaceId)}</strong>
+        </div>
+        <div className="ide-workspace-metric-card">
+          <span>Viewport</span>
+          <strong>{detectScreenProfile()}</strong>
+        </div>
+        <div className="ide-workspace-metric-card">
+          <span>Presets</span>
+          <strong>{presets.length}</strong>
+        </div>
+      </div>
+
+      <div className="ide-workspace-action-row">
+        <button disabled={isBusy} onClick={saveCurrentWorkspace}>
+          Save Current
+        </button>
+        <button disabled={isBusy} onClick={saveAllWorkspaces}>
+          Save All
+        </button>
+        <button disabled={isBusy} onClick={applyCurrentWorkspace}>
+          Apply Current
+        </button>
+        <button disabled={isBusy} onClick={applyAllWorkspaces}>
+          Apply All
+        </button>
+        <button disabled={isBusy} onClick={resetAllWorkspaces}>
+          Reset All
+        </button>
+      </div>
+
+      <div className="ase-config-list">
+        {presets.length ? (
+          presets.slice(0, 16).map((preset) => (
+            <div key={preset.id} className="ase-config-card">
+              <strong>{resolveWorkspaceLabel(preset.workspaceId)}</strong>
+              <span>{preset.presetName} / {preset.screenProfile}</span>
+              <small>{preset.updatedAt || "no timestamp"}</small>
+            </div>
+          ))
+        ) : (
+          <div className="ide-empty-panel">
+            <LayoutTemplate size={14} />
+            <span>Сохраненные flexlayout-пресеты пока отсутствуют.</span>
+          </div>
+        )}
+      </div>
+
+      {status ? <div className="ase-feedback-card"><Sparkles size={14} /><p>{status}</p></div> : null}
+    </div>
+  );
+}
+
+function resolveWorkspaceIdByMode(activeTab) {
+  if (activeTab === "prompt_library") return "prompt_ide_workspace";
+  if (activeTab === "ase_console") return "ase_workspace";
+  if (activeTab === "archives") return "local_media_library";
+  return "app_mode_workspace";
+}
+
+function resolveWorkspaceLabel(workspaceId) {
+  return (
+    FLEX_WORKSPACE_OPTIONS.find((option) => option.value === workspaceId)?.label || workspaceId
+  );
+}
+
 function resolveTabIcon(icon) {
   const common = { size: 14, strokeWidth: 2 };
   switch (icon) {
@@ -436,6 +822,8 @@ function resolveTabIcon(icon) {
       return <TerminalSquare {...common} />;
     case "services":
       return <Settings2 {...common} />;
+    case "layout-manager":
+      return <LayoutTemplate {...common} />;
     default:
       return <Boxes {...common} />;
   }

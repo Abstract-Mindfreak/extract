@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Copy, FolderPlus, Save } from "lucide-react";
+import appPersistenceService from "../services/AppPersistenceService";
 
 const PANEL_APPEARANCE_STORAGE_KEY = "mmss.sequenceBuilderAppearance.v1";
 const DEFAULT_PANEL_APPEARANCE = {
@@ -52,11 +53,32 @@ function JsonSequenceBuilder({
   const [batchMode, setBatchMode] = useState("random");
   const [batchTagPreset, setBatchTagPreset] = useState("all");
   const [sourceFilter, setSourceFilter] = useState("all");
-  const [panelAppearance, setPanelAppearance] = useState(loadPanelAppearance);
+  const [panelAppearance, setPanelAppearance] = useState(DEFAULT_PANEL_APPEARANCE);
 
   useEffect(() => {
-    window.localStorage.setItem(PANEL_APPEARANCE_STORAGE_KEY, JSON.stringify(panelAppearance));
+    void appPersistenceService.setSetting("sequence_builder", PANEL_APPEARANCE_STORAGE_KEY, panelAppearance);
   }, [panelAppearance]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const hydrateAppearance = async () => {
+      const stored = await appPersistenceService.getSetting(
+        "sequence_builder",
+        PANEL_APPEARANCE_STORAGE_KEY,
+        DEFAULT_PANEL_APPEARANCE,
+      );
+      if (!cancelled && stored && typeof stored === "object") {
+        setPanelAppearance({
+          ...DEFAULT_PANEL_APPEARANCE,
+          ...stored,
+        });
+      }
+    };
+    void hydrateAppearance();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const compositionBlocks = useMemo(
     () =>
@@ -452,20 +474,6 @@ function JsonSequenceBuilder({
       </div>
     </div>
   );
-}
-
-function loadPanelAppearance() {
-  try {
-    const raw = window.localStorage.getItem(PANEL_APPEARANCE_STORAGE_KEY);
-    if (!raw) return DEFAULT_PANEL_APPEARANCE;
-    const parsed = JSON.parse(raw);
-    return {
-      ...DEFAULT_PANEL_APPEARANCE,
-      ...parsed,
-    };
-  } catch (_error) {
-    return DEFAULT_PANEL_APPEARANCE;
-  }
 }
 
 function hexToRgba(hex, alpha) {

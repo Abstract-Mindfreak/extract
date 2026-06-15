@@ -6,15 +6,20 @@ const MISTRAL_PROXY_URL = "http://localhost:3456/api/mistral/chat";
 const OLLAMA_PROXY_URL = "http://localhost:3456/api/ollama/generate";
 const OLLAMA_MODEL = (import.meta as any).env.VITE_OLLAMA_MODEL || "gemma2b-mmss-dense";
 type MistralProxyMode = 'plan' | 'generate' | 'validate';
+export type AIProvider = 'mistral' | 'ollama';
 
 // Re-initialize for each call to ensure latest key is used if it changes
 const getAi = () => new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
-interface GenOptions {
+export interface GenOptions {
   mode: 'augment' | 'rewrite' | 'skeleton';
   rules?: string;
   onProgress?: (message: string) => void;
   libraryContext?: string;
+  temperature?: number;
+  max_tokens?: number;
+  provider?: AIProvider;
+  enableDB?: boolean;
 }
 
 export interface MistralLibraryPlan {
@@ -82,6 +87,59 @@ function parseJsonFromMistralPayload(payload: any, sourceLabel: string) {
       `${sourceLabel} returned non-JSON content: ${error instanceof Error ? error.message : "parse failed"} :: ${normalizedContent.slice(0, 400)}`,
     );
   }
+}
+
+function getModeInstruction(mode: GenOptions['mode']) {
+  return {
+    augment: "Fill in missing values or extend with new meaningful keys.",
+    rewrite: "Completely recreate JSON.",
+    skeleton: "Only structure/keys, values should be null/0.",
+  }[mode];
+}
+
+function buildStructuredPrompt(prompt: string, structure?: string, options?: GenOptions) {
+  const mode = options?.mode || 'augment';
+  const modeInstruction = getModeInstruction(mode);
+  const dbInstruction = options?.enableDB
+    ? `
+
+DATABASE ACCESS: You can query PostgreSQL database.
+If you need data from DB, output SQL query in format:
+\`\`\`sql
+SELECT column1, column2 FROM table_name WHERE condition;
+\`\`\`
+Only SELECT queries allowed. After receiving DB results, generate final JSON.`
+    : '';
+
+  return `Mode: ${mode}
+Rules: ${options?.rules || 'None'}
+MMSS Library Context: ${options?.libraryContext || 'None'}
+Context: ${structure || 'None'}
+Action: ${prompt}
+Instruction: ${modeInstruction}${dbInstruction}
+
+CRITICAL: Return ONLY valid JSON. No explanations, no markdown, no text before or after JSON.`;
+}
+
+function extractJsonEnvelope(rawContent: string, sourceLabel: string) {
+  const normalized = String(rawContent || '')
+    .replace(/^```json\s*/i, '')
+    .replace(/^```\s*/i, '')
+    .replace(/\s*```$/i, '')
+    .trim();
+  const start = normalized.indexOf('{');
+  const end = normalized.lastIndexOf('}');
+
+  if (start === -1 || end === -1 || end < start) {
+    throw new Error(`${sourceLabel} returned no JSON object :: ${normalized.slice(0, 400)}`);
+  }
+
+  return normalized.slice(start, end + 1);
+}
+
+function previewText(value: string, maxLength = 400) {
+  const text = String(value || '');
+  return text.length > maxLength ? `${text.slice(0, maxLength)}…` : text;
 }
 
 async function callMistralProxy(
@@ -197,27 +255,15 @@ IMPORTANT: Return ONLY a valid JSON object. No markdown, no conversation.`;
 export async function generateWithMistral(prompt: string, structure?: string, options?: GenOptions) {
   try {
     options?.onProgress?.('Preparing Mistral request');
-    const modeInstruction = {
-      augment: "Fill in missing values or extend with new meaningful keys.",
-      rewrite: "Completely recreate JSON.",
-      skeleton: "Only structure/keys, values should be null/0."
-    }[options?.mode || 'augment'];
-
-    const fullPrompt = `Mode: ${options?.mode || 'augment'}
-Rules: ${options?.rules || 'None'}
-MMSS Library Context: ${options?.libraryContext || 'None'}
-Context: ${structure || 'None'}
-Action: ${prompt}
-Instruction: ${modeInstruction}
-Return JSON strictly.`;
+    const fullPrompt = buildStructuredPrompt(prompt, structure, options);
 
     if (!MISTRAL_API_KEY) {
       options?.onProgress?.('Sending prompt to local Mistral proxy');
       options?.onProgress?.('Parsing Mistral proxy response');
       const proxyData = await callMistralProxy('generate', fullPrompt, {
         model: "mistral-small-latest",
-        temperature: 0.4,
-        max_tokens: 4096,
+        temperature: options?.temperature ?? 0.4,
+        max_tokens: options?.max_tokens ?? 4096,
       });
       return parseJsonFromMistralPayload(proxyData, 'Mistral proxy');
     }
@@ -226,8 +272,8 @@ Return JSON strictly.`;
     options?.onProgress?.('Parsing Mistral response');
     const data = await callMistralDirect('generate', fullPrompt, {
       model: "mistral-small-latest",
-      temperature: 0.4,
-      max_tokens: 4096,
+      temperature: options?.temperature ?? 0.4,
+      max_tokens: options?.max_tokens ?? 4096,
     });
     return parseJsonFromMistralPayload(data, 'Mistral');
   } catch (err) {
@@ -239,19 +285,28 @@ Return JSON strictly.`;
 export async function generateWithOllama(prompt: string, structure?: string, options?: GenOptions) {
   try {
     options?.onProgress?.('Preparing Ollama request');
-    const modeInstruction = {
-      augment: "Fill in missing values or extend with new meaningful keys.",
-      rewrite: "Completely recreate JSON.",
-      skeleton: "Only structure/keys, values should be null/0."
-    }[options?.mode || 'augment'];
+    const fullPrompt = buildStructuredPrompt(prompt, structure, options);
+    const requestPayload = {
+      model: OLLAMA_MODEL,
+      prompt: fullPrompt,
+      stream: false,
+      context: {
+        enableDB: options?.enableDB || false,
+      },
+      options: {
+        temperature: options?.temperature ?? 0.3,
+        num_predict: options?.max_tokens ?? 4096,
+      },
+    };
 
-    const fullPrompt = `Mode: ${options?.mode || 'augment'}
-Rules: ${options?.rules || 'None'}
-MMSS Library Context: ${options?.libraryContext || 'None'}
-Context: ${structure || 'None'}
-Action: ${prompt}
-Instruction: ${modeInstruction}
-Return JSON strictly.`;
+    console.log('[Ollama] Outgoing proxy request:', {
+      url: OLLAMA_PROXY_URL,
+      model: requestPayload.model,
+      enableDB: requestPayload.context.enableDB,
+      promptChars: fullPrompt.length,
+      promptPreview: previewText(fullPrompt),
+      options: requestPayload.options,
+    });
 
     options?.onProgress?.('Sending prompt to Ollama');
     const response = await fetch(OLLAMA_PROXY_URL, {
@@ -259,15 +314,7 @@ Return JSON strictly.`;
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        model: OLLAMA_MODEL,
-        prompt: fullPrompt,
-        stream: false,
-        options: {
-          temperature: 0.4,
-          num_predict: 4096,
-        },
-      }),
+      body: JSON.stringify(requestPayload),
     });
 
     const responseText = await response.text();
@@ -283,26 +330,34 @@ Return JSON strictly.`;
 
     const data = JSON.parse(responseText);
     const rawContent = data?.response || '';
-    console.log('[Ollama] Extracted content:', rawContent);
-    
-    const normalizedContent = rawContent
-      .replace(/^```json\s*/i, '')
-      .replace(/^```\s*/i, '')
-      .replace(/\s*```$/i, '')
-      .trim();
+    console.log('[Ollama] Parsed proxy response meta:', {
+      traceId: data?.traceId || null,
+      targetModel: data?.targetModel || null,
+      toolCall: data?.toolCall || null,
+      responseChars: String(rawContent).length,
+      responsePreview: previewText(rawContent),
+    });
 
     options?.onProgress?.('Parsing Ollama response');
     try {
-      return JSON.parse(normalizedContent);
+      return JSON.parse(extractJsonEnvelope(rawContent, 'Ollama'));
     } catch (error) {
       throw new Error(
-        `Ollama returned non-JSON content: ${error instanceof Error ? error.message : 'parse failed'} :: ${normalizedContent.slice(0, 400)}`,
+        `Ollama returned non-JSON content: ${error instanceof Error ? error.message : 'parse failed'} :: ${String(rawContent).slice(0, 400)}`,
       );
     }
   } catch (err) {
     console.error("Ollama Error:", err);
     throw err;
   }
+}
+
+export async function generateAI(prompt: string, structure?: string, options?: GenOptions) {
+  const provider = options?.provider || 'mistral';
+  if (provider === 'ollama') {
+    return generateWithOllama(prompt, structure, options);
+  }
+  return generateWithMistral(prompt, structure, options);
 }
 
 export async function planMistralLibraryQueries(prompt: string, librarySummary: string, onProgress?: (message: string) => void): Promise<MistralLibraryPlan> {

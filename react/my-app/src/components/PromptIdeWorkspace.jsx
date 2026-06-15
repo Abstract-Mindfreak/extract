@@ -27,6 +27,7 @@ import {
   SequenceActionsPanel,
 } from "./SequenceWorkspacePanels";
 import { useIdeWorkspaceStore } from "../hooks/useIdeWorkspaceStore";
+import flexLayoutWorkspaceService from "../services/FlexLayoutWorkspaceService";
 import "./PromptIdeWorkspace.css";
 
 const PREVIEW_TAB_ID = "ide-preview-json";
@@ -134,6 +135,14 @@ function buildDefaultLayout() {
               enableClose: false,
               icon: "bindings",
             },
+            {
+              id: "ide-library-tools-tab",
+              type: "tab",
+              name: "Library Tools",
+              component: "library-tools",
+              enableClose: false,
+              icon: "topbar",
+            },
           ],
         },
         {
@@ -214,8 +223,54 @@ export default function PromptIdeWorkspace(props) {
   const layoutRef = useRef(null);
   const workspaceStore = useIdeWorkspaceStore();
   const { blocks, selectedBlock, selectedBlockId } = props;
-  const [model] = useState(() =>
+  const [model, setModel] = useState(() =>
     Model.fromJson(workspaceStore.layoutSnapshot || buildDefaultLayout())
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const hydrateLayout = async () => {
+      const resolved = await flexLayoutWorkspaceService.loadEffectiveLayout({
+        workspaceId: "prompt_ide_workspace",
+        fallbackLayout: buildDefaultLayout(),
+        legacySnapshot: workspaceStore.layoutSnapshot,
+      });
+      if (!cancelled && resolved?.layoutJson) {
+        setModel(Model.fromJson(resolved.layoutJson));
+        workspaceStore.setLayoutSnapshot(resolved.layoutJson);
+      }
+    };
+
+    void hydrateLayout();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(
+    () =>
+      flexLayoutWorkspaceService.subscribe((event) => {
+        if (event.workspaceId !== "prompt_ide_workspace") return;
+
+        if (event.type === "apply" && event.layoutJson) {
+          setModel(Model.fromJson(event.layoutJson));
+          workspaceStore.setLayoutSnapshot(event.layoutJson);
+          if (event.preset?.uiTheme) {
+            workspaceStore.setUiTheme(event.preset.uiTheme);
+          }
+          if (event.preset?.fontScale) {
+            workspaceStore.setFontScale(event.preset.fontScale);
+          }
+        }
+
+        if (event.type === "reset") {
+          const nextLayout = buildDefaultLayout();
+          setModel(Model.fromJson(nextLayout));
+          workspaceStore.setLayoutSnapshot(nextLayout);
+        }
+      }),
+    []
   );
 
   const blockMap = useMemo(
@@ -325,6 +380,25 @@ export default function PromptIdeWorkspace(props) {
     const component = node.getComponent();
 
     if (component === "topbar") {
+      return (
+        <PromptLibraryTopbar
+          blocks={blocks}
+          sequences={props.sequenceBuilderProps?.sequences || []}
+          libraryReady={props.workspaceProps?.libraryReady || false}
+          activePromptPanelMeta={{
+            label: "IDE Workspace",
+            subtitle: "Unified prompt library workspace",
+          }}
+          onLoadLibrary={props.workspaceProps?.onLoadLibrary}
+          onImportSessionBlocks={props.workspaceProps?.onImportSessionBlocks}
+          onResetLayout={props.workspaceProps?.onResetLayout}
+          onSetActivePromptPanel={() => {}}
+          onClearComposition={props.sequenceBuilderProps?.onClearComposition}
+        />
+      );
+    }
+
+    if (component === "library-tools") {
       return (
         <PromptLibraryTopbar
           blocks={blocks}
@@ -503,7 +577,14 @@ export default function PromptIdeWorkspace(props) {
               workspaceStore.renameDraftDocument(config.draftId, nextName);
             }
           }
-          workspaceStore.setLayoutSnapshot(nextModel.toJson());
+          const nextJson = nextModel.toJson();
+          workspaceStore.setLayoutSnapshot(nextJson);
+          void flexLayoutWorkspaceService.persistAutoLayout({
+            workspaceId: "prompt_ide_workspace",
+            layoutJson: nextJson,
+            uiTheme: workspaceStore.uiTheme,
+            fontScale: workspaceStore.fontScale,
+          });
         }}
         onRenderTab={(node, renderValues) => {
           renderValues.leading = resolveTabIcon(node.getConfig()?.icon);

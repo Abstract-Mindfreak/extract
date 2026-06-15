@@ -175,6 +175,36 @@ function buildHash(text) {
   return crypto.createHash('sha1').update(text).digest('hex');
 }
 
+function buildArtifactDocument({
+  artifactId,
+  title,
+  payload,
+  metadata = {},
+}) {
+  const rawText = stableStringify(payload || {});
+  const text = truncateText([
+    title,
+    rawText,
+    ...collectJsonTextFragments(payload, { maxFragments: 48, maxStringLength: 320 }),
+  ].filter(Boolean).join('\n\n'), JSON_TEXT_LIMIT);
+
+  return {
+    sourceTable: 'rag_artifacts',
+    sourceId: String(artifactId),
+    sourceTitle: title || artifactId,
+    chunkText: text,
+    sourcePayload: payload || {},
+    metadata: {
+      artifact_type: metadata.artifact_type || 'local_rag_result',
+      ui_origin: metadata.ui_origin || 'local_rag_panel',
+      query: metadata.query || null,
+      mode: metadata.mode || null,
+      saved_at: metadata.saved_at || new Date().toISOString(),
+      ...metadata,
+    },
+  };
+}
+
 function cleanupJobs() {
   const now = Date.now();
   for (const [jobId, job] of jobs.entries()) {
@@ -616,6 +646,37 @@ async function gatherStats(databaseName) {
     sourceTables: result.rows[0]?.source_tables || [],
     lastUpdatedAt: result.rows[0]?.last_updated_at || null,
     activeJob: Array.from(jobs.values()).find((job) => job.database === databaseName && job.status === 'running') || null,
+  };
+}
+
+async function vectorizeArtifact(options = {}) {
+  const database = normalizeDatabaseIdentifier(options.database);
+  const artifactId = String(options.artifactId || '').trim() || `artifact_${Date.now()}`;
+  const title = String(options.title || '').trim() || artifactId;
+  const payload = options.payload ?? {};
+
+  await ensureRagSchema(database);
+  const doc = buildArtifactDocument({
+    artifactId,
+    title,
+    payload,
+    metadata: options.metadata || {},
+  });
+  doc.contentHash = buildHash(doc.chunkText);
+
+  const [embedding] = await embedTexts([doc.chunkText]);
+  await upsertEmbeddingBatch(database, [doc], [embedding]);
+
+  return {
+    database,
+    artifactId,
+    sourceTable: doc.sourceTable,
+    sourceTitle: doc.sourceTitle,
+    embeddingModel: EMBEDDING_MODEL,
+    embeddingDimension: embedding.length,
+    contentHash: doc.contentHash,
+    metadata: doc.metadata,
+    chunkPreview: safePreview(doc.chunkText, 800),
   };
 }
 
@@ -1286,4 +1347,5 @@ module.exports = {
   normalizeDatabaseIdentifier,
   searchRag,
   startVectorizationJob,
+  vectorizeArtifact,
 };

@@ -1,104 +1,120 @@
 # FlowMusic.app Archiver
 
-Emergency backup tool for FlowMusic.app — downloads your **entire music library** including M4A audio, cover art, and all metadata (lyrics, prompts, generation settings, seeds, etc.).
-
-Built with Playwright for browser automation. Resumes on crash and skips already-downloaded songs.
+FlowMusic archiver with an MMSS-oriented v2 pipeline. It harvests track metadata, captures linked conversation sessions, builds relation lineage, downloads local media files, and can persist normalized MMSS records into PostgreSQL.
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) 18+ installed
-- A FlowMusic.app account with songs in your library
+- Node.js 18+
+- A FlowMusic account with an accessible library
+- PostgreSQL only if you want `DB_MODE=v2` persistence
 
 ## Installation
 
 ```bash
-# Install dependencies
 npm install
-
-# Install the Chromium browser binary (required, one-time)
 npx playwright install chromium
+```
+
+## Environment
+
+The archiver reads `.env` from the workspace root and `flowmusic-archiver/.env` if present.
+
+Typical database config:
+
+```bash
+DB_MODE=v2
+FLOWMUSIC_DB_ENABLED=true
+FLOWMUSIC_DB_AUTO_INIT=true
+PG_HOST=localhost
+PG_PORT=5432
+PG_DATABASE=abstract-mind-lab
+PG_USER=mind_user
+PG_PASSWORD=...
+```
+
+Optional post-processing:
+
+```bash
+FLOWMUSIC_EMBED_METADATA=true
+FLOWMUSIC_EMBED_ACCOUNTS=1,2,3,4
 ```
 
 ## Usage
 
-### First Run (Login Required)
+First login / refresh:
 
 ```bash
 node archiver.mjs --headful
 ```
 
-1. A Chromium browser window will open and navigate to FlowMusic.app
-2. **Log in** with your account in the browser window
-3. Once you see your song library, open a **separate terminal** and run:
-   ```bash
-   touch producer_login_ready
-   ```
-4. The script will save your session and begin archiving
-
-### Subsequent Runs
+Resume with saved session:
 
 ```bash
 node archiver.mjs
 ```
 
-Uses the saved session from `producer_auth.json`. If the session has expired, it will tell you to re-run with `--headful`.
-
-### Resume / Skip Harvest
+Reuse the saved manifest and skip re-harvest:
 
 ```bash
 node archiver.mjs --skip-harvest
 ```
 
-Skips re-scanning your library and goes straight to downloading any missing files from the existing manifest. Useful when resuming after a crash.
+## Pipeline
 
-## What Gets Downloaded
+The v2 flow is:
 
-Each song gets its own folder inside `producer_backup/`:
+1. Harvest all track metadata into `producer_manifest.json`
+2. Capture linked conversation/session payloads into `sessions/`
+3. Build `mmss_manifest.json` with lineage, session context, and normalized MMSS structure
+4. Download track assets and optionally embed local metadata tags
+5. Persist MMSS records into PostgreSQL when enabled
 
+## Output
+
+```text
+flowmusic_backup/
+|- 00/
+|  `- <track-id>_<safe-title>/
+|     |- audio.m4a
+|     |- image.jpg
+|     `- meta.json
+|- sessions/
+|- producer_manifest.json
+|- mmss_manifest.json
+|- completion.json
+|- verification_summary.json
+`- session_capture_summary.json
 ```
-producer_backup/
-├── 00/
-│   └── 00632f86-..._Song Title/
-│       ├── audio.m4a        # Audio file
-│       ├── image.jpg        # Cover art
-│       └── meta.json        # All metadata
-├── 01/
-│   └── ...
-└── ff/
-```
 
-### Metadata includes:
-- **Title**, creation date, duration, source URL
-- **Lyrics** (plain text with section headers)
-- **Sound/Prompt** — the full generation prompt and tags
-- **Generation data** — model version, seed, conditions, transform type
-- **Stats** — play count, favorite count
-- **Parent song ID** — for remixes, covers, and vocal swaps
-- **Raw API data** — complete API response as an escape hatch
+Additional artifacts:
 
-## Resumability
+- `schema.sql` contains the MMSS PostgreSQL schema
+- `test/mmss-mapper.test.mjs` covers the mapper and lineage helpers
+- `scripts/sync-audio-meta/` contains the optional Python metadata embedder
 
-The script is fully resumable:
-- `producer_manifest.json` — tracks all discovered songs
-- `completion.json` — tracks which songs have been fully downloaded
-- If the script crashes or you stop it, just run it again — it picks up where it left off
+## PostgreSQL
 
-## Session Security
+When `DB_MODE=v2` and `FLOWMUSIC_DB_ENABLED=true`, the archiver writes:
 
-- `producer_auth.json` contains your login session cookies
-- **Never share** this file or commit it to Git
-- To force a fresh login, delete it and re-run with `--headful`
+- `sessions`
+- `tracks`
+- `stems`
+- `applied_flows`
+- `applied_memories`
+- `video_metadata`
+- `internal_tags`
+
+The schema is auto-created from `schema.sql` unless `FLOWMUSIC_DB_AUTO_INIT=false`.
 
 ## Known Limitations
 
-- **M4A only** — WAV/MP3 downloads require per-song API calls which would significantly slow down large archives
-- Some songs may return HTTP 404 if they failed to generate or were purged by FlowMusic.app
-- Sessions expire after a few hours; re-run with `--headful` to refresh
+- lineage is inferred from available parent/session links, so some chains may remain partial
+- `audio_md5` is computed after local download, not before remote fetch
+- metadata embedding depends on the Python helper and its local dependencies
+- some FlowMusic assets may still return `404` or `403` if they no longer exist upstream
 
-## Technical Details
+## Security
 
-See [TECHNICAL_REFERENCE.md](./TECHNICAL_REFERENCE.md) for in-depth documentation on the architecture, authentication flow, API endpoints, and known issues.
-
----
-
-Made with ❤️ for preserving your AI music creations
+- auth JSON files contain live session cookies and must never be committed
+- backup folders, local DB artifacts, and embedder state/logs are ignored in git
+- verify `.gitignore` before pushing account-specific output

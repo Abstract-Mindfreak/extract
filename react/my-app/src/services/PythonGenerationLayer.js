@@ -5,32 +5,47 @@
  */
 
 import { callMistral } from './MistralOrchestrator';
+import appPersistenceService from './AppPersistenceService';
 
 // =========================
 // MEMORY SYSTEM (memory_v3.py)
 // =========================
 const MEMORY_KEY = 'mmss.generation.memory_v3';
+let memoryCache = null;
+let memoryHydrationStarted = false;
+const DEFAULT_MEMORY = {
+  block_stats: {},
+  intent_stats: {},
+  generation_stats: {}
+};
+
+async function hydrateMemoryFromDatabase() {
+  if (memoryHydrationStarted) return;
+  memoryHydrationStarted = true;
+  try {
+    const stored = await appPersistenceService.getSetting('generation', MEMORY_KEY, null);
+    if (stored && typeof stored === 'object') {
+      memoryCache = stored;
+    }
+  } catch (e) {
+    console.warn('Failed to hydrate generation memory from database:', e);
+  }
+}
 
 export function loadMemory() {
-  try {
-    const saved = localStorage.getItem(MEMORY_KEY);
-    if (saved) return JSON.parse(saved);
-  } catch (e) {
-    console.warn('Failed to load memory:', e);
+  if (!memoryHydrationStarted) {
+    void hydrateMemoryFromDatabase();
   }
-  return {
-    block_stats: {},
-    intent_stats: {},
-    generation_stats: {}
-  };
+  if (memoryCache) {
+    return memoryCache;
+  }
+  memoryCache = { ...DEFAULT_MEMORY };
+  return memoryCache;
 }
 
 export function saveMemory(memory) {
-  try {
-    localStorage.setItem(MEMORY_KEY, JSON.stringify(memory));
-  } catch (e) {
-    console.warn('Failed to save memory:', e);
-  }
+  memoryCache = memory;
+  void appPersistenceService.setSetting('generation', MEMORY_KEY, memory);
 }
 
 export function updateMemory(blocks, intent) {

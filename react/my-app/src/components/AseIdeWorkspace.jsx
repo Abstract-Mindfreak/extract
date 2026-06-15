@@ -2,7 +2,7 @@ import {
   Layout,
   Model,
 } from "flexlayout-react";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
   Boxes,
@@ -23,6 +23,7 @@ import GenerationEnginePanel from "./ase-variations/generation-engine-panel";
 import LocalRagPanel from "./ase-variations/local-rag-panel";
 import MMSSMutatorPanel from "./ase-variations/mmss-mutator-panel";
 import { useAseWorkspaceStore } from "../hooks/useAseWorkspaceStore";
+import flexLayoutWorkspaceService from "../services/FlexLayoutWorkspaceService";
 import "./PromptIdeWorkspace.css";
 import "./AseIdeWorkspace.css";
 
@@ -218,7 +219,7 @@ function ensureWorkspaceTab(layoutJson, tabConfig) {
 export default function AseIdeWorkspace(props) {
   const workspaceStore = useAseWorkspaceStore();
   const layoutRef = useRef(null);
-  const [model] = useState(() =>
+  const [model, setModel] = useState(() =>
     Model.fromJson(
       [
         {
@@ -242,6 +243,52 @@ export default function AseIdeWorkspace(props) {
         workspaceStore.layoutSnapshot || buildDefaultLayout(),
       ),
     )
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const hydrateLayout = async () => {
+      const resolved = await flexLayoutWorkspaceService.loadEffectiveLayout({
+        workspaceId: "ase_workspace",
+        fallbackLayout: buildDefaultLayout(),
+        legacySnapshot: workspaceStore.layoutSnapshot,
+      });
+      if (!cancelled && resolved?.layoutJson) {
+        setModel(Model.fromJson(resolved.layoutJson));
+        workspaceStore.setLayoutSnapshot(resolved.layoutJson);
+      }
+    };
+
+    void hydrateLayout();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(
+    () =>
+      flexLayoutWorkspaceService.subscribe((event) => {
+        if (event.workspaceId !== "ase_workspace") return;
+
+        if (event.type === "apply" && event.layoutJson) {
+          setModel(Model.fromJson(event.layoutJson));
+          workspaceStore.setLayoutSnapshot(event.layoutJson);
+          if (event.preset?.uiTheme) {
+            workspaceStore.setUiTheme(event.preset.uiTheme);
+          }
+          if (event.preset?.fontScale) {
+            workspaceStore.setFontScale(event.preset.fontScale);
+          }
+        }
+
+        if (event.type === "reset") {
+          const nextLayout = buildDefaultLayout();
+          setModel(Model.fromJson(nextLayout));
+          workspaceStore.setLayoutSnapshot(nextLayout);
+        }
+      }),
+    []
   );
 
   const activityLogs = useMemo(
@@ -367,7 +414,14 @@ export default function AseIdeWorkspace(props) {
         factory={factory}
         model={model}
         onModelChange={(nextModel) => {
-          workspaceStore.setLayoutSnapshot(nextModel.toJson());
+          const nextJson = nextModel.toJson();
+          workspaceStore.setLayoutSnapshot(nextJson);
+          void flexLayoutWorkspaceService.persistAutoLayout({
+            workspaceId: "ase_workspace",
+            layoutJson: nextJson,
+            uiTheme: workspaceStore.uiTheme,
+            fontScale: workspaceStore.fontScale,
+          });
         }}
         onRenderTab={(node, renderValues) => {
           renderValues.leading = resolveTabIcon(node.getConfig()?.icon);

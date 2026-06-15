@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
+import appPersistenceService from "../services/AppPersistenceService";
 
 const DEFAULT_DRAFT_TEMPLATE = '{\n  "prompt": ""\n}';
 const DEFAULT_SEQUENCE_PANEL_APPEARANCE = {
@@ -101,6 +102,7 @@ export const useIdeWorkspaceStore = create(
     }),
     {
       name: "mmss.ide.workspace.v1",
+      storage: createJSONStorage(() => appPersistenceService.createZustandStorage("zustand")),
       partialize: (state) => ({
         draftDocuments: state.draftDocuments,
         enableGraphDecomposition: state.enableGraphDecomposition,

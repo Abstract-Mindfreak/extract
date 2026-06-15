@@ -36,6 +36,16 @@ def apply_indexes():
             """))
             print("Created idx_chat_sessions_user_id")
             
+            connection.execute(text("""
+                CREATE INDEX IF NOT EXISTS idx_music_blocks_content_gin ON music_blocks USING gin (content)
+            """))
+            print("Created idx_music_blocks_content_gin")
+            
+            connection.execute(text("""
+                CREATE INDEX IF NOT EXISTS idx_music_blocks_catalog ON music_blocks (block_type, layer)
+            """))
+            print("Created idx_music_blocks_catalog")
+            
             print("All indexes applied successfully!")
 
 if __name__ == "__main__":

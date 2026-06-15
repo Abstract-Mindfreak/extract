@@ -2,6 +2,7 @@ import { DEFAULT_BLOCKLY_CONTEXT, MERGE_STRATEGIES } from "./promptTypes";
 const PROMPT_LIBRARY_SCHEMA_VERSION = 1;
 export const PROMPT_LIBRARY_STORAGE_KEY = "mmss.promptLibrary.v1";
 export const PROMPT_BINDING_BUTTONS = Array.from({ length: 16 }, (_, index) => `slot_${index + 1}`);
+let promptLibrarySnapshot = null;
 
 export const DEFAULT_BLOCKLY_WORKSPACE_XML =
   '<xml xmlns="https://developers.google.com/blockly/xml"><block type="mmss_set_merge_strategy" x="24" y="24"><field name="MERGE_STRATEGY">merge_deep</field><next><block type="mmss_add_block"></block></next></block></xml>';
@@ -405,28 +406,16 @@ export function createEntityId(prefix) {
 }
 
 export function savePromptLibraryState(state) {
-  const payload = {
+  promptLibrarySnapshot = {
     schemaVersion: PROMPT_LIBRARY_SCHEMA_VERSION,
     promptLibrary: state,
   };
-
-  try {
-    window.localStorage.setItem(PROMPT_LIBRARY_STORAGE_KEY, JSON.stringify(payload));
-  } catch (error) {
-    // Ignore persistence errors (for example QuotaExceededError) to keep runtime import stable.
-  }
 }
 
 export function loadPromptLibraryState() {
-  try {
-    const raw = window.localStorage.getItem(PROMPT_LIBRARY_STORAGE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (parsed?.schemaVersion !== PROMPT_LIBRARY_SCHEMA_VERSION) return null;
-    return parsed.promptLibrary ?? null;
-  } catch (error) {
-    return null;
-  }
+  if (!promptLibrarySnapshot) return null;
+  if (promptLibrarySnapshot?.schemaVersion !== PROMPT_LIBRARY_SCHEMA_VERSION) return null;
+  return promptLibrarySnapshot.promptLibrary ?? null;
 }
 
 export function exportPromptLibraryFile(state) {

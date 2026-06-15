@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 const PROMPT_PANEL_DEFAULT_ORDER = [
   "json_block_list",
   "prompt_logic_blockly",

@@ -237,8 +237,8 @@ export const useTrackStore = create((set, get) => ({
   loadCustomFilters: async () => {
     try {
       const metadata = await storageService.getMetadata('customFilters');
-      if (metadata?.value && Array.isArray(metadata.value)) {
-        set({ customFilters: metadata.value });
+      if (Array.isArray(metadata)) {
+        set({ customFilters: metadata });
       }
     } catch (error) {
       console.error('Failed to load custom filters:', error);

@@ -113,7 +113,7 @@ class ProducerSessionParser {
           continue;
         }
 
-        if (part.part_kind === 'tool-call' && part.tool_name === 'audio__create_song') {
+        if (part.part_kind === 'tool-call' && this.isAudioGenerationTool(part.tool_name)) {
           const linkedTrack = this.findTrackForAudioPart(
             conversation.id,
             part.args,
@@ -123,7 +123,7 @@ class ProducerSessionParser {
           const message = {
             id: this.makeMessageId(conversation.id, messages.length, 'audio-call'),
             role: 'assistant',
-            content: this.formatAudioCall(part.args),
+            content: this.formatAudioCall(part.tool_name, part.args),
             timestamp,
             createdAt: timestamp,
             linkedTrackId: linkedTrack?.id,
@@ -145,13 +145,14 @@ class ProducerSessionParser {
           continue;
         }
 
-        if (part.part_kind === 'tool-return' && part.tool_name === 'audio__create_song') {
+        if (part.part_kind === 'tool-return' && this.isAudioGenerationTool(part.tool_name)) {
           const payload = part.content || {};
           const pending = pendingAudioMessages.shift();
           const linkedTrack = this.findTrackForAudioPart(
             conversation.id,
             {
               clip_id: payload.clip_id,
+              clip_outputs: payload.clip_outputs,
               operation_id: payload.operation_id,
               title: pending?.args?.title
             },
@@ -171,7 +172,7 @@ class ProducerSessionParser {
           pushMessage({
             id: this.makeMessageId(conversation.id, messages.length, 'audio-return'),
             role: 'assistant',
-            content: this.formatAudioReturn(payload),
+            content: this.formatAudioReturn(part.tool_name, payload),
             timestamp,
             createdAt: timestamp,
             linkedTrackId: linkedTrack?.id,
@@ -240,13 +241,29 @@ class ProducerSessionParser {
     };
   }
 
+  isAudioGenerationTool(toolName) {
+    return toolName === 'audio__create_song' || toolName === 'audio__render_edit';
+  }
+
   findTrackForAudioPart(conversationId, payload, trackIndex) {
-    if (payload?.clip_id && trackIndex.trackById.has(payload.clip_id)) {
-      return trackIndex.trackById.get(payload.clip_id);
+    const clipIds = [
+      payload?.clip_id,
+      ...(Array.isArray(payload?.clip_outputs)
+        ? payload.clip_outputs.map((item) => item?.clip_id).filter(Boolean)
+        : []),
+    ];
+
+    for (const clipId of clipIds) {
+      if (trackIndex.trackById.has(clipId)) {
+        return trackIndex.trackById.get(clipId);
+      }
     }
 
-    if (payload?.operation_id && trackIndex.trackByOperationId.has(payload.operation_id)) {
-      return trackIndex.trackByOperationId.get(payload.operation_id);
+    const operationIds = [payload?.operation_id, payload?.operation_id_b].filter(Boolean);
+    for (const operationId of operationIds) {
+      if (trackIndex.trackByOperationId.has(operationId)) {
+        return trackIndex.trackByOperationId.get(operationId);
+      }
     }
 
     if (conversationId && payload?.title) {
@@ -309,13 +326,17 @@ class ProducerSessionParser {
     return [title ? `LYRICS\n${title}` : 'LYRICS', lyrics].filter(Boolean).join('\n\n');
   }
 
-  formatAudioCall(payload) {
+  formatAudioCall(toolName, payload) {
     if (!payload) return '';
 
-    const sections = ['GENERATE SONG'];
+    const sections = [toolName === 'audio__render_edit' ? 'RENDER EDIT' : 'GENERATE SONG'];
 
     if (payload.title) {
       sections.push(`Title: ${payload.title}`);
+    }
+
+    if (payload.recipe_id) {
+      sections.push(`Recipe ID: ${payload.recipe_id}`);
     }
 
     if (payload.sound_prompt) {
@@ -329,13 +350,20 @@ class ProducerSessionParser {
     return sections.join('\n\n');
   }
 
-  formatAudioReturn(payload) {
+  formatAudioReturn(toolName, payload) {
     if (!payload) return '';
 
-    const sections = ['SONG CREATED'];
+    const sections = [toolName === 'audio__render_edit' ? 'EDIT RENDERED' : 'SONG CREATED'];
 
     if (payload.clip_id) {
       sections.push(`Clip ID: ${payload.clip_id}`);
+    }
+
+    if (Array.isArray(payload.clip_outputs)) {
+      payload.clip_outputs
+        .map((item) => item?.clip_id)
+        .filter(Boolean)
+        .forEach((clipId) => sections.push(`Clip ID: ${clipId}`));
     }
 
     if (payload.operation_id) {

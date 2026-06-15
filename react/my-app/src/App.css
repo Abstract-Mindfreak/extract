@@ -44,6 +44,7 @@
   display: grid;
   grid-template-columns: 64px 0 minmax(0, 1fr);
   gap: 18px;
+  min-height:100vh;
   align-items: start;
   transition: grid-template-columns 220ms ease;
 }

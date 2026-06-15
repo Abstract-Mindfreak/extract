@@ -15,7 +15,7 @@ import {
   Upload,
 } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
-import { generateWithGemini, generateWithMistral, generateWithOllama, planMistralLibraryQueries, validateWithMistral, type MistralLibraryPlan } from '../services/aiService';
+import { generateAI, generateWithGemini, planMistralLibraryQueries, validateWithMistral, type AIProvider, type MistralLibraryPlan } from '../services/aiService';
 import { cn } from '../lib/utils';
 import { injectMetaRules, type MmssMetricsContract } from '../services/mmssMetaInjector';
 import { buildMmssQualityReport, type MmssQualityReport } from '../services/mmssValidation';
@@ -26,6 +26,8 @@ import { BlockPalette } from './BlockPalette';
 const MMSS_BRIDGE_API_BASE = 'http://localhost:3456/api/mmss';
 const MAX_CONTEXT_BLOCKS = 10;
 const STORAGE_KEY = 'json_genesis_mistral_pipeline_v1';
+const AI_PROVIDER_STORAGE_KEY = 'json_genesis_ai_provider_v1';
+const AI_DB_STORAGE_KEY = 'json_genesis_ai_enable_db_v1';
 const DEFAULT_MMSS_META_RULES = [
   'Include MMSS metrics when relevant: V, N, S, D_f, G_S, R_T.',
   'Preserve MMSS meta-formulas and relation operators when they match the selected context.',
@@ -162,6 +164,8 @@ export const MainEditor: React.FC = () => {
   const [isPlanningContext, setIsPlanningContext] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
   const [aiModel, setAiModel] = useState<'gemini' | 'mistral' | 'ollama'>('gemini');
+  const [aiProvider, setAiProvider] = useState<AIProvider>('mistral');
+  const [enableDatabaseTools, setEnableDatabaseTools] = useState(false);
   const [genMode, setGenMode] = useState<'augment' | 'rewrite' | 'skeleton'>('augment');
   const [assemblyRules, setAssemblyRules] = useState(DEFAULT_PRESET.assemblyRules);
   const [aiEventLog, setAiEventLog] = useState<string[]>([]);
@@ -203,6 +207,30 @@ export const MainEditor: React.FC = () => {
       console.error('Failed to load project', error);
     }
   }, []);
+
+  useEffect(() => {
+    try {
+      const savedProvider = localStorage.getItem(AI_PROVIDER_STORAGE_KEY);
+      if (savedProvider === 'mistral' || savedProvider === 'ollama') {
+        setAiProvider(savedProvider);
+      }
+
+      const savedDbToggle = localStorage.getItem(AI_DB_STORAGE_KEY);
+      if (savedDbToggle === 'true' || savedDbToggle === 'false') {
+        setEnableDatabaseTools(savedDbToggle === 'true');
+      }
+    } catch (error) {
+      console.error('Failed to load AI provider settings', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(AI_PROVIDER_STORAGE_KEY, aiProvider);
+  }, [aiProvider]);
+
+  useEffect(() => {
+    localStorage.setItem(AI_DB_STORAGE_KEY, enableDatabaseTools ? 'true' : 'false');
+  }, [enableDatabaseTools]);
 
   useEffect(() => {
     try {
@@ -744,6 +772,8 @@ export const MainEditor: React.FC = () => {
         mode: genMode,
         rules: mergedRules,
         libraryContext: relevantLibraryContext,
+        provider: aiModel === 'gemini' ? undefined : aiProvider,
+        enableDB: aiModel === 'ollama' ? enableDatabaseTools : false,
         onProgress: (message: string) => {
           setAiStatusText(message);
           appendAiEvent(message);
@@ -753,9 +783,7 @@ export const MainEditor: React.FC = () => {
       const result =
         aiModel === 'gemini'
           ? await generateWithGemini(aiPrompt, currentStructure, options)
-          : aiModel === 'mistral'
-            ? await generateWithMistral(aiPrompt, currentStructure, options)
-            : await generateWithOllama(aiPrompt, currentStructure, options);
+          : await generateAI(aiPrompt, currentStructure, options);
 
       const nextQualityReport = buildMmssQualityReport(result, MMSS_METRICS_CONTRACT);
       setQualityReport(nextQualityReport);
@@ -996,7 +1024,13 @@ export const MainEditor: React.FC = () => {
               ].map((model) => (
                 <button
                   key={model.id}
-                  onClick={() => setAiModel(model.id as 'gemini' | 'mistral' | 'ollama')}
+                  onClick={() => {
+                    const nextModel = model.id as 'gemini' | 'mistral' | 'ollama';
+                    setAiModel(nextModel);
+                    if (nextModel === 'mistral' || nextModel === 'ollama') {
+                      setAiProvider(nextModel);
+                    }
+                  }}
                   className={cn(
                     'w-full flex flex-col p-4 rounded-xl border transition-all text-left',
                     aiModel === model.id ? 'bg-zinc-800/50 border-orange-500/30 shadow-lg' : 'bg-black/20 border-white/5 opacity-70',
@@ -1006,6 +1040,35 @@ export const MainEditor: React.FC = () => {
                   <p className="text-[10px] text-zinc-500 font-mono tracking-tight">{model.desc}</p>
                 </button>
               ))}
+            </div>
+            <div className="mt-4 space-y-3 border border-white/5 rounded-xl bg-black/20 p-4">
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-2">Structured Provider</label>
+                <select
+                  value={aiProvider}
+                  onChange={(event) => {
+                    const nextProvider = event.target.value as AIProvider;
+                    setAiProvider(nextProvider);
+                    setAiModel(nextProvider);
+                  }}
+                  className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 text-[11px] font-mono text-zinc-200 focus:outline-none"
+                >
+                  <option value="mistral">Mistral</option>
+                  <option value="ollama">Ollama</option>
+                </select>
+              </div>
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={enableDatabaseTools}
+                  onChange={(event) => setEnableDatabaseTools(event.target.checked)}
+                  disabled={aiProvider !== 'ollama'}
+                />
+                <div>
+                  <div className="text-[10px] font-black uppercase text-zinc-300">Enable PostgreSQL Tool Access</div>
+                  <div className="text-[10px] text-zinc-500">Allows Ollama to emit one read-only SELECT query through the proxy before final JSON generation.</div>
+                </div>
+              </label>
             </div>
           </div>
 

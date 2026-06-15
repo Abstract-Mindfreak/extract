@@ -8,6 +8,7 @@ import {
   MERGE_STRATEGIES,
 } from "../mmss/promptTypes";
 import { DEFAULT_BLOCKLY_WORKSPACE_XML } from "../mmss/promptLibrary";
+import appPersistenceService from "../services/AppPersistenceService";
 
 const BLOCKLY_HEIGHT_STORAGE_KEY = "mmss.blockly.height.v1";
 const BLOCKLY_EXPANDED_STORAGE_KEY = "mmss.blockly.expanded.v1";
@@ -37,8 +38,8 @@ function PromptLogicBlocklyPanel({
   const [selectedPreset, setSelectedPreset] = useState("neuro_dark");
   const [runError, setRunError] = useState("");
   const [sourceJsonText, setSourceJsonText] = useState("");
-  const [workspaceHeight, setWorkspaceHeight] = useState(loadBlocklyHeight);
-  const [expanded, setExpanded] = useState(loadBlocklyExpanded);
+  const [workspaceHeight, setWorkspaceHeight] = useState(560);
+  const [expanded, setExpanded] = useState(false);
   const [toast, setToast] = useState(null);
 
   const toolbox = useMemo(
@@ -144,12 +145,32 @@ function PromptLogicBlocklyPanel({
   }, [initialContext]);
 
   useEffect(() => {
-    window.localStorage.setItem(BLOCKLY_HEIGHT_STORAGE_KEY, String(workspaceHeight));
+    void appPersistenceService.setSetting("blockly", BLOCKLY_HEIGHT_STORAGE_KEY, workspaceHeight);
   }, [workspaceHeight]);
 
   useEffect(() => {
-    window.localStorage.setItem(BLOCKLY_EXPANDED_STORAGE_KEY, expanded ? "1" : "0");
+    void appPersistenceService.setSetting("blockly", BLOCKLY_EXPANDED_STORAGE_KEY, expanded);
   }, [expanded]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const hydrateBlocklyUi = async () => {
+      const [storedHeight, storedExpanded] = await Promise.all([
+        appPersistenceService.getSetting("blockly", BLOCKLY_HEIGHT_STORAGE_KEY, 560),
+        appPersistenceService.getSetting("blockly", BLOCKLY_EXPANDED_STORAGE_KEY, false),
+      ]);
+      if (cancelled) return;
+      const numericHeight = Number(storedHeight);
+      if (Number.isFinite(numericHeight) && numericHeight >= 360 && numericHeight <= 960) {
+        setWorkspaceHeight(numericHeight);
+      }
+      setExpanded(Boolean(storedExpanded));
+    };
+    void hydrateBlocklyUi();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const workspace = workspaceRef.current;
@@ -411,16 +432,6 @@ function PromptLogicBlocklyPanel({
       {toast ? <div className={`blockly-toast ${toast.type}`}>{toast.message}</div> : null}
     </div>
   );
-}
-
-function loadBlocklyHeight() {
-  const raw = Number(window.localStorage.getItem(BLOCKLY_HEIGHT_STORAGE_KEY));
-  if (!Number.isFinite(raw)) return 460;
-  return Math.max(300, Math.min(920, raw));
-}
-
-function loadBlocklyExpanded() {
-  return window.localStorage.getItem(BLOCKLY_EXPANDED_STORAGE_KEY) === "1";
 }
 
 function toDropdownOptions(items) {

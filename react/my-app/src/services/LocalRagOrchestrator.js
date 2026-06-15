@@ -100,6 +100,22 @@ async function answerWithLocalRag(request) {
   return payload.data;
 }
 
+async function vectorizeLocalRagArtifact(request) {
+  const response = await fetch(`${ARCHIVER_PROXY_BASE}/api/rag/artifact/vectorize`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(request || {}),
+  });
+  const payload = await parseJson(response);
+  if (!response.ok || !payload?.success) {
+    throw new Error(payload?.error || `RAG artifact vectorization failed: HTTP ${response.status}`);
+  }
+  return payload.data;
+}
+
 export function useLocalRagOrchestrator() {
   return {
     answerWithLocalRag,
@@ -109,6 +125,7 @@ export function useLocalRagOrchestrator() {
     cancelRagJob,
     searchLocalRag,
     startRagVectorization,
+    vectorizeLocalRagArtifact,
   };
 }
 

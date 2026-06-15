@@ -6,6 +6,7 @@
 
 import { EventEmitter } from 'events';
 import archiverAccounts from '../config/flowmusicArchiverAccounts.json';
+import appPersistenceService from './AppPersistenceService';
 
 const API_BASE = 'http://localhost:3456/api';
 const WS_URL = 'ws://localhost:3456';
@@ -78,11 +79,13 @@ async function apiPost(endpoint, body = {}) {
 
 export class ProducerArchiverManager {
   constructor() {
-    this.accounts = this.loadAccounts();
+    this.accounts = JSON.parse(JSON.stringify(DEFAULT_ACCOUNTS));
     this.eventEmitter = new EventEmitter();
     this.ws = null;
     this.runningAccounts = new Set();
+    this.activeAccountId = 'account_1';
     this.connectWebSocket();
+    void this.hydratePersistence();
   }
 
   connectWebSocket() {
@@ -131,24 +134,24 @@ export class ProducerArchiverManager {
     }
   }
 
-  loadAccounts() {
+  async hydratePersistence() {
     try {
-      const saved = localStorage.getItem(ACCOUNTS_CONFIG_KEY);
-      if (saved) {
-        return JSON.parse(saved).map(normalizeAccount);
+      const [savedAccounts, activeAccountId] = await Promise.all([
+        appPersistenceService.getSetting('producer_archiver', ACCOUNTS_CONFIG_KEY, DEFAULT_ACCOUNTS),
+        appPersistenceService.getSetting('producer_archiver', ACTIVE_ACCOUNT_KEY, 'account_1'),
+      ]);
+      if (Array.isArray(savedAccounts)) {
+        this.accounts = savedAccounts.map(normalizeAccount);
       }
+      this.activeAccountId = activeAccountId || 'account_1';
+      this.eventEmitter.emit('accounts-updated', this.accounts);
     } catch (e) {
-      console.warn('Failed to load accounts config:', e);
+      console.warn('Failed to hydrate producer archiver persistence:', e);
     }
-    return JSON.parse(JSON.stringify(DEFAULT_ACCOUNTS));
   }
 
   saveAccounts() {
-    try {
-      localStorage.setItem(ACCOUNTS_CONFIG_KEY, JSON.stringify(this.accounts));
-    } catch (e) {
-      console.warn('Failed to save accounts config:', e);
-    }
+    void appPersistenceService.setSetting('producer_archiver', ACCOUNTS_CONFIG_KEY, this.accounts);
   }
 
   async getAccounts() {
@@ -172,19 +175,12 @@ export class ProducerArchiverManager {
   }
 
   setActiveAccount(accountId) {
-    try {
-      localStorage.setItem(ACTIVE_ACCOUNT_KEY, accountId);
-    } catch (e) {
-      console.warn('Failed to set active account:', e);
-    }
+    this.activeAccountId = accountId;
+    void appPersistenceService.setSetting('producer_archiver', ACTIVE_ACCOUNT_KEY, accountId);
   }
 
   getActiveAccount() {
-    try {
-      return localStorage.getItem(ACTIVE_ACCOUNT_KEY) || 'account_1';
-    } catch (e) {
-      return 'account_1';
-    }
+    return this.activeAccountId || 'account_1';
   }
 
   async startArchiver(accountId, options = {}) {

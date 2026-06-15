@@ -31,6 +31,7 @@ const {
   normalizeDatabaseIdentifier: normalizeLocalRagDatabase,
   searchRag: searchLocalRag,
   startVectorizationJob: startLocalRagVectorizationJob,
+  vectorizeArtifact: vectorizeLocalRagArtifact,
 } = require('./server/localRagService.js');
 const {
   DATABASE_URL,
@@ -531,6 +532,27 @@ app.post('/api/rag/answer', async (req, res) => {
     res.status(500).json({
       success: false,
       error: error?.message || 'Failed to generate local RAG answer',
+    });
+  }
+});
+
+app.post('/api/rag/artifact/vectorize', async (req, res) => {
+  try {
+    const payload = await vectorizeLocalRagArtifact({
+      database: req.body?.database,
+      artifactId: req.body?.artifactId,
+      title: req.body?.title,
+      payload: req.body?.payload,
+      metadata: req.body?.metadata,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to vectorize local RAG artifact',
     });
   }
 });

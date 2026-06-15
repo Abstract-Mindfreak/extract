@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Cpu, Dna, GitMerge, Brain, Download, Trash2, Activity, Target, Zap, Terminal, Code2, FolderPlus, RefreshCw } from "lucide-react";
 import { usePythonGenerationLayer } from "../../services/PythonGenerationLayer";
 import { DEFAULT_RULES } from "../../services/PythonBridge";
+import appPersistenceService from "../../services/AppPersistenceService";
 
 const MMSS_LIBRARY_STATE_ENDPOINT = "http://localhost:3456/api/mmss/library-state";
 
@@ -211,7 +212,7 @@ export default function GenerationEnginePanel({ onSaveToLibrary }) {
   };
 
   const clearMemory = () => {
-    localStorage.removeItem("mmss.generation.memory_v3");
+    void appPersistenceService.removeSetting("generation", "mmss.generation.memory_v3");
     alert("Memory cleared");
   };
 
@@ -702,14 +703,21 @@ function MemoryStats() {
   const [stats, setStats] = useState(null);
   
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("mmss.generation.memory_v3");
-      if (saved) {
-        setStats(JSON.parse(saved));
+    let cancelled = false;
+    const loadStats = async () => {
+      try {
+        const stored = await appPersistenceService.getSetting("generation", "mmss.generation.memory_v3", null);
+        if (!cancelled && stored) {
+          setStats(stored);
+        }
+      } catch (e) {
+        console.warn("Failed to load memory stats");
       }
-    } catch (e) {
-      console.warn("Failed to load memory stats");
-    }
+    };
+    void loadStats();
+    return () => {
+      cancelled = true;
+    };
   }, []);
   
   if (!stats) {

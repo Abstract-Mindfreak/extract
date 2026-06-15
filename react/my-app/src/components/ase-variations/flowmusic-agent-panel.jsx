@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Bot, CheckCircle2, LoaderCircle, Save, Sparkles, TriangleAlert } from "lucide-react";
 import { useFlowmusicAgentOrchestrator } from "../../services/FlowmusicAgentOrchestrator";
+import appPersistenceService from "../../services/AppPersistenceService";
 
 function splitLines(value) {
   return String(value || "")
@@ -10,7 +11,12 @@ function splitLines(value) {
 }
 
 export default function FlowmusicAgentPanel({ onSaveToLibrary }) {
-  const orchestrator = useFlowmusicAgentOrchestrator();
+  const {
+    getFlowmusicAgentStatus,
+    getMistralStatus,
+    getOllamaStatus,
+    generateFlowmusicPrompt,
+  } = useFlowmusicAgentOrchestrator();
   const [intent, setIntent] = useState("cinematic industrial pulse with recursive low-end pressure and evolving stereo dust");
   const [titleHint, setTitleHint] = useState("Recursive Collapse");
   const [genresText, setGenresText] = useState("industrial, cinematic electronica");
@@ -20,10 +26,20 @@ export default function FlowmusicAgentPanel({ onSaveToLibrary }) {
   const [negativeText, setNegativeText] = useState("cheesy EDM lead, lo-fi mud, overcrowded top end");
   const [includeLibraryContext, setIncludeLibraryContext] = useState(true);
   const [libraryLimit, setLibraryLimit] = useState(6);
+  const [providerType, setProviderType] = useState("mistral");
   const [model, setModel] = useState("mistral-large-latest");
-  const [status, setStatus] = useState({ loading: true, error: "", mistral: null, agent: null });
+  const [status, setStatus] = useState({ loading: true, error: "", mistral: null, ollama: null, agent: null });
   const [result, setResult] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  const availableModels = useMemo(() => {
+    if (providerType === "ollama") {
+      const remoteModels = Array.isArray(status.ollama?.models) ? status.ollama.models : [];
+      return remoteModels.length ? remoteModels : ["gemma2b-mmss-dense", "gemma4:e2b"];
+    }
+    return ["mistral-large-latest", "mistral-medium", "mistral-small", "open-mistral-7b"];
+  }, [providerType, status.ollama]);
 
   const requestPayload = useMemo(() => ({
     intent,
@@ -36,13 +52,22 @@ export default function FlowmusicAgentPanel({ onSaveToLibrary }) {
     include_library_context: includeLibraryContext,
     library_limit: libraryLimit,
     output_language: "en",
-    provider: {
-      provider: "mistral",
-      base_url: "https://api.mistral.ai/v1",
-      model,
-      temperature: 0.35,
-      timeout_seconds: 120,
-    },
+    provider: providerType === "ollama"
+      ? {
+          provider: "ollama",
+          base_url: "http://localhost:3456/api/ollama/generate",
+          model,
+          temperature: 0.2,
+          timeout_seconds: 600,
+          enable_db: true,
+        }
+      : {
+          provider: "mistral",
+          base_url: "https://api.mistral.ai/v1",
+          model,
+          temperature: 0.35,
+          timeout_seconds: 120,
+        },
   }), [
     constraintsText,
     genresText,
@@ -52,6 +77,7 @@ export default function FlowmusicAgentPanel({ onSaveToLibrary }) {
     model,
     moodsText,
     negativeText,
+    providerType,
     sonicFocusText,
     titleHint,
   ]);
@@ -59,18 +85,51 @@ export default function FlowmusicAgentPanel({ onSaveToLibrary }) {
   useEffect(() => {
     let cancelled = false;
 
+    const hydrate = async () => {
+      const saved = await appPersistenceService.getSetting("flowmusic_agents", "provider_config", null);
+      if (!saved || cancelled) {
+        setHydrated(true);
+        return;
+      }
+      if (saved.providerType === "mistral" || saved.providerType === "ollama") {
+        setProviderType(saved.providerType);
+      }
+      if (saved.model) {
+        setModel(saved.model);
+      }
+      setHydrated(true);
+    };
+
+    void hydrate();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    void appPersistenceService.setSetting("flowmusic_agents", "provider_config", {
+      providerType,
+      model,
+    });
+  }, [hydrated, model, providerType]);
+
+  useEffect(() => {
+    let cancelled = false;
+
     const loadStatus = async () => {
       try {
-        const [mistral, agent] = await Promise.all([
-          orchestrator.getMistralStatus(),
-          orchestrator.getFlowmusicAgentStatus(),
+        const [mistral, ollama, agent] = await Promise.all([
+          getMistralStatus(),
+          getOllamaStatus(),
+          getFlowmusicAgentStatus(),
         ]);
         if (!cancelled) {
-          setStatus({ loading: false, error: "", mistral, agent });
+          setStatus({ loading: false, error: "", mistral, ollama, agent });
         }
       } catch (error) {
         if (!cancelled) {
-          setStatus({ loading: false, error: error.message, mistral: null, agent: null });
+          setStatus({ loading: false, error: error.message, mistral: null, ollama: null, agent: null });
         }
       }
     };
@@ -79,12 +138,12 @@ export default function FlowmusicAgentPanel({ onSaveToLibrary }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [getFlowmusicAgentStatus, getMistralStatus, getOllamaStatus]);
 
   const handleGenerate = async () => {
     setIsGenerating(true);
     try {
-      const payload = await orchestrator.generateFlowmusicPrompt(requestPayload);
+      const payload = await generateFlowmusicPrompt(requestPayload);
       setResult(payload);
     } catch (error) {
       setResult({ error: error.message });
@@ -101,26 +160,26 @@ export default function FlowmusicAgentPanel({ onSaveToLibrary }) {
     });
   };
 
-  const availableModels = ["mistral-large-latest", "mistral-medium", "mistral-small", "open-mistral-7b"];
-
   return (
     <div className="ide-panel-shell ase-flex-panel">
       <div className="ide-panel-header">
         <div>
           <strong>Flowmusic Agents</strong>
-          <span>Planner, composer, critic, and normalizer coordinated through Pydantic + Mistral AI.</span>
+          <span>Planner, composer, critic, and normalizer coordinated through Pydantic with switchable Mistral or local Ollama providers.</span>
         </div>
       </div>
 
       <div className="ase-feedback-card">
         <Bot size={14} />
         <p>
-          Local provider: <strong>{model}</strong>. Using Mistral AI API for structured generation.
+          Active provider: <strong>{providerType}</strong> / <strong>{model}</strong>.
+          {providerType === "ollama" ? " Local Ollama generation through react/my-app proxy." : " Using Mistral AI API for structured generation."}
         </p>
       </div>
 
       <div className="ide-workspace-summary-grid">
-        <StatusMetric label="Mistral" value={status.loading ? "Checking" : status.mistral?.api_key_configured ? "Configured" : "Not Configured"} />
+        <StatusMetric label="Mistral" value={status.loading ? "Checking" : status.mistral?.configured ? "Configured" : "Offline"} />
+        <StatusMetric label="Ollama" value={status.loading ? "Checking" : status.ollama?.available ? "Online" : "Offline"} />
         <StatusMetric label="Agent API" value={status.loading ? "Checking" : status.agent?.status === "ok" ? "Online" : "Offline"} />
         <StatusMetric label="Models" value={String(availableModels.length || 0)} />
         <StatusMetric label="Context" value={includeLibraryContext ? `${libraryLimit} blocks` : "Disabled"} />
@@ -135,13 +194,34 @@ export default function FlowmusicAgentPanel({ onSaveToLibrary }) {
 
       <div className="ide-settings-form">
         <label>
+          <span>Provider</span>
+          <select
+            value={providerType}
+            onChange={(event) => {
+              const nextProvider = event.target.value;
+              setProviderType(nextProvider);
+              if (nextProvider === "ollama") {
+                const fallbackModel = Array.isArray(status.ollama?.models) && status.ollama.models.length
+                  ? status.ollama.models[0]
+                  : "gemma2b-mmss-dense";
+                setModel(fallbackModel);
+              } else {
+                setModel("mistral-large-latest");
+              }
+            }}
+          >
+            <option value="mistral">Mistral API</option>
+            <option value="ollama">Local Ollama</option>
+          </select>
+        </label>
+        <label>
           <span>Title Hint</span>
           <input value={titleHint} onChange={(event) => setTitleHint(event.target.value)} />
         </label>
         <label>
           <span>Model</span>
           <select value={model} onChange={(event) => setModel(event.target.value)}>
-            {(availableModels.length ? availableModels : ["gemma3:4b"]).map((entry) => (
+            {availableModels.map((entry) => (
               <option key={entry} value={entry}>{entry}</option>
             ))}
           </select>

@@ -27,6 +27,7 @@ from .flowmusic_agent_models import (
     FlowmusicPromptPayload,
     FlowmusicSection,
     MistralProviderConfig,
+    OllamaProviderConfig,
     NormalizerOutput,
     PlannerOutput,
 )
@@ -119,6 +120,90 @@ class MistralStructuredClient:
         return data
 
 
+class OllamaStructuredClient:
+    def __init__(self, base_url: str = "http://localhost:3456/api/ollama/generate", timeout_seconds: float = 600.0, enable_db: bool = True):
+        self.base_url = base_url
+        self.timeout_seconds = timeout_seconds
+        self.enable_db = enable_db
+        self.client = httpx.AsyncClient(timeout=timeout_seconds)
+
+    async def generate_structured(
+        self,
+        model: str,
+        system: str,
+        prompt: str,
+        schema: dict,
+        temperature: float = 0.2,
+        tools: list[dict] | None = None,
+        tool_choice: str | None = None,
+    ) -> dict:
+        del tools, tool_choice
+        base_prompt = (
+            f"{system}\n\n"
+            f"{prompt}\n\n"
+            f"Return a single valid JSON object only.\n"
+            f"Use this target schema as guidance:\n{json.dumps(schema, ensure_ascii=False)}\n"
+            f"No markdown. No explanations."
+        )
+
+        attempts = [
+            {
+                "prompt": base_prompt,
+                "temperature": temperature,
+                "num_predict": 4096,
+            },
+            {
+                "prompt": (
+                    f"{base_prompt}\n\n"
+                    "Previous attempt returned an empty body.\n"
+                    "You must output JSON now, even if minimal.\n"
+                    "Do not return an empty response."
+                ),
+                "temperature": min(temperature, 0.15),
+                "num_predict": 2048,
+            },
+        ]
+
+        last_error = None
+        for attempt_index, attempt in enumerate(attempts, 1):
+            response = await self.client.post(
+                self.base_url,
+                json={
+                    "model": model,
+                    "prompt": attempt["prompt"],
+                    "stream": False,
+                    "context": {
+                        "enableDB": self.enable_db,
+                    },
+                    "options": {
+                        "temperature": attempt["temperature"],
+                        "num_predict": attempt["num_predict"],
+                    },
+                },
+            )
+            response.raise_for_status()
+            data = response.json()
+            raw_content = data.get("response") or ""
+            if not raw_content:
+                last_error = ValueError(
+                    f"Ollama returned empty response on attempt {attempt_index} (done_reason={data.get('done_reason')})"
+                )
+                continue
+            normalized = str(raw_content).strip()
+            start = normalized.find("{")
+            end = normalized.rfind("}")
+            if start == -1 or end == -1 or end < start:
+                last_error = ValueError(
+                    f"Ollama returned non-JSON content on attempt {attempt_index}: {normalized[:400]}"
+                )
+                continue
+            return json.loads(normalized[start : end + 1])
+
+        if last_error:
+            raise last_error
+        raise ValueError("Ollama returned no usable response")
+
+
 class FlowmusicAgentService:
     def __init__(self):
         self.api_key = self._load_mistral_key()
@@ -133,35 +218,66 @@ class FlowmusicAgentService:
         return ""
 
     async def get_health(self) -> dict:
+        ollama_status = {"available": False}
+        try:
+          response = await self.api_client.get("http://localhost:3456/api/ollama/status")
+          if response.is_success:
+              ollama_status = response.json()
+        except Exception:
+          ollama_status = {"available": False}
         return {
             "status": "ok",
             "provider": "mistral",
             "api_key_configured": bool(self.api_key),
+            "ollama": ollama_status,
         }
 
     async def get_archive_tracks(self) -> dict:
         try:
-            response = await self.client.get("http://localhost:3456/api/archives/tracks")
+            response = await self.api_client.get("http://localhost:3456/api/persistence/entities/tracks")
             response.raise_for_status()
-            return response.json()
+            payload = response.json()
+            return {"tracks": payload.get("items", []), "total": payload.get("total", 0)}
         except Exception as error:
             return {"tracks": [], "error": str(error)}
 
     async def get_archive_sessions(self) -> dict:
         try:
-            response = await self.client.get("http://localhost:3456/api/archives/sessions")
+            response = await self.api_client.get("http://localhost:3456/api/persistence/entities/sessions")
             response.raise_for_status()
-            return response.json()
+            payload = response.json()
+            return {"sessions": payload.get("items", []), "total": payload.get("total", 0)}
         except Exception as error:
             return {"sessions": [], "error": str(error)}
 
     async def get_library_catalog(self) -> dict:
         try:
-            response = await self.client.get("http://localhost:3456/api/library/catalog")
+            response = await self.api_client.get("http://localhost:3456/api/mmss/library-state")
+            response.raise_for_status()
+            payload = response.json()
+            prompt_library = payload.get("promptLibrary") or {}
+            blocks = prompt_library.get("blocks") or []
+            sequences = prompt_library.get("sequences") or []
+            return {
+                "catalog": {
+                    "blocks": len(blocks),
+                    "sequences": len(sequences),
+                },
+                "error": None,
+            }
+        except Exception as error:
+            return {"catalog": [], "error": str(error)}
+
+    async def query_database(self, sql: str) -> dict:
+        try:
+            response = await self.api_client.post(
+                "http://localhost:3456/api/db/query",
+                json={"sql": sql},
+            )
             response.raise_for_status()
             return response.json()
         except Exception as error:
-            return {"catalog": [], "error": str(error)}
+            return {"success": False, "data": [], "rowCount": 0, "error": str(error)}
 
     async def get_library_blocks(self) -> dict:
         library = self._read_prompt_library()
@@ -305,6 +421,23 @@ class FlowmusicAgentService:
                         "required": []
                     }
                 }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "query_database",
+                    "description": "Run one read-only SELECT query against PostgreSQL to inspect prompt blocks, tracks, sessions, and stored metadata",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "sql": {
+                                "type": "string",
+                                "description": "Single SELECT query only"
+                            }
+                        },
+                        "required": ["sql"]
+                    }
+                }
             }
         ]
 
@@ -410,44 +543,60 @@ class FlowmusicAgentService:
                 "categories": sorted(list(categories)),
                 "total_categories": len(categories),
             }
+
+        elif tool_name == "query_database":
+            sql = str(tool_args.get("sql") or "").strip()
+            if not sql:
+                return {"success": False, "data": [], "rowCount": 0, "error": "sql is required"}
+            return await self.query_database(sql)
         
         else:
             return {"error": f"Unknown tool: {tool_name}"}
 
     async def generate(self, request: FlowmusicAgentRequest) -> FlowmusicGenerationResponse:
-        if not self.api_key:
+        if request.provider.provider == "mistral" and not self.api_key:
             raise ValueError("MISTRAL_API_KEY not configured in .env file")
 
-        client = MistralStructuredClient(
-            api_key=self.api_key,
-            base_url=request.provider.base_url,
-        )
+        if request.provider.provider == "ollama":
+            client = OllamaStructuredClient(
+                base_url=request.provider.base_url,
+                timeout_seconds=request.provider.timeout_seconds,
+                enable_db=request.provider.enable_db,
+            )
+            use_tools = False
+        else:
+            client = MistralStructuredClient(
+                api_key=self.api_key,
+                base_url=request.provider.base_url,
+            )
+            use_tools = True
 
         context_blocks = self._select_context_blocks(request)
         archive_context = await self._get_archive_context(request)
+        db_context = await self._build_prefetch_database_context(request)
 
         planner_system = self._build_planner_system()
-        planner_prompt = self._build_planner_prompt(request, context_blocks, archive_context)
+        planner_prompt = self._build_planner_prompt(request, context_blocks, archive_context, db_context)
         planner_result = await self._run_step(
-            client, request, "planner", PlannerOutput, planner_system, planner_prompt, self._fallback_planner(request), use_tools=True
+            client, request, "planner", PlannerOutput, planner_system, planner_prompt, self._fallback_planner(request), use_tools=use_tools
         )
 
         composer_system = self._build_composer_system()
-        composer_prompt = self._build_composer_prompt(request, planner_result.data, context_blocks)
+        composer_prompt = self._build_composer_prompt(request, planner_result.data, context_blocks, db_context)
         composer_result = await self._run_step(
-            client, request, "composer", ComposerOutput, composer_system, composer_prompt, self._fallback_composer(request, planner_result.data), use_tools=True
+            client, request, "composer", ComposerOutput, composer_system, composer_prompt, self._fallback_composer(request, planner_result.data), use_tools=use_tools
         )
 
         critic_system = self._build_critic_system()
-        critic_prompt = self._build_critic_prompt(request, composer_result.data)
+        critic_prompt = self._build_critic_prompt(request, composer_result.data, db_context)
         critic_result = await self._run_step(
-            client, request, "critic", CriticOutput, critic_system, critic_prompt, self._fallback_critic(), use_tools=True
+            client, request, "critic", CriticOutput, critic_system, critic_prompt, self._fallback_critic(), use_tools=use_tools
         )
 
         normalizer_system = self._build_normalizer_system()
-        normalizer_prompt = self._build_normalizer_prompt(request, composer_result.data, critic_result.data)
+        normalizer_prompt = self._build_normalizer_prompt(request, composer_result.data, critic_result.data, db_context)
         normalizer_result = await self._run_step(
-            client, request, "normalizer", NormalizerOutput, normalizer_system, normalizer_prompt, self._fallback_normalizer(composer_result.data, critic_result.data), use_tools=True
+            client, request, "normalizer", NormalizerOutput, normalizer_system, normalizer_prompt, self._fallback_normalizer(composer_result.data, critic_result.data), use_tools=use_tools
         )
 
         final_payload = FlowmusicPromptPayload(
@@ -501,9 +650,9 @@ You have access to the following tools:
 
 Use these tools to gather context and information before planning the track structure."""
 
-    def _build_planner_prompt(self, request: FlowmusicAgentRequest, context_blocks: list[ContextBlockSummary], archive_context: dict = None) -> str:
+    def _build_planner_prompt(self, request: FlowmusicAgentRequest, context_blocks: list[ContextBlockSummary], archive_context: dict = None, db_context: dict | None = None) -> str:
         lines = [
-            f"Intent: {request.intent}",
+            f"Intent: {self._compose_request_signature(request)}",
             f"Genres: {', '.join(request.genres) or 'unspecified'}",
             f"Moods: {', '.join(request.moods) or 'unspecified'}",
             f"Sonic focus: {', '.join(request.sonic_focus) or 'unspecified'}",
@@ -513,6 +662,8 @@ Use these tools to gather context and information before planning the track stru
             lines.append(f"\nReference blocks:\n{self._format_context_blocks(context_blocks)}")
         if archive_context and archive_context.get("tracks"):
             lines.append(f"\nArchive tracks:\n{self._format_archive_tracks(archive_context['tracks'])}")
+        if db_context and db_context.get("rows"):
+            lines.append(f"\nPostgreSQL context:\n{self._format_database_rows(db_context['rows'])}")
         return "\n".join(lines)
 
     def _fallback_planner(self, request: FlowmusicAgentRequest) -> PlannerOutput:
@@ -529,21 +680,24 @@ Use these tools to gather context and information before planning the track stru
     def _build_composer_system(self) -> str:
         return """You are a Flowmusic composer. Create detailed track prompts with sections, production notes, and sonic characteristics."""
 
-    def _build_composer_prompt(self, request: FlowmusicAgentRequest, planner: PlannerOutput, context_blocks: list[ContextBlockSummary]) -> str:
+    def _build_composer_prompt(self, request: FlowmusicAgentRequest, planner: PlannerOutput, context_blocks: list[ContextBlockSummary], db_context: dict | None = None) -> str:
         lines = [
             f"Create a track: {planner.title}",
             f"Style tags: {', '.join(planner.style_tags)}",
             f"Sonic targets: {', '.join(planner.sonic_targets)}",
             f"Structure: {', '.join(planner.structure_outline)}",
+            f"User request signature: {self._compose_request_signature(request)}",
         ]
         if context_blocks:
             lines.append(f"\nReference blocks:\n{self._format_context_blocks(context_blocks)}")
+        if db_context and db_context.get("rows"):
+            lines.append(f"\nPostgreSQL context:\n{self._format_database_rows(db_context['rows'])}")
         return "\n".join(lines)
 
     def _fallback_composer(self, request: FlowmusicAgentRequest, planner: PlannerOutput) -> ComposerOutput:
         return ComposerOutput(
             title=planner.title,
-            prompt=self._compose_fallback_prompt(request, planner, []),
+            prompt=self._compose_fallback_prompt(request, planner, context_blocks=[]),
             negative_prompt="low quality, generic, repetitive",
             style_tags=planner.style_tags,
             sections=[FlowmusicSection(label=label, purpose=f"{label} section", prompt_fragment=f"Shape the {label}") for label in planner.structure_outline[:6]],
@@ -559,8 +713,14 @@ Use these tools to gather context and information before planning the track stru
     def _build_critic_system(self) -> str:
         return """You are a Flowmusic critic. Evaluate the generated prompt for quality, coherence, and completeness."""
 
-    def _build_critic_prompt(self, request: FlowmusicAgentRequest, composer: ComposerOutput) -> str:
-        return f"Evaluate this track prompt:\n\nTitle: {composer.title}\nPrompt: {composer.prompt}\n\nCheck for: clarity, completeness, musical coherence, and adherence to constraints."
+    def _build_critic_prompt(self, request: FlowmusicAgentRequest, composer: ComposerOutput, db_context: dict | None = None) -> str:
+        lines = [
+            f"Evaluate this track prompt:\n\nTitle: {composer.title}\nPrompt: {composer.prompt}\n\nCheck for: clarity, completeness, musical coherence, and adherence to constraints.",
+            f"Original request signature: {self._compose_request_signature(request)}",
+        ]
+        if db_context and db_context.get("rows"):
+            lines.append(f"\nPostgreSQL context:\n{self._format_database_rows(db_context['rows'])}")
+        return "\n".join(lines)
 
     def _fallback_critic(self) -> CriticOutput:
         return CriticOutput(
@@ -574,14 +734,17 @@ Use these tools to gather context and information before planning the track stru
     def _build_normalizer_system(self) -> str:
         return """You are a Flowmusic normalizer. Ensure the final prompt is properly formatted and ready for the Prompt Library."""
 
-    def _build_normalizer_prompt(self, request: FlowmusicAgentRequest, composer: ComposerOutput, critic: CriticOutput) -> str:
+    def _build_normalizer_prompt(self, request: FlowmusicAgentRequest, composer: ComposerOutput, critic: CriticOutput, db_context: dict | None = None) -> str:
         lines = [
             f"Normalize this track prompt for the Prompt Library.",
             f"Title: {composer.title}",
             f"Prompt: {composer.prompt}",
+            f"Original request signature: {self._compose_request_signature(request)}",
         ]
         if critic.revision_instructions:
             lines.append(f"\nApply these revisions: {', '.join(critic.revision_instructions)}")
+        if db_context and db_context.get("rows"):
+            lines.append(f"\nPostgreSQL context:\n{self._format_database_rows(db_context['rows'])}")
         return "\n".join(lines)
 
     def _fallback_normalizer(self, composer: ComposerOutput, critic: CriticOutput) -> NormalizerOutput:
@@ -602,6 +765,10 @@ Use these tools to gather context and information before planning the track stru
         )
 
     def _flatten_mistral_response(self, payload: dict, agent: str) -> dict:
+        if isinstance(payload, dict) and len(payload) == 1:
+            only_key = next(iter(payload.keys()))
+            if only_key.lower() in {"planneroutput", "composeroutput", "criticoutput", "normalizeroutput"}:
+                return payload[only_key]
         if agent == "planner":
             if "track_plan" in payload:
                 flattened = payload["track_plan"]
@@ -623,16 +790,22 @@ Use these tools to gather context and information before planning the track stru
                         payload["title"] = title
                 return payload
         if agent == "composer":
+            if "ComposerOutput" in payload:
+                return payload["ComposerOutput"]
             if "track" in payload:
                 return payload["track"]
             if "track_prompt" in payload:
                 return payload["track_prompt"]
         if agent == "critic":
+            if "CriticOutput" in payload:
+                return payload["CriticOutput"]
             if "evaluation" in payload:
                 return payload["evaluation"]
             if "clarity" in payload:
                 return payload["clarity"]
         if agent == "normalizer":
+            if "NormalizerOutput" in payload:
+                return payload["NormalizerOutput"]
             if "core_concept" in payload:
                 return payload["core_concept"]
             if "description" in payload:
@@ -819,11 +992,11 @@ Use these tools to gather context and information before planning the track stru
         payload: FlowmusicPromptPayload,
     ) -> dict[str, Any]:
         tags = self._uniq(
-            ["flowmusic", "agent_generated", "mistral", *request.genres, *request.moods, *payload.style_tags]
+            ["flowmusic", "agent_generated", request.provider.provider, *request.genres, *request.moods, *payload.style_tags]
         )
         return {
             "name": payload.title,
-            "description": f"Multi-agent Flowmusic prompt generated from intent: {request.intent}",
+            "description": f"Multi-agent Flowmusic prompt generated from request: {self._compose_request_signature(request)}",
             "category": "flowmusic_agent",
             "tags": tags[:18],
             "payload": {
@@ -854,7 +1027,7 @@ Use these tools to gather context and information before planning the track stru
         context_blocks: list[ContextBlockSummary],
     ) -> str:
         lines = [
-            f"Create a track around: {request.intent}.",
+            f"Create a track around: {self._compose_request_signature(request)}.",
             f"Primary mood palette: {', '.join(request.moods) or 'unspecified'}.",
             f"Genre anchors: {', '.join(request.genres) or 'hybrid electronic'}.",
             f"Sonic focus: {', '.join(planner.sonic_targets or request.sonic_focus) or 'detailed texture design'}.",
@@ -895,6 +1068,66 @@ Use these tools to gather context and information before planning the track stru
                 for track in tracks
             ]
         )
+
+    def _format_database_rows(self, rows: list[dict]) -> str:
+        if not rows:
+            return "none"
+        return "\n".join(
+            [f"- {json.dumps(row, ensure_ascii=False)[:280]}" for row in rows[:8]]
+        )
+
+    def _compose_request_signature(self, request: FlowmusicAgentRequest) -> str:
+        parts = []
+        if request.title_hint:
+            parts.append(f"title hint: {request.title_hint}")
+        if request.intent:
+            parts.append(f"intent: {request.intent}")
+        if request.genres:
+            parts.append(f"genres: {', '.join(request.genres)}")
+        if request.moods:
+            parts.append(f"moods: {', '.join(request.moods)}")
+        if request.sonic_focus:
+            parts.append(f"sonic focus: {', '.join(request.sonic_focus)}")
+        if request.constraints:
+            parts.append(f"constraints: {', '.join(request.constraints)}")
+        if request.negative_constraints:
+            parts.append(f"negative: {', '.join(request.negative_constraints)}")
+        return " | ".join(parts) or "minimal request"
+
+    async def _build_prefetch_database_context(self, request: FlowmusicAgentRequest) -> dict:
+        query_terms = self._uniq(
+            [
+                request.title_hint or "",
+                request.intent,
+                *request.genres,
+                *request.moods,
+                *request.sonic_focus,
+                *request.constraints,
+            ]
+        )[:5]
+        like_clauses = []
+        for term in query_terms:
+            safe = str(term).replace("'", "''").strip()
+            if not safe:
+                continue
+            like_clauses.append(f"payload::text ILIKE '%{safe}%'")
+
+        if not like_clauses:
+            return {"rows": [], "sql": None}
+
+        sql = f"""
+SELECT scope, entity_key, payload->>'name' AS name, LEFT(payload::text, 280) AS excerpt
+FROM app_entity_store
+WHERE scope IN ('prompt_blocks', 'tracks', 'sessions', 'raw_prompts')
+  AND ({' OR '.join(like_clauses)})
+ORDER BY updated_at DESC
+LIMIT 8
+""".strip()
+        result = await self.query_database(sql)
+        return {
+            "rows": result.get("data", []) if isinstance(result, dict) else [],
+            "sql": sql,
+        }
 
     def _tokenize(self, text: str) -> set[str]:
         return {token for token in re.findall(r"[A-Za-z0-9_]+", text.lower()) if len(token) >= 3}

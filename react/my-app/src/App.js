@@ -51,8 +51,8 @@ const APP_TABS = [
   },
   {
     id: "archives",
-    label: "Archives",
-    summary: "Archive import and browsing",
+    label: "Локальная медиатека",
+    summary: "Сессии, треки, видео и JSON из abstract-mind-lab",
   },
   {
     id: "json_genesis",
@@ -126,7 +126,7 @@ function App() {
   const [activePromptPanel, setActivePromptPanel] = useState(PROMPT_PANEL_DEFAULT_ORDER[0]);
   const [serviceHealth, setServiceHealth] = useState({
     mistral: { online: false, label: "Unchecked", detail: "http://localhost:3456/api/mistral/status" },
-    database: { online: false, label: "Unchecked", detail: "postgresql://mind_user:mindfreak@localhost:5432/abstract_mind_db" },
+    database: { online: false, label: "Unchecked", detail: "postgresql://mind_user:mindfreak@localhost:5432/abstract-mind-lab" },
     ollama: { online: false, label: "Unchecked", detail: "http://localhost:3456/api/ollama/status" },
     agents: { online: false, label: "Unchecked", detail: "http://localhost:3456/api/agents/status" },
     jsonhero: { online: false, label: "Unchecked", detail: "http://localhost:8787" },
@@ -1046,7 +1046,7 @@ function App() {
       probeJsonEndpoint("http://localhost:3456/api/database/status", (payload) => ({
         online: !!payload?.available,
         label: payload?.available ? "Online / postgres" : "Offline",
-        detail: payload?.databaseUrl || "postgresql://mind_user:mindfreak@localhost:5432/abstract_mind_db",
+        detail: payload?.databaseUrl || "postgresql://mind_user:mindfreak@localhost:5432/abstract-mind-lab",
       })),
       probeJsonEndpoint("http://localhost:3456/api/mistral/status", (payload) => ({
         online: !!payload?.configured,
@@ -1082,7 +1082,7 @@ function App() {
     { id: "overview", icon: LayoutTemplate, label: "Workspace" },
     { id: "prompt_library", icon: Library, label: "Prompt Tools" },
     { id: "ase_console", icon: Workflow, label: "ASE Flow" },
-    { id: "archives", icon: Archive, label: "Archives" },
+    { id: "archives", icon: Archive, label: "Локальная медиатека" },
     { id: "json_genesis", icon: FileJson, label: "JSON Genesis" },
     { id: "system", icon: Settings, label: "System State" },
   ];
@@ -1133,7 +1133,7 @@ function App() {
     }
 
     if (activeTab === "archives") {
-      return "Archive workspace is online. Import local Flowmusic data, inspect sessions, and keep archive flows inside the same shell.";
+      return "Локальная медиатека активна. Доступны детальные сессии, треки, видеогенерации и JSON-данные из abstract-mind-lab.";
     }
 
     if (activeTab === "json_genesis") {
@@ -1168,7 +1168,7 @@ function App() {
     if (activeTab === "archives") {
       return {
         mode: "archives",
-        source: "flowmusic",
+        source: "abstract-mind-lab",
         libraryReady,
         selectedSequence: activeSequence?.name || null,
         checkpoints: state.mmss.checkpoints.slice(-4),
@@ -1785,37 +1785,37 @@ function App() {
         <div className="workspace-surface__head">
           <div>
             <span className="workspace-surface__eyebrow">Core Mode 03</span>
-            <h3>Archives</h3>
-            <p>Archive import, browsing, filtering, and session drill-down stay available in the same workspace.</p>
+            <h3>LocalMediaLibrary</h3>
+            <p>Локальная медиатека для просмотра архивов, фильтрации, drill-down по сессиям и детального JSON без сокращений.</p>
           </div>
           <button className="workspace-surface__action" onClick={() => setExpandedPanel("archives")}>
-            Open Archive
+            Открыть медиатеку
           </button>
         </div>
 
         <div className="workspace-archives-shell">
           <div className="workspace-surface__summary">
             <div className="workspace-summary-card">
-              <span>Source of truth</span>
+              <span>База данных</span>
+              <strong>abstract-mind-lab</strong>
+            </div>
+            <div className="workspace-summary-card">
+              <span>Архив на диске</span>
               <strong>flowmusic_backup_*</strong>
             </div>
             <div className="workspace-summary-card">
-              <span>Legacy fallback</span>
-              <strong>producer_backup_*</strong>
-            </div>
-            <div className="workspace-summary-card">
-              <span>Auth preference</span>
-              <strong>flowmusic_auth_*</strong>
+              <span>Видео и связи</span>
+              <strong>video_job_id / session links</strong>
             </div>
           </div>
           <div className="mode-shell-head mode-shell-head--archives">
             <div>
-              <strong>Archive Workspace</strong>
-              <span>Import local data, browse sessions, and keep archive flows inside the same app shell.</span>
+              <strong>Локальная медиатека</strong>
+              <span>Просмотр локальных данных, подробных сессий, JSON-ответов и связанных треков в одном shell.</span>
             </div>
             <div className="mode-shell-status">
-              <span>Flowmusic source</span>
-              <span>Import ready</span>
+              <span>Источник: PostgreSQL</span>
+              <span>Детальный режим</span>
             </div>
           </div>
           <ArchivesPage />
@@ -1925,7 +1925,7 @@ function App() {
             <span className="eyebrow">MMSS React Rebuild</span>
             <h1>Core Workspace</h1>
             <p>
-              Focused workspace for Prompt Library, ASE Console, and Archives inside `react/my-app`.
+              Единое рабочее пространство для Prompt Library, ASE Console, LocalMediaLibrary и JSON Genesis внутри `react/my-app`.
             </p>
             <button className="btn accent" onClick={launchCore}>
               Open Workspace
@@ -1956,12 +1956,8 @@ function App() {
               className="workspace-rail__btn"
               onClick={() => {
                 focusWorkspaceSection("archives");
-                setTimeout(() => {
-                  const importButton = document.querySelector('.archives-header .btn-primary');
-                  if (importButton) importButton.click();
-                }, 500);
               }}
-              title="Import Archive Data"
+              title="Открыть локальную медиатеку"
             >
               <Archive size={18} />
             </button>
@@ -2083,19 +2079,19 @@ function App() {
 
             {expandedPanel === "archives" ? (
               <div className="drawer-stack">
-                <SectionCard title="Archive Tools" subtitle="Archive import stays inside the same workspace">
+                <SectionCard title="Инструменты медиатеки" subtitle="Доступ к локальному архиву остается внутри общего workspace">
                   <div className="drawer-link-list">
                     <button onClick={() => focusWorkspaceSection("archives")}>
-                      <strong>Open Archives surface</strong>
+                      <strong>Открыть LocalMediaLibrary</strong>
                       <ChevronRight size={14} />
                     </button>
                   </div>
                 </SectionCard>
-                <SectionCard title="Archive Focus" subtitle="Single source of truth already switched to flowmusic">
+                <SectionCard title="Источник данных" subtitle="Основной контур уже переведен на abstract-mind-lab">
                   <div className="drawer-note-list">
-                    <div><strong>Output folders:</strong> `flowmusic_backup_*`</div>
-                    <div><strong>Legacy support:</strong> `producer_backup_*` still readable</div>
-                    <div><strong>Auth files:</strong> `flowmusic_auth_*` preferred</div>
+                    <div><strong>База:</strong> `abstract-mind-lab`</div>
+                    <div><strong>Папки выгрузки:</strong> `flowmusic_backup_*`</div>
+                    <div><strong>Детали видео:</strong> `video_job_id`, session payloads, JSON fragments</div>
                   </div>
                 </SectionCard>
               </div>
@@ -2136,7 +2132,7 @@ function App() {
                 <SectionCard title="Rebuild Status" subtitle="Current direction of the UI rewrite">
                   <div className="drawer-note-list">
                     <div><Sparkles size={14} /> Single-page shell is active</div>
-                    <div><Database size={14} /> Prompt Library, ASE, Archives, and JSON Genesis are preserved</div>
+                    <div><Database size={14} /> Prompt Library, ASE, LocalMediaLibrary и JSON Genesis сохранены в общей оболочке</div>
                     <div><Workflow size={14} /> Stage/Matrix/Intent/Transport/Prismatic/Magnetic are detached from runtime</div>
                   </div>
                 </SectionCard>

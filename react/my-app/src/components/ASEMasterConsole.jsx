@@ -34,6 +34,7 @@ import AIOrchestratorPanel from "./ase-variations/ai-orchestrator-panel";
 import GenerationEnginePanel from "./ase-variations/generation-engine-panel";
 import ProducerArchiverPanel from "./ase-variations/producer-archiver-panel";
 import promptLibraryService from "../services/PromptLibraryService";
+import appPersistenceService from "../services/AppPersistenceService";
 
 const ASE_STORAGE_KEY = "mmss.ase.configurations.v1";
 const ASE_STATE_KEY = "mmss.ase.currentState.v1";
@@ -285,41 +286,51 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
   };
 
   useEffect(() => {
-    const stored = localStorage.getItem(ASE_STORAGE_KEY);
-    if (stored) {
-      try {
-        setSavedConfigs(JSON.parse(stored));
-      } catch (error) {
-        console.error("Failed to load ASE configs:", error);
-      }
-    }
+    let cancelled = false;
 
-    const lastState = localStorage.getItem(ASE_STATE_KEY);
-    if (lastState) {
+    const hydrateState = async () => {
       try {
-        const state = JSON.parse(lastState);
-        setEntropy(state.entropy || { p: 0.965, c: 0.946 });
-        setGravity(state.gravity || 0.88);
-        setPhase(state.phase || "STABLE");
-        setLfeMode(state.lfeMode || "AMBIENT");
-        setPhiSync(state.phiSync ?? true);
-        setLogicStack(state.logicStack || LOGIC_STACKS.extended);
-        setMetaKey(state.metaKey || "?_KEY_0411_ALPHA");
-        setHyperParams(state.hyperParams || DEFAULT_HYPER_PARAMS);
-        setOpMode(state.opMode || "ANNIHILATE");
-        setQuantumState(state.quantumState || "COLLAPSED");
-        setCurrentVariation(state.currentVariation || "unified");
-        setSelectedModeIds(state.selectedModeIds || DEFAULT_UNIFIED_SELECTION);
+        const [storedConfigs, lastState] = await Promise.all([
+          appPersistenceService.getSetting("ase_console", ASE_STORAGE_KEY, []),
+          appPersistenceService.getSetting("ase_console", ASE_STATE_KEY, null),
+        ]);
+
+        if (cancelled) return;
+        if (Array.isArray(storedConfigs)) {
+          setSavedConfigs(storedConfigs);
+        }
+
+        if (lastState && typeof lastState === "object") {
+          const state = lastState;
+          setEntropy(state.entropy || { p: 0.965, c: 0.946 });
+          setGravity(state.gravity || 0.88);
+          setPhase(state.phase || "STABLE");
+          setLfeMode(state.lfeMode || "AMBIENT");
+          setPhiSync(state.phiSync ?? true);
+          setLogicStack(state.logicStack || LOGIC_STACKS.extended);
+          setMetaKey(state.metaKey || "?_KEY_0411_ALPHA");
+          setHyperParams(state.hyperParams || DEFAULT_HYPER_PARAMS);
+          setOpMode(state.opMode || "ANNIHILATE");
+          setQuantumState(state.quantumState || "COLLAPSED");
+          setCurrentVariation(state.currentVariation || "unified");
+          setSelectedModeIds(state.selectedModeIds || DEFAULT_UNIFIED_SELECTION);
+        }
       } catch (error) {
         console.error("Failed to load ASE state:", error);
       }
-    }
+    };
+
+    void hydrateState();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(
+    void appPersistenceService.setSetting(
+      "ase_console",
       ASE_STATE_KEY,
-      JSON.stringify({
+      {
         entropy,
         gravity,
         phase,
@@ -333,7 +344,7 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
         currentVariation,
         selectedModeIds,
         timestamp: Date.now(),
-      })
+      }
     );
   }, [entropy, gravity, phase, lfeMode, phiSync, logicStack, metaKey, hyperParams, opMode, quantumState, currentVariation, selectedModeIds]);
 
@@ -705,7 +716,7 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
 
     const nextConfigs = [...savedConfigs, config];
     setSavedConfigs(nextConfigs);
-    localStorage.setItem(ASE_STORAGE_KEY, JSON.stringify(nextConfigs));
+    void appPersistenceService.setSetting("ase_console", ASE_STORAGE_KEY, nextConfigs);
     setConfigName("");
     setSelectedConfig(config.id);
 
@@ -756,7 +767,7 @@ export default function ASEMasterConsole({ onSaveToDatabase, onSendToSequenceBui
     (configId) => {
       const nextConfigs = savedConfigs.filter((item) => item.id !== configId);
       setSavedConfigs(nextConfigs);
-      localStorage.setItem(ASE_STORAGE_KEY, JSON.stringify(nextConfigs));
+      void appPersistenceService.setSetting("ase_console", ASE_STORAGE_KEY, nextConfigs);
       if (selectedConfig === configId) {
         setSelectedConfig(null);
       }

@@ -2,6 +2,13 @@
 /node_modules/
 /renderer/node_modules/
 /dist-electron/
+flowmusic_auth_*.json
+flowmusic_auth_2.json
+flowmusic-archiver/flowmusic_auth_1.json
+flowmusic-archiver/flowmusic_auth_2.json
+flowmusic-archiver/flowmusic_auth_3.json
+flowmusic-archiver/flowmusic_auth_4.json
+*flowmusic_auth*.json
 /renderer/dist/
 /extension/dist/
 /coverage/

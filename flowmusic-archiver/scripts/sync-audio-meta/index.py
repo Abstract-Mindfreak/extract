@@ -2,12 +2,24 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from lib.m4a_tagger import prepare_tags, should_skip_from_state, validate_tags, write_tags
 from lib.scanner import TrackFolder, scan_single_track, scan_track_folders
+
+
+def configure_console() -> None:
+    for stream_name in ("stdout", "stderr"):
+        stream = getattr(sys, stream_name, None)
+        reconfigure = getattr(stream, "reconfigure", None)
+        if callable(reconfigure):
+            reconfigure(encoding="utf-8", errors="replace")
+
+
+configure_console()
 
 
 def parse_args() -> argparse.Namespace:

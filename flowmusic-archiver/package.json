@@ -5,11 +5,13 @@
   "main": "archiver.mjs",
   "type": "module",
   "scripts": {
-    "start": "node archiver.mjs"
+    "start": "node archiver.mjs",
+    "test": "node --test"
   },
   "dependencies": {
     "p-queue": "^8.1.0",
     "p-retry": "^8.0.0",
+    "pg": "^8.16.3",
     "playwright": "^1.50.1"
   }
 }

@@ -1,44 +1,167 @@
-Предыстория и задача:
-Мы интегрируем логи сессий нейросети (LLM-диалогов) из JSON-файлов архива в нашу реляционную базу данных PostgreSQL. Файлы сессий находятся по пути `flowmusic-archiver/**/sessions/*.json`. 
-Нам нужно реализовать гибридный подход: метаданные сессии вынести в индексируемые колонки, весь массив переписки сохранить «как есть» в бинарное поле JSONB, а связь между сессиями и существующими музыкальными треками реализовать через таблицу-мост (многие-ко-многим), используя поле `linked_clip_ids` из JSON.
+{
+  "project": "Abstract Mindfreak Extract",
+  "goal": "Rollback to the stable state before \"Да. Приступи к фазе 2\", restore ASE Console, then reorient the system toward high-signal MMSS invariant extraction, selective vectorization, and RAG preparation for local Ollama.",
+  "normalized_task_for_devin": {
+    "phase_1_rollback": [
+      "Find the commit immediately before the user response \"Да. Приступи к фазе 2\".",
+      "Rollback the codebase to that stable point.",
+      "Verify that ASE Console is restored and functional.",
+      "Create a commit with a clear rollback message.",
+      "Push the rollback commit to the remote repository."
+    ],
+    "phase_2_data_architecture": [
+      "Create a PostgreSQL schema in database `abstract-mind-lab` for MMSS knowledge storage.",
+      "Add a table for invariant storage, a table for generation/search traces, and a table for embeddings if needed.",
+      "Store only structured, high-value MMSS rules, logic principles, meta-formulas, and instructions.",
+      "Add deduplication, metadata search, and vector search indexes.",
+      "Keep the schema idempotent and safe to rerun."
+    ],
+    "phase_3_invariant_extraction": [
+      "Extract universal MMSS invariants from the current codebase instead of vectorizing everything.",
+      "Prioritize these paths: ASE variation components, core MMSS components, services, scripts, seeds, logs, and invariant extractor modules.",
+      "Classify extracted content into categories such as logic, MMSS principle, rule, meta_formula, instruction, and template.",
+      "Normalize extracted data into a unified JSON structure for later storage and retrieval.",
+      "Focus on abstract reusable structure, not raw volume."
+    ],
+    "phase_4_rag_preparation": [
+      "Vectorize only the curated invariant set.",
+      "Integrate the local Ollama model as the reasoning layer that receives only the most important invariant context.",
+      "Build a RAG flow that searches vectors, composes compact context, and sends it to the local LLM.",
+      "Store generation outputs, search chains, and important vector queries in the database.",
+      "Use the system to teach the LLM MMSS logic, principles, and how to extend them with new structures."
+    ],
+    "phase_5_validation": [
+      "Add tests for invariant extraction, vectorization, retrieval, and Ollama integration.",
+      "Validate that ASE Console is restored.",
+      "Validate that extracted invariants are correctly stored and retrievable.",
+      "Validate that the RAG pipeline uses only high-signal context."
+    ]
+  },
+  "recommended_focus": [
+    "Do not vectorize everything.",
+    "Curate only strong MMSS blocks, rules, logic patterns, and meta-structures.",
+    "Use the local LLM as a high-precision consumer of selected invariants.",
+    "Treat logs, generation traces, and search chains as first-class knowledge artifacts."
+  ],
+  "priority_sources_from_extract": [
+    "react/my-app/src/components/ase-variations/aase-monitor-update.jsx",
+    "react/my-app/src/components/ase-variations/ai-orchestrator-panel.jsx",
+    "react/my-app/src/components/ase-variations/ase_monitor_supreme.jsx",
+    "react/my-app/src/components/ase-variations/ase-v4_infinity.jsx",
+    "react/my-app/src/components/ase-variations/decomposition-audio.jsx",
+    "react/my-app/src/components/ase-variations/entropy_modulator.jsx",
+    "react/my-app/src/components/ase-variations/flowmusic-agent-panel.jsx",
+    "react/my-app/src/components/ase-variations/generation-engine-panel.jsx",
+    "react/my-app/src/components/ase-variations/mmss-mutator-panel.jsx",
+    "react/my-app/src/components/ase-variations/modulator_rack.jsx",
+    "react/my-app/src/components/JsonBlockEditor.jsx",
+    "react/my-app/src/components/JsonSequenceBuilder.jsx",
+    "react/my-app/src/components/PromptIdeWorkspace.jsx",
+    "react/my-app/src/components/SequenceWorkspacePanels.jsx",
+    "react/my-app/src/mmss/promptLibrary.js",
+    "react/my-app/src/mmss/reducer.js",
+    "react/my-app/src/mmss/useAudioEngine.js",
+    "react/my-app/src/services/MMSSMutatorRuntimeService.js",
+    "react/my-app/src/services/PythonGenerationLayer.js",
+    "react/my-app/src/types/Track.ts",
+    "react-agent/flowmusic_agent_models.py",
+    "react-agent/models.py",
+    "extract_agent/server.py",
+    "scripts/apply_indexes.py",
+    "scripts/import_archiver.py",
+    "import_producer_blocks.py",
+    "database/connection.py",
+    "database/seeds/mmss_ontology_seed.json",
+    "docs/mmss/mmss_progress_log.json",
+    "invariants_extractor/"
+  ],
+  "database_plan": {
+    "tables": [
+      {
+        "name": "mmss_invariants",
+        "purpose": "Curated MMSS rules, logic, principles, templates, and meta-formulas.",
+        "recommended_fields": [
+          "id",
+          "source_path",
+          "category",
+          "title",
+          "content",
+          "normalized_json",
+          "content_hash",
+          "metadata",
+          "created_at",
+          "updated_at",
+          "vectorized"
+        ]
+      },
+      {
+        "name": "generation_results",
+        "purpose": "Outputs from generations, search chains, important prompts, and retrieval traces.",
+        "recommended_fields": [
+          "id",
+          "query",
+          "context_used",
+          "result_text",
+          "search_chain",
+          "metadata",
+          "created_at"
+        ]
+      },
+      {
+        "name": "vector_embeddings",
+        "purpose": "Embedding vectors linked to curated invariant records.",
+        "recommended_fields": [
+          "id",
+          "invariant_id",
+          "embedding",
+          "model_name",
+          "dimensions",
+          "created_at"
+        ]
+      }
+    ],
+    "indexing": [
+      "Unique or hash-based deduplication on content_hash.",
+      "GIN index for metadata search.",
+      "Category index for filtering.",
+      "Vector index for nearest-neighbor retrieval."
+    ]
+  },
+  "ollama_rag_note": {
+    "answer": "Yes — local Ollama can play the role of a reasoning model in this architecture, but it should receive curated invariant context rather than raw bulk data.",
+    "supporting_context": [
+      "Ollama embeddings are designed to produce vector representations for semantic search and retrieval.", [ollama](https://ollama.com/blog/embedding-models)
+      "PostgreSQL with pgvector can store and search embeddings directly in the database.", [cloud.google](https://cloud.google.com/discover/what-is-pgvector)
+      "LangChain's Ollama embeddings integration supports local embedding workflows with a configured Ollama instance." [reference.langchain](https://reference.langchain.com/python/langchain-ollama/embeddings/OllamaEmbeddings)
+    ]
+  },
+  "implementation_strategy": [
+    "Rollback first.",
+    "Restore ASE Console.",
+    "Create the MMSS invariant schema.",
+    "Write the invariant extractor.",
+    "Curate and vectorize only high-signal blocks.",
+    "Wire retrieval into local Ollama.",
+    "Log every important generation and retrieval chain."
+  ],
+  "suggested_devin_instruction": "Please execute Phase 1 first: restore the stable commit before \"Да. Приступи к фазе 2\", verify ASE Console, create a rollback commit, and push it. Then prepare Phase 2 and Phase 3 around selective MMSS invariant extraction rather than full-bulk vectorization."
+}
 
-Используемый стек: Python 3.11+, SQLModel (SQLAlchemy), PostgreSQL.
 
-Твоя задача — пошагово выполнить следующие изменения в проекте:
+**Небольшие рекомендации для улучшения:**
 
-1. ОБНОВЛЕНИЕ МОДЕЛЕЙ ДАННЫХ
-В файле `database/models.py` добавь две новые модели и обнови существующую модель `Song`:
-- Модель `SessionSongLink` (таблица `session_song_links`): связующая таблица для связи многие-ко-многим между `chat_sessions` и `songs`. Поля `session_id` и `song_id` являются первичными и внешними ключами с `ondelete="CASCADE"`.
-- Модель `ChatSession` (таблица `chat_sessions`):
-    * `id`: uuid.UUID (primary_key=True, index=True, мапится на `conversation_id` из JSON).
-    * `title`: Optional[str] (index=True)
-    * `user_id`: Optional[uuid.UUID] (index=True)
-    * `project_id`: Optional[uuid.UUID]
-    * `created_at`: datetime (index=True)
-    * `captured_at`: datetime (index=True)
-    * `full_payload`: Dict[str, Any] — должно использовать тип `Column(JSONB)` из `sqlalchemy.dialects.postgresql`.
-    * `songs`: связь `Relationship` к модели `Song` через `link_model=SessionSongLink`.
-- В существующую модель `Song` добавь обратную связь:
-    * `sessions: List["ChatSession"] = Relationship(back_populates="songs", link_model=SessionSongLink)`
+Можно добавить секцию с критериями приемки (acceptance criteria), чтобы Devin точно знал, когда задача выполнена:
 
-2. СОЗДАНИЕ ETL-СКРИПТА ДЛЯ ИМПОРТА
-Создай новый файл `scripts/import_sessions.py`. Скрипт должен:
-- Рекурсивно обходить директорию `flowmusic-archiver` (путь брать из переменной окружения `FLOWMUSIC_ARCHIVER_PATH` с дефолтом `flowmusic-archiver`) и искать все файлы внутри папок `sessions/*.json`.
-- Парсить JSON. Использовать `conversation_id` как ID сессии.
-- Быть идемпотентным: если сессия с таким ID уже есть в БД, старую запись нужно удалить (или обновить), чтобы избежать конфликтов primary key при повторных запусках.
-- Корректно парсить даты ISO 8601 (строки вида `2025-11-20T15:30:00Z` должны безопасно преобразовываться в `datetime` с таймзоной UTC).
-- Связывать сессию с треками из `linked.linked_clip_ids`. **Важно:** связь в `SessionSongLink` записывать только в том случае, если `clip_id` физически существует в таблице `songs` (проверять через `select(Song)`), иначе пропускать этот конкретный линк и выводить предупреждение в лог, чтобы не падать по Foreign Key Error.
-- Пакетировать коммиты (делать `db_session.commit()` каждые 50-100 обработанных файлов для оптимизации скорости).
+```json
+"acceptance_criteria": [
+  "ASE Console is restored and accessible",
+  "Database schema created with all three tables",
+  "At least 80% of priority files processed for invariant extraction",
+  "Vector embeddings generated for extracted invariants",
+  "RAG pipeline successfully retrieves context for Ollama",
+  "Generation results are logged to database",
+  "All changes committed and pushed to repository"
+]
+```
 
-3. ДОБАВЛЕНИЕ ПОСТГРЕС-ИНДЕКСОВ
-Добавь генерацию индексов в базу данных. Если вы используете миграции Alembic, сгенерируй миграцию. Если БД инициализируется через `init_db()`, убедись, что выполняются следующие SQL-команды или настройки индексов SQLModel:
-- GIN-индекс на поле `full_payload` таблицы `chat_sessions` для быстрого поиска по внутренностям JSON.
-- Стандартный B-tree индекс на `user_id`.
 
-План действий для тебя:
-1. Проанализируй текущую структуру файлов `database/models.py` и `database/connection.py`.
-2. Напиши код изменений в `database/models.py`.
-3. Создай скрипт `scripts/import_sessions.py`.
-4. Запусти скрипт или предоставь инструкции по его тестированию.
-
-Действуй аккуратно, пиши чистый код, обрабатывай исключения `ValueError` при конвертации UUID и логируй процесс выполнения.

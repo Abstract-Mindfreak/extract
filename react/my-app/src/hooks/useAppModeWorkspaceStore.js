@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
+import appPersistenceService from "../services/AppPersistenceService";
 
 export const useAppModeWorkspaceStore = create(
   persist(
@@ -9,6 +10,7 @@ export const useAppModeWorkspaceStore = create(
     }),
     {
       name: "mmss.app.mode-workspace.v1",
+      storage: createJSONStorage(() => appPersistenceService.createZustandStorage("zustand")),
       partialize: (state) => ({
         layoutSnapshot: state.layoutSnapshot,
       }),

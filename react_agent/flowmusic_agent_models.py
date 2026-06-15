@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 class MistralProviderConfig(BaseModel):
@@ -13,8 +13,17 @@ class MistralProviderConfig(BaseModel):
     timeout_seconds: float = Field(default=120.0, ge=5.0, le=600.0)
 
 
+class OllamaProviderConfig(BaseModel):
+    provider: Literal["ollama"] = "ollama"
+    base_url: str = Field(default="http://localhost:3456/api/ollama/generate")
+    model: str = Field(default="gemma2b-mmss-dense")
+    temperature: float = Field(default=0.2, ge=0.0, le=2.0)
+    timeout_seconds: float = Field(default=600.0, ge=5.0, le=900.0)
+    enable_db: bool = Field(default=True)
+
+
 class FlowmusicAgentRequest(BaseModel):
-    intent: str = Field(..., min_length=8, description="Main generation brief")
+    intent: str = Field(default="", description="Main generation brief")
     title_hint: str | None = Field(default=None)
     genres: list[str] = Field(default_factory=list)
     moods: list[str] = Field(default_factory=list)
@@ -24,7 +33,24 @@ class FlowmusicAgentRequest(BaseModel):
     output_language: str = Field(default="en")
     include_library_context: bool = Field(default=True)
     library_limit: int = Field(default=6, ge=0, le=12)
-    provider: MistralProviderConfig = Field(default_factory=MistralProviderConfig)
+    provider: Annotated[MistralProviderConfig | OllamaProviderConfig, Field(discriminator="provider")] = Field(default_factory=MistralProviderConfig)
+
+    @model_validator(mode="after")
+    def validate_minimum_input(self) -> "FlowmusicAgentRequest":
+        signal_fields = [
+            self.intent,
+            self.title_hint or "",
+            " ".join(self.genres),
+            " ".join(self.moods),
+            " ".join(self.sonic_focus),
+            " ".join(self.constraints),
+            " ".join(self.negative_constraints),
+        ]
+        if not any(str(value).strip() for value in signal_fields):
+            raise ValueError(
+                "At least one of intent, title_hint, genres, moods, sonic_focus, constraints, or negative_constraints must be provided"
+            )
+        return self
 
 
 class ContextBlockSummary(BaseModel):

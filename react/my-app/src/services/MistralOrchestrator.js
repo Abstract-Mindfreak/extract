@@ -4,18 +4,22 @@
  * Compatible with browser environment (no Electron dependencies)
  */
 
+import appPersistenceService from "./AppPersistenceService";
+
 const MISTRAL_API_BASE = "https://api.mistral.ai/v1";
 const MISTRAL_PROXY_BASE = "http://localhost:3456/api/mistral";
 const DEFAULT_MODEL = "mistral-large-latest";
 
 // API Key management
-let apiKey = localStorage.getItem("mistral_api_key") || "";
+let apiKey = "";
+let apiKeyLoaded = false;
 let backendConfigured = false;
 let backendAvailable = false;
 
 export function setApiKey(key) {
   apiKey = key;
-  localStorage.setItem("mistral_api_key", key);
+  apiKeyLoaded = true;
+  void appPersistenceService.setSetting("service_keys", "mistral_api_key", key);
 }
 
 export function getApiKey() {
@@ -27,6 +31,10 @@ export function hasApiKey() {
 }
 
 export async function initializeMistral() {
+  if (!apiKeyLoaded) {
+    apiKey = (await appPersistenceService.getSetting("service_keys", "mistral_api_key", "")) || "";
+    apiKeyLoaded = true;
+  }
   try {
     const response = await fetch(`${MISTRAL_PROXY_BASE}/status`);
     if (!response.ok) {

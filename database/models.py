@@ -80,3 +80,13 @@ class ChatSession(SQLModel, table=True):
     full_payload: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSONB))
     
     songs: List["Song"] = Relationship(back_populates="sessions", link_model=SessionSongLink)
+
+class MusicBlock(SQLModel, table=True):
+    __tablename__ = "music_blocks"
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    block_type: str = Field(index=True)
+    layer: int = Field(index=True)
+    slug: str = Field(index=True, unique=True)
+    name: Optional[str] = Field(default=None)
+    content: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSONB))
