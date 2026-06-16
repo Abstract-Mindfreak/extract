@@ -1,6 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Bot, Database, LoaderCircle, Save, Search, ServerCog, Sparkles } from "lucide-react";
-import { useLocalRagOrchestrator } from "../../services/LocalRagOrchestrator";
+import {
+  BookKey,
+  Bot,
+  Database,
+  LoaderCircle,
+  Play,
+  RefreshCcw,
+  Search,
+  Save,
+  ServerCog,
+  Square,
+} from "lucide-react";
+import {
+  MMSS_INVARIANTS_DEFAULT_DATABASE,
+  MMSS_INVARIANTS_DEFAULT_MODE,
+  MMSS_INVARIANTS_DEFAULT_SOURCE_SCOPES,
+  useMMSSInvariantsOrchestrator,
+} from "../../services/MMSSInvariantsOrchestrator";
 import appPersistenceService from "../../services/AppPersistenceService";
 
 const DATABASE_OPTIONS = [
@@ -8,21 +24,19 @@ const DATABASE_OPTIONS = [
   { value: "abstract_mind_db", label: "abstract_mind_db" },
 ];
 
-const SOURCE_TABLE_OPTIONS = ["tracks", "sessions", "music_blocks", "chat_sessions", "songs", "mmss_invariants"];
-const FILTER_PROFILE_OPTIONS = ["strict", "balanced", "exploratory"];
 const MODE_OPTIONS = [
-  "qa",
-  "prompt_mutation",
-  "session_analysis",
+  "mmss_invariants",
   "mmss_operator_assist",
-  "cross_db_reconciliation",
   "json_prompt_extraction",
-  "source_audit",
   "ase_console_recipe",
+  "cross_db_reconciliation",
 ];
+
+const FILTER_PROFILE_OPTIONS = ["strict", "balanced", "exploratory"];
 const MODEL_OPTIONS = ["batiai/gemma4-e2b:q4", "gemma4:e2b", "quant-mmss:latest"];
-const SETTINGS_SCOPE = "local_rag_ui";
-const SNAPSHOT_SCOPE = "local_rag_results";
+const SOURCE_TABLE_OPTIONS = ["tracks", "sessions", "music_blocks", "mmss_invariants"];
+const SETTINGS_SCOPE = "mmss_invariants_ui";
+const SNAPSHOT_SCOPE = "mmss_invariants_results";
 
 function StatusCard({ label, value }) {
   return (
@@ -31,6 +45,24 @@ function StatusCard({ label, value }) {
       <strong>{value}</strong>
     </div>
   );
+}
+
+function JsonCard({ title, value, emptyText }) {
+  return (
+    <div className="ase-config-card">
+      <strong>{title}</strong>
+      <pre className="ase-stream-preview">
+        {value ? JSON.stringify(value, null, 2) : emptyText}
+      </pre>
+    </div>
+  );
+}
+
+function buildScopeSelectionsFromDefaults() {
+  return MMSS_INVARIANTS_DEFAULT_SOURCE_SCOPES.reduce((acc, scope) => {
+    acc[scope.database] = scope.sourceTables;
+    return acc;
+  }, {});
 }
 
 function splitSelected(selected, value) {
@@ -53,17 +85,6 @@ function summarizeScopes(scopeSelections) {
   return buildSourceScopes(scopeSelections)
     .map((scope) => `${scope.database}: ${scope.sourceTables.join(", ")}`)
     .join(" | ");
-}
-
-function JsonCard({ title, value }) {
-  return (
-    <div className="ase-config-card">
-      <strong>{title}</strong>
-      <pre className="ase-stream-preview">
-        {JSON.stringify(value || {}, null, 2)}
-      </pre>
-    </div>
-  );
 }
 
 function getAvailableTablesByDb(statusMap = {}) {
@@ -94,43 +115,44 @@ function buildSnapshotEntity({ kind, query, database, mode, sourceScopes, payloa
   };
 }
 
-export default function LocalRagPanel() {
+export default function MMSSInvariantsPanel() {
   const {
-    answerWithLocalRag,
-    buildRagContext,
-    cancelRagJob,
-    getRagJob,
-    getRagStatus,
-    searchLocalRag,
-    startRagVectorization,
-  } = useLocalRagOrchestrator();
+    cancelInvariantJob,
+    getInvariantJob,
+    getInvariantStatus,
+    getStatus,
+    startInvariantExtraction,
+    searchInvariants,
+    syncInvariantSeed,
+    buildInvariantContext,
+    generateInvariantAnswer,
+  } = useMMSSInvariantsOrchestrator();
 
-  const [database, setDatabase] = useState("abstract-mind-lab");
-  const [batchSize, setBatchSize] = useState(10);
+  const [database, setDatabase] = useState(MMSS_INVARIANTS_DEFAULT_DATABASE);
   const [topK, setTopK] = useState(5);
   const [queryBudget, setQueryBudget] = useState(8);
-  const [query, setQuery] = useState("industrial prompt with strong spatial diffusion and recursive low-end movement");
-  const [selectedTables, setSelectedTables] = useState(["tracks", "sessions"]);
-  const [scopeSelections, setScopeSelections] = useState({
-    "abstract-mind-lab": ["tracks", "sessions"],
-    abstract_mind_db: ["music_blocks"],
-  });
-  const [filterProfile, setFilterProfile] = useState("balanced");
-  const [mode, setMode] = useState("qa");
+  const [query, setQuery] = useState(
+    "MMSS operator mappings, ontology terms, rhythm/space/timbre/logic/math relations and reusable invariant structures",
+  );
+  const [mode, setMode] = useState(MMSS_INVARIANTS_DEFAULT_MODE);
   const [model, setModel] = useState("batiai/gemma4-e2b:q4");
+  const [filterProfile, setFilterProfile] = useState("balanced");
   const [includeRelationLayer, setIncludeRelationLayer] = useState(true);
   const [responseMaxChars, setResponseMaxChars] = useState(40000);
+  const [scopeSelections, setScopeSelections] = useState(buildScopeSelectionsFromDefaults);
   const [status, setStatus] = useState(null);
   const [statusByDb, setStatusByDb] = useState({});
+  const [invariantStatus, setInvariantStatus] = useState(null);
   const [job, setJob] = useState(null);
   const [result, setResult] = useState(null);
   const [contextResult, setContextResult] = useState(null);
   const [answerResult, setAnswerResult] = useState(null);
   const [loadingStatus, setLoadingStatus] = useState(true);
-  const [runningVectorization, setRunningVectorization] = useState(false);
   const [runningSearch, setRunningSearch] = useState(false);
   const [runningContext, setRunningContext] = useState(false);
   const [runningAnswer, setRunningAnswer] = useState(false);
+  const [runningSyncSeed, setRunningSyncSeed] = useState(false);
+  const [runningExtraction, setRunningExtraction] = useState(false);
   const [error, setError] = useState("");
   const [savingSnapshot, setSavingSnapshot] = useState(false);
   const [lastSavedSnapshot, setLastSavedSnapshot] = useState("");
@@ -142,23 +164,46 @@ export default function LocalRagPanel() {
   const loadStatus = useCallback(async (targetDatabase = database) => {
     setLoadingStatus(true);
     try {
-      const entries = await Promise.all(
-        DATABASE_OPTIONS.map(async (option) => [option.value, await getRagStatus(option.value)]),
-      );
-      const nextStatusMap = Object.fromEntries(entries);
+      const [statusEntries, nextInvariantStatus] = await Promise.all([
+        Promise.all(DATABASE_OPTIONS.map(async (option) => [option.value, await getStatus(option.value)])),
+        getInvariantStatus(targetDatabase),
+      ]);
+      const nextStatusMap = Object.fromEntries(statusEntries);
       const nextStatus = nextStatusMap[targetDatabase] || nextStatusMap[database];
       setStatus(nextStatus);
       setStatusByDb(nextStatusMap);
-      setError("");
-      if (nextStatus.activeJob?.jobId) {
-        setJob(nextStatus.activeJob);
+      setInvariantStatus(nextInvariantStatus);
+      if (nextInvariantStatus?.activeJob?.jobId) {
+        setJob(nextInvariantStatus.activeJob);
       }
+      setError("");
     } catch (nextError) {
       setError(nextError.message);
     } finally {
       setLoadingStatus(false);
     }
-  }, [database, getRagStatus]);
+  }, [database, getInvariantStatus, getStatus]);
+
+  useEffect(() => {
+    if (!job?.jobId || job.status !== "running") return undefined;
+    const timer = window.setInterval(async () => {
+      try {
+        const nextJob = await getInvariantJob(job.jobId);
+        setJob(nextJob);
+        if (nextJob.status !== "running") {
+          window.clearInterval(timer);
+          setRunningExtraction(false);
+          void loadStatus(database);
+        }
+      } catch (nextError) {
+        setError(nextError.message);
+        setRunningExtraction(false);
+        window.clearInterval(timer);
+      }
+    }, 2500);
+
+    return () => window.clearInterval(timer);
+  }, [database, getInvariantJob, job, loadStatus]);
 
   useEffect(() => {
     void loadStatus(database);
@@ -171,17 +216,17 @@ export default function LocalRagPanel() {
         const saved = await appPersistenceService.getScope(SETTINGS_SCOPE);
         if (!active || !saved || typeof saved !== "object") return;
         if (typeof saved.database === "string") setDatabase(saved.database);
-        if (Number.isFinite(Number(saved.batchSize))) setBatchSize(Number(saved.batchSize));
         if (Number.isFinite(Number(saved.topK))) setTopK(Number(saved.topK));
         if (Number.isFinite(Number(saved.queryBudget))) setQueryBudget(Number(saved.queryBudget));
         if (typeof saved.query === "string") setQuery(saved.query);
-        if (saved.selectedTables && Array.isArray(saved.selectedTables)) setSelectedTables(saved.selectedTables);
-        if (saved.scopeSelections && typeof saved.scopeSelections === "object") setScopeSelections(saved.scopeSelections);
-        if (typeof saved.filterProfile === "string") setFilterProfile(saved.filterProfile);
         if (typeof saved.mode === "string") setMode(saved.mode);
         if (typeof saved.model === "string") setModel(saved.model);
+        if (typeof saved.filterProfile === "string") setFilterProfile(saved.filterProfile);
         if (typeof saved.includeRelationLayer === "boolean") setIncludeRelationLayer(saved.includeRelationLayer);
         if (Number.isFinite(Number(saved.responseMaxChars))) setResponseMaxChars(Number(saved.responseMaxChars));
+        if (saved.scopeSelections && typeof saved.scopeSelections === "object") {
+          setScopeSelections(saved.scopeSelections);
+        }
       } catch (_error) {
         // Keep the panel usable even if persistence is unavailable.
       }
@@ -194,20 +239,17 @@ export default function LocalRagPanel() {
   useEffect(() => {
     void appPersistenceService.setScope(SETTINGS_SCOPE, {
       database,
-      batchSize,
       topK,
       queryBudget,
       query,
-      selectedTables,
-      scopeSelections,
-      filterProfile,
       mode,
       model,
+      filterProfile,
       includeRelationLayer,
       responseMaxChars,
+      scopeSelections,
     });
   }, [
-    batchSize,
     database,
     filterProfile,
     includeRelationLayer,
@@ -217,79 +259,93 @@ export default function LocalRagPanel() {
     queryBudget,
     responseMaxChars,
     scopeSelections,
-    selectedTables,
     topK,
   ]);
-
-  useEffect(() => {
-    if (!job?.jobId || job.status !== "running") return undefined;
-    const timer = window.setInterval(async () => {
-      try {
-        const nextJob = await getRagJob(job.jobId);
-        setJob(nextJob);
-        if (nextJob.status !== "running") {
-          window.clearInterval(timer);
-          void loadStatus(database);
-          setRunningVectorization(false);
-        }
-      } catch (nextError) {
-        setError(nextError.message);
-        window.clearInterval(timer);
-        setRunningVectorization(false);
-      }
-    }, 2500);
-
-    return () => window.clearInterval(timer);
-  }, [database, getRagJob, job, loadStatus]);
 
   const statusCards = useMemo(() => ([
     { label: "Embedding model", value: status?.embeddingModel || "n/a" },
     { label: "Dimension", value: String(status?.embeddingDimension || "n/a") },
     { label: "Stored vectors", value: String(status?.totalEmbeddings || 0) },
     { label: "Source tables", value: Array.isArray(status?.sourceTables) ? status.sourceTables.join(", ") || "n/a" : "n/a" },
-  ]), [status]);
+    { label: "Phase seeds", value: String(invariantStatus?.phasePatternCount || 0) },
+    { label: "Domain seeds", value: String(invariantStatus?.domainPatternCount || 0) },
+    { label: "MMSS invariants", value: String(invariantStatus?.invariantCount || 0) },
+    { label: "Invariant vectors", value: String(invariantStatus?.vectorizedCount || 0) },
+  ]), [invariantStatus, status]);
 
   const parameterGuide = useMemo(() => ({
-    topK: `Top K=${topK}. Это итоговое количество самых сильных найденных блоков, которые проходят в финальный retrieval pool и затем в отбор контекста.`,
-    queryBudget: `Query Budget=${queryBudget}. Это число вариантов поискового запроса, которые система генерирует из одного исходного запроса для расширения semantic search.`,
+    topK: `Top K=${topK}. Это итоговое количество самых сильных invariant-кандидатов, которые удерживаются после semantic search.`,
+    queryBudget: `Query Budget=${queryBudget}. Это число query-вариантов, которыми система пытается достать контекст из ontology, operators и MMSS blocks.`,
     includeRelationLayer: includeRelationLayer
-      ? "Include relation layer=on. В контекст добавляется вторичный слой relation-heavy блоков: связи, session traces, tool/meta anchors."
-      : "Include relation layer=off. Берутся только основные смысловые блоки без вторичного relation-слоя.",
-    filterProfile: `Filter Profile=${filterProfile}. Strict сильнее режет шум, Balanced оставляет компромисс, Exploratory расширяет поиск и чаще тянет слабые совпадения.`,
-    responseMaxChars: `Response max chars=${responseMaxChars}. Это верхняя граница длины итогового ответа, которую сервер просит соблюдать и дополнительно обрезает при возврате в UI.`,
-  }), [filterProfile, includeRelationLayer, queryBudget, responseMaxChars, topK]);
+      ? "Include relation layer=on. В контекст добавляется вторичный слой relation-heavy блоков: связи между сущностями, session traces, meta anchors."
+      : "Include relation layer=off. Система опирается только на primary invariant blocks без relation-слоя.",
+    responseMaxChars: `Response max chars=${responseMaxChars}. Это максимальная длина итогового ответа, которую сервер просит соблюдать и затем принудительно ограничивает.`,
+  }), [includeRelationLayer, queryBudget, responseMaxChars, topK]);
 
-  const handleVectorize = async () => {
-    setRunningVectorization(true);
+  const handleSyncSeed = async () => {
+    setRunningSyncSeed(true);
     setError("");
     setLastOperation({
-      action: "vectorize",
+      action: "sync_seed",
+      status: "running",
+      startedAt: new Date().toISOString(),
+      request: { database },
+    });
+    try {
+      await syncInvariantSeed({ database });
+      await loadStatus(database);
+      setLastOperation({
+        action: "sync_seed",
+        status: "success",
+        finishedAt: new Date().toISOString(),
+      });
+    } catch (nextError) {
+      setError(nextError.message);
+      setLastOperation({
+        action: "sync_seed",
+        status: "error",
+        finishedAt: new Date().toISOString(),
+        error: nextError.message,
+      });
+    } finally {
+      setRunningSyncSeed(false);
+    }
+  };
+
+  const handleStartExtraction = async () => {
+    setRunningExtraction(true);
+    setError("");
+    setLastOperation({
+      action: "extract_invariants",
       status: "running",
       startedAt: new Date().toISOString(),
       request: {
         database,
-        batchSize,
-        sourceTables: selectedTables,
+        sourceScopes: activeSourceScopes,
       },
     });
     try {
-      const nextJob = await startRagVectorization({
+      const nextJob = await startInvariantExtraction({
         database,
-        batchSize,
-        sourceTables: selectedTables,
+        sourceTables: activeSourceScopes
+          .filter((scope) => scope.database === database)
+          .flatMap((scope) => scope.sourceTables)
+          .filter((tableName) => tableName !== "mmss_invariants"),
+        batchSize: 20,
+        syncSeed: true,
       });
       setJob(nextJob);
       setLastOperation({
-        action: "vectorize",
+        action: "extract_invariants",
         status: "success",
         finishedAt: new Date().toISOString(),
         response: nextJob,
       });
     } catch (nextError) {
       setError(nextError.message);
-      setRunningVectorization(false);
+      setRunningExtraction(false);
       setLastOperation({
-        action: "vectorize",
+        action: "extract_invariants",
         status: "error",
         finishedAt: new Date().toISOString(),
         error: nextError.message,
@@ -297,11 +353,22 @@ export default function LocalRagPanel() {
     }
   };
 
+  const handleCancelExtraction = async () => {
+    if (!job?.jobId) return;
+    try {
+      const nextJob = await cancelInvariantJob(job.jobId);
+      setJob(nextJob);
+      setRunningExtraction(false);
+    } catch (nextError) {
+      setError(nextError.message);
+    }
+  };
+
   const handleSearch = async () => {
     setRunningSearch(true);
     setError("");
     setLastOperation({
-      action: "search",
+      action: "search_invariants",
       status: "running",
       startedAt: new Date().toISOString(),
       request: {
@@ -314,7 +381,7 @@ export default function LocalRagPanel() {
       },
     });
     try {
-      const payload = await searchLocalRag({
+      const payload = await searchInvariants({
         database,
         query,
         topK,
@@ -324,20 +391,19 @@ export default function LocalRagPanel() {
       });
       setResult(payload);
       setLastOperation({
-        action: "search",
+        action: "search_invariants",
         status: "success",
         finishedAt: new Date().toISOString(),
         summary: {
           results: Array.isArray(payload?.results) ? payload.results.length : 0,
           queryVariants: Array.isArray(payload?.queryVariants) ? payload.queryVariants.length : 0,
-          sourceScopes: payload?.sourceScopes || [],
         },
       });
     } catch (nextError) {
       setError(nextError.message);
       setResult(null);
       setLastOperation({
-        action: "search",
+        action: "search_invariants",
         status: "error",
         finishedAt: new Date().toISOString(),
         error: nextError.message,
@@ -351,7 +417,7 @@ export default function LocalRagPanel() {
     setRunningContext(true);
     setError("");
     setLastOperation({
-      action: "build_context",
+      action: "build_invariant_context",
       status: "running",
       startedAt: new Date().toISOString(),
       request: {
@@ -366,7 +432,7 @@ export default function LocalRagPanel() {
       },
     });
     try {
-      const payload = await buildRagContext({
+      const payload = await buildInvariantContext({
         database,
         query,
         topK,
@@ -378,7 +444,7 @@ export default function LocalRagPanel() {
       });
       setContextResult(payload);
       setLastOperation({
-        action: "build_context",
+        action: "build_invariant_context",
         status: "success",
         finishedAt: new Date().toISOString(),
         summary: {
@@ -392,7 +458,7 @@ export default function LocalRagPanel() {
       setError(nextError.message);
       setContextResult(null);
       setLastOperation({
-        action: "build_context",
+        action: "build_invariant_context",
         status: "error",
         finishedAt: new Date().toISOString(),
         error: nextError.message,
@@ -406,7 +472,7 @@ export default function LocalRagPanel() {
     setRunningAnswer(true);
     setError("");
     setLastOperation({
-      action: "answer",
+      action: "generate_invariant_answer",
       status: "running",
       startedAt: new Date().toISOString(),
       request: {
@@ -423,7 +489,7 @@ export default function LocalRagPanel() {
       },
     });
     try {
-      const payload = await answerWithLocalRag({
+      const payload = await generateInvariantAnswer({
         database,
         query,
         topK,
@@ -443,9 +509,10 @@ export default function LocalRagPanel() {
         retrievalDebug: payload.debug,
         sourceScopes: payload.sourceScopes,
         queryVariants: payload.queryVariants,
+        retrievedSources: payload.retrievedSources,
       });
       setLastOperation({
-        action: "answer",
+        action: "generate_invariant_answer",
         status: "success",
         finishedAt: new Date().toISOString(),
         summary: {
@@ -460,7 +527,7 @@ export default function LocalRagPanel() {
       setError(nextError.message);
       setAnswerResult(null);
       setLastOperation({
-        action: "answer",
+        action: "generate_invariant_answer",
         status: "error",
         finishedAt: new Date().toISOString(),
         error: nextError.message,
@@ -496,15 +563,15 @@ export default function LocalRagPanel() {
     <div className="ide-panel-shell ase-flex-panel">
       <div className="ide-panel-header">
         <div>
-          <strong>Local LLM RAG</strong>
-          <span>Локальный retrieval и контекст для ASE Console через Ollama, PostgreSQL и multi-DB semantic search.</span>
+          <strong>MMSS Invariants</strong>
+          <span>Отдельный invariant-oriented режим поверх существующего RAG-ядра. Local LLM RAG остается неизменным.</span>
         </div>
       </div>
 
       <div className="ase-feedback-card">
-        <Database size={14} />
+        <BookKey size={14} />
         <p>
-          Runtime DB: <strong>{database}</strong>. Active RAG scopes: <strong>{summarizeScopes(scopeSelections) || "none"}</strong>.
+          Focus DB: <strong>{database}</strong>. Active invariant scopes: <strong>{summarizeScopes(scopeSelections) || "none"}</strong>.
         </p>
       </div>
 
@@ -523,16 +590,12 @@ export default function LocalRagPanel() {
 
       <div className="ide-settings-form">
         <label>
-          <span>Vectorization DB</span>
+          <span>Primary DB</span>
           <select value={database} onChange={(event) => setDatabase(event.target.value)}>
             {DATABASE_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>{option.label}</option>
             ))}
           </select>
-        </label>
-        <label>
-          <span>Batch Size</span>
-          <input type="number" min="1" max="20" value={batchSize} onChange={(event) => setBatchSize(Number(event.target.value) || 10)} />
         </label>
         <label>
           <span>Top K</span>
@@ -561,27 +624,13 @@ export default function LocalRagPanel() {
         <p>{parameterGuide.topK}</p>
         <p>{parameterGuide.queryBudget}</p>
         <p>{parameterGuide.includeRelationLayer}</p>
-        <p>{parameterGuide.filterProfile}</p>
         <p>{parameterGuide.responseMaxChars}</p>
-      </div>
-
-      <div className="ide-workspace-action-row" style={{ flexWrap: "wrap" }}>
-        {(availableTablesByDb[database] || SOURCE_TABLE_OPTIONS).map((tableName) => (
-          <label key={tableName} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <input
-              type="checkbox"
-              checked={selectedTables.includes(tableName)}
-              onChange={() => setSelectedTables((current) => splitSelected(current, tableName))}
-            />
-            {tableName}
-          </label>
-        ))}
       </div>
 
       <div className="ase-config-list">
         {DATABASE_OPTIONS.map((dbOption) => (
           <div key={dbOption.value} className="ase-config-card">
-            <strong>Search Scope: {dbOption.label}</strong>
+            <strong>Invariant Scope: {dbOption.label}</strong>
             <div className="ide-workspace-action-row" style={{ flexWrap: "wrap", marginTop: 12 }}>
               {(availableTablesByDb[dbOption.value] || SOURCE_TABLE_OPTIONS).map((tableName) => (
                 <label key={`${dbOption.value}-${tableName}`} style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -603,69 +652,26 @@ export default function LocalRagPanel() {
         ))}
       </div>
 
-      <div className="ide-workspace-action-row">
-        <button onClick={() => void loadStatus(database)} disabled={loadingStatus}>
-          {loadingStatus ? <LoaderCircle size={14} className="spin" /> : <ServerCog size={14} />}
-          Refresh Status
-        </button>
-        <button onClick={handleVectorize} disabled={runningVectorization || !selectedTables.length}>
-          {runningVectorization ? <LoaderCircle size={14} className="spin" /> : <Sparkles size={14} />}
-          Векторизовать базу данных
-        </button>
-      </div>
-
-      {job ? (
-        <div className="ase-config-card">
-          <strong>Vectorization Job</strong>
-          <div className="ide-workspace-summary-grid">
-            <StatusCard label="Job ID" value={job.jobId} />
-            <StatusCard label="Status" value={job.status} />
-            <StatusCard label="Stage" value={job.lastStage || "n/a"} />
-            <StatusCard label="Progress" value={`${job.progress || 0}%`} />
-            <StatusCard label="Processed" value={`${job.processed || 0}/${job.totalDocuments || 0}`} />
-            <StatusCard label="Vectorized" value={String(job.vectorized || 0)} />
-            <StatusCard label="Skipped" value={String(job.skipped || 0)} />
-          </div>
-          <div className="ide-workspace-action-row">
-            <button
-              onClick={async () => {
-                try {
-                  const nextJob = await cancelRagJob(job.jobId);
-                  setJob(nextJob);
-                  setRunningVectorization(false);
-                } catch (nextError) {
-                  setError(nextError.message);
-                }
-              }}
-              disabled={job.status !== "running"}
-            >
-              Остановить процесс
-            </button>
-          </div>
-          {job.error ? <pre className="ase-stream-preview">{job.error}</pre> : null}
-        </div>
-      ) : null}
-
       <div className="ide-settings-form">
         <label>
-          <span>Smart Search Query</span>
+          <span>Invariant Query</span>
           <textarea value={query} onChange={(event) => setQuery(event.target.value)} rows={4} />
         </label>
       </div>
 
       <div className="ide-settings-form">
         <label>
-          <span>Answer Model</span>
-          <select value={model} onChange={(event) => setModel(event.target.value)}>
-            {MODEL_OPTIONS.map((entry) => (
+          <span>Mode</span>
+          <select value={mode} onChange={(event) => setMode(event.target.value)}>
+            {MODE_OPTIONS.map((entry) => (
               <option key={entry} value={entry}>{entry}</option>
             ))}
           </select>
         </label>
         <label>
-          <span>Mode</span>
-          <select value={mode} onChange={(event) => setMode(event.target.value)}>
-            {MODE_OPTIONS.map((entry) => (
+          <span>Answer Model</span>
+          <select value={model} onChange={(event) => setModel(event.target.value)}>
+            {MODEL_OPTIONS.map((entry) => (
               <option key={entry} value={entry}>{entry}</option>
             ))}
           </select>
@@ -681,19 +687,42 @@ export default function LocalRagPanel() {
       </div>
 
       <div className="ide-workspace-action-row">
+        <button onClick={() => void loadStatus(database)} disabled={loadingStatus}>
+          {loadingStatus ? <LoaderCircle size={14} className="spin" /> : <RefreshCcw size={14} />}
+          Refresh Status
+        </button>
+        <button onClick={handleSyncSeed} disabled={runningSyncSeed}>
+          {runningSyncSeed ? <LoaderCircle size={14} className="spin" /> : <Database size={14} />}
+          Sync Ontology Seed
+        </button>
+        <button onClick={handleStartExtraction} disabled={runningExtraction}>
+          {runningExtraction ? <LoaderCircle size={14} className="spin" /> : <Play size={14} />}
+          Extract Invariants
+        </button>
+        <button onClick={handleCancelExtraction} disabled={!job?.jobId || job?.status !== "running"}>
+          <Square size={14} />
+          Stop Extraction
+        </button>
         <button onClick={handleSearch} disabled={runningSearch || !query.trim() || !activeSourceScopes.length}>
           {runningSearch ? <LoaderCircle size={14} className="spin" /> : <Search size={14} />}
-          Smart Search
+          Search Invariants
         </button>
         <button onClick={handleBuildContext} disabled={runningContext || !query.trim() || !activeSourceScopes.length}>
           {runningContext ? <LoaderCircle size={14} className="spin" /> : <Database size={14} />}
-          Build Context
+          Build Invariant Context
         </button>
         <button onClick={handleGenerateAnswer} disabled={runningAnswer || !query.trim() || !activeSourceScopes.length}>
           {runningAnswer ? <LoaderCircle size={14} className="spin" /> : <Bot size={14} />}
-          Generate Answer
+          Generate Invariant Answer
         </button>
       </div>
+
+      {job ? (
+        <div className="ase-config-card">
+          <strong>Invariant Extraction Job</strong>
+          <pre className="ase-stream-preview">{JSON.stringify(job, null, 2)}</pre>
+        </div>
+      ) : null}
 
       <div className="ide-workspace-action-row">
         <button onClick={() => void handleSaveSnapshot("search", result)} disabled={savingSnapshot || !result}>
@@ -720,10 +749,10 @@ export default function LocalRagPanel() {
       ) : null}
 
       <div className="ase-config-list">
-        <JsonCard title="Diagnostics" value={{ error: error || null, lastOperation, lastSavedSnapshot: lastSavedSnapshot || null }} />
-        <JsonCard title="Search Results" value={result} />
-        <JsonCard title="Prompt Context" value={contextResult} />
-        <JsonCard title="Local LLM Answer" value={answerResult} />
+        <JsonCard title="Diagnostics" value={{ error: error || null, lastOperation, lastSavedSnapshot: lastSavedSnapshot || null }} emptyText="No diagnostics yet." />
+        <JsonCard title="Invariant Search Results" value={result} emptyText="No search results yet." />
+        <JsonCard title="Invariant Prompt Context" value={contextResult} emptyText="No prompt context yet." />
+        <JsonCard title="Invariant Answer" value={answerResult} emptyText="No answer yet." />
       </div>
     </div>
   );

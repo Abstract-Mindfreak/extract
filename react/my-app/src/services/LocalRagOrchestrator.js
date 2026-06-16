@@ -4,100 +4,108 @@ async function parseJson(response) {
   return response.json().catch(() => null);
 }
 
-async function getRagStatus(database = "abstract-mind-lab") {
-  const response = await fetch(`${ARCHIVER_PROXY_BASE}/api/rag/status?database=${encodeURIComponent(database)}`);
+async function requestJson(url, options = {}, actionLabel = "Request") {
+  let response;
+  try {
+    response = await fetch(url, options);
+  } catch (error) {
+    throw new Error(`${actionLabel} fetch failed. endpoint=${url}. reason=${error?.message || error}`);
+  }
+
   const payload = await parseJson(response);
   if (!response.ok || !payload?.success) {
-    throw new Error(payload?.error || `RAG status failed: HTTP ${response.status}`);
+    throw new Error(payload?.error || `${actionLabel} failed: HTTP ${response.status}. endpoint=${url}`);
   }
   return payload.data;
+}
+
+async function getRagStatus(database = "abstract-mind-lab") {
+  return requestJson(
+    `${ARCHIVER_PROXY_BASE}/api/rag/status?database=${encodeURIComponent(database)}`,
+    {},
+    "RAG status",
+  );
 }
 
 async function getRagJob(jobId) {
-  const response = await fetch(`${ARCHIVER_PROXY_BASE}/api/rag/job/${encodeURIComponent(jobId)}`);
-  const payload = await parseJson(response);
-  if (!response.ok || !payload?.success) {
-    throw new Error(payload?.error || `RAG job failed: HTTP ${response.status}`);
-  }
-  return payload.data;
+  return requestJson(
+    `${ARCHIVER_PROXY_BASE}/api/rag/job/${encodeURIComponent(jobId)}`,
+    {},
+    "RAG job",
+  );
 }
 
 async function cancelRagJob(jobId) {
-  const response = await fetch(`${ARCHIVER_PROXY_BASE}/api/rag/job/${encodeURIComponent(jobId)}/cancel`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
+  return requestJson(
+    `${ARCHIVER_PROXY_BASE}/api/rag/job/${encodeURIComponent(jobId)}/cancel`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
     },
-  });
-  const payload = await parseJson(response);
-  if (!response.ok || !payload?.success) {
-    throw new Error(payload?.error || `RAG cancel failed: HTTP ${response.status}`);
-  }
-  return payload.data;
+    "RAG cancel",
+  );
 }
 
 async function startRagVectorization(request) {
-  const response = await fetch(`${ARCHIVER_PROXY_BASE}/api/rag/vectorize`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
+  return requestJson(
+    `${ARCHIVER_PROXY_BASE}/api/rag/vectorize`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(request || {}),
     },
-    body: JSON.stringify(request || {}),
-  });
-  const payload = await parseJson(response);
-  if (!response.ok || !payload?.success) {
-    throw new Error(payload?.error || `RAG vectorization failed: HTTP ${response.status}`);
-  }
-  return payload.data;
+    "RAG vectorization",
+  );
 }
 
 async function searchLocalRag(request) {
-  const response = await fetch(`${ARCHIVER_PROXY_BASE}/api/rag/search`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
+  return requestJson(
+    `${ARCHIVER_PROXY_BASE}/api/rag/search`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(request || {}),
     },
-    body: JSON.stringify(request || {}),
-  });
-  const payload = await parseJson(response);
-  if (!response.ok || !payload?.success) {
-    throw new Error(payload?.error || `RAG search failed: HTTP ${response.status}`);
-  }
-  return payload.data;
+    "RAG search",
+  );
 }
 
 async function buildRagContext(request) {
-  const response = await fetch(`${ARCHIVER_PROXY_BASE}/api/rag/context`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
+  return requestJson(
+    `${ARCHIVER_PROXY_BASE}/api/rag/context`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(request || {}),
     },
-    body: JSON.stringify(request || {}),
-  });
-  const payload = await parseJson(response);
-  if (!response.ok || !payload?.success) {
-    throw new Error(payload?.error || `RAG context failed: HTTP ${response.status}`);
-  }
-  return payload.data;
+    "RAG context",
+  );
 }
 
 async function answerWithLocalRag(request) {
-  const response = await fetch(`${ARCHIVER_PROXY_BASE}/api/rag/answer`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
+  return requestJson(
+    `${ARCHIVER_PROXY_BASE}/api/rag/answer`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(request || {}),
     },
-    body: JSON.stringify(request || {}),
-  });
-  const payload = await parseJson(response);
-  if (!response.ok || !payload?.success) {
-    throw new Error(payload?.error || `RAG answer failed: HTTP ${response.status}`);
-  }
-  return payload.data;
+    "RAG answer",
+  );
 }
 
 export function useLocalRagOrchestrator() {

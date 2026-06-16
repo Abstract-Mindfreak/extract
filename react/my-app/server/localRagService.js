@@ -55,6 +55,17 @@ function clampQueryBudget(value) {
   return Math.max(1, Math.min(100, Math.floor(numeric)));
 }
 
+function clampResponseMaxChars(value) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) return 40000;
+  return Math.max(500, Math.min(200000, Math.floor(numeric)));
+}
+
+function estimateNumPredictForChars(maxChars) {
+  const chars = clampResponseMaxChars(maxChars);
+  return Math.max(128, Math.ceil(chars / 3.2));
+}
+
 function toVectorLiteral(values) {
   return `[${values.map((value) => Number(value).toFixed(12)).join(',')}]`;
 }
@@ -76,6 +87,35 @@ function stableStringify(value) {
   } catch {
     return String(value);
   }
+}
+
+function quoteIdentifier(identifier) {
+  return `"${String(identifier || '').replace(/"/g, '""')}"`;
+}
+
+async function listPublicTables(databaseName) {
+  const result = await getPool(databaseName).query(`
+    SELECT table_name
+    FROM information_schema.tables
+    WHERE table_schema = 'public'
+      AND table_type = 'BASE TABLE'
+    ORDER BY table_name ASC
+  `);
+  return result.rows.map((row) => String(row.table_name || '').trim()).filter(Boolean);
+}
+
+async function listTableColumns(databaseName, tableName) {
+  const result = await getPool(databaseName).query(`
+    SELECT column_name, data_type
+    FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = $1
+    ORDER BY ordinal_position ASC
+  `, [tableName]);
+  return result.rows.map((row) => ({
+    columnName: String(row.column_name || ''),
+    dataType: String(row.data_type || ''),
+  }));
 }
 
 function collectJsonTextFragments(value, options = {}, state = { count: 0 }) {
@@ -209,7 +249,23 @@ async function embedTexts(texts) {
   return embeddings;
 }
 
-async function generateWithLocalModel({ model, prompt, systemPrompt, temperature = 0, numCtx = 8192 }) {
+async function generateWithLocalModel({
+  model,
+  prompt,
+  systemPrompt,
+  temperature = 0,
+  numCtx = 8192,
+  numPredict,
+}) {
+  const numericPredict = Number(numPredict);
+  const options = {
+    temperature,
+    num_ctx: numCtx,
+  };
+  if (Number.isFinite(numericPredict) && numericPredict > 0) {
+    options.num_predict = Math.max(64, Math.floor(numericPredict));
+  }
+
   const response = await fetch(`${OLLAMA_API_BASE.replace(/\/+$/, '')}/generate`, {
     method: 'POST',
     headers: {
@@ -221,10 +277,7 @@ async function generateWithLocalModel({ model, prompt, systemPrompt, temperature
       prompt,
       system: systemPrompt,
       stream: false,
-      options: {
-        temperature,
-        num_ctx: numCtx,
-      },
+      options,
     }),
   });
 
@@ -467,13 +520,123 @@ function buildSongDocument(row) {
   };
 }
 
+function buildMmssInvariantDocument(row) {
+  const snapshot = {
+    invariant_key: row.invariant_key,
+    source_database: row.source_database,
+    source_table: row.source_table,
+    source_id: row.source_id,
+    source_title: row.source_title,
+    extractor: row.extractor,
+    domain: row.domain,
+    metrics: row.metrics,
+    validation: row.validation,
+    metadata: row.metadata,
+  };
+  const text = truncateText([
+    row.source_title,
+    row.source_text,
+    stableStringify(row.phase_matches),
+    stableStringify(row.metrics),
+    stableStringify(row.validation),
+    stableStringify(row.metadata),
+  ].filter(Boolean).join('\n\n'), 5000);
+
+  return {
+    sourceTable: 'mmss_invariants',
+    sourceId: String(row.invariant_key),
+    sourceTitle: row.source_title || row.invariant_key,
+    chunkText: text,
+    sourcePayload: snapshot,
+    metadata: {
+      source_database: row.source_database,
+      source_table: row.source_table,
+      source_id: row.source_id,
+      extractor: row.extractor,
+      domain: row.domain,
+      stability_flag: row.metrics?.stability_flag ?? row.metadata?.stability_flag ?? false,
+      phase_operator_ids: row.metadata?.phase_operator_ids || [],
+    },
+  };
+}
+
+function getGenericSourceId(row, tableName) {
+  const candidates = [row.id, row.invariant_key, row.uuid, row.key, row.slug, row.name, row.title];
+  const found = candidates.find((value) => value != null && String(value).trim());
+  if (found != null) {
+    return String(found);
+  }
+  return buildHash(`${tableName}:${stableStringify(row)}`);
+}
+
+function getGenericSourceTitle(row, sourceId) {
+  return row.title || row.name || row.slug || row.key || sourceId;
+}
+
+function buildGenericTableDocument(tableName, row, columns = []) {
+  const sourceId = getGenericSourceId(row, tableName);
+  const sourceTitle = getGenericSourceTitle(row, sourceId);
+  const fragments = [];
+
+  for (const column of columns) {
+    const key = column.columnName;
+    const value = row[key];
+    if (value == null) continue;
+    if (typeof value === 'string' && value.trim()) {
+      fragments.push(`${key}: ${value.trim()}`);
+    } else if (typeof value === 'number' || typeof value === 'boolean') {
+      fragments.push(`${key}: ${String(value)}`);
+    } else if (typeof value === 'object') {
+      fragments.push(`${key}: ${stableStringify(value)}`);
+    }
+  }
+
+  const chunkText = truncateText([
+    `Table: ${tableName}`,
+    `Source ID: ${sourceId}`,
+    ...fragments,
+  ].join('\n\n'), JSON_TEXT_LIMIT);
+
+  return {
+    sourceTable: tableName,
+    sourceId,
+    sourceTitle,
+    chunkText,
+    sourcePayload: row,
+    metadata: {
+      generic_source: true,
+      column_count: columns.length,
+    },
+  };
+}
+
+async function loadGenericTableDocuments(databaseName, tableName) {
+  const columns = await listTableColumns(databaseName, tableName);
+  if (!columns.length) return [];
+
+  const quotedTable = quoteIdentifier(tableName);
+  let rows = [];
+  try {
+    const result = await getPool(databaseName).query(`SELECT * FROM ${quotedTable}`);
+    rows = result.rows;
+  } catch {
+    return [];
+  }
+
+  return rows
+    .map((row) => buildGenericTableDocument(tableName, row, columns))
+    .filter((doc) => doc.chunkText);
+}
+
 async function loadSourceDocuments(databaseName, requestedTables = []) {
   const selected = new Set((Array.isArray(requestedTables) ? requestedTables : []).filter(Boolean));
   const docs = [];
+  const handledTables = new Set();
 
   const canUse = (tableName) => selected.size === 0 || selected.has(tableName);
 
   if (canUse('tracks') && await tableExists(databaseName, 'tracks')) {
+    handledTables.add('tracks');
     const result = await getPool(databaseName).query(`
       SELECT id, title, prompt, negative_prompt, generation_mode, transform_type, model_name, video_prompt,
              session_id, has_video, created_at, raw_data, conditions, lyrics_timestamped
@@ -488,6 +651,7 @@ async function loadSourceDocuments(databaseName, requestedTables = []) {
   }
 
   if (canUse('sessions') && await tableExists(databaseName, 'sessions')) {
+    handledTables.add('sessions');
     const result = await getPool(databaseName).query(`
       SELECT id, title, ai_snapshot, config, created_at, updated_at
       FROM sessions
@@ -498,6 +662,7 @@ async function loadSourceDocuments(databaseName, requestedTables = []) {
   }
 
   if (canUse('music_blocks') && await tableExists(databaseName, 'music_blocks')) {
+    handledTables.add('music_blocks');
     const result = await getPool(databaseName).query(`
       SELECT id, block_type, layer, slug, name, content
       FROM music_blocks
@@ -508,6 +673,7 @@ async function loadSourceDocuments(databaseName, requestedTables = []) {
   }
 
   if (canUse('chat_sessions') && await tableExists(databaseName, 'chat_sessions')) {
+    handledTables.add('chat_sessions');
     const result = await getPool(databaseName).query(`
       SELECT id, title, full_payload, created_at
       FROM chat_sessions
@@ -518,6 +684,7 @@ async function loadSourceDocuments(databaseName, requestedTables = []) {
   }
 
   if (canUse('songs') && await tableExists(databaseName, 'songs')) {
+    handledTables.add('songs');
     const result = await getPool(databaseName).query(`
       SELECT id, title, sound_prompt, phase_transition_logic, raw_data
       FROM songs
@@ -527,6 +694,27 @@ async function loadSourceDocuments(databaseName, requestedTables = []) {
       ORDER BY created_at DESC
     `);
     docs.push(...result.rows.map(buildSongDocument).filter((doc) => doc.chunkText));
+  }
+
+  if (canUse('mmss_invariants') && await tableExists(databaseName, 'mmss_invariants')) {
+    handledTables.add('mmss_invariants');
+    const result = await getPool(databaseName).query(`
+      SELECT invariant_key, source_database, source_table, source_id, source_title, extractor, domain,
+             source_text, phase_matches, metrics, validation, metadata, updated_at
+      FROM mmss_invariants
+      WHERE source_text IS NOT NULL
+      ORDER BY updated_at DESC NULLS LAST
+    `);
+    docs.push(...result.rows.map(buildMmssInvariantDocument).filter((doc) => doc.chunkText));
+  }
+
+  const genericCandidates = selected.size
+    ? Array.from(selected).filter((tableName) => !handledTables.has(tableName))
+    : [];
+
+  for (const tableName of genericCandidates) {
+    if (!await tableExists(databaseName, tableName)) continue;
+    docs.push(...await loadGenericTableDocuments(databaseName, tableName));
   }
 
   return docs;
@@ -585,6 +773,14 @@ async function upsertEmbeddingBatch(databaseName, docs, embeddings) {
         doc.contentHash,
         vector,
       ]);
+
+      if (doc.sourceTable === 'mmss_invariants') {
+        await client.query(`
+          UPDATE mmss_invariants
+          SET vectorized = TRUE, updated_at = NOW()
+          WHERE invariant_key = $1
+        `, [doc.sourceId]);
+      }
     }
     await client.query('COMMIT');
   } catch (error) {
@@ -598,6 +794,7 @@ async function upsertEmbeddingBatch(databaseName, docs, embeddings) {
 async function gatherStats(databaseName) {
   const dimension = await getEmbeddingDimension();
   await ensureRagSchema(databaseName);
+  const availableTables = await listPublicTables(databaseName);
   const result = await getPool(databaseName).query(`
     SELECT
       COUNT(*)::int AS total_embeddings,
@@ -614,6 +811,7 @@ async function gatherStats(databaseName) {
     totalEmbeddings: result.rows[0]?.total_embeddings || 0,
     sourceTableCount: result.rows[0]?.source_table_count || 0,
     sourceTables: result.rows[0]?.source_tables || [],
+    availableTables,
     lastUpdatedAt: result.rows[0]?.last_updated_at || null,
     activeJob: Array.from(jobs.values()).find((job) => job.database === databaseName && job.status === 'running') || null,
   };
@@ -803,6 +1001,11 @@ function buildQueryVariants(query, mode, budget) {
       'Retrieve MMSS operator mappings, ontology terms, and structured blocks for: {query}',
       'Find rhythm, timbre, space, logic, math, and phase relations for: {query}',
       'Collect canonical MMSS evidence and comparable legacy echoes for: {query}',
+    ],
+    mmss_invariants: [
+      'Retrieve MMSS invariants, ontology terms, operator rules, and reusable structures for: {query}',
+      'Find rhythm, timbre, space, logic, math, and phase invariant mappings for: {query}',
+      'Collect structured MMSS blocks, invariant fragments, and canonical evidence for: {query}',
     ],
     cross_db_reconciliation: [
       'Compare cross-database records, overlaps, and divergences for: {query}',
@@ -1122,6 +1325,8 @@ function assemblePromptContext({ query, contextBlocks, relationBlocks, mode }) {
         return 'Task Mode: session_analysis. Analyze sessions and workflow traces using only the retrieved context.';
       case 'mmss_operator_assist':
         return 'Task Mode: mmss_operator_assist. Explain MMSS operators, structures, and likely mappings using only the retrieved context.';
+      case 'mmss_invariants':
+        return 'Task Mode: mmss_invariants. Work only with MMSS invariants, ontology mappings, operator rules, and structured reusable evidence from the retrieved context.';
       case 'cross_db_reconciliation':
         return 'Task Mode: cross_db_reconciliation. Compare evidence across the active databases, keep provenance explicit, and identify alignment or conflict.';
       case 'json_prompt_extraction':
@@ -1210,12 +1415,14 @@ async function buildPromptContext(options = {}) {
 async function answerWithRag(options = {}) {
   const contextBundle = await buildPromptContext(options);
   const startedAt = Date.now();
+  const responseMaxChars = clampResponseMaxChars(options.responseMaxChars);
   const systemPrompt = String(options.systemPrompt || '').trim() || [
     'You are a local RAG assistant inside MMSS ASE Console.',
     'Use only the retrieved context provided to you.',
     'If the context is insufficient, say so explicitly.',
     'Do not invent sources or facts.',
     'When useful, cite source_table and source_id inline.',
+    `Keep the final answer within ${responseMaxChars} characters.`,
   ].join(' ');
 
   const prompt = [
@@ -1225,6 +1432,7 @@ async function answerWithRag(options = {}) {
     '- Answer only from the retrieved context.',
     '- Prefer concise, structured output.',
     '- Mention uncertainty when context is incomplete.',
+    `- Keep the final answer within ${responseMaxChars} characters.`,
     '',
     `Final User Request: ${contextBundle.query}`,
   ].join('\n');
@@ -1235,7 +1443,9 @@ async function answerWithRag(options = {}) {
     systemPrompt,
     temperature: Number.isFinite(Number(options.temperature)) ? Number(options.temperature) : 0,
     numCtx: Number.isFinite(Number(options.numCtx)) ? Number(options.numCtx) : 8192,
+    numPredict: options.numPredict || estimateNumPredictForChars(responseMaxChars),
   });
+  const answer = truncateText(generation.response, responseMaxChars);
 
   return {
     query: contextBundle.query,
@@ -1247,7 +1457,7 @@ async function answerWithRag(options = {}) {
     includeRelationLayer: contextBundle.includeRelationLayer,
     queryBudget: contextBundle.queryBudget,
     queryVariants: contextBundle.queryVariants,
-    answer: generation.response,
+    answer,
     contextBlocks: contextBundle.contextBlocks,
     relationBlocks: contextBundle.relationBlocks,
     retrievedSources: contextBundle.retrievedSources,
@@ -1260,6 +1470,8 @@ async function answerWithRag(options = {}) {
       queryVariantCount: contextBundle.retrievalDebug.queryVariantCount,
       acceptedPrimary: contextBundle.retrievalDebug.acceptedPrimary,
       acceptedRelation: contextBundle.retrievalDebug.acceptedRelation,
+      requestedAnswerMaxChars: responseMaxChars,
+      answerChars: answer.length,
       generationDurationMs: Date.now() - startedAt,
       promptEvalCount: generation.promptEvalCount,
       evalCount: generation.evalCount,

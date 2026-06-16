@@ -49,6 +49,14 @@ const {
   upsertEntities,
   upsertEntity,
 } = require('./server/postgresPersistence.js');
+const {
+  MMSS_INVARIANTS_TABLE,
+  cancelJob: cancelMmssInvariantsJob,
+  gatherStats: gatherMmssInvariantsStats,
+  getJobStatus: getMmssInvariantsJobStatus,
+  startExtractionJob: startMmssInvariantsExtractionJob,
+  syncOntologySeed: syncMmssOntologySeed,
+} = require('./server/mmssInvariantsService.js');
 
 const app = express();
 const server = http.createServer(app);
@@ -522,6 +530,8 @@ app.post('/api/rag/answer', async (req, res) => {
       systemPrompt: req.body?.systemPrompt,
       temperature: req.body?.temperature,
       numCtx: req.body?.numCtx,
+      responseMaxChars: req.body?.responseMaxChars,
+      numPredict: req.body?.numPredict,
     });
     res.json({
       success: true,
@@ -533,6 +543,94 @@ app.post('/api/rag/answer', async (req, res) => {
       error: error?.message || 'Failed to generate local RAG answer',
     });
   }
+});
+
+app.get('/api/mmss-invariants/status', async (req, res) => {
+  try {
+    const database = normalizeLocalRagDatabase(req.query.database);
+    const stats = await gatherMmssInvariantsStats(database);
+    res.json({
+      success: true,
+      data: {
+        ...stats,
+        table: MMSS_INVARIANTS_TABLE,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to load MMSS invariant status',
+    });
+  }
+});
+
+app.post('/api/mmss-invariants/seed/sync', async (req, res) => {
+  try {
+    const database = normalizeLocalRagDatabase(req.body?.database || req.query?.database);
+    const summary = await syncMmssOntologySeed(database);
+    res.json({
+      success: true,
+      data: {
+        database,
+        ...summary,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to sync MMSS ontology seed',
+    });
+  }
+});
+
+app.post('/api/mmss-invariants/extract', async (req, res) => {
+  try {
+    const job = await startMmssInvariantsExtractionJob({
+      database: req.body?.database,
+      sourceTables: req.body?.sourceTables,
+      batchSize: req.body?.batchSize,
+      syncSeed: req.body?.syncSeed,
+    });
+    res.json({
+      success: true,
+      data: job,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to start MMSS invariant extraction job',
+    });
+  }
+});
+
+app.get('/api/mmss-invariants/job/:jobId', async (req, res) => {
+  const job = getMmssInvariantsJobStatus(req.params.jobId);
+  if (!job) {
+    return res.status(404).json({
+      success: false,
+      error: 'MMSS invariant job not found',
+    });
+  }
+
+  res.json({
+    success: true,
+    data: job,
+  });
+});
+
+app.post('/api/mmss-invariants/job/:jobId/cancel', async (req, res) => {
+  const job = cancelMmssInvariantsJob(req.params.jobId);
+  if (!job) {
+    return res.status(404).json({
+      success: false,
+      error: 'MMSS invariant job not found',
+    });
+  }
+
+  res.json({
+    success: true,
+    data: job,
+  });
 });
 
 app.get('/api/persistence/settings/:scope', async (req, res) => {

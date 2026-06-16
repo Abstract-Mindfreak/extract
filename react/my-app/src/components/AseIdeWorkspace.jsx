@@ -21,6 +21,7 @@ import ASEMasterConsole from "./ASEMasterConsole";
 import FlowmusicAgentPanel from "./ase-variations/flowmusic-agent-panel";
 import GenerationEnginePanel from "./ase-variations/generation-engine-panel";
 import LocalRagPanel from "./ase-variations/local-rag-panel";
+import MMSSInvariantsPanel from "./ase-variations/mmss-invariants-panel";
 import MMSSMutatorPanel from "./ase-variations/mmss-mutator-panel";
 import { useAseWorkspaceStore } from "../hooks/useAseWorkspaceStore";
 import "./PromptIdeWorkspace.css";
@@ -237,6 +238,14 @@ export default function AseIdeWorkspace(props) {
           enableClose: false,
           icon: "local-rag",
         },
+        {
+          id: "ase-mmss-invariants-tab",
+          type: "tab",
+          name: "MMSS Invariants",
+          component: "mmss-invariants",
+          enableClose: false,
+          icon: "mmss-invariants",
+        },
       ].reduce(
         (layoutJson, tabConfig) => ensureWorkspaceTab(layoutJson, tabConfig),
         workspaceStore.layoutSnapshot || buildDefaultLayout(),
@@ -306,6 +315,10 @@ export default function AseIdeWorkspace(props) {
 
     if (component === "local-rag") {
       return <LocalRagPanel />;
+    }
+
+    if (component === "mmss-invariants") {
+      return <MMSSInvariantsPanel />;
     }
 
     if (component === "flowmusic-agents") {
@@ -715,6 +728,8 @@ function resolveTabIcon(icon) {
     case "mmss-mutator":
       return <Database {...common} />;
     case "local-rag":
+      return <Database {...common} />;
+    case "mmss-invariants":
       return <Database {...common} />;
     case "flowmusic-agents":
       return <Sparkles {...common} />;
