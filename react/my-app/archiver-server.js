@@ -57,6 +57,16 @@ const {
   startExtractionJob: startMmssInvariantsExtractionJob,
   syncOntologySeed: syncMmssOntologySeed,
 } = require('./server/mmssInvariantsService.js');
+const {
+  cancelDesignSkillTreeJob,
+  designSkillTree: designMmssSkillTree,
+  getDesignSkillTreeJobStatus,
+  runDummySkillTreeExecution,
+  startDesignSkillTreeJob,
+} = require('./server/mmssSkillTreeService.js');
+const {
+  getRuntimeHealth: getMmssRuntimeHealth,
+} = require('./server/mmssRuntimePersistenceService.js');
 
 const app = express();
 const server = http.createServer(app);
@@ -631,6 +641,132 @@ app.post('/api/mmss-invariants/job/:jobId/cancel', async (req, res) => {
     success: true,
     data: job,
   });
+});
+
+app.post('/api/mmss/skill-tree/design', async (req, res) => {
+  try {
+    const payload = await designMmssSkillTree({
+      database: req.body?.database,
+      goal: req.body?.goal,
+      sourceTables: req.body?.sourceTables,
+      sourceScopes: req.body?.sourceScopes,
+      topK: req.body?.topK,
+      queryBudget: req.body?.queryBudget,
+      filterProfile: req.body?.filterProfile,
+      includeRelationLayer: req.body?.includeRelationLayer,
+      model: req.body?.model || LOCAL_RAG_ANSWER_MODEL,
+      ownerScope: req.body?.ownerScope,
+      contextHint: req.body?.contextHint,
+      responseMaxChars: req.body?.responseMaxChars,
+      mode: req.body?.mode,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to design MMSS skill tree',
+    });
+  }
+});
+
+app.post('/api/mmss/skill-tree/design/async', async (req, res) => {
+  try {
+    const job = await startDesignSkillTreeJob({
+      database: req.body?.database,
+      goal: req.body?.goal,
+      sourceTables: req.body?.sourceTables,
+      sourceScopes: req.body?.sourceScopes,
+      topK: req.body?.topK,
+      queryBudget: req.body?.queryBudget,
+      filterProfile: req.body?.filterProfile,
+      includeRelationLayer: req.body?.includeRelationLayer,
+      model: req.body?.model || LOCAL_RAG_ANSWER_MODEL,
+      ownerScope: req.body?.ownerScope,
+      contextHint: req.body?.contextHint,
+      responseMaxChars: req.body?.responseMaxChars,
+      mode: req.body?.mode,
+    });
+    res.json({
+      success: true,
+      data: job,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to start async MMSS skill tree design job',
+    });
+  }
+});
+
+app.get('/api/mmss/skill-tree/design/job/:jobId', async (req, res) => {
+  const job = getDesignSkillTreeJobStatus(req.params.jobId);
+  if (!job) {
+    return res.status(404).json({
+      success: false,
+      error: 'MMSS skill tree design job not found',
+    });
+  }
+
+  res.json({
+    success: true,
+    data: job,
+  });
+});
+
+app.post('/api/mmss/skill-tree/design/job/:jobId/cancel', async (req, res) => {
+  const job = cancelDesignSkillTreeJob(req.params.jobId);
+  if (!job) {
+    return res.status(404).json({
+      success: false,
+      error: 'MMSS skill tree design job not found',
+    });
+  }
+
+  res.json({
+    success: true,
+    data: job,
+  });
+});
+
+app.get('/api/mmss/runtime/health', async (req, res) => {
+  try {
+    const database = normalizeLocalRagDatabase(req.query.database);
+    const payload = await getMmssRuntimeHealth(database);
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to load MMSS runtime health',
+    });
+  }
+});
+
+app.post('/api/mmss/skill-tree/run/dummy', async (req, res) => {
+  try {
+    const payload = await runDummySkillTreeExecution({
+      database: req.body?.database,
+      treeId: req.body?.treeId,
+      skillSetId: req.body?.skillSetId,
+      skillId: req.body?.skillId,
+      mode: req.body?.mode,
+      inputPayload: req.body?.inputPayload,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to run dummy MMSS skill tree execution',
+    });
+  }
 });
 
 app.get('/api/persistence/settings/:scope', async (req, res) => {

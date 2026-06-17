@@ -108,14 +108,62 @@ async function answerWithLocalRag(request) {
   );
 }
 
+async function getMmssRuntimeHealth(database = "abstract-mind-lab") {
+  return requestJson(
+    `${ARCHIVER_PROXY_BASE}/api/mmss/runtime/health?database=${encodeURIComponent(database)}`,
+    {},
+    "MMSS runtime health",
+  );
+}
+
+async function startMmssSkillTreeDesignJob(request) {
+  return requestJson(
+    `${ARCHIVER_PROXY_BASE}/api/mmss/skill-tree/design/async`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(request || {}),
+    },
+    "MMSS skill tree design job",
+  );
+}
+
+async function getMmssSkillTreeDesignJob(jobId) {
+  return requestJson(
+    `${ARCHIVER_PROXY_BASE}/api/mmss/skill-tree/design/job/${encodeURIComponent(jobId)}`,
+    {},
+    "MMSS skill tree design status",
+  );
+}
+
+async function cancelMmssSkillTreeDesignJob(jobId) {
+  return requestJson(
+    `${ARCHIVER_PROXY_BASE}/api/mmss/skill-tree/design/job/${encodeURIComponent(jobId)}/cancel`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+    },
+    "MMSS skill tree design cancel",
+  );
+}
+
 export function useLocalRagOrchestrator() {
   return {
     answerWithLocalRag,
     buildRagContext,
+    cancelMmssSkillTreeDesignJob,
     getRagJob,
     getRagStatus,
+    getMmssRuntimeHealth,
+    getMmssSkillTreeDesignJob,
     cancelRagJob,
     searchLocalRag,
+    startMmssSkillTreeDesignJob,
     startRagVectorization,
   };
 }

@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const { getPool } = require('../db');
+const { logGenerationResult } = require('./mmssRuntimePersistenceService');
 
 const OLLAMA_API_BASE = process.env.OLLAMA_API_BASE || 'http://127.0.0.1:11434/api';
 const EMBEDDING_MODEL = process.env.RAG_EMBEDDING_MODEL || 'embeddinggemma:300m';
@@ -1447,7 +1448,7 @@ async function answerWithRag(options = {}) {
   });
   const answer = truncateText(generation.response, responseMaxChars);
 
-  return {
+  const payload = {
     query: contextBundle.query,
     database: contextBundle.database,
     sourceScopes: contextBundle.sourceScopes,
@@ -1483,6 +1484,54 @@ async function answerWithRag(options = {}) {
       profileConfig: contextBundle.retrievalDebug.profileConfig,
     },
   };
+
+  const shouldLogMmssResult = [
+    'mmss_operator_assist',
+    'mmss_invariants',
+    'ase_console_recipe',
+  ].includes(String(contextBundle.mode || ''));
+
+  if (shouldLogMmssResult) {
+    try {
+      await logGenerationResult(contextBundle.database, {
+        mode: contextBundle.mode,
+        model: generation.model,
+        query: contextBundle.query,
+        answer,
+        sourceScopes: contextBundle.sourceScopes,
+        retrievedSources: contextBundle.retrievedSources,
+        promptContextText: contextBundle.promptContextText,
+        debug: {
+          promptChars: prompt.length,
+          contextChars: contextBundle.promptContextText.length,
+          totalRetrieved: contextBundle.retrievalDebug.totalRetrieved,
+          sourceScopeCount: contextBundle.retrievalDebug.sourceScopeCount,
+          queryVariantCount: contextBundle.retrievalDebug.queryVariantCount,
+          acceptedPrimary: contextBundle.retrievalDebug.acceptedPrimary,
+          acceptedRelation: contextBundle.retrievalDebug.acceptedRelation,
+          requestedAnswerMaxChars: responseMaxChars,
+          answerChars: answer.length,
+          generationDurationMs: Date.now() - startedAt,
+          promptEvalCount: generation.promptEvalCount,
+          evalCount: generation.evalCount,
+          totalDuration: generation.totalDuration,
+          loadDuration: generation.loadDuration,
+          evalDuration: generation.evalDuration,
+          embeddingModel: contextBundle.embeddingModel,
+          embeddingDimension: contextBundle.embeddingDimension,
+          profileConfig: contextBundle.retrievalDebug.profileConfig,
+        },
+        metadata: {
+          operation: 'rag_answer',
+          origin: 'answerWithRag',
+        },
+      });
+    } catch (_error) {
+      // Logging failures must not break the main RAG answer flow.
+    }
+  }
+
+  return payload;
 }
 
 module.exports = {

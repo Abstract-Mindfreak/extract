@@ -1,5 +1,6 @@
+import { Layout, Model } from "flexlayout-react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Bot, Database, LoaderCircle, Save, Search, ServerCog, Sparkles } from "lucide-react";
+import { Bot, Database, LoaderCircle, Play, RefreshCcw, Save, Search, ServerCog, Sparkles, Square } from "lucide-react";
 import { useLocalRagOrchestrator } from "../../services/LocalRagOrchestrator";
 import appPersistenceService from "../../services/AppPersistenceService";
 
@@ -23,6 +24,7 @@ const MODE_OPTIONS = [
 const MODEL_OPTIONS = ["batiai/gemma4-e2b:q4", "gemma4:e2b", "quant-mmss:latest"];
 const SETTINGS_SCOPE = "local_rag_ui";
 const SNAPSHOT_SCOPE = "local_rag_results";
+const RESULT_LAYOUT_SETTING_KEY = "resultLayoutSnapshot";
 
 function StatusCard({ label, value }) {
   return (
@@ -53,17 +55,6 @@ function summarizeScopes(scopeSelections) {
   return buildSourceScopes(scopeSelections)
     .map((scope) => `${scope.database}: ${scope.sourceTables.join(", ")}`)
     .join(" | ");
-}
-
-function JsonCard({ title, value }) {
-  return (
-    <div className="ase-config-card">
-      <strong>{title}</strong>
-      <pre className="ase-stream-preview">
-        {JSON.stringify(value || {}, null, 2)}
-      </pre>
-    </div>
-  );
 }
 
 function getAvailableTablesByDb(statusMap = {}) {
@@ -98,10 +89,14 @@ export default function LocalRagPanel() {
   const {
     answerWithLocalRag,
     buildRagContext,
+    cancelMmssSkillTreeDesignJob,
     cancelRagJob,
+    getMmssRuntimeHealth,
+    getMmssSkillTreeDesignJob,
     getRagJob,
     getRagStatus,
     searchLocalRag,
+    startMmssSkillTreeDesignJob,
     startRagVectorization,
   } = useLocalRagOrchestrator();
 
@@ -122,22 +117,42 @@ export default function LocalRagPanel() {
   const [responseMaxChars, setResponseMaxChars] = useState(40000);
   const [status, setStatus] = useState(null);
   const [statusByDb, setStatusByDb] = useState({});
+  const [runtimeHealth, setRuntimeHealth] = useState(null);
   const [job, setJob] = useState(null);
+  const [designJob, setDesignJob] = useState(null);
   const [result, setResult] = useState(null);
   const [contextResult, setContextResult] = useState(null);
   const [answerResult, setAnswerResult] = useState(null);
+  const [designResult, setDesignResult] = useState(null);
   const [loadingStatus, setLoadingStatus] = useState(true);
   const [runningVectorization, setRunningVectorization] = useState(false);
   const [runningSearch, setRunningSearch] = useState(false);
   const [runningContext, setRunningContext] = useState(false);
   const [runningAnswer, setRunningAnswer] = useState(false);
+  const [runningDesignJob, setRunningDesignJob] = useState(false);
   const [error, setError] = useState("");
   const [savingSnapshot, setSavingSnapshot] = useState(false);
   const [lastSavedSnapshot, setLastSavedSnapshot] = useState("");
   const [lastOperation, setLastOperation] = useState(null);
+  const [skillTreeGoal, setSkillTreeGoal] = useState("Build an MMSS skill tree for operator-aware retrieval, context assembly, and reusable runtime execution.");
+  const [skillTreeOwnerScope, setSkillTreeOwnerScope] = useState("local_rag_runtime");
+  const [skillTreeContextHint, setSkillTreeContextHint] = useState("");
+  const [resultLayoutModel, setResultLayoutModel] = useState(() => Model.fromJson(buildResultLayout()));
 
   const activeSourceScopes = useMemo(() => buildSourceScopes(scopeSelections), [scopeSelections]);
   const availableTablesByDb = useMemo(() => getAvailableTablesByDb(statusByDb), [statusByDb]);
+  const diagnosticsPayload = useMemo(() => ({
+    error: error || null,
+    lastOperation,
+    lastSavedSnapshot: lastSavedSnapshot || null,
+    runtimeHealth,
+    database,
+    activeSourceScopes,
+  }), [activeSourceScopes, database, error, lastOperation, lastSavedSnapshot, runtimeHealth]);
+  const runtimeJobsPayload = useMemo(() => ({
+    vectorizationJob: job || null,
+    skillTreeDesignJob: designJob || null,
+  }), [designJob, job]);
 
   const loadStatus = useCallback(async (targetDatabase = database) => {
     setLoadingStatus(true);
@@ -145,10 +160,12 @@ export default function LocalRagPanel() {
       const entries = await Promise.all(
         DATABASE_OPTIONS.map(async (option) => [option.value, await getRagStatus(option.value)]),
       );
+      const nextRuntimeHealth = await getMmssRuntimeHealth(targetDatabase);
       const nextStatusMap = Object.fromEntries(entries);
       const nextStatus = nextStatusMap[targetDatabase] || nextStatusMap[database];
       setStatus(nextStatus);
       setStatusByDb(nextStatusMap);
+      setRuntimeHealth(nextRuntimeHealth);
       setError("");
       if (nextStatus.activeJob?.jobId) {
         setJob(nextStatus.activeJob);
@@ -158,7 +175,7 @@ export default function LocalRagPanel() {
     } finally {
       setLoadingStatus(false);
     }
-  }, [database, getRagStatus]);
+  }, [database, getMmssRuntimeHealth, getRagStatus]);
 
   useEffect(() => {
     void loadStatus(database);
@@ -182,8 +199,27 @@ export default function LocalRagPanel() {
         if (typeof saved.model === "string") setModel(saved.model);
         if (typeof saved.includeRelationLayer === "boolean") setIncludeRelationLayer(saved.includeRelationLayer);
         if (Number.isFinite(Number(saved.responseMaxChars))) setResponseMaxChars(Number(saved.responseMaxChars));
+        if (typeof saved.skillTreeGoal === "string") setSkillTreeGoal(saved.skillTreeGoal);
+        if (typeof saved.skillTreeOwnerScope === "string") setSkillTreeOwnerScope(saved.skillTreeOwnerScope);
+        if (typeof saved.skillTreeContextHint === "string") setSkillTreeContextHint(saved.skillTreeContextHint);
       } catch (_error) {
         // Keep the panel usable even if persistence is unavailable.
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    void (async () => {
+      try {
+        const savedLayout = await appPersistenceService.getSetting(SETTINGS_SCOPE, RESULT_LAYOUT_SETTING_KEY, null);
+        if (!active || !savedLayout || typeof savedLayout !== "object") return;
+        setResultLayoutModel(Model.fromJson(savedLayout));
+      } catch (_error) {
+        // Keep default layout if the saved snapshot is unavailable or invalid.
       }
     })();
     return () => {
@@ -205,6 +241,9 @@ export default function LocalRagPanel() {
       model,
       includeRelationLayer,
       responseMaxChars,
+      skillTreeGoal,
+      skillTreeOwnerScope,
+      skillTreeContextHint,
     });
   }, [
     batchSize,
@@ -218,6 +257,9 @@ export default function LocalRagPanel() {
     responseMaxChars,
     scopeSelections,
     selectedTables,
+    skillTreeContextHint,
+    skillTreeGoal,
+    skillTreeOwnerScope,
     topK,
   ]);
 
@@ -242,12 +284,42 @@ export default function LocalRagPanel() {
     return () => window.clearInterval(timer);
   }, [database, getRagJob, job, loadStatus]);
 
+  useEffect(() => {
+    if (!designJob?.jobId || designJob.status !== "running") return undefined;
+    const timer = window.setInterval(async () => {
+      try {
+        const nextJob = await getMmssSkillTreeDesignJob(designJob.jobId);
+        setDesignJob(nextJob);
+        if (nextJob.status !== "running") {
+          window.clearInterval(timer);
+          setRunningDesignJob(false);
+          setDesignResult(nextJob.result || null);
+          void loadStatus(database);
+        }
+      } catch (nextError) {
+        setError(nextError.message);
+        window.clearInterval(timer);
+        setRunningDesignJob(false);
+      }
+    }, 2500);
+
+    return () => window.clearInterval(timer);
+  }, [database, designJob, getMmssSkillTreeDesignJob, loadStatus]);
+
   const statusCards = useMemo(() => ([
     { label: "Embedding model", value: status?.embeddingModel || "n/a" },
     { label: "Dimension", value: String(status?.embeddingDimension || "n/a") },
     { label: "Stored vectors", value: String(status?.totalEmbeddings || 0) },
     { label: "Source tables", value: Array.isArray(status?.sourceTables) ? status.sourceTables.join(", ") || "n/a" : "n/a" },
   ]), [status]);
+
+  const runtimeCards = useMemo(() => ([
+    { label: "Generation results", value: String(runtimeHealth?.generationResults || 0) },
+    { label: "Skills", value: String(runtimeHealth?.skills || 0) },
+    { label: "Skill sets", value: String(runtimeHealth?.skillSets || 0) },
+    { label: "Skill trees", value: String(runtimeHealth?.skillTrees || 0) },
+    { label: "Skill runs", value: String(runtimeHealth?.skillRuns || 0) },
+  ]), [runtimeHealth]);
 
   const parameterGuide = useMemo(() => ({
     topK: `Top K=${topK}. Это итоговое количество самых сильных найденных блоков, которые проходят в финальный retrieval pool и затем в отбор контекста.`,
@@ -492,6 +564,160 @@ export default function LocalRagPanel() {
     }
   };
 
+  const handleStartDesignJob = async () => {
+    setRunningDesignJob(true);
+    setError("");
+    setLastOperation({
+      action: "design_skill_tree_async",
+      status: "running",
+      startedAt: new Date().toISOString(),
+      request: {
+        database,
+        goal: skillTreeGoal,
+        ownerScope: skillTreeOwnerScope,
+        contextHint: skillTreeContextHint || null,
+        topK,
+        queryBudget,
+        filterProfile,
+        includeRelationLayer,
+        mode,
+        model,
+        responseMaxChars,
+        sourceScopes: activeSourceScopes,
+      },
+    });
+    try {
+      const nextJob = await startMmssSkillTreeDesignJob({
+        database,
+        goal: skillTreeGoal,
+        ownerScope: skillTreeOwnerScope,
+        contextHint: skillTreeContextHint,
+        topK,
+        queryBudget,
+        filterProfile,
+        includeRelationLayer,
+        mode,
+        model,
+        responseMaxChars,
+        sourceScopes: activeSourceScopes,
+      });
+      setDesignJob(nextJob);
+      setDesignResult(null);
+      setLastOperation({
+        action: "design_skill_tree_async",
+        status: "success",
+        finishedAt: new Date().toISOString(),
+        response: {
+          jobId: nextJob.jobId,
+          status: nextJob.status,
+          database: nextJob.database,
+          goal: nextJob.goal,
+        },
+      });
+    } catch (nextError) {
+      setError(nextError.message);
+      setRunningDesignJob(false);
+      setLastOperation({
+        action: "design_skill_tree_async",
+        status: "error",
+        finishedAt: new Date().toISOString(),
+        error: nextError.message,
+      });
+    }
+  };
+
+  const handleRefreshDesignJob = async () => {
+    if (!designJob?.jobId) return;
+    try {
+      const nextJob = await getMmssSkillTreeDesignJob(designJob.jobId);
+      setDesignJob(nextJob);
+      if (nextJob.status !== "running") {
+        setRunningDesignJob(false);
+        setDesignResult(nextJob.result || null);
+        await loadStatus(database);
+      }
+    } catch (nextError) {
+      setError(nextError.message);
+    }
+  };
+
+  const handleCancelDesignJob = async () => {
+    if (!designJob?.jobId) return;
+    try {
+      const nextJob = await cancelMmssSkillTreeDesignJob(designJob.jobId);
+      setDesignJob(nextJob);
+      setRunningDesignJob(false);
+    } catch (nextError) {
+      setError(nextError.message);
+    }
+  };
+
+  const resultLayoutFactory = useCallback((node) => {
+    const component = node.getComponent();
+
+    if (component === "diagnostics") {
+      return (
+        <ResultJsonPanel
+          title="Diagnostics"
+          subtitle="Errors, last operation metadata, runtime health, and active scope summary."
+          value={diagnosticsPayload}
+        />
+      );
+    }
+
+    if (component === "search-results") {
+      return (
+        <ResultJsonPanel
+          title="Search Results"
+          subtitle="Raw retrieval candidates and ranking output from Smart Search."
+          value={result}
+        />
+      );
+    }
+
+    if (component === "prompt-context") {
+      return (
+        <ResultJsonPanel
+          title="Prompt Context"
+          subtitle="Context blocks, relation blocks, retrieval debug, and prompt assembly."
+          value={contextResult}
+        />
+      );
+    }
+
+    if (component === "answer") {
+      return (
+        <ResultJsonPanel
+          title="Local LLM Answer"
+          subtitle="Final answer payload returned from Local LLM RAG."
+          value={answerResult}
+        />
+      );
+    }
+
+    if (component === "skill-tree-design") {
+      return (
+        <ResultJsonPanel
+          title="Skill Tree Design"
+          subtitle="Async MMSS skill tree design result or latest job payload."
+          value={designResult || designJob}
+        />
+      );
+    }
+
+    if (component === "runtime-jobs") {
+      return (
+        <ResultJsonPanel
+          title="Runtime Jobs"
+          subtitle="Vectorization and skill-tree background jobs."
+          value={runtimeJobsPayload}
+        />
+      );
+    }
+
+    return <div className="ide-panel-shell ase-flex-panel">Unknown result panel: {component}</div>;
+  }, [answerResult, contextResult, designJob, designResult, diagnosticsPayload, result, runtimeJobsPayload]);
+
   return (
     <div className="ide-panel-shell ase-flex-panel">
       <div className="ide-panel-header">
@@ -512,6 +738,15 @@ export default function LocalRagPanel() {
         {statusCards.map((card) => (
           <StatusCard key={card.label} label={card.label} value={card.value} />
         ))}
+      </div>
+
+      <div className="ase-config-card">
+        <strong>MMSS Runtime Health</strong>
+        <div className="ide-workspace-summary-grid" style={{ marginTop: 12 }}>
+          {runtimeCards.map((card) => (
+            <StatusCard key={card.label} label={card.label} value={card.value} />
+          ))}
+        </div>
       </div>
 
       {error ? (
@@ -605,7 +840,7 @@ export default function LocalRagPanel() {
 
       <div className="ide-workspace-action-row">
         <button onClick={() => void loadStatus(database)} disabled={loadingStatus}>
-          {loadingStatus ? <LoaderCircle size={14} className="spin" /> : <ServerCog size={14} />}
+          {loadingStatus ? <LoaderCircle size={14} className="spin" /> : <RefreshCcw size={14} />}
           Refresh Status
         </button>
         <button onClick={handleVectorize} disabled={runningVectorization || !selectedTables.length}>
@@ -652,6 +887,61 @@ export default function LocalRagPanel() {
           <textarea value={query} onChange={(event) => setQuery(event.target.value)} rows={4} />
         </label>
       </div>
+
+      <div className="ase-config-card">
+        <strong>MMSS Skill Tree Runtime</strong>
+        <p style={{ marginTop: 8 }}>
+          Async designer поверх текущего Local RAG. Heavy design-run уходит в background job и не держит HTTP sync request открытым.
+        </p>
+      </div>
+
+      <div className="ide-settings-form">
+        <label>
+          <span>Skill Tree Goal</span>
+          <textarea value={skillTreeGoal} onChange={(event) => setSkillTreeGoal(event.target.value)} rows={4} />
+        </label>
+        <label>
+          <span>Owner Scope</span>
+          <input type="text" value={skillTreeOwnerScope} onChange={(event) => setSkillTreeOwnerScope(event.target.value)} />
+        </label>
+        <label>
+          <span>Context Hint</span>
+          <textarea value={skillTreeContextHint} onChange={(event) => setSkillTreeContextHint(event.target.value)} rows={4} />
+        </label>
+      </div>
+
+      <div className="ide-workspace-action-row">
+        <button onClick={handleStartDesignJob} disabled={runningDesignJob || !skillTreeGoal.trim() || !activeSourceScopes.length}>
+          {runningDesignJob ? <LoaderCircle size={14} className="spin" /> : <Play size={14} />}
+          Start Skill Tree Design Job
+        </button>
+        <button onClick={handleRefreshDesignJob} disabled={!designJob?.jobId}>
+          <RefreshCcw size={14} />
+          Refresh Design Job
+        </button>
+        <button onClick={handleCancelDesignJob} disabled={!designJob?.jobId || designJob?.status !== "running"}>
+          <Square size={14} />
+          Cancel Design Job
+        </button>
+      </div>
+
+      {designJob ? (
+        <div className="ase-config-card">
+          <strong>Skill Tree Design Job</strong>
+          <div className="ide-workspace-summary-grid" style={{ marginTop: 12 }}>
+            <StatusCard label="Job ID" value={designJob.jobId} />
+            <StatusCard label="Status" value={designJob.status} />
+            <StatusCard label="Stage" value={designJob.lastStage || "n/a"} />
+            <StatusCard label="Progress" value={`${designJob.progress || 0}%`} />
+            <StatusCard label="Owner Scope" value={designJob.ownerScope || "n/a"} />
+            <StatusCard label="Model" value={designJob.model || "n/a"} />
+          </div>
+          {designJob.error ? <pre className="ase-stream-preview">{designJob.error}</pre> : null}
+          {designJob.resultSummary ? (
+            <pre className="ase-stream-preview">{JSON.stringify(designJob.resultSummary, null, 2)}</pre>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="ide-settings-form">
         <label>
@@ -708,6 +998,10 @@ export default function LocalRagPanel() {
           <Save size={14} />
           Save Answer Snapshot
         </button>
+        <button onClick={() => void handleSaveSnapshot("skill_tree_design", designResult || designJob)} disabled={savingSnapshot || (!designResult && !designJob)}>
+          <Save size={14} />
+          Save Skill Tree Snapshot
+        </button>
       </div>
 
       {lastSavedSnapshot ? (
@@ -719,12 +1013,82 @@ export default function LocalRagPanel() {
         </div>
       ) : null}
 
-      <div className="ase-config-list">
-        <JsonCard title="Diagnostics" value={{ error: error || null, lastOperation, lastSavedSnapshot: lastSavedSnapshot || null }} />
-        <JsonCard title="Search Results" value={result} />
-        <JsonCard title="Prompt Context" value={contextResult} />
-        <JsonCard title="Local LLM Answer" value={answerResult} />
+      <div className="ase-config-card local-rag-results-workspace-shell">
+        <strong>Result Workspace</strong>
+        <span style={{ display: "block", marginTop: 6, color: "#9eb0c8" }}>
+          Separate flexlayout workspace for JSON-heavy outputs. Tab positions persist independently from the main ASE layout.
+        </span>
+        <div className="local-rag-results-workspace">
+          <Layout
+            factory={resultLayoutFactory}
+            model={resultLayoutModel}
+            onModelChange={(nextModel) => {
+              setResultLayoutModel(nextModel);
+              void appPersistenceService.setSetting(SETTINGS_SCOPE, RESULT_LAYOUT_SETTING_KEY, nextModel.toJson());
+            }}
+          />
+        </div>
       </div>
+    </div>
+  );
+}
+
+function buildResultLayout() {
+  return {
+    global: {
+      tabEnableClose: false,
+      tabEnableFloat: true,
+      tabEnablePopout: true,
+      tabEnablePopoutIcon: true,
+      tabEnableRename: false,
+      splitterSize: 8,
+      tabSetEnableCloseButton: false,
+    },
+    borders: [],
+    layout: {
+      type: "row",
+      weight: 100,
+      children: [
+        {
+          type: "tabset",
+          id: "local-rag-results-left",
+          weight: 38,
+          selected: 0,
+          children: [
+            { id: "local-rag-diagnostics-tab", type: "tab", name: "Diagnostics", component: "diagnostics", enableClose: false },
+            { id: "local-rag-search-tab", type: "tab", name: "Search Results", component: "search-results", enableClose: false },
+            { id: "local-rag-context-tab", type: "tab", name: "Prompt Context", component: "prompt-context", enableClose: false },
+          ],
+        },
+        {
+          type: "tabset",
+          id: "local-rag-results-right",
+          weight: 62,
+          selected: 0,
+          children: [
+            { id: "local-rag-answer-tab", type: "tab", name: "Answer", component: "answer", enableClose: false },
+            { id: "local-rag-skill-tree-tab", type: "tab", name: "Skill Tree Design", component: "skill-tree-design", enableClose: false },
+            { id: "local-rag-jobs-tab", type: "tab", name: "Runtime Jobs", component: "runtime-jobs", enableClose: false },
+          ],
+        },
+      ],
+    },
+  };
+}
+
+function ResultJsonPanel({ title, subtitle, value, emptyText = "No data yet." }) {
+  const hasValue = !(value == null || value === "");
+  return (
+    <div className="ide-panel-shell ase-flex-panel ase-json-panel">
+      <div className="ide-panel-header is-compact">
+        <div>
+          <strong>{title}</strong>
+          <span>{subtitle}</span>
+        </div>
+      </div>
+      <pre className="ase-stream-preview local-rag-stream-preview">
+        {hasValue ? JSON.stringify(value, null, 2) : emptyText}
+      </pre>
     </div>
   );
 }

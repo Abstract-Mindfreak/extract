@@ -109,3 +109,26 @@
   background: rgba(255, 255, 255, 0.92);
   color: #0d1726;
 }
+
+.local-rag-results-workspace-shell {
+  display: grid;
+  gap: 12px;
+}
+
+.local-rag-results-workspace {
+  height: 960px;
+  min-height: 720px;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(103, 232, 249, 0.14);
+  background: rgba(4, 9, 15, 0.42);
+}
+
+.local-rag-results-workspace .flexlayout__layout {
+  height: 100%;
+}
+
+.local-rag-stream-preview {
+  min-height: 0;
+  height: calc(100% - 12px);
+}
