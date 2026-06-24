@@ -5,14 +5,30 @@ const { logGenerationResult } = require('./mmssRuntimePersistenceService');
 const OLLAMA_API_BASE = process.env.OLLAMA_API_BASE || 'http://127.0.0.1:11434/api';
 const EMBEDDING_MODEL = process.env.RAG_EMBEDDING_MODEL || 'embeddinggemma:300m';
 const ANSWER_MODEL = process.env.RAG_ANSWER_MODEL || 'batiai/gemma4-e2b:q4';
+const OLLAMA_EMBED_TIMEOUT_MS = Number(process.env.OLLAMA_EMBED_TIMEOUT_MS || 300000);
+const OLLAMA_GENERATE_TIMEOUT_MS = Number(process.env.OLLAMA_GENERATE_TIMEOUT_MS || 600000);
 const PRIMARY_DATABASE = process.env.PG_DATABASE || 'abstract-mind-lab';
 const LEGACY_DATABASE = process.env.DB_NAME_V1 || 'abstract_mind_db';
+const RAG_CHUNKS_DATABASE = process.env.RAG_CHUNKS_DB_NAME || 'rag_chunks_db';
 const RAG_TABLE = 'rag_document_embeddings';
 const JOB_TTL_MS = 1000 * 60 * 60 * 6;
 const JSON_TEXT_LIMIT = 5000;
 const MAX_JSON_FRAGMENTS = 80;
 const jobs = new Map();
 let embeddingDimensionPromise = null;
+
+const SOURCE_DATABASE_TABLES = {
+  [PRIMARY_DATABASE]: new Set([
+    'tracks',
+    'mmss_collection',
+    'mmss_albums',
+    'mmss_domain_patterns',
+    'mmss_custom_instructions',
+  ]),
+  [LEGACY_DATABASE]: new Set([
+    'music_blocks',
+  ]),
+};
 
 function createJobId() {
   return `rag_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -26,7 +42,10 @@ function normalizeDatabaseIdentifier(database) {
   if (normalized === 'abstract_mind_db') {
     return LEGACY_DATABASE;
   }
-  if (normalized === PRIMARY_DATABASE || normalized === LEGACY_DATABASE) {
+  if (normalized === 'rag_chunks_db') {
+    return RAG_CHUNKS_DATABASE;
+  }
+  if (normalized === PRIMARY_DATABASE || normalized === LEGACY_DATABASE || normalized === RAG_CHUNKS_DATABASE) {
     return normalized;
   }
   throw new Error(`Unsupported database target: ${database}`);
@@ -67,6 +86,14 @@ function estimateNumPredictForChars(maxChars) {
   return Math.max(128, Math.ceil(chars / 3.2));
 }
 
+function shouldEnforceResponseMaxChars(options = {}) {
+  return options.enforceResponseMaxChars === true;
+}
+
+function isAlbumMode(mode) {
+  return ['album_synthesis', 'album_concept', 'deep_worldbuilding'].includes(String(mode || '').trim());
+}
+
 function toVectorLiteral(values) {
   return `[${values.map((value) => Number(value).toFixed(12)).join(',')}]`;
 }
@@ -90,8 +117,29 @@ function stableStringify(value) {
   }
 }
 
+function getAllowedSourceTables(databaseName) {
+  return SOURCE_DATABASE_TABLES[databaseName] || new Set();
+}
+
+function filterRequestedTables(databaseName, requestedTables = []) {
+  const allowed = getAllowedSourceTables(databaseName);
+  if (!allowed.size) return [];
+  return (Array.isArray(requestedTables) ? requestedTables : [])
+    .map((tableName) => String(tableName || '').trim())
+    .filter((tableName) => allowed.has(tableName));
+}
+
 function quoteIdentifier(identifier) {
   return `"${String(identifier || '').replace(/"/g, '""')}"`;
+}
+
+function createTimeoutSignal(timeoutMs) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(new Error(`timeout after ${timeoutMs}ms`)), timeoutMs);
+  return {
+    signal: controller.signal,
+    cancel: () => clearTimeout(timer),
+  };
 }
 
 async function listPublicTables(databaseName) {
@@ -191,9 +239,143 @@ function extractTrackSearchText(row) {
   return truncateText(fragments.join('\n\n'), JSON_TEXT_LIMIT);
 }
 
-function buildTrackPayloadSummary(row) {
+function extractPromptText(part) {
+  const content = part?.content;
+  if (typeof content === 'string') return content.trim();
+  if (content && typeof content === 'object') {
+    if (typeof content.prompt === 'string' && content.prompt.trim()) return content.prompt.trim();
+    if (typeof content.sound_prompt === 'string' && content.sound_prompt.trim()) return content.sound_prompt.trim();
+    if (typeof content.text === 'string' && content.text.trim()) return content.text.trim();
+    return truncateText(stableStringify(content), 2000);
+  }
+  return '';
+}
+
+function matchesTrackGenerationMessage(message, trackId, trackTitle) {
+  const parts = Array.isArray(message?.parts) ? message.parts : [];
+  return parts.some((part) => {
+    const args = part?.args || {};
+    const content = part?.content || {};
+    return args?.title === trackTitle
+      || args?.output_title === trackTitle
+      || args?.track_id === trackId
+      || args?.result_clip_id === trackId
+      || content?.track_id === trackId
+      || content?.result_clip_id === trackId;
+  });
+}
+
+function extractGenerationTail(rawData, trackId, trackTitle) {
+  const messages = Array.isArray(rawData?.session_snapshot?.messages)
+    ? rawData.session_snapshot.messages
+    : [];
+  if (!messages.length) {
+    return {
+      operation: rawData?.raw_track?.operation || rawData?.operation || null,
+      userPrompt: null,
+      toolCall: null,
+      toolResult: null,
+    };
+  }
+
+  let matchIndex = -1;
+  for (let index = messages.length - 1; index >= 0; index -= 1) {
+    if (matchesTrackGenerationMessage(messages[index], trackId, trackTitle)) {
+      matchIndex = index;
+      break;
+    }
+  }
+
+  const tail = {
+    operation: rawData?.raw_track?.operation || rawData?.operation || null,
+    userPrompt: null,
+    toolCall: null,
+    toolResult: null,
+  };
+
+  if (matchIndex === -1) {
+    return tail;
+  }
+
+  for (let index = matchIndex; index >= 0; index -= 1) {
+    const message = messages[index];
+    const parts = Array.isArray(message?.parts) ? message.parts : [];
+    for (const part of parts) {
+      if (!tail.toolResult && message?.kind === 'request' && part?.part_kind === 'tool-return') {
+        const resultClipId = part?.content?.result_clip_id || part?.content?.track_id || null;
+        if (!resultClipId || String(resultClipId) === String(trackId)) {
+          tail.toolResult = part.content;
+        }
+      }
+
+      if (!tail.toolCall && message?.kind === 'response' && part?.part_kind === 'tool-call') {
+        const args = part?.args || {};
+        if (
+          args?.title === trackTitle
+          || args?.output_title === trackTitle
+          || args?.track_id === trackId
+          || part?.tool_name === 'audio__create_song'
+          || part?.tool_name === 'audio__apply_effect'
+        ) {
+          tail.toolCall = {
+            tool_name: part.tool_name,
+            args,
+          };
+        }
+      }
+
+      if (!tail.userPrompt && message?.kind === 'request' && part?.part_kind === 'user-prompt') {
+        const promptText = extractPromptText(part);
+        if (promptText && promptText !== '<ui-hidden>Conversation started</ui-hidden>') {
+          tail.userPrompt = promptText;
+        }
+      }
+    }
+
+    if (tail.userPrompt && tail.toolCall && tail.toolResult) {
+      break;
+    }
+  }
+
+  return tail;
+}
+
+function compactFilteredEntry(row) {
+  return {
+    filtered_id: row.filtered_id,
+    source_ref: row.source_ref,
+    generation_insights: row.generation_insights,
+    operator_trajectory: row.operator_trajectory,
+    temporal_phases: row.temporal_phases,
+    metric_v: row.metric_v,
+    metric_s: row.metric_s,
+    metric_d_f: row.metric_d_f,
+    metric_r_t: row.metric_r_t,
+    creative_choices: row.creative_choices,
+    emergence_moments: row.emergence_moments,
+    next_vector_suggestions: row.next_vector_suggestions,
+    domain: row.domain,
+    recursion_depth: row.recursion_depth,
+    stability_flag: row.stability_flag,
+    raw_payload: row.raw_payload || null,
+  };
+}
+
+function compactCollectionEntry(row) {
+  return {
+    entry_id: row.entry_id,
+    category: row.category,
+    title: row.title,
+    content: row.content,
+    source_ref: row.source_ref,
+    score: row.score,
+    payload: row.payload || null,
+  };
+}
+
+function buildTrackPayloadSummary(row, related = {}) {
   const raw = row.raw_data || {};
-  const operation = raw?.raw_track?.operation || raw?.operation || {};
+  const generationTail = extractGenerationTail(raw, row.id, row.title);
 
   return {
     id: row.id,
@@ -205,10 +387,11 @@ function buildTrackPayloadSummary(row) {
     model_name: row.model_name,
     has_video: row.has_video,
     session_id: row.session_id,
-    operation_sound_prompt: operation?.sound_prompt || null,
-    raw_excerpt: safePreview(stableStringify(raw), 1600),
-    conditions_excerpt: safePreview(stableStringify(row.conditions), 1200),
-    lyrics_excerpt: safePreview(stableStringify(row.lyrics_timestamped), 1200),
+    conditions: row.conditions || null,
+    lyrics_timestamped: row.lyrics_timestamped || null,
+    generation_tail: generationTail,
+    filtered: Array.isArray(related.filtered) ? related.filtered.map(compactFilteredEntry) : [],
+    collection: Array.isArray(related.collection) ? related.collection.map(compactCollectionEntry) : [],
   };
 }
 
@@ -226,28 +409,39 @@ function cleanupJobs() {
 }
 
 async function embedTexts(texts) {
-  const response = await fetch(`${OLLAMA_API_BASE.replace(/\/+$/, '')}/embed`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify({
-      model: EMBEDDING_MODEL,
-      input: texts,
-    }),
-  });
+  const timeout = createTimeoutSignal(OLLAMA_EMBED_TIMEOUT_MS);
+  try {
+    const response = await fetch(`${OLLAMA_API_BASE.replace(/\/+$/, '')}/embed`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      signal: timeout.signal,
+      body: JSON.stringify({
+        model: EMBEDDING_MODEL,
+        input: texts,
+      }),
+    });
 
-  const payload = await response.json().catch(() => null);
-  if (!response.ok) {
-    throw new Error(payload?.error || `Ollama embed failed: HTTP ${response.status}`);
-  }
+    const payload = await response.json().catch(() => null);
+    if (!response.ok) {
+      throw new Error(payload?.error || `Ollama embed failed: HTTP ${response.status}`);
+    }
 
-  const embeddings = Array.isArray(payload?.embeddings) ? payload.embeddings : [];
-  if (!embeddings.length) {
-    throw new Error('Ollama returned no embeddings');
+    const embeddings = Array.isArray(payload?.embeddings) ? payload.embeddings : [];
+    if (!embeddings.length) {
+      throw new Error('Ollama returned no embeddings');
+    }
+    return embeddings;
+  } catch (error) {
+    const reason = error?.name === 'AbortError'
+      ? `Ollama embed timeout after ${OLLAMA_EMBED_TIMEOUT_MS}ms`
+      : (error?.message || error);
+    throw new Error(`Ollama embed request failed. endpoint=${OLLAMA_API_BASE}/embed. reason=${reason}`);
+  } finally {
+    timeout.cancel();
   }
-  return embeddings;
 }
 
 async function generateWithLocalModel({
@@ -257,6 +451,7 @@ async function generateWithLocalModel({
   temperature = 0,
   numCtx = 8192,
   numPredict,
+  format,
 }) {
   const numericPredict = Number(numPredict);
   const options = {
@@ -266,47 +461,127 @@ async function generateWithLocalModel({
   if (Number.isFinite(numericPredict) && numericPredict > 0) {
     options.num_predict = Math.max(64, Math.floor(numericPredict));
   }
+  const timeout = createTimeoutSignal(OLLAMA_GENERATE_TIMEOUT_MS);
+  const decoder = new TextDecoder();
+  let responseText = '';
+  let lastPayload = null;
 
-  const response = await fetch(`${OLLAMA_API_BASE.replace(/\/+$/, '')}/generate`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify({
-      model: model || ANSWER_MODEL,
-      prompt,
-      system: systemPrompt,
-      stream: false,
-      options,
-    }),
-  });
+  try {
+    const response = await fetch(`${OLLAMA_API_BASE.replace(/\/+$/, '')}/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      signal: timeout.signal,
+      body: JSON.stringify({
+        model: model || ANSWER_MODEL,
+        prompt,
+        system: systemPrompt,
+        stream: true,
+        format: format || undefined,
+        options,
+      }),
+    });
 
-  const payload = await response.json().catch(() => null);
-  if (!response.ok) {
-    throw new Error(payload?.error || `Ollama generate failed: HTTP ${response.status}`);
+    if (!response.ok) {
+      const payload = await response.json().catch(() => null);
+      throw new Error(payload?.error || `Ollama generate failed: HTTP ${response.status}`);
+    }
+
+    if (!response.body) {
+      throw new Error('Ollama generate returned no readable stream');
+    }
+
+    const reader = response.body.getReader();
+    let buffer = '';
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+        let payload;
+        try {
+          payload = JSON.parse(trimmed);
+        } catch (_error) {
+          continue;
+        }
+        lastPayload = payload;
+        if (typeof payload.response === 'string') {
+          responseText += payload.response;
+        }
+      }
+    }
+    const tail = decoder.decode();
+    if (tail) {
+      buffer += tail;
+    }
+    if (buffer.trim()) {
+      try {
+        const payload = JSON.parse(buffer.trim());
+        lastPayload = payload;
+        if (typeof payload.response === 'string') {
+          responseText += payload.response;
+        }
+      } catch (_error) {
+        // Ignore broken tail; partial text is already captured.
+      }
+    }
+
+    return {
+      model: lastPayload?.model || model || ANSWER_MODEL,
+      response: String(responseText || '').trim(),
+      partial: false,
+      promptEvalCount: lastPayload?.prompt_eval_count ?? null,
+      evalCount: lastPayload?.eval_count ?? null,
+      totalDuration: lastPayload?.total_duration ?? null,
+      loadDuration: lastPayload?.load_duration ?? null,
+      evalDuration: lastPayload?.eval_duration ?? null,
+    };
+  } catch (error) {
+    if (responseText.trim()) {
+      return {
+        model: lastPayload?.model || model || ANSWER_MODEL,
+        response: String(responseText || '').trim(),
+        partial: true,
+        partialError: error?.name === 'AbortError'
+          ? `Ollama generate timeout after ${OLLAMA_GENERATE_TIMEOUT_MS}ms`
+          : (error?.message || String(error)),
+        promptEvalCount: lastPayload?.prompt_eval_count ?? null,
+        evalCount: lastPayload?.eval_count ?? null,
+        totalDuration: lastPayload?.total_duration ?? null,
+        loadDuration: lastPayload?.load_duration ?? null,
+        evalDuration: lastPayload?.eval_duration ?? null,
+      };
+    }
+    const reason = error?.name === 'AbortError'
+      ? `Ollama generate timeout after ${OLLAMA_GENERATE_TIMEOUT_MS}ms`
+      : (error?.message || error);
+    throw new Error(`Ollama generate request failed. endpoint=${OLLAMA_API_BASE}/generate. reason=${reason}`);
+  } finally {
+    timeout.cancel();
   }
-
-  return {
-    model: payload?.model || model || ANSWER_MODEL,
-    response: String(payload?.response || '').trim(),
-    promptEvalCount: payload?.prompt_eval_count ?? null,
-    evalCount: payload?.eval_count ?? null,
-    totalDuration: payload?.total_duration ?? null,
-    loadDuration: payload?.load_duration ?? null,
-    evalDuration: payload?.eval_duration ?? null,
-  };
 }
 
 async function getEmbeddingDimension() {
   if (!embeddingDimensionPromise) {
     embeddingDimensionPromise = (async () => {
-      const embeddings = await embedTexts(['dimension probe']);
-      const dimension = Array.isArray(embeddings[0]) ? embeddings[0].length : 0;
-      if (!dimension) {
-        throw new Error('Failed to detect embedding dimension');
+      try {
+        const embeddings = await embedTexts(['dimension probe']);
+        const dimension = Array.isArray(embeddings[0]) ? embeddings[0].length : 0;
+        if (!dimension) {
+          throw new Error('Failed to detect embedding dimension');
+        }
+        return dimension;
+      } catch (error) {
+        // A failed probe must not poison the process forever.
+        embeddingDimensionPromise = null;
+        throw error;
       }
-      return dimension;
     })();
   }
 
@@ -391,9 +666,37 @@ async function tableExists(databaseName, tableName) {
   return Boolean(result.rows[0]?.exists);
 }
 
-function buildTrackDocument(row) {
-  const snapshot = buildTrackPayloadSummary(row);
-  const text = extractTrackSearchText(row);
+function buildTrackDocument(row, related = {}) {
+  const snapshot = buildTrackPayloadSummary(row, related);
+  const filteredSummaries = (snapshot.filtered || []).map((entry) => [
+    entry.domain,
+    entry.generation_insights,
+    entry.operator_trajectory,
+    entry.temporal_phases,
+    entry.creative_choices,
+    entry.next_vector_suggestions,
+  ].filter(Boolean).join(' | '));
+  const collectionSummaries = (snapshot.collection || []).map((entry) => [
+    entry.title,
+    entry.category,
+    entry.content,
+  ].filter(Boolean).join(' | '));
+  const text = truncateText(stableStringify({
+    title: snapshot.title,
+    prompt: snapshot.prompt,
+    session_id: snapshot.session_id,
+    generation_tail: snapshot.generation_tail,
+    filtered: snapshot.filtered,
+    collection: snapshot.collection.map((entry) => ({
+      entry_id: entry.entry_id,
+      category: entry.category,
+      title: entry.title,
+      source_ref: entry.source_ref,
+      score: entry.score,
+    })),
+    filtered_summaries: filteredSummaries,
+    collection_summaries: collectionSummaries,
+  }), 24000);
 
   return {
     sourceTable: 'tracks',
@@ -406,7 +709,8 @@ function buildTrackDocument(row) {
       session_id: row.session_id,
       has_video: row.has_video,
       created_at: row.created_at,
-      raw_length: String(row.raw_data ? stableStringify(row.raw_data).length : 0),
+      filtered_count: String(snapshot.filtered.length),
+      collection_count: String(snapshot.collection.length),
     },
   };
 }
@@ -561,6 +865,56 @@ function buildMmssInvariantDocument(row) {
   };
 }
 
+function buildRagChunkDocument(row) {
+  let parsedChunk = null;
+  try {
+    parsedChunk = typeof row.chunk_text === 'string' ? JSON.parse(row.chunk_text) : row.chunk_text;
+  } catch {
+    parsedChunk = row.chunk_text;
+  }
+
+  const textFragments = [
+    row.title,
+    row.description,
+    row.category,
+    row.domain,
+    Array.isArray(row.tags) ? row.tags.join(', ') : null,
+    typeof parsedChunk === 'string'
+      ? parsedChunk
+      : stableStringify(parsedChunk),
+  ].filter(Boolean);
+
+  return {
+    sourceTable: 'rag_chunks',
+    sourceId: String(row.id || row.chunk_hash || buildHash(stableStringify(row))),
+    sourceTitle: row.title || row.category || row.domain || row.id,
+    chunkText: truncateText(textFragments.join('\n\n'), JSON_TEXT_LIMIT),
+    sourcePayload: {
+      id: row.id,
+      source_table: row.source_table,
+      source_id: row.source_id,
+      source_database: row.source_database,
+      tags: row.tags,
+      category: row.category,
+      domain: row.domain,
+      title: row.title,
+      description: row.description,
+      chunk_hash: row.chunk_hash,
+      parsed_chunk: parsedChunk,
+    },
+    metadata: {
+      source_table: row.source_table,
+      source_id: row.source_id,
+      source_database: row.source_database,
+      tags: row.tags || [],
+      category: row.category || null,
+      domain: row.domain || null,
+      chunk_hash: row.chunk_hash || null,
+      created_at: row.created_at || null,
+    },
+  };
+}
+
 function getGenericSourceId(row, tableName) {
   const candidates = [row.id, row.invariant_key, row.uuid, row.key, row.slug, row.name, row.title];
   const found = candidates.find((value) => value != null && String(value).trim());
@@ -629,12 +983,49 @@ async function loadGenericTableDocuments(databaseName, tableName) {
     .filter((doc) => doc.chunkText);
 }
 
+async function loadTrackRelatedContext(databaseName, trackIds = []) {
+  const ids = Array.from(new Set((Array.isArray(trackIds) ? trackIds : []).map((value) => String(value || '').trim()).filter(Boolean)));
+  const context = new Map(ids.map((id) => [id, { filtered: [], collection: [] }]));
+  if (!ids.length) return context;
+
+  if (await tableExists(databaseName, 'mmss_filtered')) {
+    const filtered = await getPool(databaseName).query(`
+      SELECT *
+      FROM mmss_filtered
+      WHERE track_id = ANY($1)
+      ORDER BY updated_at DESC NULLS LAST, id DESC
+    `, [ids]);
+    for (const row of filtered.rows) {
+      const key = String(row.track_id || '').trim();
+      if (!context.has(key)) continue;
+      context.get(key).filtered.push(row);
+    }
+  }
+
+  if (await tableExists(databaseName, 'mmss_collection')) {
+    const collection = await getPool(databaseName).query(`
+      SELECT *
+      FROM mmss_collection
+      WHERE payload->>'track_id' = ANY($1)
+      ORDER BY updated_at DESC NULLS LAST, id DESC
+    `, [ids]);
+    for (const row of collection.rows) {
+      const key = String(row?.payload?.track_id || '').trim();
+      if (!context.has(key)) continue;
+      context.get(key).collection.push(row);
+    }
+  }
+
+  return context;
+}
+
 async function loadSourceDocuments(databaseName, requestedTables = []) {
-  const selected = new Set((Array.isArray(requestedTables) ? requestedTables : []).filter(Boolean));
+  const allowed = getAllowedSourceTables(databaseName);
+  const selected = new Set(filterRequestedTables(databaseName, requestedTables));
   const docs = [];
   const handledTables = new Set();
 
-  const canUse = (tableName) => selected.size === 0 || selected.has(tableName);
+  const canUse = (tableName) => allowed.has(tableName) && (selected.size === 0 || selected.has(tableName));
 
   if (canUse('tracks') && await tableExists(databaseName, 'tracks')) {
     handledTables.add('tracks');
@@ -648,18 +1039,8 @@ async function loadSourceDocuments(databaseName, requestedTables = []) {
          OR lyrics_timestamped IS NOT NULL
       ORDER BY created_at DESC NULLS LAST
     `);
-    docs.push(...result.rows.map(buildTrackDocument).filter((doc) => doc.chunkText));
-  }
-
-  if (canUse('sessions') && await tableExists(databaseName, 'sessions')) {
-    handledTables.add('sessions');
-    const result = await getPool(databaseName).query(`
-      SELECT id, title, ai_snapshot, config, created_at, updated_at
-      FROM sessions
-      WHERE ai_snapshot IS NOT NULL OR config IS NOT NULL
-      ORDER BY updated_at DESC NULLS LAST
-    `);
-    docs.push(...result.rows.map(buildSessionDocument).filter((doc) => doc.chunkText));
+    const relatedContext = await loadTrackRelatedContext(databaseName, result.rows.map((row) => row.id));
+    docs.push(...result.rows.map((row) => buildTrackDocument(row, relatedContext.get(String(row.id)) || {})).filter((doc) => doc.chunkText));
   }
 
   if (canUse('music_blocks') && await tableExists(databaseName, 'music_blocks')) {
@@ -671,42 +1052,6 @@ async function loadSourceDocuments(databaseName, requestedTables = []) {
       ORDER BY layer ASC, slug ASC
     `);
     docs.push(...result.rows.map(buildMusicBlockDocument).filter((doc) => doc.chunkText));
-  }
-
-  if (canUse('chat_sessions') && await tableExists(databaseName, 'chat_sessions')) {
-    handledTables.add('chat_sessions');
-    const result = await getPool(databaseName).query(`
-      SELECT id, title, full_payload, created_at
-      FROM chat_sessions
-      WHERE full_payload IS NOT NULL
-      ORDER BY created_at DESC
-    `);
-    docs.push(...result.rows.map(buildChatSessionDocument).filter((doc) => doc.chunkText));
-  }
-
-  if (canUse('songs') && await tableExists(databaseName, 'songs')) {
-    handledTables.add('songs');
-    const result = await getPool(databaseName).query(`
-      SELECT id, title, sound_prompt, phase_transition_logic, raw_data
-      FROM songs
-      WHERE COALESCE(sound_prompt, '') <> ''
-         OR COALESCE(phase_transition_logic, '') <> ''
-         OR raw_data IS NOT NULL
-      ORDER BY created_at DESC
-    `);
-    docs.push(...result.rows.map(buildSongDocument).filter((doc) => doc.chunkText));
-  }
-
-  if (canUse('mmss_invariants') && await tableExists(databaseName, 'mmss_invariants')) {
-    handledTables.add('mmss_invariants');
-    const result = await getPool(databaseName).query(`
-      SELECT invariant_key, source_database, source_table, source_id, source_title, extractor, domain,
-             source_text, phase_matches, metrics, validation, metadata, updated_at
-      FROM mmss_invariants
-      WHERE source_text IS NOT NULL
-      ORDER BY updated_at DESC NULLS LAST
-    `);
-    docs.push(...result.rows.map(buildMmssInvariantDocument).filter((doc) => doc.chunkText));
   }
 
   const genericCandidates = selected.size
@@ -1243,6 +1588,50 @@ function buildContextHeader(block) {
   ].join('\n');
 }
 
+function buildCompactAlbumContext(block, mode) {
+  const text = String(block?.context_text || '');
+  const lines = text
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  const picked = [];
+  const sourceTable = String(block?.source_table || '').trim().toLowerCase();
+  const allowTrackRefs = mode !== 'album_synthesis' && mode !== 'album_concept';
+  const allowTitle = sourceTable !== 'mmss_albums' || (mode !== 'album_synthesis' && mode !== 'album_concept');
+  for (const line of lines) {
+    const lower = line.toLowerCase();
+    if (
+      (allowTitle && lower.startsWith('title:')) ||
+      lower.startsWith('description:') ||
+      lower.startsWith('domain:') ||
+      (allowTrackRefs && lower.startsWith('track_refs:')) ||
+      lower.startsWith('instruction_text:') ||
+      lower.startsWith('instruction_refs:') ||
+      lower.startsWith('content:')
+    ) {
+      picked.push(line);
+    }
+    if (picked.length >= 6) break;
+  }
+
+  if (!picked.length) {
+    return truncateText(text, 700);
+  }
+  return truncateText(picked.join('\n'), 900);
+}
+
+function compactBlocksForMode(blocks, mode) {
+  if (!isAlbumMode(mode)) {
+    return blocks;
+  }
+
+  return (blocks || []).map((block) => ({
+    ...block,
+    context_text: buildCompactAlbumContext(block, mode),
+  }));
+}
+
 function applyPreliminaryFilters(results, options = {}) {
   const profileConfig = getFilterProfileConfig(options.filterProfile);
   const includeRelationLayer = options.includeRelationLayer === true;
@@ -1310,12 +1699,14 @@ function applyPreliminaryFilters(results, options = {}) {
 }
 
 function assemblePromptContext({ query, contextBlocks, relationBlocks, mode }) {
-  const primarySection = contextBlocks.length
-    ? contextBlocks.map((block) => `${buildContextHeader(block)}\nContext:\n${block.context_text}`).join('\n\n---\n\n')
+  const compactPrimaryBlocks = compactBlocksForMode(contextBlocks, mode);
+  const compactRelationBlocks = compactBlocksForMode(relationBlocks, mode);
+  const primarySection = compactPrimaryBlocks.length
+    ? compactPrimaryBlocks.map((block) => `${buildContextHeader(block)}\nContext:\n${block.context_text}`).join('\n\n---\n\n')
     : 'No primary context blocks matched.';
 
-  const relationSection = relationBlocks.length
-    ? relationBlocks.map((block) => `${buildContextHeader(block)}\nRelation Layer:\n${block.context_text}`).join('\n\n---\n\n')
+  const relationSection = compactRelationBlocks.length
+    ? compactRelationBlocks.map((block) => `${buildContextHeader(block)}\nRelation Layer:\n${block.context_text}`).join('\n\n---\n\n')
     : '';
 
   const modePrefix = (() => {
@@ -1336,6 +1727,48 @@ function assemblePromptContext({ query, contextBlocks, relationBlocks, mode }) {
         return 'Task Mode: source_audit. Audit provenance coverage, missing links, and evidence quality using only the retrieved context.';
       case 'ase_console_recipe':
         return 'Task Mode: ase_console_recipe. Build ASE Console style procedures and operator recipes using only the retrieved context.';
+      case 'contextual_summarization':
+        return 'Task Mode: contextual_summarization. Produce a smart summary that preserves domain-specific detail, structure, and technical context using only the retrieved evidence.';
+      case 'knowledge_synthesis':
+        return 'Task Mode: knowledge_synthesis. Synthesize a grounded answer from fragmented sources, combining multiple evidence blocks without inventing unsupported facts.';
+      case 'skill_tree_pathfinding':
+        return 'Task Mode: skill_tree_pathfinding. Determine the most relevant path through skill tree knowledge and retrieval evidence for the current task.';
+      case 'skill_chain_orchestration':
+        return 'Task Mode: skill_chain_orchestration. Propose a sequence of reusable skills and execution stages grounded only in the retrieved context.';
+      case 'skill_gap_analysis':
+        return 'Task Mode: skill_gap_analysis. Identify missing skills, weak branches, or incomplete runtime coverage from the retrieved MMSS context.';
+      case 'track_variation':
+        return 'Task Mode: track_variation. Create several grounded track or session variations while preserving the core identity and vibe from the retrieved context.';
+      case 'style_fusion':
+        return 'Task Mode: style_fusion. Combine separate stylistic evidence streams into one hybrid style proposal using only retrieved material.';
+      case 'prompt_evolution':
+        return 'Task Mode: prompt_evolution. Iteratively analyze, expand, and optimize prompts for audio generation using only retrieved evidence and constraints.';
+      case 'parameter_shift':
+        return 'Task Mode: parameter_shift. Change BPM, tonality, or technical parameters while preserving the original vibe grounded in retrieved context.';
+      case 'session_digest':
+        return 'Task Mode: session_digest. Distill a long session or dense metadata set into a compact but information-rich summary using only retrieved evidence.';
+      case 'vibe_extraction':
+        return 'Task Mode: vibe_extraction. Extract moods, abstractions, visual associations, and latent aesthetic cues from retrieved material.';
+      case 'pattern_mining':
+        return 'Task Mode: pattern_mining. Detect recurring successful patterns, combinations, and high-value structures in the retrieved data.';
+      case 'tag_enrichment':
+        return 'Task Mode: tag_enrichment. Generate normalized, taxonomy-aware tags grounded in retrieved prompts, sessions, and domain evidence.';
+      case 'similarity_audit':
+        return 'Task Mode: similarity_audit. Compare the idea against retrieved references to detect duplicates, loops, overlap, or loss of novelty.';
+      case 'concept_ideation':
+        return 'Task Mode: concept_ideation. Generate a full creative concept including story, visual aesthetic, and sound palette from retrieved context.';
+      case 'album_synthesis':
+        return 'Task Mode: album_synthesis. Build a coherent album from retrieved MMSS fragments, prompts, instructions, sessions, and track evidence. Produce reusable album-level direction, track identity, and generation-ready structure.';
+      case 'arrangement_blueprint':
+        return 'Task Mode: arrangement_blueprint. Build a structural map of the track with sections, timing, and evolving elements using retrieved evidence.';
+      case 'soundscape_design':
+        return 'Task Mode: soundscape_design. Design the ambient, spatial, and textural environment using only the retrieved source material.';
+      case 'album_concept':
+        return 'Task Mode: album_concept. Build a coherent album-scale concept, tracklist, and per-track direction using retrieved context only.';
+      case 'deep_worldbuilding':
+        return 'Task Mode: deep_worldbuilding. Build lore, universe rules, and audio-visual narrative links from retrieved MMSS context.';
+      case 'pattern_recognition':
+        return 'Task Mode: pattern_recognition. Recognize latent patterns in prompts, sessions, metadata, and generation outcomes using only retrieved evidence.';
       default:
         return 'Task Mode: qa. Answer the user query using only the retrieved context.';
     }
@@ -1416,6 +1849,8 @@ async function buildPromptContext(options = {}) {
 async function answerWithRag(options = {}) {
   const contextBundle = await buildPromptContext(options);
   const startedAt = Date.now();
+  const albumMode = isAlbumMode(contextBundle.mode);
+  const enforceResponseMaxChars = shouldEnforceResponseMaxChars(options) || albumMode;
   const responseMaxChars = clampResponseMaxChars(options.responseMaxChars);
   const systemPrompt = String(options.systemPrompt || '').trim() || [
     'You are a local RAG assistant inside MMSS ASE Console.',
@@ -1423,20 +1858,57 @@ async function answerWithRag(options = {}) {
     'If the context is insufficient, say so explicitly.',
     'Do not invent sources or facts.',
     'When useful, cite source_table and source_id inline.',
-    `Keep the final answer within ${responseMaxChars} characters.`,
+    'Do not echo or restate the user request unless strictly necessary.',
+    'Start directly with the synthesized answer.',
+    'Do not spend output budget on preamble, politeness, or reformulating the request.',
+    'Prioritize synthesis, cross-source reconciliation, extracted facts, and actionable structure.',
+    ...(albumMode ? [
+      'For album-oriented modes, return strict JSON only.',
+      'Do not add markdown fences, commentary, or explanatory text outside JSON.',
+      'The JSON must be immediately parseable.',
+    ] : []),
+    ...(enforceResponseMaxChars ? [`Keep the final answer within ${responseMaxChars} characters.`] : []),
   ].join(' ');
+
+  const promptInstructions = albumMode
+    ? [
+      '- Return strict JSON only.',
+      '- Do not repeat the request.',
+      '- Do not output markdown fences.',
+      '- Create a new album draft instead of copying any retrieved album record.',
+      '- Never reuse an existing retrieved album title verbatim unless the user explicitly asked for a remake or continuation.',
+      '- Never reuse a retrieved track list verbatim.',
+      '- Treat retrieved albums as style references, not as templates to duplicate.',
+      '- Use this schema exactly:',
+      '{"album":{"title":"string","description":"string","domain":"string","tracks":[{"index":1,"title":"string","prompt":"string","operator_notes":"string","json_prompt":{"prompt":"string","negative_prompt":"string","style_tags":["string"],"tools":["string"],"notes":"string"}}]}}',
+      '- Keep each track prompt specific, generation-ready, and distinct.',
+      '- Prefer 8-10 tracks unless the context clearly supports a smaller form.',
+      '- Use retrieved evidence to ground style, operators, tags, and tools.',
+      ...(enforceResponseMaxChars ? [`- Keep the final JSON within ${responseMaxChars} characters.`] : []),
+    ]
+    : [
+      '- Answer only from the retrieved context.',
+      '- Prefer concise, structured output.',
+      '- Mention uncertainty when context is incomplete.',
+      '- Do not repeat the question back to the user.',
+      '- Do not copy the request wording into the answer.',
+      '- Spend the response budget on synthesis and evidence, not restatement.',
+      '- When multiple sources agree, merge them into one conclusion instead of listing duplicates.',
+      ...(enforceResponseMaxChars ? [`- Keep the final answer within ${responseMaxChars} characters.`] : []),
+    ];
 
   const prompt = [
     contextBundle.promptContextText,
     '',
     'Instructions:',
-    '- Answer only from the retrieved context.',
-    '- Prefer concise, structured output.',
-    '- Mention uncertainty when context is incomplete.',
-    `- Keep the final answer within ${responseMaxChars} characters.`,
+    ...promptInstructions,
     '',
     `Final User Request: ${contextBundle.query}`,
   ].join('\n');
+
+  const effectiveNumPredict = Number.isFinite(Number(options.numPredict)) && Number(options.numPredict) > 0
+    ? Number(options.numPredict)
+    : (enforceResponseMaxChars ? estimateNumPredictForChars(responseMaxChars) : 8192);
 
   const generation = await generateWithLocalModel({
     model: options.model || ANSWER_MODEL,
@@ -1444,9 +1916,12 @@ async function answerWithRag(options = {}) {
     systemPrompt,
     temperature: Number.isFinite(Number(options.temperature)) ? Number(options.temperature) : 0,
     numCtx: Number.isFinite(Number(options.numCtx)) ? Number(options.numCtx) : 8192,
-    numPredict: options.numPredict || estimateNumPredictForChars(responseMaxChars),
+    numPredict: effectiveNumPredict,
+    format: albumMode ? 'json' : undefined,
   });
-  const answer = truncateText(generation.response, responseMaxChars);
+  const answer = enforceResponseMaxChars
+    ? truncateText(generation.response, responseMaxChars)
+    : String(generation.response || '').trim();
 
   const payload = {
     query: contextBundle.query,
@@ -1462,7 +1937,7 @@ async function answerWithRag(options = {}) {
     contextBlocks: contextBundle.contextBlocks,
     relationBlocks: contextBundle.relationBlocks,
     retrievedSources: contextBundle.retrievedSources,
-    promptContextText: contextBundle.promptContextText,
+    promptContextText: truncateText(contextBundle.promptContextText, albumMode ? 1800 : 6000),
     debug: {
       promptChars: prompt.length,
       contextChars: contextBundle.promptContextText.length,
@@ -1471,8 +1946,11 @@ async function answerWithRag(options = {}) {
       queryVariantCount: contextBundle.retrievalDebug.queryVariantCount,
       acceptedPrimary: contextBundle.retrievalDebug.acceptedPrimary,
       acceptedRelation: contextBundle.retrievalDebug.acceptedRelation,
-      requestedAnswerMaxChars: responseMaxChars,
+      requestedAnswerMaxChars: enforceResponseMaxChars ? responseMaxChars : null,
+      enforceResponseMaxChars,
       answerChars: answer.length,
+      partial: generation.partial === true,
+      partialError: generation.partialError || null,
       generationDurationMs: Date.now() - startedAt,
       promptEvalCount: generation.promptEvalCount,
       evalCount: generation.evalCount,
@@ -1489,6 +1967,27 @@ async function answerWithRag(options = {}) {
     'mmss_operator_assist',
     'mmss_invariants',
     'ase_console_recipe',
+    'contextual_summarization',
+    'knowledge_synthesis',
+    'skill_tree_pathfinding',
+    'skill_chain_orchestration',
+    'skill_gap_analysis',
+    'track_variation',
+    'style_fusion',
+    'prompt_evolution',
+    'parameter_shift',
+    'session_digest',
+    'vibe_extraction',
+    'pattern_mining',
+    'tag_enrichment',
+    'similarity_audit',
+    'concept_ideation',
+    'album_synthesis',
+    'arrangement_blueprint',
+    'soundscape_design',
+    'album_concept',
+    'deep_worldbuilding',
+    'pattern_recognition',
   ].includes(String(contextBundle.mode || ''));
 
   if (shouldLogMmssResult) {
@@ -1509,8 +2008,11 @@ async function answerWithRag(options = {}) {
           queryVariantCount: contextBundle.retrievalDebug.queryVariantCount,
           acceptedPrimary: contextBundle.retrievalDebug.acceptedPrimary,
           acceptedRelation: contextBundle.retrievalDebug.acceptedRelation,
-          requestedAnswerMaxChars: responseMaxChars,
+          requestedAnswerMaxChars: enforceResponseMaxChars ? responseMaxChars : null,
+          enforceResponseMaxChars,
           answerChars: answer.length,
+          partial: generation.partial === true,
+          partialError: generation.partialError || null,
           generationDurationMs: Date.now() - startedAt,
           promptEvalCount: generation.promptEvalCount,
           evalCount: generation.evalCount,

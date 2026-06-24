@@ -1,0 +1,54 @@
+{
+  "app_setting_store": {
+    "found_in_databases": [
+      "abstract-mind-lab",
+      "abstract_mind_db"
+    ],
+    "potential_duplicates": 2,
+    "sample_hashes": [
+      "226c8dd5a30015f5215db62dd8d019b0",
+      "6fea3173b780a7a00512572b78552287"
+    ]
+  },
+  "mmss_domain_patterns": {
+    "found_in_databases": [
+      "abstract-mind-lab",
+      "abstract_mind_db"
+    ],
+    "potential_duplicates": 5,
+    "sample_hashes": [
+      "fe07da507e0437ef778396b226e2d451",
+      "8b8410cdef9ba682636fc489b0e42360",
+      "18261d3b9e66e4fbe41b5ac54cb9fc7f",
+      "64dcdacdde3072c3697a78acdb28c8fd",
+      "1f3d59ac11aae05ed9bb384ef09c5164"
+    ]
+  },
+  "video_metadata": {
+    "found_in_databases": [
+      "abstract-mind-lab",
+      "abstract_mind_db"
+    ],
+    "potential_duplicates": 2,
+    "sample_hashes": [
+      "5318a856d0b996ef3e1aaad4a906b2c4",
+      "315f815fda4f79bfd908d169aaef4627"
+    ]
+  },
+  "mmss_phase_patterns": {
+    "found_in_databases": [
+      "abstract-mind-lab",
+      "abstract_mind_db"
+    ],
+    "potential_duplicates": 7,
+    "sample_hashes": [
+      "5701baf8ac77c5e1193c1f2c8fe67b0c",
+      "0e270d4ee12a6432bf15bc27d0ccd282",
+      "591673518b4cef0b5fa09fd6ae2f29ea",
+      "18ee24dc4136f9f78142150ac6197fb0",
+      "95ba7d9c8e72dc310f6da1016337a35b",
+      "4eee022a5707df2d57732702cd352838",
+      "6b3cb347688f1d2db628b0c6baf57d92"
+    ]
+  }
+}

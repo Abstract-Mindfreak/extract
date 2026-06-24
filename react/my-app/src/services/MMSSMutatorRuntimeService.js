@@ -379,7 +379,7 @@ class MMSSMutatorRuntimeService {
     const primaryDb = "abstract-mind-lab";
     const [primaryRows, legacyRows] = await Promise.all([
       this.loadSourceRows(primaryDb),
-      includeLegacy ? this.loadSourceRows("abstract_mind_db") : Promise.resolve({ musicBlocks: [], tracks: [], sessions: [] }),
+      includeLegacy ? this.loadSourceRows("legacy") : Promise.resolve({ musicBlocks: [], tracks: [], sessions: [] }),
     ]);
 
     const primaryBlocks = [
@@ -390,9 +390,9 @@ class MMSSMutatorRuntimeService {
 
     const legacyBlocks = includeLegacy
       ? [
-          ...this.mapMusicBlocks(legacyRows.musicBlocks, "abstract_mind_db"),
-          ...this.mapTracks(legacyRows.tracks, "abstract_mind_db"),
-          ...this.mapSessions(legacyRows.sessions, "abstract_mind_db"),
+          ...this.mapMusicBlocks(legacyRows.musicBlocks, "legacy"),
+          ...this.mapTracks(legacyRows.tracks, "legacy"),
+          ...this.mapSessions(legacyRows.sessions, "legacy"),
         ]
       : [];
 

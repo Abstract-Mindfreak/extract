@@ -65,7 +65,14 @@ const {
   startDesignSkillTreeJob,
 } = require('./server/mmssSkillTreeService.js');
 const {
+  buildGeneratedAlbumFlowmusicPayload,
   getRuntimeHealth: getMmssRuntimeHealth,
+  listCustomInstructions,
+  saveGeneratedAlbum,
+  saveCustomInstruction,
+  syncCollectionFromFiltered,
+  syncMmssFiltered,
+  syncTrackPrompts,
 } = require('./server/mmssRuntimePersistenceService.js');
 
 const app = express();
@@ -73,6 +80,127 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 const PORT = process.env.ARCHIVER_PORT || 3456;
+const RAG_CHUNKS_CLEANER_SCRIPT = path.join(__dirname, '..', 'react_agent', 'сhunks-cleaner.py');
+const ragChunkRefreshJobs = new Map();
+
+function resolveRagChunksCleanerScript() {
+  const scriptsDir = path.join(__dirname, '..', 'react_agent');
+  const directCandidates = [
+    path.join(scriptsDir, 'chunks-cleaner.py'),
+    path.join(scriptsDir, 'сhunks-cleaner.py'),
+  ];
+  for (const candidate of directCandidates) {
+    if (existsSync(candidate)) {
+      return candidate;
+    }
+  }
+
+  try {
+    const matches = require('fs')
+      .readdirSync(scriptsDir, { withFileTypes: true })
+      .filter((entry) => entry.isFile() && /hunks-cleaner\.py$/i.test(entry.name))
+      .map((entry) => path.join(scriptsDir, entry.name));
+    if (matches.length) {
+      return matches[0];
+    }
+  } catch (_error) {
+    return directCandidates[0];
+  }
+
+  return directCandidates[0];
+}
+
+function createUtilityJobId(prefix) {
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function getRagChunkRefreshJob(jobId) {
+  return jobId ? ragChunkRefreshJobs.get(jobId) || null : null;
+}
+
+function cancelRagChunkRefreshJob(jobId) {
+  const job = getRagChunkRefreshJob(jobId);
+  if (!job) return null;
+  if (job.child && job.status === 'running') {
+    job.cancelRequested = true;
+    job.child.kill();
+  }
+  return job;
+}
+
+async function startRagChunkRefreshJob() {
+  const cleanerScript = resolveRagChunksCleanerScript();
+  if (!existsSync(cleanerScript)) {
+    throw new Error(`chunks-cleaner.py not found: ${cleanerScript}`);
+  }
+
+  const job = {
+    jobId: createUtilityJobId('rag_chunks_refresh'),
+    status: 'running',
+    progress: 5,
+    startedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    completedAt: null,
+    cancelRequested: false,
+    logs: [],
+    scriptPath: cleanerScript,
+    child: null,
+  };
+  ragChunkRefreshJobs.set(job.jobId, job);
+
+  const child = spawn('python', [cleanerScript], {
+    cwd: path.dirname(cleanerScript),
+    env: process.env,
+    stdio: ['ignore', 'pipe', 'pipe'],
+    windowsHide: true,
+  });
+  job.child = child;
+
+  const appendLog = (prefix, chunk) => {
+    const text = String(chunk || '').trim();
+    if (!text) return;
+    job.logs.push(`${prefix}${text}`);
+    if (job.logs.length > 120) {
+      job.logs = job.logs.slice(-120);
+    }
+    job.updatedAt = new Date().toISOString();
+  };
+
+  child.stdout.on('data', (chunk) => {
+    appendLog('', chunk);
+    job.progress = Math.min(95, job.progress + 2);
+  });
+  child.stderr.on('data', (chunk) => {
+    appendLog('[stderr] ', chunk);
+    job.progress = Math.min(95, job.progress + 1);
+  });
+
+  child.on('error', (error) => {
+    job.status = 'failed';
+    job.error = error?.message || String(error);
+    job.progress = 100;
+    job.completedAt = new Date().toISOString();
+    job.updatedAt = job.completedAt;
+    job.child = null;
+  });
+
+  child.on('close', (code, signal) => {
+    job.completedAt = new Date().toISOString();
+    job.updatedAt = job.completedAt;
+    job.child = null;
+    job.progress = 100;
+    if (job.cancelRequested || signal) {
+      job.status = 'cancelled';
+    } else if (code === 0) {
+      job.status = 'completed';
+    } else {
+      job.status = 'failed';
+      job.error = `chunks-cleaner exited with code ${code}`;
+    }
+  });
+
+  return { ...job, child: undefined };
+}
 const ARCHIVER_PATH = path.join(__dirname, '..', '..', 'flowmusic-archiver');
 const PRODUCER_BASE_URL = 'https://www.flowmusic.app';
 const PRODUCER_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36';
@@ -743,6 +871,236 @@ app.get('/api/mmss/runtime/health', async (req, res) => {
     res.status(500).json({
       success: false,
       error: error?.message || 'Failed to load MMSS runtime health',
+    });
+  }
+});
+
+app.get('/api/mmss/custom-instructions', async (req, res) => {
+  try {
+    const database = normalizeLocalRagDatabase(req.query.database);
+    const payload = await listCustomInstructions(database, {
+      limit: req.query.limit,
+    });
+    res.json({
+      success: true,
+      data: {
+        database,
+        items: payload,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to list MMSS custom instructions',
+    });
+  }
+});
+
+app.post('/api/mmss/custom-instructions', async (req, res) => {
+  try {
+    const database = normalizeLocalRagDatabase(req.body?.database || req.query?.database);
+    const payload = await saveCustomInstruction(database, {
+      instructionId: req.body?.instructionId,
+      title: req.body?.title,
+      category: req.body?.category,
+      instructionText: req.body?.instructionText,
+      sourceLabel: req.body?.sourceLabel,
+      metadata: req.body?.metadata,
+    });
+    res.json({
+      success: true,
+      data: {
+        database,
+        item: payload,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to save MMSS custom instruction',
+    });
+  }
+});
+
+app.post('/api/mmss/albums/save-generated', async (req, res) => {
+  try {
+    const database = normalizeLocalRagDatabase(req.body?.database || req.query?.database);
+    const payload = await saveGeneratedAlbum(database, {
+      answerResult: req.body?.answerResult,
+      answer: req.body?.answer,
+      query: req.body?.query,
+      mode: req.body?.mode,
+      retrievedSources: req.body?.retrievedSources,
+      score: req.body?.score,
+      albumId: req.body?.albumId,
+      collectionEntryId: req.body?.collectionEntryId,
+    });
+    res.json({
+      success: true,
+      data: {
+        database,
+        ...payload,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to save generated MMSS album draft',
+    });
+  }
+});
+
+app.post('/api/mmss/albums/build-flowmusic-payload', async (req, res) => {
+  try {
+    const database = normalizeLocalRagDatabase(req.body?.database || req.query?.database);
+    const payload = await buildGeneratedAlbumFlowmusicPayload(database, {
+      answerResult: req.body?.answerResult,
+      answer: req.body?.answer,
+      query: req.body?.query,
+      mode: req.body?.mode,
+      retrievedSources: req.body?.retrievedSources,
+    });
+    res.json({
+      success: true,
+      data: {
+        database,
+        ...payload,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to build Flowmusic album payload',
+    });
+  }
+});
+
+app.post('/api/rag-chunks/refresh', async (_req, res) => {
+  try {
+    const job = await startRagChunkRefreshJob();
+    res.json({
+      success: true,
+      data: job,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to start rag_chunks refresh job',
+    });
+  }
+});
+
+app.post('/api/rag_chunks/refresh', async (_req, res) => {
+  try {
+    const job = await startRagChunkRefreshJob();
+    res.json({
+      success: true,
+      data: job,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to start rag_chunks refresh job',
+    });
+  }
+});
+
+app.get('/api/rag-chunks/refresh/:jobId', async (req, res) => {
+  const job = getRagChunkRefreshJob(req.params.jobId);
+  if (!job) {
+    return res.status(404).json({
+      success: false,
+      error: 'rag_chunks refresh job not found',
+    });
+  }
+
+  res.json({
+    success: true,
+    data: {
+      ...job,
+      child: undefined,
+    },
+  });
+});
+
+app.post('/api/rag-chunks/refresh/:jobId/cancel', async (req, res) => {
+  const job = cancelRagChunkRefreshJob(req.params.jobId);
+  if (!job) {
+    return res.status(404).json({
+      success: false,
+      error: 'rag_chunks refresh job not found',
+    });
+  }
+
+  res.json({
+    success: true,
+    data: {
+      ...job,
+      child: undefined,
+    },
+  });
+});
+
+app.post('/api/mmss/tracks-prompts/sync', async (req, res) => {
+  try {
+    const database = normalizeLocalRagDatabase(req.body?.database || req.query?.database);
+    const payload = await syncTrackPrompts(database);
+    res.json({
+      success: true,
+      data: {
+        database,
+        ...payload,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to sync MMSS track prompts',
+    });
+  }
+});
+
+app.post('/api/mmss/filtered/sync', async (req, res) => {
+  try {
+    const database = normalizeLocalRagDatabase(req.body?.database || req.query?.database);
+    const payload = await syncMmssFiltered(database, {
+      sessionLimit: req.body?.sessionLimit || req.query?.sessionLimit,
+      trackLimit: req.body?.trackLimit || req.query?.trackLimit,
+    });
+    res.json({
+      success: true,
+      data: {
+        database,
+        ...payload,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to sync MMSS filtered data',
+    });
+  }
+});
+
+app.post('/api/mmss/collection/sync-from-filtered', async (req, res) => {
+  try {
+    const database = normalizeLocalRagDatabase(req.body?.database || req.query?.database);
+    const payload = await syncCollectionFromFiltered(database, {
+      rowLimit: req.body?.rowLimit || req.query?.rowLimit,
+      minScore: req.body?.minScore || req.query?.minScore,
+      maxRows: req.body?.maxRows || req.query?.maxRows,
+    });
+    res.json({
+      success: true,
+      data: {
+        database,
+        ...payload,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to sync MMSS collection from filtered data',
     });
   }
 });

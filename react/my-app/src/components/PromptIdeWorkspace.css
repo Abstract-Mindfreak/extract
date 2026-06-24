@@ -193,7 +193,9 @@
 }
 
 .ide-settings-form select,
-.ide-settings-form input[type="text"] {
+.ide-settings-form input[type="text"],
+.ide-settings-form input[type="number"],
+.ide-settings-form textarea {
   padding: 10px 12px;
   border-radius: 12px;
   border: 1px solid rgba(134, 153, 179, 0.2);

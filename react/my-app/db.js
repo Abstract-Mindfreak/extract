@@ -1,10 +1,13 @@
 const { Pool } = require('pg');
 
+// Primary database is now abstract-mind-lab
 const PG_DATABASE = process.env.PG_DATABASE || 'abstract-mind-lab';
 const PG_HOST = process.env.PG_HOST || 'localhost';
 const PG_PORT = process.env.PG_PORT || '5432';
 const PG_USER = process.env.PG_USER || 'mind_user';
 const PG_PASSWORD = process.env.PG_PASSWORD || 'mindfreak';
+
+// Legacy database for read-only access to old data
 const LEGACY_DATABASE = process.env.DB_NAME_V1 || 'abstract_mind_db';
 
 function buildDatabaseUrl(databaseName) {
@@ -68,15 +71,18 @@ function validateReadOnlySql(sql) {
 
 function resolveDatabaseName(databaseName) {
   const normalized = String(databaseName || '').trim();
+  
+  // Default to primary database
   if (!normalized || normalized === 'default' || normalized === 'abstract-mind-lab') {
     return PG_DATABASE;
   }
 
-  if (normalized === 'abstract_mind_db') {
+  // Legacy database access (with renamed tables)
+  if (normalized === 'abstract_mind_db' || normalized === 'legacy') {
     return LEGACY_DATABASE;
   }
 
-  throw new Error(`Unsupported database target: ${normalized}`);
+  throw new Error(`Unsupported database target: ${normalized}. Use 'abstract-mind-lab' or 'legacy'`);
 }
 
 async function executeReadOnlyQuery(sql, databaseName) {

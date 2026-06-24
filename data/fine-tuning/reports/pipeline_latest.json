@@ -1,0 +1,128 @@
+{
+  "scan": {
+    "generated_at": "20260622_201355",
+    "total_files": 3051,
+    "by_source": {
+      "mmss-builder": 1588,
+      "extract-raw": 728,
+      "extract-prep": 735
+    },
+    "by_category_hint": {
+      "mmss-universal": 1416,
+      "mmss-sound-craft": 675,
+      "categories": 960
+    },
+    "by_readiness": {
+      "ready": 2845,
+      "too_small": 2,
+      "duplicate": 196,
+      "invalid": 6,
+      "too_large_review": 2
+    },
+    "by_ext": {
+      ".txt": 40,
+      ".py": 57,
+      ".md": 1282,
+      ".json": 1667,
+      ".yml": 3,
+      ".yaml": 2
+    },
+    "duplicates": 196,
+    "ready_count": 2845
+  },
+  "jsonl": {
+    "categories": {
+      "mmss-universal": {
+        "total": 580,
+        "train": 522,
+        "val": 58
+      },
+      "mmss-sound-craft": {
+        "total": 897,
+        "train": 807,
+        "val": 90
+      },
+      "categories": {
+        "total": 227,
+        "train": 204,
+        "val": 23
+      }
+    },
+    "paths": {
+      "D:\\WORK\\CLIENTS\\extract\\prepare-for-fine-tuning-dataset-kaggle-gemma\\ready-for-dataset\\almost_ready\\mmss-universal\\mmss_mmss-universal_train.jsonl": 522,
+      "D:\\WORK\\CLIENTS\\extract\\prepare-for-fine-tuning-dataset-kaggle-gemma\\ready-for-dataset\\almost_ready\\mmss-universal\\mmss_mmss-universal_val.jsonl": 58,
+      "D:\\project\\data\\fine-tuning\\staging\\mmss-universal\\mmss_mmss-universal_all.jsonl": 580,
+      "D:\\WORK\\CLIENTS\\extract\\prepare-for-fine-tuning-dataset-kaggle-gemma\\ready-for-dataset\\almost_ready\\mmss-sound-craft\\mmss_mmss-sound-craft_train.jsonl": 807,
+      "D:\\WORK\\CLIENTS\\extract\\prepare-for-fine-tuning-dataset-kaggle-gemma\\ready-for-dataset\\almost_ready\\mmss-sound-craft\\mmss_mmss-sound-craft_val.jsonl": 90,
+      "D:\\project\\data\\fine-tuning\\staging\\mmss-sound-craft\\mmss_mmss-sound-craft_all.jsonl": 897,
+      "D:\\WORK\\CLIENTS\\extract\\prepare-for-fine-tuning-dataset-kaggle-gemma\\ready-for-dataset\\almost_ready\\categories\\mmss_categories_train.jsonl": 204,
+      "D:\\WORK\\CLIENTS\\extract\\prepare-for-fine-tuning-dataset-kaggle-gemma\\ready-for-dataset\\almost_ready\\categories\\mmss_categories_val.jsonl": 23,
+      "D:\\project\\data\\fine-tuning\\staging\\categories\\mmss_categories_all.jsonl": 227,
+      "D:\\project\\data\\fine-tuning\\staging\\mmss_combined_all.jsonl": 1704
+    },
+    "total_examples": 1704,
+    "manifest": "D:\\project\\data\\fine-tuning\\staging\\manifest.json"
+  },
+  "validation": [
+    {
+      "file": "D:\\project\\data\\fine-tuning\\staging\\categories\\mmss_categories_all.jsonl",
+      "lines": 227,
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "D:\\project\\data\\fine-tuning\\staging\\mmss-sound-craft\\mmss_mmss-sound-craft_all.jsonl",
+      "lines": 897,
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "D:\\project\\data\\fine-tuning\\staging\\mmss-universal\\mmss_mmss-universal_all.jsonl",
+      "lines": 580,
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "D:\\project\\data\\fine-tuning\\staging\\mmss_combined_all.jsonl",
+      "lines": 1704,
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "D:\\WORK\\CLIENTS\\extract\\prepare-for-fine-tuning-dataset-kaggle-gemma\\ready-for-dataset\\almost_ready\\categories\\mmss_categories_train.jsonl",
+      "lines": 204,
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "D:\\WORK\\CLIENTS\\extract\\prepare-for-fine-tuning-dataset-kaggle-gemma\\ready-for-dataset\\almost_ready\\categories\\mmss_categories_val.jsonl",
+      "lines": 23,
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "D:\\WORK\\CLIENTS\\extract\\prepare-for-fine-tuning-dataset-kaggle-gemma\\ready-for-dataset\\almost_ready\\mmss-sound-craft\\mmss_mmss-sound-craft_train.jsonl",
+      "lines": 807,
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "D:\\WORK\\CLIENTS\\extract\\prepare-for-fine-tuning-dataset-kaggle-gemma\\ready-for-dataset\\almost_ready\\mmss-sound-craft\\mmss_mmss-sound-craft_val.jsonl",
+      "lines": 90,
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "D:\\WORK\\CLIENTS\\extract\\prepare-for-fine-tuning-dataset-kaggle-gemma\\ready-for-dataset\\almost_ready\\mmss-universal\\mmss_mmss-universal_train.jsonl",
+      "lines": 522,
+      "errors": [],
+      "valid": true
+    },
+    {
+      "file": "D:\\WORK\\CLIENTS\\extract\\prepare-for-fine-tuning-dataset-kaggle-gemma\\ready-for-dataset\\almost_ready\\mmss-universal\\mmss_mmss-universal_val.jsonl",
+      "lines": 58,
+      "errors": [],
+      "valid": true
+    }
+  ]
+}

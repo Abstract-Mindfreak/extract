@@ -1,0 +1,31 @@
+{
+  "generated_at": "20260622_201355",
+  "total_files": 3051,
+  "by_source": {
+    "mmss-builder": 1588,
+    "extract-raw": 728,
+    "extract-prep": 735
+  },
+  "by_category_hint": {
+    "mmss-universal": 1416,
+    "mmss-sound-craft": 675,
+    "categories": 960
+  },
+  "by_readiness": {
+    "ready": 2845,
+    "too_small": 2,
+    "duplicate": 196,
+    "invalid": 6,
+    "too_large_review": 2
+  },
+  "by_ext": {
+    ".txt": 40,
+    ".py": 57,
+    ".md": 1282,
+    ".json": 1667,
+    ".yml": 3,
+    ".yaml": 2
+  },
+  "duplicates": 196,
+  "ready_count": 2845
+}

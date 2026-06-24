@@ -23,6 +23,7 @@ import GenerationEnginePanel from "./ase-variations/generation-engine-panel";
 import LocalRagPanel from "./ase-variations/local-rag-panel";
 import MMSSInvariantsPanel from "./ase-variations/mmss-invariants-panel";
 import MMSSMutatorPanel from "./ase-variations/mmss-mutator-panel";
+import OmegaBreathPanel from "./ase-variations/omega-breath-panel";
 import { useAseWorkspaceStore } from "../hooks/useAseWorkspaceStore";
 import "./PromptIdeWorkspace.css";
 import "./AseIdeWorkspace.css";
@@ -246,6 +247,14 @@ export default function AseIdeWorkspace(props) {
           enableClose: false,
           icon: "mmss-invariants",
         },
+        {
+          id: "ase-omega-breath-tab",
+          type: "tab",
+          name: "Omega Breath ASE",
+          component: "omega-breath",
+          enableClose: false,
+          icon: "omega-breath",
+        },
       ].reduce(
         (layoutJson, tabConfig) => ensureWorkspaceTab(layoutJson, tabConfig),
         workspaceStore.layoutSnapshot || buildDefaultLayout(),
@@ -319,6 +328,10 @@ export default function AseIdeWorkspace(props) {
 
     if (component === "mmss-invariants") {
       return <MMSSInvariantsPanel />;
+    }
+
+    if (component === "omega-breath") {
+      return <OmegaBreathPanel />;
     }
 
     if (component === "flowmusic-agents") {
@@ -731,6 +744,8 @@ function resolveTabIcon(icon) {
       return <Database {...common} />;
     case "mmss-invariants":
       return <Database {...common} />;
+    case "omega-breath":
+      return <Sparkles {...common} />;
     case "flowmusic-agents":
       return <Sparkles {...common} />;
     case "database":

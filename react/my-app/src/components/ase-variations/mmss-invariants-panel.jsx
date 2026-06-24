@@ -18,10 +18,11 @@ import {
   useMMSSInvariantsOrchestrator,
 } from "../../services/MMSSInvariantsOrchestrator";
 import appPersistenceService from "../../services/AppPersistenceService";
+import { getInvariantModePreset, INVARIANT_PRESET_MODES } from "../../config/mmssModePresets";
 
 const DATABASE_OPTIONS = [
   { value: "abstract-mind-lab", label: "abstract-mind-lab" },
-  { value: "abstract_mind_db", label: "abstract_mind_db" },
+  { value: "legacy", label: "legacy (abstract_mind_db)" },
 ];
 
 const MODE_OPTIONS = [
@@ -34,7 +35,7 @@ const MODE_OPTIONS = [
 
 const FILTER_PROFILE_OPTIONS = ["strict", "balanced", "exploratory"];
 const MODEL_OPTIONS = ["batiai/gemma4-e2b:q4", "gemma4:e2b", "quant-mmss:latest"];
-const SOURCE_TABLE_OPTIONS = ["tracks", "sessions", "music_blocks", "mmss_invariants"];
+const SOURCE_TABLE_OPTIONS = ["tracks", "sessions", "music_blocks", "rag_chunks", "mmss_invariants", "mmss_phase_patterns", "mmss_domain_patterns"];
 const SETTINGS_SCOPE = "mmss_invariants_ui";
 const SNAPSHOT_SCOPE = "mmss_invariants_results";
 
@@ -56,6 +57,32 @@ function JsonCard({ title, value, emptyText }) {
       </pre>
     </div>
   );
+}
+
+function FieldHint({ children }) {
+  return <small className="mmss-field-hint">{children}</small>;
+}
+
+function InvariantPresetCard({ mode, activeMode, onApply }) {
+  const active = mode === activeMode;
+  return (
+    <div className={`ase-config-card mmss-preset-card ${active ? "is-active" : ""}`}>
+      <strong>{mode}</strong>
+      <span>Invariant-oriented preset pair for this mode.</span>
+      <div className="ide-workspace-action-row mmss-preset-actions">
+        <button type="button" className="mmss-action-button mmss-action-button--secondary is-compact" onClick={() => onApply(mode, "quick")}>
+          Quick
+        </button>
+        <button type="button" className="mmss-action-button mmss-action-button--accent is-compact" onClick={() => onApply(mode, "deep")}>
+          Deep
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function handleInvariantModeSelect(applyModePreset, nextMode) {
+  applyModePreset(nextMode, "quick");
 }
 
 function buildScopeSelectionsFromDefaults() {
@@ -281,6 +308,20 @@ export default function MMSSInvariantsPanel() {
       : "Include relation layer=off. Система опирается только на primary invariant blocks без relation-слоя.",
     responseMaxChars: `Response max chars=${responseMaxChars}. Это максимальная длина итогового ответа, которую сервер просит соблюдать и затем принудительно ограничивает.`,
   }), [includeRelationLayer, queryBudget, responseMaxChars, topK]);
+
+  const applyModePreset = (presetMode, variant = "quick") => {
+    const preset = getInvariantModePreset(presetMode, variant);
+    setDatabase(preset.database);
+    setTopK(preset.topK);
+    setQueryBudget(preset.queryBudget);
+    setQuery(preset.query);
+    setMode(preset.mode);
+    setModel(preset.model);
+    setFilterProfile(preset.filterProfile);
+    setIncludeRelationLayer(preset.includeRelationLayer);
+    setResponseMaxChars(preset.responseMaxChars);
+    setScopeSelections(preset.scopeSelections);
+  };
 
   const handleSyncSeed = async () => {
     setRunningSyncSeed(true);
@@ -560,7 +601,7 @@ export default function MMSSInvariantsPanel() {
   };
 
   return (
-    <div className="ide-panel-shell ase-flex-panel">
+    <div className="ide-panel-shell ase-flex-panel mmss-invariants-panel-shell">
       <div className="ide-panel-header">
         <div>
           <strong>MMSS Invariants</strong>
@@ -588,34 +629,57 @@ export default function MMSSInvariantsPanel() {
         </div>
       ) : null}
 
-      <div className="ide-settings-form">
-        <label>
+      <div className="ase-config-card mmss-section-card mmss-section-card--preset">
+        <strong>Invariant Mode Presets</strong>
+        <span>Each mode has two start configurations. Quick is narrow and audit-friendly, Deep widens the retrieval cone.</span>
+        <div className="ide-workspace-action-row mmss-preset-actions" style={{ marginTop: 12 }}>
+          <button type="button" className="mmss-action-button mmss-action-button--secondary" onClick={() => applyModePreset(mode, "quick")}>
+            Apply Current Quick
+          </button>
+          <button type="button" className="mmss-action-button mmss-action-button--accent" onClick={() => applyModePreset(mode, "deep")}>
+            Apply Current Deep
+          </button>
+        </div>
+        <div className="mmss-preset-grid">
+          {INVARIANT_PRESET_MODES.map((presetMode) => (
+            <InvariantPresetCard key={presetMode} mode={presetMode} activeMode={mode} onApply={applyModePreset} />
+          ))}
+        </div>
+      </div>
+
+      <div className="ide-settings-form mmss-form-grid">
+        <label className="mmss-field mmss-field--runtime">
           <span>Primary DB</span>
           <select value={database} onChange={(event) => setDatabase(event.target.value)}>
             {DATABASE_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>{option.label}</option>
             ))}
           </select>
+          <FieldHint>Primary target for invariant retrieval and extraction writes.</FieldHint>
         </label>
-        <label>
+        <label className="mmss-field mmss-field--retrieval">
           <span>Top K</span>
           <input type="number" min="1" max="20" value={topK} onChange={(event) => setTopK(Number(event.target.value) || 5)} />
+          <FieldHint>Number of best invariant candidates retained after ranking.</FieldHint>
         </label>
-        <label>
+        <label className="mmss-field mmss-field--retrieval">
           <span>Query Budget</span>
           <input type="number" min="1" max="100" value={queryBudget} onChange={(event) => setQueryBudget(Number(event.target.value) || 1)} />
+          <FieldHint>How many search rewrites are allowed during invariant lookup.</FieldHint>
         </label>
-        <label>
+        <label className="mmss-field mmss-field--retrieval">
           <span>Filter Profile</span>
           <select value={filterProfile} onChange={(event) => setFilterProfile(event.target.value)}>
             {FILTER_PROFILE_OPTIONS.map((entry) => (
               <option key={entry} value={entry}>{entry}</option>
             ))}
           </select>
+          <FieldHint>Controls how aggressively weak evidence is trimmed.</FieldHint>
         </label>
-        <label>
+        <label className="mmss-field mmss-field--warning">
           <span>Answer Max Chars</span>
           <input type="number" min="500" max="200000" value={responseMaxChars} onChange={(event) => setResponseMaxChars(Number(event.target.value) || 40000)} />
+          <FieldHint>Upper bound for final invariant answer length.</FieldHint>
         </label>
       </div>
 
@@ -627,13 +691,13 @@ export default function MMSSInvariantsPanel() {
         <p>{parameterGuide.responseMaxChars}</p>
       </div>
 
-      <div className="ase-config-list">
+      <div className="ase-config-list mmss-scope-list">
         {DATABASE_OPTIONS.map((dbOption) => (
           <div key={dbOption.value} className="ase-config-card">
             <strong>Invariant Scope: {dbOption.label}</strong>
             <div className="ide-workspace-action-row" style={{ flexWrap: "wrap", marginTop: 12 }}>
               {(availableTablesByDb[dbOption.value] || SOURCE_TABLE_OPTIONS).map((tableName) => (
-                <label key={`${dbOption.value}-${tableName}`} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <label key={`${dbOption.value}-${tableName}`} className="mmss-checkbox-chip">
                   <input
                     type="checkbox"
                     checked={(scopeSelections[dbOption.value] || []).includes(tableName)}
@@ -644,7 +708,7 @@ export default function MMSSInvariantsPanel() {
                       }));
                     }}
                   />
-                  {tableName}
+                  <span>{tableName}</span>
                 </label>
               ))}
             </div>
@@ -652,66 +716,70 @@ export default function MMSSInvariantsPanel() {
         ))}
       </div>
 
-      <div className="ide-settings-form">
-        <label>
+      <div className="ide-settings-form mmss-form-grid">
+        <label className="mmss-field mmss-field--wide mmss-field--query">
           <span>Invariant Query</span>
           <textarea value={query} onChange={(event) => setQuery(event.target.value)} rows={4} />
+          <FieldHint>Main request for invariant search, context build, and answer generation.</FieldHint>
         </label>
       </div>
 
-      <div className="ide-settings-form">
-        <label>
+      <div className="ide-settings-form mmss-form-grid">
+        <label className="mmss-field mmss-field--generation">
           <span>Mode</span>
-          <select value={mode} onChange={(event) => setMode(event.target.value)}>
+          <select value={mode} onChange={(event) => handleInvariantModeSelect(applyModePreset, event.target.value)}>
             {MODE_OPTIONS.map((entry) => (
               <option key={entry} value={entry}>{entry}</option>
             ))}
           </select>
+          <FieldHint>Changes the invariant reasoning frame and preset families.</FieldHint>
         </label>
-        <label>
+        <label className="mmss-field mmss-field--generation">
           <span>Answer Model</span>
           <select value={model} onChange={(event) => setModel(event.target.value)}>
             {MODEL_OPTIONS.map((entry) => (
               <option key={entry} value={entry}>{entry}</option>
             ))}
           </select>
+          <FieldHint>Local model used for invariant answer synthesis.</FieldHint>
         </label>
-        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <label className="mmss-field mmss-field--operator" style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <input
             type="checkbox"
             checked={includeRelationLayer}
             onChange={(event) => setIncludeRelationLayer(event.target.checked)}
           />
           <span>Include relation layer</span>
+          <FieldHint>Appends relation-rich evidence to the invariant context.</FieldHint>
         </label>
       </div>
 
-      <div className="ide-workspace-action-row">
-        <button onClick={() => void loadStatus(database)} disabled={loadingStatus}>
+      <div className="ide-workspace-action-row mmss-action-strip">
+        <button className="mmss-action-button mmss-action-button--secondary" onClick={() => void loadStatus(database)} disabled={loadingStatus}>
           {loadingStatus ? <LoaderCircle size={14} className="spin" /> : <RefreshCcw size={14} />}
           Refresh Status
         </button>
-        <button onClick={handleSyncSeed} disabled={runningSyncSeed}>
+        <button className="mmss-action-button mmss-action-button--primary" onClick={handleSyncSeed} disabled={runningSyncSeed}>
           {runningSyncSeed ? <LoaderCircle size={14} className="spin" /> : <Database size={14} />}
           Sync Ontology Seed
         </button>
-        <button onClick={handleStartExtraction} disabled={runningExtraction}>
+        <button className="mmss-action-button mmss-action-button--accent" onClick={handleStartExtraction} disabled={runningExtraction}>
           {runningExtraction ? <LoaderCircle size={14} className="spin" /> : <Play size={14} />}
           Extract Invariants
         </button>
-        <button onClick={handleCancelExtraction} disabled={!job?.jobId || job?.status !== "running"}>
+        <button className="mmss-action-button mmss-action-button--danger" onClick={handleCancelExtraction} disabled={!job?.jobId || job?.status !== "running"}>
           <Square size={14} />
           Stop Extraction
         </button>
-        <button onClick={handleSearch} disabled={runningSearch || !query.trim() || !activeSourceScopes.length}>
+        <button className="mmss-action-button mmss-action-button--primary" onClick={handleSearch} disabled={runningSearch || !query.trim() || !activeSourceScopes.length}>
           {runningSearch ? <LoaderCircle size={14} className="spin" /> : <Search size={14} />}
           Search Invariants
         </button>
-        <button onClick={handleBuildContext} disabled={runningContext || !query.trim() || !activeSourceScopes.length}>
+        <button className="mmss-action-button mmss-action-button--secondary" onClick={handleBuildContext} disabled={runningContext || !query.trim() || !activeSourceScopes.length}>
           {runningContext ? <LoaderCircle size={14} className="spin" /> : <Database size={14} />}
           Build Invariant Context
         </button>
-        <button onClick={handleGenerateAnswer} disabled={runningAnswer || !query.trim() || !activeSourceScopes.length}>
+        <button className="mmss-action-button mmss-action-button--accent" onClick={handleGenerateAnswer} disabled={runningAnswer || !query.trim() || !activeSourceScopes.length}>
           {runningAnswer ? <LoaderCircle size={14} className="spin" /> : <Bot size={14} />}
           Generate Invariant Answer
         </button>

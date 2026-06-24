@@ -1,0 +1,132 @@
+{
+  "track": [
+    {
+      "id": "5c293123-4a7e-43cc-ae16-8583eced8694",
+      "title": "Кирзовый Бригадир: Re-Sourced (V1)",
+      "prompt": "West Coast Brutal Rap, aggressive dual male vocalists, 95 BPM, heavy industrial grinding textures, hard-hitting rhythmic drums, deep distorted synth bass, dark menacing atmosphere, street-level aggression, mechanical SFX, Russian rap delivery style, G-funk inspired dark melodies.",
+      "session_id": "d8c1b678-ece9-4481-a82d-3df087d6782b",
+      "created_at": "2026-03-22T08:52:06.928Z",
+      "raw_data": "{\"raw_track\":{\"id\":\"5c293123-4a7e-43cc-ae16-8583eced8694\",\"op_id\":\"bde649f6-67f0-512c-bd81-608b3e5970f1\",\"title\":\"Кирзовый Бригадир: Re-Sourced (V1)\",\"lyrics\":{\"value\":{\"id\":\"6ad6f9ec-a676-5ad4-867b-d9be8dfc6f60\",\"text\":\"maternal grinding industrial hum.\\npiercing conan voroshpets on an empty stomach.\\nsisyphus' swoosh, zu's approaching buzz.\\nкюзовый бригадир подъехал, выходи.\\nбелоровна отдаёт команду зюки: (беги!)\\nбригадир подъедет, поберегись, поберегись,\\nтот босс дал команду,\\nпоедет набело, набело,\\nнабело, набело, набело.\\nон подъехал, белоровна, командуй.\\nкюзовый бригадир отдаёт команду: «выходи!»\\nшух! шух! кю-пе-пе-пе-пе-жо!\\nconan voroshpets.\\nкюзовый бригадир подъехал, выходи.\\nтот босс отдаёт команду...\\nбригадир подъедет, поберегись, поберегись,\\nтот босс дал команду,\\nпоедет набело, набело,\\nнабело, набело, набело.\\nconan voroshpets.\\nкюзовый бригадир, выходи, выходи, выходи!\"},\"status\":\"completed\"},\"op_type\":\"audio__create_song\",\"privacy\":\"unlisted\",\"wav_url\":\"https://storage.googleapis.com/producer-app-public/clips/5c293123-4a7e-43cc-ae16-8583eced8694.wav\",\"duration\":{\"value\":\"143.69066666666666\",\"status\":\"completed\"},\"image_id\":\"bde649f6-67f0-512c-bd81-608b3e5970f1\",\"video_id\":null,\"audio_url\":\"https://storage.googleapis.com/producer-app-public/clips/5c293123-4a7e-43cc-ae16-8583eced8694.m4a\",\"author_id\":\"e1719abc-d49a-4095-863f-0ae637f65bf4\",\"image_url\":\"https://storage.googleapis.com/producer-app-public/assets/bde649f6-67f0-512c-bd81-608b3e5970f1.jpg\",\"operation\":{\"seed\":null,\"title\":\"Кирзовый Бригадир: Re-Sourced (V1)\",\"op_type\":\"audio__create_song\",\"lyrics_id\":\"df481632-450f-5c42-be35-9f4b906944fa\",\"sound_prompt\":\"West Coast Brutal Rap, aggressive dual male vocalists, 95 BPM, heavy industrial grinding textures, hard-hitting rhythmic drums, deep distorted synth bass, dark menacing atmosphere, street-level aggression, mechanical SFX, Russian rap delivery style, G-funk inspired dark melodies.\",\"conversation_id\":\"d8c1b678-ece9-4481-a82d-3df087d6782b\"},\"video_url\":null,\"created_at\":\"2026-03-22T08:52:06.928068Z\",\"deleted_at\":null,\"play_count\":1,\"is_favorite\":false,\"lyrics_timing\":{\"value\":{\"markers\":[[0,15],[9,16.2],[18,17.4],[29,18.6],[34,19.8],[43,21],[49,22.2],[60,23.4],[63,24.6],[66,25.8],[72,27],[81,28.2],[91,29.4],[99,30.6],[104,31.8],[116,33],[122,34.2],[130,35.4],[139,36.6],[149,37.8],[157,39],[167,40.2],[174,41.4],[182,42.6],[188,43.8],[196,45],[205,46.429],[215,47.857],[227,49.286],[239,50.714],[243,52.143],[248,53.571],[252,55],[261,56.429],[268,57.857],[276,59.286],[284,60.714],[292,62.143],[300,63.571],[308,65],[311,67.222],[321,69.444],[332,71.667],[342,73.889],[350,76.111],[359,78.333],[366,80.556],[375,82.778],[385,85],[390,90],[395,95],[414,100],[420,105],[432,110],[440,111.136],[449,112.273],[459,113.409],[467,114.545],[471,115.682],[476,116.818],[483,117.955],[494,119.091],[503,120.227],[513,121.364],[525,122.5],[537,123.636],[541,124.773],[546,125.909],[550,127.045],[559,128.182],[566,129.318],[574,130.455],[582,131.591],[590,132.727],[598,133.864],[606,135],[612,136.242],[624,137.483],[632,138.725],[642,139.966],[650,141.208],[658,142.449]],\"lyrics_id\":\"6ad6f9ec-a676-5ad4-867b-d9be8dfc6f60\"},\"status\":\"completed\"},\"favorite_count\":0,\"allow_public_use\":true,\"preference_state\":null,\"user_edited_lyrics_id\":null},\"session_snapshot\":{\"id\":\"d8c1b678-ece9-4481-a82d-3df087d6782b\",\"title\":\"Fractal Neuro-Dark Fusion\",\"user_id\":\"e1719abc-d49a-4095-863f-0ae637f65bf4\",\"messages\":[{\"kind\":\"request\",\"parts\":[{\"content\":\"<ui-hidden>Conversation started</ui-hidden>\",\"part_kind\":\"user-prompt\",\"timestamp\":\"2026-03-22T08:11:06.984931Z\"}],\"run_id\":null,\"metadata\":null,\"timestamp\":null,\"instructions\":null},{\"kind\":\"response\",\"parts\":[{\"id\":null,\"args\":{\"lyrics\":\"\"},\"part_kind\":\"tool-call\",\"tool_name\":\"lyrics__register\",\"tool_call_id\":\"1a3ffde7-8787-44b2-989f-238c582ec3bd\",\"provider_name\":null,\"provider_details\":null}],\"usage\":{\"details\":{},\"input_tokens\":0,\"output_tokens\":0,\"cache_read_tokens\":0,\"cache_write_tokens\":0,\"input_audio_tokens\":0,\"output_audio_tokens\":0,\"cache_audio_read_tokens\":0},\"run_id\":null,\"metadata\":null,\"timestamp\":\"2026-03-22T08:11:07.078511Z\",\"model_name\":null,\"provider_url\":null,\"finish_reason\":null,\"provider_name\":null,\"provider_details\":null,\"provider_response_id\":null},{\"kind\":\"request\",\"parts\":[{\"content\":{\"lyrics\":\"[Intro]\\n[Densely layered wooden percussion clicking, deep sub-bass pulse in E Phrygian, the sound of heavy rain hitting a tin roof]\\n\\n[Section A]\\nI hold the weight\\nThe hundredth stone\\nIt fits the space\\nIt stays here\\n(It stays here)\\nSearching for the line\\nEverything is heavy\\nOne hundred parts\\nFinally whole\\n(Finally whole)\\n\\n[Build]\\n[Percussion becomes more frantic, metallic textures layered over organic clicks, vocals begin to stutter]\\nThe floor is the sky\\nThe sky is the floor\\nTurning it over\\nTurning it over\\nThe frame is gone\\nThe weight is gone\\n(Turning it over)\\n(Turning it over)\\n\\n[Climax]\\n[Full distorted bass, synth swells in Phr...",
+      "conditions": "{\"prompt\":\"West Coast Brutal Rap, aggressive dual male vocalists, 95 BPM, heavy industrial grinding textures, hard-hitting rhythmic drums, deep distorted synth bass, dark menacing atmosphere, street-level aggression, mechanical SFX, Russian rap delivery style, G-funk inspired dark melodies.\"}",
+      "lyrics_timestamped": "[[0,15],[9,16.2],[18,17.4],[29,18.6],[34,19.8],[43,21],[49,22.2],[60,23.4],[63,24.6],[66,25.8],[72,27],[81,28.2],[91,29.4],[99,30.6],[104,31.8],[116,33],[122,34.2],[130,35.4],[139,36.6],[149,37.8],[157,39],[167,40.2],[174,41.4],[182,42.6],[188,43.8],[196,45],[205,46.429],[215,47.857],[227,49.286],[239,50.714],[243,52.143],[248,53.571],[252,55],[261,56.429],[268,57.857],[276,59.286],[284,60.714],[292,62.143],[300,63.571],[308,65],[311,67.222],[321,69.444],[332,71.667],[342,73.889],[350,76.111],[359,78.333],[366,80.556],[375,82.778],[385,85],[390,90],[395,95],[414,100],[420,105],[432,110],[440,111.136],[449,112.273],[459,113.409],[467,114.545],[471,115.682],[476,116.818],[483,117.955],[494,119.091],[503,120.227],[513,121.364],[525,122.5],[537,123.636],[541,124.773],[546,125.909],[550,127.045],[559,128.182],[566,129.318],[574,130.455],[582,131.591],[590,132.727],[598,133.864],[606,135],[612,136.242],[624,137.483],[632,138.725],[642,139.966],[650,141.208],[658,142.449]]"
+    }
+  ],
+  "session": [
+    {
+      "id": "d8c1b678-ece9-4481-a82d-3df087d6782b",
+      "title": "Fractal Neuro-Dark Fusion",
+      "created_at": "2026-06-12T10:27:38.006Z",
+      "updated_at": "2026-06-12T10:27:38.006Z",
+      "ai_snapshot": "{\"title\":\"Fractal Neuro-Dark Fusion\",\"payload\":{\"id\":\"d8c1b678-ece9-4481-a82d-3df087d6782b\",\"title\":\"Fractal Neuro-Dark Fusion\",\"user_id\":\"e1719abc-d49a-4095-863f-0ae637f65bf4\",\"messages\":[{\"kind\":\"request\",\"parts\":[{\"content\":\"<ui-hidden>Conversation started</ui-hidden>\",\"part_kind\":\"user-prompt\",\"timestamp\":\"2026-03-22T08:11:06.984931Z\"}],\"run_id\":null,\"metadata\":null,\"timestamp\":null,\"instructions\":null},{\"kind\":\"response\",\"parts\":[{\"id\":null,\"args\":{\"lyrics\":\"\"},\"part_kind\":\"tool-call\",\"tool_name\":\"lyrics__register\",\"tool_call_id\":\"1a3ffde7-8787-44b2-989f-238c582ec3bd\",\"provider_name\":null,\"provider_details\":null}],\"usage\":{\"details\":{},\"input_tokens\":0,\"output_tokens\":0,\"cache_read_tokens\":0,\"cache_write_tokens\":0,\"input_audio_tokens\":0,\"output_audio_tokens\":0,\"cache_audio_read_tokens\":0},\"run_id\":null,\"metadata\":null,\"timestamp\":\"2026-03-22T08:11:07.078511Z\",\"model_name\":null,\"provider_url\":null,\"finish_reason\":null,\"provider_name\":null,\"provider_details\":null,\"provider_response_id\":null},{\"kind\":\"request\",\"parts\":[{\"content\":{\"lyrics\":\"[Intro]\\n[Densely layered wooden percussion clicking, deep sub-bass pulse in E Phrygian, the sound of heavy rain hitting a tin roof]\\n\\n[Section A]\\nI hold the weight\\nThe hundredth stone\\nIt fits the space\\nIt stays here\\n(It stays here)\\nSearching for the line\\nEverything is heavy\\nOne hundred parts\\nFinally whole\\n(Finally whole)\\n\\n[Build]\\n[Percussion becomes more frantic, metallic textures layered over organic clicks, vocals begin to stutter]\\nThe floor is the sky\\nThe sky is the floor\\nTurning it over\\nTurning it over\\nThe frame is gone\\nThe weight is gone\\n(Turning it over)\\n(Turning it over)\\n\\n[Climax]\\n[Full distorted bass, synth swells in Phrygian mode, driving kick drum, vocals layered in multiple octaves]\\nI become the new\\nI am not myself\\nThe level is open\\nThe level is wide\\nLosing the touch\\nLosing the name\\nOne becomes the all\\nOne becomes the all\\n(Everything turns)\\n(Everything turns)\\n\\n[Outro]\\n[Sudden drop in volume, only the wood clicks and the rain sound remain, vocal fragments fade out slowly]\\nThe hundredth stone\\n(It stays here)\\nThe sky is the floor\\n(Turning over)\\n(Turning over)\\n(Turning)\\n(Turning)\\n[Fade to silence]\",\"lyrics_id\":\"415721cd-33c2-5883-865d-1563871c16fa\"},\"metadata\":null,\"part_kind\":\"tool-return\",\"timestamp\":\"2026-03-22T08:11:07.078521Z\",\"tool_name\":\"lyrics__register\",\"tool_call_id\":\"1a3ffde7-8787-44b2-989f-238c582ec3bd\"}],\"run_id\":null,\"metadata\":null,\"timestamp\":null,\"instructions\":null},{\"kind\":\"response\",\"parts\":[{\"id\":null,\"args\":{\"title\":\"One Hundred Parts\",\"lyrics_id\":\"415721cd-33c2-5883-865d-1563871c16fa\",\"instructions\":\"Tool indicating that the user has edited the compose form. The inputs correspond to the\\ncreate compose input fields representing the user's UI form.\\n\\nNOTE: The agent does not have access to this tool directly.\",\"sound_prompt\":\"Indietronica, Dark Experimental, Phrygian mode, gravelly synth bass, sampled wood cracks, soft male falsetto, heavy reverb on breathing, glitchy organic loops, slow building tension, melancholic yet driving, cinematic textures, 92 BPM, D Phrygian.\"},\"part_kind\":\"tool-call\",\"tool_name\":\"synthetic__compose_form_edited\",\"tool_call_id\":\"c5d37f1c-83c2-432c-8548-5f4b3ea730a7\",\"provider_name\":null,\"provider_details\":null}],\"usage\":{\"details\":{},\"input_tokens\":0,\"output_tokens\":0,\"cache_read_tokens\":0,\"cache_write_tokens\":0,\"input_audio_tokens\":0,\"output_audio_tokens\":0,\"cache_audio_read_tokens\":0},\"run_id\":null,\"metadata\":null,\"timestamp\":\"2026-03-22T08:11:07.082347Z\",\"model_name\":null,\"provider_url\":null,\"finish_reason\":null,\"provider_name\":null,\"provider_details\":null,\"provider_response_id\":null},{\"kind\":\"request\",\"parts\":[{\"content\":null,\"metadata\":null,\"part_kind\":\"tool-return\",\"timestamp\":\"2026-03-22T08:11:06.654189Z\",\"tool_name\":\"synthetic__compose_form_edited\",\"tool_call_id\":\"c5d37f1c-83c2-432c-8548-5f4b3ea730a7\"},{\"content\":\"Создаем Новый Артефакт на основе 100 блоков из БЗ (наша сессия /session/9b1d753d-329e-4f7c-98bc-375a4886d97c ). Fractal Neuro-dark-Techno ⊗ Dark Psy fusion . ASE on - Старайся правильно сочетать блоки , для того чтобы закрепить все правила в памяти с помощью практики.\",\"part_kind\":\"user-prompt\",\"timestamp\":\"2026-03-22T08:11:06.654194Z\"}],\"run_id\":null,\"metadata\":null,\"timestamp\":null,\"instructions\":null},{\"kind\":\"response\",\"parts\":[{\"id\":null,\"args\":{\"title\":\"Fractal Artifact: 100 Blocks (V1)\",\"lyrics_id\":\"415721cd-33c2-5883-865d-1563871c16fa\",\"sound_prompt\":\"Fractal Neuro-dark-Techno, Dark Psytrance fusion, recursive FM synthesis, neuro-reese bass glides, 148 BPM, recursive rhythmic entropy, mechanical clicking, dark cinematic textures, D Phrygian, high-frequency fractal overlays, 148 bpm\"},\"part_kind\":\"tool-call\",\"tool_name\":\"audio__create_song\",\"tool_call_id\":\"t4ab0vhc\",\"provider_name\":null,\"provider_details\":null},{\"id\":null,\"args\":{\"title\":\"Fractal Artifact: 100 Blocks (V2)\",\"lyrics_id\":\"415721cd-33c2-5883-865d-1563871c16fa\",\"sound_prompt\":\"Neur...",
+      "config": "{\"message_count\":135}"
+    }
+  ],
+  "mmss_tracks_prompts": [
+    {
+      "id": 330,
+      "prompt_id": "track_prompt_5c293123-4a7e-43cc-ae16-8583eced8694",
+      "track_id": "5c293123-4a7e-43cc-ae16-8583eced8694",
+      "prompt_text": "West Coast Brutal Rap, aggressive dual male vocalists, 95 BPM, heavy industrial grinding textures, hard-hitting rhythmic drums, deep distorted synth bass, dark menacing atmosphere, street-level aggression, mechanical SFX, Russian rap delivery style, G-funk inspired dark melodies.",
+      "metadata": {
+        "title": "Кирзовый Бригадир: Re-Sourced (V1)",
+        "source": "tracks.prompt",
+        "session_id": "d8c1b678-ece9-4481-a82d-3df087d6782b"
+      },
+      "created_at": "2026-06-18T02:18:58.964Z",
+      "updated_at": "2026-06-18T17:06:42.854Z"
+    }
+  ],
+  "mmss_filtered": [],
+  "mmss_collection": [],
+  "rag_chunks": [
+    {
+      "id": "92124de8-7028-40ba-a279-f1ddd54aec84",
+      "source_table": "tracks",
+      "source_id": "5c293123-4a7e-43cc-ae16-8583eced8694",
+      "source_database": "abstract-mind-lab",
+      "title": "Кирзовый Бригадир: Re-Sourced (V1)",
+      "description": "Кирзовый Бригадир: Re-Sourced (V1) West Coast Brutal Rap, aggressive dual male vocalists, 95 BPM, heavy industrial grinding textures, hard-hitting rhythmic drums, deep distorted synth bass, dark menacing atmosphere, street-level aggression, mechanical SFX, Russian rap delivery style, G-funk inspired dark melodies.",
+      "chunk_hash": "5fb44dca2e7e50e8fc99eb00052f48d9",
+      "chunk_text": "Кирзовый Бригадир: Re-Sourced (V1) West Coast Brutal Rap, aggressive dual male vocalists, 95 BPM, heavy industrial grinding textures, hard-hitting rhythmic drums, deep distorted synth bass, dark menacing atmosphere, street-level aggression, mechanical SFX, Russian rap delivery style, G-funk inspired dark melodies."
+    }
+  ],
+  "rag_stats": {
+    "by_source_table": [
+      {
+        "source_table": "mmss_collection",
+        "count": 1721
+      },
+      {
+        "source_table": "tracks",
+        "count": 1718
+      },
+      {
+        "source_table": "sessions",
+        "count": 258
+      },
+      {
+        "source_table": "app_setting_store",
+        "count": 20
+      },
+      {
+        "source_table": "mmss_albums",
+        "count": 11
+      },
+      {
+        "source_table": "mmss_domain_patterns",
+        "count": 5
+      },
+      {
+        "source_table": "mmss_custom_instructions",
+        "count": 3
+      }
+    ],
+    "by_source_database_table": [
+      {
+        "source_database": "abstract-mind-lab",
+        "source_table": "app_setting_store",
+        "count": 20
+      },
+      {
+        "source_database": "abstract-mind-lab",
+        "source_table": "mmss_albums",
+        "count": 11
+      },
+      {
+        "source_database": "abstract-mind-lab",
+        "source_table": "mmss_collection",
+        "count": 1721
+      },
+      {
+        "source_database": "abstract-mind-lab",
+        "source_table": "mmss_custom_instructions",
+        "count": 3
+      },
+      {
+        "source_database": "abstract-mind-lab",
+        "source_table": "mmss_domain_patterns",
+        "count": 5
+      },
+      {
+        "source_database": "abstract-mind-lab",
+        "source_table": "sessions",
+        "count": 258
+      },
+      {
+        "source_database": "abstract-mind-lab",
+        "source_table": "tracks",
+        "count": 1718
+      }
+    ],
+    "track_duplicates": {
+      "total_rows": 1718,
+      "distinct_source_ids": 1718,
+      "duplicate_rows": 0
+    },
+    "session_duplicates": {
+      "total_rows": 258,
+      "distinct_source_ids": 258,
+      "duplicate_rows": 0
+    }
+  }
+}

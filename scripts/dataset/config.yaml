@@ -1,0 +1,107 @@
+# MMSS Fine-tuning Dataset Pipeline Configuration
+# Target: Gemma 4 E2B via Kaggle + Unsloth
+
+output_root: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma/ready-for-dataset"
+staging_root: "data/fine-tuning/staging"
+reports_dir: "data/fine-tuning/reports"
+
+source_roots:
+  - path: "."
+    label: "mmss-builder"
+    priority: 1
+  - path: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma/raw-dataset"
+    label: "extract-raw"
+    priority: 2
+  - path: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma"
+    label: "extract-prep"
+    priority: 3
+
+categories:
+  mmss-universal:
+  mmss-sound-craft:
+  categories:
+
+almost_ready_subdir: "almost_ready"
+
+extensions:
+  text: [".md", ".txt", ".py", ".json", ".yaml", ".yml"]
+  skip_dirs:
+    - ".git"
+    - "__pycache__"
+    - "node_modules"
+    - ".venv"
+    - "venv"
+    - "static/vendor"
+    - "mmss_core/ai/orchestrator-mmss/git"
+    - "mmss_core/ai/chats"
+    - "mmss_core/ai/projects"
+
+mmss_builder_paths:
+  packages: "packages"
+  blocks: "data/prompts/database/blocks"
+  generated_blocks: "data/prompts/database/system/generated_blocks"
+  stored_prompts: "data/prompts"
+  engines:
+    - "mmss_core/fractal_reassembly.py"
+    - "mmss_core/temporal_navigator.py"
+    - "mmss_core/context_weaver.py"
+    - "mmss_core/prompt_generator.py"
+    - "mmss_core/domains.py"
+    - "mmss_core/orchestrator_core.py"
+    - "mmss_activator.py"
+  architectures: "architectures"
+
+classification_keywords:
+  mmss-sound-craft:
+    - flowmusic
+    - producer
+    - audio
+    - sound
+    - timbre
+    - rhythm
+    - ase
+    - lfe
+    - lyrics
+    - track
+    - eq
+    - gate
+    - multiband
+    - avatar
+    - phoneme
+  categories:
+    - logic
+    - space
+    - layer
+    - domain
+    - category
+    - rules.json
+    - domains.py
+  mmss-universal:
+    - pfr
+    - frp
+    - ammss
+    - mmss
+    - formula
+    - operator
+    - fractal
+    - temporal
+    - context
+    - metrics
+    - eta_r
+
+jsonl:
+  max_examples_per_source: 500
+  min_content_length: 40
+  train_split: 0.9
+
+stage4:
+  raw_dataset: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma/raw-dataset"
+  helper_json: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma/helper_mmss_builder.json"
+  ready_for_dataset: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma/ready-for-dataset"
+  source_archive: "mmss_core/ai/source_files_done"
+  meta_yaml: "packages/mmss_meta_core_v6.yaml"
+  max_raw_docs: 400
+  max_archive_files: 80
+  max_helper_items: 300
+  max_yaml_ops: 512
+  max_architecture: 100

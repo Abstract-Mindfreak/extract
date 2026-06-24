@@ -6,11 +6,11 @@ const ARCHIVER_PROXY_BASE = "http://localhost:3456";
 const DEFAULT_SOURCE_SCOPES = [
   {
     database: "abstract-mind-lab",
-    sourceTables: ["mmss_invariants", "tracks", "sessions"],
+    sourceTables: ["mmss_invariants", "tracks", "sessions", "rag_chunks"],
   },
   {
-    database: "abstract_mind_db",
-    sourceTables: ["music_blocks"],
+    database: "legacy", // Uses abstract_mind_db with renamed tables
+    sourceTables: ["amd_music_blocks"],
   },
 ];
 
