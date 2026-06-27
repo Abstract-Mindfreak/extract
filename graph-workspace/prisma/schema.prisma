@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Document {
+  id         String   @id @default(cuid())
+  title      String
+  content    String
+  fileType   String   @default("text")
+  chunkCount Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  chunks     Chunk[]
+}
+
+model Chunk {
+  id         String   @id @default(cuid())
+  documentId String
+  index      Int
+  content    String
+  embedding  String   @default("[]")
+  createdAt  DateTime @default(now())
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+}
+
+model GraphNode {
+  id            String   @id @default(cuid())
+  key           String
+  namespace     String   @default("graphrag")
+  graphId       String?
+  name          String
+  type          String
+  metadata      String   @default("{}")
+  createdAt     DateTime @default(now())
+  edgesAsSource Edge[]   @relation("EdgeSource")
+  edgesAsTarget Edge[]   @relation("EdgeTarget")
+
+  @@unique([namespace, key])
+  @@index([namespace, graphId])
+}
+
+model Edge {
+  id          String    @id @default(cuid())
+  namespace   String    @default("graphrag")
+  graphId     String?
+  sourceId    String
+  targetId    String
+  relation    String
+  weight      Float     @default(1.0)
+  description String?
+  edgeType    String    @default("EXTRACTED")
+  createdAt   DateTime  @default(now())
+  source      GraphNode @relation("EdgeSource", fields: [sourceId], references: [id], onDelete: Cascade)
+  target      GraphNode @relation("EdgeTarget", fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@index([namespace, graphId])
+}
+
+model GraphifyGraph {
+  id             String         @id @default(cuid())
+  key            String         @unique
+  name           String
+  sourcePath     String
+  mode           String         @default("standard")
+  nodeCount      Int            @default(0)
+  edgeCount      Int            @default(0)
+  communityCount Int            @default(0)
+  graphJson      String         @default("{}")
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  files          GraphifyFile[]
+}
+
+model GraphifyFile {
+  id        String        @id @default(cuid())
+  fileKey   String        @unique
+  graphId   String
+  filename  String
+  fileType  String
+  sha256    String?
+  status    String        @default("pending")
+  nodeCount Int           @default(0)
+  edgeCount Int           @default(0)
+  createdAt DateTime      @default(now())
+  graph     GraphifyGraph @relation(fields: [graphId], references: [id], onDelete: Cascade)
+}
+
+model SuggestedRelationship {
+  id            String   @id @default(cuid())
+  fromNodeId    String
+  toNodeId      String
+  fromNodeName  String
+  toNodeName    String
+  relation_type String
+  justification String
+  confidence    Float    @default(0.8)
+  status        String   @default("PENDING")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([status])
+}
