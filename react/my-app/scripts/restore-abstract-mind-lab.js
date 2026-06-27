@@ -5,6 +5,7 @@ const { getPool } = require('../db');
 const runtime = require('../server/mmssRuntimePersistenceService');
 const invariants = require('../server/mmssInvariantsService');
 const { startVectorizationJob, getJobStatus } = require('../server/localRagService');
+const persistence = require('../server/postgresPersistence');
 
 const TARGET_DB = process.env.PG_DATABASE || 'abstract-mind-lab';
 const LEGACY_DB = process.env.DB_NAME_V1 || 'abstract_mind_db';
@@ -41,8 +42,6 @@ const RENAMED_TABLES = [
   ['amd_tracks', 'tracks'],
   ['amd_sessions', 'sessions'],
   ['amd_video_metadata', 'video_metadata'],
-  ['amd_app_entity_store', 'app_entity_store'],
-  ['amd_app_setting_store', 'app_setting_store'],
   ['amd_applied_flows', 'applied_flows'],
   ['amd_applied_memories', 'applied_memories'],
 ];
@@ -654,6 +653,14 @@ async function restoreInvariantTables() {
   };
 }
 
+async function restorePersistenceTables() {
+  await persistence.ensureSchema();
+  return {
+    app_entity_store: await copyIntoExistingTable(LEGACY_DB, 'amd_app_entity_store', 'app_entity_store'),
+    app_setting_store: await copyIntoExistingTable(LEGACY_DB, 'amd_app_setting_store', 'app_setting_store'),
+  };
+}
+
 async function importLegacyEmbeddings() {
   const sourcePool = getPool(LEGACY_RAG_DB);
   const targetPool = getPool(TARGET_DB);
@@ -784,6 +791,7 @@ async function main() {
 
   await runtime.ensureSchema(TARGET_DB);
   await invariants.ensureSchema(TARGET_DB);
+  await persistence.ensureSchema();
   await ensureGraphWorkspaceTables();
 
   for (const tableName of SAME_NAME_TABLES) {
@@ -801,6 +809,7 @@ async function main() {
   }
 
   Object.assign(report.restored, await restoreInvariantTables());
+  Object.assign(report.restored, await restorePersistenceTables());
   await invariants.syncOntologySeed(TARGET_DB);
   report.restored.rag_chunks = await restoreRagChunksFromExport();
 

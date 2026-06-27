@@ -50,6 +50,34 @@ async function ensureSchema() {
         CREATE INDEX IF NOT EXISTS idx_app_setting_scope_updated
         ON app_setting_store (scope, updated_at DESC);
       `);
+
+      const entityPk = await client.query(`
+        SELECT 1
+        FROM pg_constraint
+        WHERE conrelid = 'public.app_entity_store'::regclass
+          AND contype = 'p'
+        LIMIT 1
+      `);
+      if (!entityPk.rowCount) {
+        await client.query(`
+          ALTER TABLE app_entity_store
+          ADD CONSTRAINT app_entity_store_pkey PRIMARY KEY (scope, entity_key)
+        `);
+      }
+
+      const settingPk = await client.query(`
+        SELECT 1
+        FROM pg_constraint
+        WHERE conrelid = 'public.app_setting_store'::regclass
+          AND contype = 'p'
+        LIMIT 1
+      `);
+      if (!settingPk.rowCount) {
+        await client.query(`
+          ALTER TABLE app_setting_store
+          ADD CONSTRAINT app_setting_store_pkey PRIMARY KEY (scope, setting_key)
+        `);
+      }
     } finally {
       client.release();
     }
