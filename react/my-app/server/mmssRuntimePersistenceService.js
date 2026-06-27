@@ -1193,11 +1193,11 @@ async function upsertFilteredEntry(client, payload = {}) {
 async function syncMmssFiltered(databaseName, options = {}) {
   await ensureSchema(databaseName);
   const sessionLimit = Number.isFinite(Number(options.sessionLimit))
-    ? Math.max(1, Math.min(500, Math.floor(Number(options.sessionLimit))))
-    : 250;
+    ? Math.max(1, Math.min(10000, Math.floor(Number(options.sessionLimit))))
+    : 5000;
   const trackLimit = Number.isFinite(Number(options.trackLimit))
-    ? Math.max(1, Math.min(1000, Math.floor(Number(options.trackLimit))))
-    : 500;
+    ? Math.max(1, Math.min(50000, Math.floor(Number(options.trackLimit))))
+    : 5000;
 
   const pool = getPool(databaseName);
   const client = await pool.connect();
