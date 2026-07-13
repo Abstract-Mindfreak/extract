@@ -142,3 +142,21 @@ export function buildGraphContext(input: {
     })),
   });
 }
+
+export async function ingestFromExportedData(
+  data: { documents: Array<{ title: string; content: string; fileType?: string }> },
+  runtime: OllamaRuntimeConfig,
+) {
+  let successful = 0;
+  let failed = 0;
+  for (const doc of data.documents) {
+    try {
+      await ingestDocument({ ...doc, runtime });
+      successful++;
+    } catch (error) {
+      console.error(`Failed to ingest document "${doc.title}":`, error);
+      failed++;
+    }
+  }
+  return { successful, failed, total: data.documents.length };
+}

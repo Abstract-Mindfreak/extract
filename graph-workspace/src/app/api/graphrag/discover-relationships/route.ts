@@ -54,12 +54,10 @@ export async function POST(request: NextRequest) {
     const userPrompt = `Please analyze the following "New Text" and propose new relationships between the "Existing Nodes".
 
 ## Existing Nodes:
-${subgraph.nodes.map(n => `- ${n.canonical_name} (type: ${n.type})`).join('
-')}
+${subgraph.nodes.map(n => `- ${n.canonical_name} (type: ${n.type})`).join('\n')}
 
 ## Existing Edges:
-${subgraph.edges.map(e => `- ${e.from} -> ${e.relation_type} -> ${e.to}`).join('
-')}
+${subgraph.edges.map(e => `- ${e.from} -> ${e.relation_type} -> ${e.to}`).join('\n')}
 
 ## Valid Relationship Types:
 ${EDGE_TYPES.join(', ')}

@@ -749,7 +749,7 @@ export default function ConfigPanel() {
                               : "bg-slate-800/50 border-slate-600/50 text-slate-400 hover:bg-slate-700/50"
                           }`}
                         >
-                          {table}
+                          {edgeType}
                         </button>
                       ))}
                     </div>

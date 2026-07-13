@@ -28,17 +28,7 @@ def make_example(system: str, user: str, model: str) -> dict:
 
 
 def formula_explain_user(formula_id: str, name: str, formula: str, description: str, subsystem: str) -> str:
-    return (
-        f"Задача: объясни формулу MMSS и её влияние на систему.\n\n"
-        f"Подсистема: {subsystem}\n"
-        f"ID формулы: {formula_id}\n"
-        f"Название: {name}\n"
-        f"Формула: {formula}\n"
-        f"Описание: {description}\n\n"
-        f"Верни JSON:\n"
-        f'{{"status":"ok","formula_id":"{formula_id}","subsystem":"{subsystem}",'
-        f'"meaning":"string","affects_metrics":["V","eta_R"],"usage_context":"string"}}'
-    )
+    return f"Analyze MMSS formula: identify invariants, subsystem, and impact on metrics. Output: {{status, formula_id, subsystem, meaning, affects_metrics, usage_context}}. Use only provided data. Seek hidden dependencies and fractal patterns. Formula ID: {formula_id}. Name: {name}. Subsystem: {subsystem}. Formula: {formula}. Description: {description}"
 
 
 def formula_explain_model(formula_id: str, name: str, formula: str, description: str, subsystem: str) -> str:
@@ -56,13 +46,8 @@ def formula_explain_model(formula_id: str, name: str, formula: str, description:
 def block_explain_user(block: dict) -> str:
     domain = block.get("attr", {}).get("domain", "Unknown")
     block_name = block.get("legacy", {}).get("block_name", block.get("id", "?"))
-    return (
-        f"Задача: опиши MMSS-блок и его оператор.\n\n"
-        f"Домен: {domain}\n"
-        f"Блок: {block_name}\n"
-        f"Данные блока:\n```json\n{__import__('json').dumps(block, ensure_ascii=False, indent=2)[:3000]}\n```\n\n"
-        f"Верни JSON с полями: status, block_name, domain, operator_summary, intent, synergy_mode"
-    )
+    block_data = __import__('json').dumps(block, ensure_ascii=False, indent=2)[:3000]
+    return f"Analyze MMSS block: identify domain, operator, intent, and synergy mode. Output: {{status, block_name, domain, operator_summary, intent, synergy_mode}}. Use only provided data. Seek hidden dependencies and fractal patterns. Domain: {domain}. Block: {block_name}. Block data: {block_data}"
 
 
 def block_explain_model(block: dict) -> str:
@@ -81,13 +66,7 @@ def block_explain_model(block: dict) -> str:
 
 
 def engine_doc_user(module_name: str, docstring: str, class_names: list) -> str:
-    return (
-        f"Задача: опиши назначение MMSS Python-модуля.\n\n"
-        f"Модуль: {module_name}\n"
-        f"Классы: {', '.join(class_names)}\n"
-        f"Документация:\n{docstring[:2000]}\n\n"
-        f"Верни JSON: status, module, purpose, key_classes, subsystem"
-    )
+    return f"Analyze MMSS Python module: identify purpose, key classes, and subsystem. Output: {{status, module, purpose, key_classes, subsystem}}. Use only provided data. Seek hidden dependencies and fractal patterns. Module: {module_name}. Classes: {', '.join(class_names)}. Documentation: {docstring[:2000]}"
 
 
 def engine_doc_model(module_name: str, docstring: str, class_names: list, subsystem: str) -> str:

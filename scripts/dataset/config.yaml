@@ -1,20 +1,20 @@
 # MMSS Fine-tuning Dataset Pipeline Configuration
 # Target: Gemma 4 E2B via Kaggle + Unsloth
 
-output_root: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma/ready-for-dataset"
-staging_root: "data/fine-tuning/staging"
-reports_dir: "data/fine-tuning/reports"
+output_root: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma/ready-for-dataset2"
+staging_root: "data/fine-tuning/staging2"
+reports_dir: "data/fine-tuning/reports2"
 
 source_roots:
-  - path: "."
-    label: "mmss-builder"
+  - path: "D:/WORK/CLIENTS/extract/scripts/new-dataset"
+    label: "MMSS-dataset"
     priority: 1
-  - path: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma/raw-dataset"
-    label: "extract-raw"
+  - path: "D:/WORK/CLIENTS/extract/scripts/extra-data-for-split"
+    label: "extra-data-split"
     priority: 2
-  - path: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma"
-    label: "extract-prep"
-    priority: 3
+  # - path: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma2"
+  #   label: "extract-prep"
+  #   priority: 3
 
 categories:
   mmss-universal:
@@ -31,10 +31,7 @@ extensions:
     - "node_modules"
     - ".venv"
     - "venv"
-    - "static/vendor"
-    - "mmss_core/ai/orchestrator-mmss/git"
-    - "mmss_core/ai/chats"
-    - "mmss_core/ai/projects"
+    
 
 mmss_builder_paths:
   packages: "packages"
@@ -74,8 +71,8 @@ classification_keywords:
     - layer
     - domain
     - category
-    - rules.json
-    - domains.py
+    - rules
+    - domains
   mmss-universal:
     - pfr
     - frp
@@ -90,18 +87,33 @@ classification_keywords:
     - eta_r
 
 jsonl:
-  max_examples_per_source: 500
-  min_content_length: 40
+  max_examples_per_source: 9500
+  min_content_length: 4
   train_split: 0.9
 
+# Параметры управления процессом
+processing:
+  # Отключить дедубликацию по содержимому
+  disable_content_deduplication: true
+  # Отключить дедубликацию по имени файла и размеру
+  disable_file_size_deduplication: true
+  # Отключить ограничения на длину данных
+  disable_length_limits: true
+  # Сохранять отдельные JSON файлы для каждого примера
+  save_individual_json: true
+  # Максимальный размер файла для обработки (0 = без ограничений)
+  max_file_size_bytes: 0
+  # Минимальный размер файла для обработки
+  min_file_size_bytes: 0
+
 stage4:
-  raw_dataset: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma/raw-dataset"
-  helper_json: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma/helper_mmss_builder.json"
-  ready_for_dataset: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma/ready-for-dataset"
-  source_archive: "mmss_core/ai/source_files_done"
+  raw_dataset: "D:/WORK/CLIENTS/extract/scripts/new-dataset"
+  # helper_json: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma/helper_mmss_builder.json"
+  ready_for_dataset: "D:/WORK/CLIENTS/extract/prepare-for-fine-tuning-dataset-kaggle-gemma/ready-for-dataset2"
+  source_archive: "mmss_core/ai/source_files_done2"
   meta_yaml: "packages/mmss_meta_core_v6.yaml"
-  max_raw_docs: 400
-  max_archive_files: 80
-  max_helper_items: 300
-  max_yaml_ops: 512
-  max_architecture: 100
+  max_raw_docs: 9400
+  max_archive_files: 800
+  max_helper_items: 2
+  max_yaml_ops: 2
+  max_architecture: 10000

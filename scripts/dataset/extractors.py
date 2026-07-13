@@ -5,12 +5,17 @@ from __future__ import annotations
 import ast
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any, Iterator
+
+# Add extra-data-for-split to path for import
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "extra-data-for-split"))
 
 from extractors_stage4 import (
     deduplicate_examples,
     extract_from_architectures,
+    extract_from_extra_data_split,
     extract_from_helper_json,
     extract_from_meta_yaml,
     extract_from_raw_dataset,
@@ -56,7 +61,7 @@ def _walk_formulas(obj: Any, subsystem: str, prefix: str = "") -> Iterator[dict]
             yield from _walk_formulas(item, subsystem, prefix=f"{prefix}[{i}]")
 
 
-def extract_from_packages(packages_dir: Path, max_items: int = 500) -> list[dict]:
+def extract_from_packages(packages_dir: Path, max_items: int = 500, disable_length_limits: bool = False) -> list[dict]:
     examples = []
     if not packages_dir.exists():
         return examples
@@ -67,8 +72,8 @@ def extract_from_packages(packages_dir: Path, max_items: int = 500) -> list[dict
         except (json.JSONDecodeError, OSError):
             continue
         for formula in _walk_formulas(data, subsystem):
-            fid = str(formula["id"])[:80]
-            name = str(formula.get("name", fid))[:120]
+            fid = str(formula["id"]) if disable_length_limits else str(formula["id"])[:80]
+            name = str(formula.get("name", fid)) if disable_length_limits else str(formula.get("name", fid))[:120]
             user = formula_explain_user(fid, name, formula["formula"], formula["description"], formula["subsystem"])
             model = formula_explain_model(fid, name, formula["formula"], formula["description"], formula["subsystem"])
             examples.append({
@@ -97,14 +102,14 @@ def extract_from_packages(packages_dir: Path, max_items: int = 500) -> list[dict
                             **make_example(GLOBAL_SYSTEM_PROMPT_RU, user, model),
                             "_meta": {"source": str(path), "type": "operator_explain", "category": "mmss-universal"},
                         })
-                        if len(examples) >= max_items:
+                        if not disable_length_limits and len(examples) >= max_items:
                             return examples
-            if len(examples) >= max_items:
+            if not disable_length_limits and len(examples) >= max_items:
                 return examples
     return examples
 
 
-def extract_from_blocks(blocks_dir: Path, max_items: int = 300) -> list[dict]:
+def extract_from_blocks(blocks_dir: Path, max_items: int = 300, disable_length_limits: bool = False) -> list[dict]:
     examples = []
     if not blocks_dir.exists():
         return examples
@@ -121,7 +126,7 @@ def extract_from_blocks(blocks_dir: Path, max_items: int = 300) -> list[dict]:
             **make_example(GLOBAL_SYSTEM_PROMPT_RU, user, model),
             "_meta": {"source": str(path), "type": "block_explain", "category": category},
         })
-        if len(examples) >= max_items:
+        if not disable_length_limits and len(examples) >= max_items:
             return examples
     return examples
 
@@ -144,7 +149,7 @@ def extract_from_engines(engine_paths: list[Path]) -> list[dict]:
     return examples
 
 
-def extract_from_stored_prompts(prompts_dir: Path, max_items: int = 340) -> list[dict]:
+def extract_from_stored_prompts(prompts_dir: Path, max_items: int = 340, disable_length_limits: bool = False) -> list[dict]:
     examples = []
     if not prompts_dir.exists():
         return examples
@@ -161,10 +166,12 @@ def extract_from_stored_prompts(prompts_dir: Path, max_items: int = 340) -> list
         tags = data.get("metadata", {}).get("tags", [])
         category = "mmss-sound-craft" if any(t in tags for t in ("producer-ai", "audio", "ase")) else "mmss-universal"
         name = data.get("metadata", {}).get("name", "unknown")
+        mmss_json = json.dumps(mmss, ensure_ascii=False, indent=2) if disable_length_limits else json.dumps(mmss, ensure_ascii=False, indent=2)[:4000]
         user = (
-            f"Задача: опиши MMSS-структуру промпта и её ops.\n\n"
-            f"Имя: {name}\n```json\n{json.dumps(mmss, ensure_ascii=False, indent=2)[:4000]}\n```\n"
-            f"Верни JSON: status, pkg, ver, ops_count, primary_domain, summary"
+            "Analyze MMSS JSON: identify invariants, construct MMSS stacks, organize cluster interconnections. "
+            "Output: {status, pkg, ver, ops_count, primary_domain, summary, emergent_moments (type, description, components), creative_path}. "
+            "Use only provided data. Seek hidden dependencies and fractal patterns.\n\n"
+            f"Name: {name}\n```json\n{mmss_json}\n```"
         )
         ops = mmss.get("ops", [])
         model = json.dumps({
@@ -179,7 +186,7 @@ def extract_from_stored_prompts(prompts_dir: Path, max_items: int = 340) -> list
             **make_example(GLOBAL_SYSTEM_PROMPT_RU, user, model),
             "_meta": {"source": str(path), "type": "stored_prompt", "category": category},
         })
-        if len(examples) >= max_items:
+        if not disable_length_limits and len(examples) >= max_items:
             return examples
     return examples
 
@@ -200,9 +207,10 @@ def extract_from_domains(domains_path: Path) -> list[dict]:
     d_f_map = getattr(mod, "DOMAIN_D_F_OPTIMAL", {})
     for domain, d_f in d_f_map.items():
         user = (
-            f"Задача: укажи оптимальную фрактальную размерность D_f для домена MMSS.\n\n"
-            f"Домен: {domain}\n"
-            f"Верни JSON: status, domain, D_f_optimal, rationale"
+            "Analyze MMSS domain: identify optimal fractal dimension D_f. "
+            "Output: {status, domain, D_f_optimal, rationale}. "
+            "Use only provided data. Seek hidden dependencies and fractal patterns.\n\n"
+            f"Domain: {domain}"
         )
         model = json.dumps({
             "status": "ok",
@@ -217,49 +225,60 @@ def extract_from_domains(domains_path: Path) -> list[dict]:
     return examples
 
 
-def build_all(project_root: Path, cfg: dict) -> dict[str, list[dict]]:
+def build_all(project_root: Path, cfg: dict, config_name: str = "config.yaml") -> dict[str, list[dict]]:
     mb = cfg.get("mmss_builder_paths", {})
     s4 = cfg.get("stage4", {})
+    processing = cfg.get("processing", {})
+    disable_length_limits = processing.get("disable_length_limits", False)
+    disable_content_deduplication = processing.get("disable_content_deduplication", False)
+    
     root = project_root
     all_examples: list[dict] = []
 
     # Stage 1-3 sources
-    all_examples.extend(extract_from_packages(root / mb.get("packages", "packages")))
-    all_examples.extend(extract_from_blocks(root / mb.get("blocks", "data/prompts/database/blocks")))
+    all_examples.extend(extract_from_packages(root / mb.get("packages", "packages"), disable_length_limits=disable_length_limits))
+    all_examples.extend(extract_from_blocks(root / mb.get("blocks", "data/prompts/database/blocks"), disable_length_limits=disable_length_limits))
     engine_paths = [root / p for p in mb.get("engines", [])]
     all_examples.extend(extract_from_engines(engine_paths))
-    all_examples.extend(extract_from_stored_prompts(root / mb.get("stored_prompts", "data/prompts")))
+    all_examples.extend(extract_from_stored_prompts(root / mb.get("stored_prompts", "data/prompts"), disable_length_limits=disable_length_limits))
     all_examples.extend(extract_from_domains(root / "mmss_core" / "domains.py"))
 
     # Stage 4 sources
     all_examples.extend(extract_from_meta_yaml(
         root / s4.get("meta_yaml", "packages/mmss_meta_core_v6.yaml"),
-        max_ops=s4.get("max_yaml_ops", 512),
+        max_ops=s4.get("max_yaml_ops", 512) if not disable_length_limits else 999999,
     ))
     all_examples.extend(extract_from_architectures(
         root / mb.get("architectures", "architectures"),
-        max_items=s4.get("max_architecture", 100),
+        max_items=s4.get("max_architecture", 100) if not disable_length_limits else 999999,
     ))
     raw_path = Path(s4.get("raw_dataset", ""))
     if not raw_path.is_absolute():
         raw_path = root / raw_path
-    all_examples.extend(extract_from_raw_dataset(raw_path, max_docs=s4.get("max_raw_docs", 400)))
+    all_examples.extend(extract_from_raw_dataset(raw_path, max_docs=s4.get("max_raw_docs", 400) if not disable_length_limits else 999999))
 
     helper_path = Path(s4.get("helper_json", ""))
     if helper_path and not helper_path.is_absolute():
         helper_path = root / helper_path
     if helper_path.exists():
-        all_examples.extend(extract_from_helper_json(helper_path, max_items=s4.get("max_helper_items", 300)))
+        all_examples.extend(extract_from_helper_json(helper_path, max_items=s4.get("max_helper_items", 300) if not disable_length_limits else 999999))
 
     archive_path = root / s4.get("source_archive", "mmss_core/ai/source_files_done")
-    all_examples.extend(extract_from_source_archive(archive_path, max_files=s4.get("max_archive_files", 80)))
+    all_examples.extend(extract_from_source_archive(archive_path, max_files=s4.get("max_archive_files", 80) if not disable_length_limits else 999999))
 
     ready_path = Path(s4.get("ready_for_dataset", ""))
     if ready_path.exists():
-        all_examples.extend(extract_from_ready_for_dataset(ready_path, max_items=100))
+        all_examples.extend(extract_from_ready_for_dataset(ready_path, max_items=100 if not disable_length_limits else 999999))
 
-    all_examples = deduplicate_examples(all_examples)
+    # Process extra-data-for-split directory
+    extra_data_dir = Path("D:/WORK/CLIENTS/extract/scripts/extra-data-for-split")
+    extra_data_output = Path(cfg["staging_root"]) / "extra_data_split"
+    if extra_data_dir.exists():
+        all_examples.extend(extract_from_extra_data_split(extra_data_dir, extra_data_output, max_items=999999 if disable_length_limits else 500))
 
+    if not disable_content_deduplication:
+        all_examples = deduplicate_examples(all_examples)
+    
     by_category: dict[str, list[dict]] = {
         "mmss-universal": [],
         "mmss-sound-craft": [],

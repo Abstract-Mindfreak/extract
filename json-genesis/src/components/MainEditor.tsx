@@ -992,7 +992,7 @@ export const MainEditor: React.FC = () => {
               {[
                 { id: 'gemini', label: 'Gemini 3-Flash', desc: 'Fast multimodal reasoning' },
                 { id: 'mistral', label: 'Mistral Large 2', desc: 'Precision structural output' },
-                { id: 'ollama', label: 'Локальная Gemma4 e2b Ollama', desc: 'gemma2b-mmss-dense' },
+                { id: 'ollama', label: 'Локальная mmss-qwen2.5-3b:latest', desc: 'mmss-qwen2.5-3b' },
               ].map((model) => (
                 <button
                   key={model.id}

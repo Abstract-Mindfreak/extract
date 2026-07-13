@@ -4,7 +4,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 const MISTRAL_API_KEY = (import.meta as any).env.VITE_MISTRAL_API_KEY || "";
 const MISTRAL_PROXY_URL = "http://localhost:3456/api/mistral/chat";
 const OLLAMA_PROXY_URL = "http://localhost:3456/api/ollama/generate";
-const OLLAMA_MODEL = (import.meta as any).env.VITE_OLLAMA_MODEL || "gemma2b-mmss-dense";
+const OLLAMA_MODEL = (import.meta as any).env.VITE_OLLAMA_MODEL || "mmss-qwen2.5-3b:latest";
 type MistralProxyMode = 'plan' | 'generate' | 'validate';
 
 // Re-initialize for each call to ensure latest key is used if it changes

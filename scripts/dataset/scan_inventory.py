@@ -29,8 +29,8 @@ class FileRecord:
     readiness: str = "pending"
 
 
-def load_config(project_root: Path) -> dict:
-    with open(project_root / "scripts/dataset/config.yaml", encoding="utf-8") as f:
+def load_config(project_root: Path, config_name: str = "config.yaml") -> dict:
+    with open(project_root / "scripts/dataset" / config_name, encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
     for root in cfg["source_roots"]:
         p = Path(root["path"])
@@ -71,6 +71,8 @@ def classify_hint(rel: str, ext: str, keywords: dict[str, list[str]]) -> str:
                 scores[cat] += 1
     if ext == ".json" and "blocks" in text:
         scores["categories"] += 2
+    if ext == ".json" and "MMSS" in text:
+        scores["mmss"] += 2    
     if ext == ".py" and "mmss_core" in text:
         scores["mmss-universal"] += 2
     best = max(scores, key=scores.get)
@@ -96,14 +98,20 @@ def validate_file(path: Path, ext: str) -> tuple[bool | None, bool | None]:
     return valid_json, valid_md
 
 
-def readiness_score(rec: FileRecord) -> str:
-    if rec.duplicate_of:
+def readiness_score(rec: FileRecord, cfg: dict) -> str:
+    processing = cfg.get("processing", {})
+    disable_file_size_deduplication = processing.get("disable_file_size_deduplication", False)
+    disable_length_limits = processing.get("disable_length_limits", False)
+    max_file_size = processing.get("max_file_size_bytes", 15_000_000)
+    min_file_size = processing.get("min_file_size_bytes", 1)
+    
+    if not disable_file_size_deduplication and rec.duplicate_of:
         return "duplicate"
     if rec.ext == ".json" and rec.valid_json is False:
         return "invalid"
-    if rec.size < 20:
+    if rec.size < min_file_size:
         return "too_small"
-    if rec.size > 5_000_000:
+    if not disable_length_limits and max_file_size > 0 and rec.size > max_file_size:
         return "too_large_review"
     if rec.valid_json is True or rec.valid_md is True or rec.ext in {".py", ".txt", ".yaml", ".yml"}:
         return "ready"
@@ -147,37 +155,43 @@ def scan(cfg: dict) -> list[FileRecord]:
             )
             records.append(rec)
 
+    processing = cfg.get("processing", {})
+    disable_content_deduplication = processing.get("disable_content_deduplication", False)
+    disable_file_size_deduplication = processing.get("disable_file_size_deduplication", False)
+    
     by_hash: dict[str, list[FileRecord]] = defaultdict(list)
     by_name_size: dict[tuple[str, int], list[FileRecord]] = defaultdict(list)
     for rec in records:
         by_hash[rec.sha256].append(rec)
         by_name_size[(Path(rec.rel_path).name.lower(), rec.size)].append(rec)
 
-  # exact content duplicates
-    for group in by_hash.values():
-        if len(group) < 2:
-            continue
-        primary = sorted(group, key=lambda r: (r.source_label != "mmss-builder", r.path))[0]
-        for rec in group:
-            if rec.path != primary.path:
-                rec.duplicate_of = primary.path
+    # exact content duplicates
+    if not disable_content_deduplication:
+        for group in by_hash.values():
+            if len(group) < 2:
+                continue
+            primary = sorted(group, key=lambda r: (r.source_label != "mmss-builder", r.path))[0]
+            for rec in group:
+                if rec.path != primary.path:
+                    rec.duplicate_of = primary.path
 
     # same name + size from different roots (likely duplicate, flag for review)
-    for group in by_name_size.values():
-        if len(group) < 2:
-            continue
-        labels = {r.source_label for r in group}
-        if len(labels) > 1:
-            primary = sorted(group, key=lambda r: (r.source_label != "mmss-builder", r.path))[0]
-            hashes = {r.sha256 for r in group}
-            if len(hashes) == 1:
-                primary = sorted(group, key=lambda r: r.source_label)[0]
-                for rec in group:
-                    if rec.path != primary.path and not rec.duplicate_of:
-                        rec.duplicate_of = primary.path
+    if not disable_file_size_deduplication:
+        for group in by_name_size.values():
+            if len(group) < 2:
+                continue
+            labels = {r.source_label for r in group}
+            if len(labels) > 1:
+                primary = sorted(group, key=lambda r: (r.source_label != "mmss-builder", r.path))[0]
+                hashes = {r.sha256 for r in group}
+                if len(hashes) == 1:
+                    primary = sorted(group, key=lambda r: r.source_label)[0]
+                    for rec in group:
+                        if rec.path != primary.path and not rec.duplicate_of:
+                            rec.duplicate_of = primary.path
 
     for rec in records:
-        rec.readiness = readiness_score(rec)
+        rec.readiness = readiness_score(rec, cfg)
     return records
 
 
@@ -238,9 +252,9 @@ def write_reports(cfg: dict, records: list[FileRecord]) -> dict[str, Any]:
     }
 
 
-def main(project_root: str | None = None) -> dict:
+def main(project_root: str | None = None, config_name: str = "config.yaml") -> dict:
     root = Path(project_root or Path(__file__).resolve().parents[2])
-    cfg = load_config(root)
+    cfg = load_config(root, config_name)
     records = scan(cfg)
     return write_reports(cfg, records)
 

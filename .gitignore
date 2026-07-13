@@ -324,3 +324,12 @@ oldtasks/TASKBOARD.md
 oldtasks/TASKS_GPT_REBUILD_UI.md
 oldtasks/TASKS_PLAN_GPT.md
 prompt-db-local/shared/react-prompt-library.json
+scripts/apply_indexes.py
+scripts/import_sessions.py
+scripts/init_database.py
+scripts/dataset/build_jsonl.py
+scripts/dataset/config.yaml
+scripts/dataset/extractors_stage4.py
+scripts/dataset/extractors.py
+scripts/dataset/scan_inventory.py
+scripts/dataset/schema.py
