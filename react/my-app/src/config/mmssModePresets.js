@@ -1,4 +1,4 @@
-const DEFAULT_MODEL = "batiai/gemma4-e2b:q4";
+const DEFAULT_MODEL = "mmss-qwen2.5-3b:latest";
 const FINAL_JSON_MAX_CHARS = 40000;
 const RAG_ONLY_SCOPE = { "abstract-mind-lab": ["rag_chunks"] };
 
@@ -31,7 +31,7 @@ const MODE_META = {
   cross_db_reconciliation: {
     label: "Cross-DB Reconciliation",
     family: "crossdb",
-    query: "Reconcile overlapping knowledge between abstract-mind-lab and abstract_mind_db, highlight gaps, duplicates, and stronger sources.",
+    query: "Reconcile overlapping knowledge between rag_chunks, curated MMSS tables, and active runtime sources, highlight gaps, duplicates, and stronger evidence anchors.",
   },
   json_prompt_extraction: {
     label: "JSON Prompt Extraction",
@@ -182,7 +182,7 @@ const FAMILY_DEFAULTS = {
   },
   crossdb: {
     primaryTables: ["rag_chunks"],
-    legacyTables: ["app_entity_store", "app_setting_store"], // Access some legacy tables
+    legacyTables: [],
     topK: 5,
     queryBudget: 3,
     filterProfile: "strict",
@@ -211,12 +211,7 @@ function buildScopeSelections(primaryTables, legacyTables) {
   if (primaryTables?.length && primaryTables.some((table) => table !== "rag_chunks")) {
     next["abstract-mind-lab"] = dedupe(primaryTables.filter((table) => table !== "rag_chunks"));
   }
-  
-  // Legacy database tables with amd_ prefix
-  if (legacyTables?.length) {
-    next["legacy"] = dedupe(legacyTables.map(table => `amd_${table}`));
-  }
-  
+
   return next;
 }
 

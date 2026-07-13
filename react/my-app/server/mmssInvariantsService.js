@@ -11,7 +11,7 @@ const SEED_PATH = path.join(ROOT_DIR, 'database', 'seeds', 'mmss_ontology_seed.j
 const MMSS_INVARIANTS_TABLE = 'mmss_invariants';
 const MMSS_PHASE_PATTERNS_TABLE = 'mmss_phase_patterns';
 const MMSS_DOMAIN_PATTERNS_TABLE = 'mmss_domain_patterns';
-const JOB_TTL_MS = 1000 * 60 * 60 * 6;
+const JOB_TTL_MS = 2000 * 60 * 60 * 6;
 const MAX_TEXT_LENGTH = 24000;
 const jobs = new Map();
 

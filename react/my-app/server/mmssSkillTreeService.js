@@ -50,6 +50,10 @@ function asObject(value) {
   return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
 }
 
+function asArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
 function normalizeDesignPayload(payload, goal, ownerScope) {
   const normalized = asObject(payload);
   const problemMap = asObject(normalized.problem_map);
@@ -122,6 +126,31 @@ function normalizeDesignPayload(payload, goal, ownerScope) {
   };
 }
 
+function validateDesignPayload(design) {
+  const problems = [];
+  const skills = Array.isArray(design?.skills) ? design.skills : [];
+  const skillSet = asObject(design?.skill_set);
+  const skillTree = asObject(design?.skill_tree);
+
+  if (skills.length < 2) {
+    problems.push('Expected at least 2 generated skills');
+  }
+  if (!asArray(skillSet.skills).length) {
+    problems.push('skill_set.skills is empty');
+  }
+  if (!asArray(skillTree.skill_sets).length) {
+    problems.push('skill_tree.skill_sets is empty');
+  }
+  if (!String(skillTree.root_goal || '').trim()) {
+    problems.push('skill_tree.root_goal is empty');
+  }
+
+  return {
+    valid: problems.length === 0,
+    problems,
+  };
+}
+
 function buildDesignRequest(options = {}) {
   const database = normalizeDatabaseIdentifier(options.database);
   const goal = String(options.goal || '').trim();
@@ -164,7 +193,7 @@ async function executeDesignSkillTree(options = {}) {
   const request = buildDesignRequest(options);
   await ensureSchema(request.database);
 
-  const ragResult = await answerWithRag({
+  const buildDesignCall = async (repairProblems = []) => answerWithRag({
     database: request.database,
     query: request.contextHint ? `${request.goal}\n\nAdditional context hint: ${request.contextHint}` : request.goal,
     topK: request.topK,
@@ -176,20 +205,51 @@ async function executeDesignSkillTree(options = {}) {
     mode: request.mode,
     model: request.model,
     responseMaxChars: request.responseMaxChars,
+    forceJsonResponse: true,
     systemPrompt: [
       'You are designing a minimal MMSS skill tree runtime artifact.',
       'Use only the retrieved MMSS context.',
       'Return JSON only.',
       'Do not add prose outside JSON.',
       'Return an object with keys: problem_map, diagnosed_problem_space, skills, skill_set, skill_tree.',
-      'Skills must be atomic and reusable.',
-      'skill_set must reference the produced skills.',
+      'Generate at least 2 and at most 5 atomic reusable skills.',
+      'Every skill must include name, description, inputs, outputs, prerequisites, failure_modes, metrics, metadata.',
+      'skill_set must reference all produced skills.',
       'skill_tree must reference the produced skill_set and owner scope.',
+      'Do not leave skills, skill_set.skills, or skill_tree.skill_sets empty.',
+      ...(repairProblems.length ? [`Repair the previous invalid design. Problems: ${repairProblems.join('; ')}.`] : []),
     ].join(' '),
   });
 
-  const parsed = extractFirstJsonObject(ragResult.answer);
-  const normalizedDesign = normalizeDesignPayload(parsed, request.goal, request.ownerScope);
+  const parseAndValidate = (result) => {
+    const parsed = extractFirstJsonObject(result.answer);
+    const normalizedDesign = normalizeDesignPayload(parsed, request.goal, request.ownerScope);
+    const designValidation = validateDesignPayload(normalizedDesign);
+    if (!designValidation.valid) {
+      throw new Error(`Skill tree design validation failed: ${designValidation.problems.join('; ')}`);
+    }
+    return normalizedDesign;
+  };
+
+  let ragResult = await buildDesignCall();
+  let normalizedDesign;
+  let firstError = null;
+
+  try {
+    normalizedDesign = parseAndValidate(ragResult);
+  } catch (error) {
+    firstError = error;
+  }
+
+  if (!normalizedDesign) {
+    ragResult = await buildDesignCall([
+      firstError?.message || 'Initial design output was invalid',
+      'Return strictly valid JSON',
+      'Do not leave any required arrays empty',
+    ]);
+    normalizedDesign = parseAndValidate(ragResult);
+  }
+
   const persisted = await upsertSkillTreeDesign(request.database, normalizedDesign, { ownerScope: request.ownerScope });
 
   const generationResultId = await logGenerationResult(request.database, {

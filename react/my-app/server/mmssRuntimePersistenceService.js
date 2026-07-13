@@ -432,6 +432,66 @@ async function getRuntimeHealth(databaseName) {
     getPool(databaseName).query(`SELECT COUNT(*)::int AS count FROM ${MMSS_TRACKS_PROMPTS_TABLE}`),
   ]);
 
+  let skillRagVectorization = {
+    available: false,
+    counts: {
+      mmss_skills: 0,
+      mmss_skill_sets: 0,
+      mmss_skill_trees: 0,
+    },
+    ready: {
+      mmss_skills: false,
+      mmss_skill_sets: false,
+      mmss_skill_trees: false,
+    },
+    summary: '0/3 ready',
+  };
+
+  try {
+    const vectorResult = await getPool(databaseName).query(`
+      SELECT source_table, COUNT(*)::int AS count
+      FROM rag_document_embeddings
+      WHERE source_table = ANY($1)
+      GROUP BY source_table
+    `, [[
+      'mmss_skills',
+      'mmss_skill_sets',
+      'mmss_skill_trees',
+    ]]);
+
+    const vectorCounts = {
+      mmss_skills: 0,
+      mmss_skill_sets: 0,
+      mmss_skill_trees: 0,
+    };
+    for (const row of vectorResult.rows) {
+      if (row?.source_table && Object.prototype.hasOwnProperty.call(vectorCounts, row.source_table)) {
+        vectorCounts[row.source_table] = Number(row.count || 0);
+      }
+    }
+
+    const tableCounts = {
+      mmss_skills: Number(checks[1].rows[0]?.count || 0),
+      mmss_skill_sets: Number(checks[2].rows[0]?.count || 0),
+      mmss_skill_trees: Number(checks[3].rows[0]?.count || 0),
+    };
+    const ready = {
+      mmss_skills: tableCounts.mmss_skills > 0 && vectorCounts.mmss_skills >= tableCounts.mmss_skills,
+      mmss_skill_sets: tableCounts.mmss_skill_sets > 0 && vectorCounts.mmss_skill_sets >= tableCounts.mmss_skill_sets,
+      mmss_skill_trees: tableCounts.mmss_skill_trees > 0 && vectorCounts.mmss_skill_trees >= tableCounts.mmss_skill_trees,
+    };
+    const readyCount = Object.values(ready).filter(Boolean).length;
+
+    skillRagVectorization = {
+      available: true,
+      counts: vectorCounts,
+      ready,
+      summary: `${readyCount}/3 ready`,
+    };
+  } catch (_error) {
+    // Vectorization coverage is optional runtime metadata and must not fail health checks.
+  }
+
   return {
     database: databaseName,
     tables: {
@@ -446,6 +506,7 @@ async function getRuntimeHealth(databaseName) {
       mmss_custom_instructions: checks[8].rows[0]?.count || 0,
       mmss_tracks_prompts: checks[9].rows[0]?.count || 0,
     },
+    skill_rag_vectorization: skillRagVectorization,
   };
 }
 

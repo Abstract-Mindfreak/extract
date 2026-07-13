@@ -64,8 +64,13 @@ def cleanup_managed_ports() -> None:
 
 
 def launch_in_console(command: str, working_dir: str) -> subprocess.Popen:
+    bootstrap = (
+        "$env:NODE_DISABLE_COMPILE_CACHE='1'; "
+        "Remove-Item Env:NODE_COMPILE_CACHE -ErrorAction SilentlyContinue; "
+        "Remove-Item Env:NODE_OPTIONS -ErrorAction SilentlyContinue"
+    )
     return subprocess.Popen(
-        ["powershell.exe", "-NoExit", "-Command", f"cd '{working_dir}'; {command}"],
+        ["powershell.exe", "-NoExit", "-Command", f"{bootstrap}; cd '{working_dir}'; {command}"],
         creationflags=subprocess.CREATE_NEW_CONSOLE,
     )
 
@@ -89,6 +94,7 @@ def main() -> None:
     print("Starting archiver server, React UI, Flowmusic Agent, and Extract Agent...")
     print(f"Working directory: {current_dir}")
     print(f"Project root: {project_root}")
+    os.makedirs(os.path.join(current_dir, "tmp"), exist_ok=True)
 
     cleanup_managed_ports()
 

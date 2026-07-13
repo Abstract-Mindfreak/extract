@@ -34,7 +34,7 @@ const MODE_OPTIONS = [
 ];
 
 const FILTER_PROFILE_OPTIONS = ["strict", "balanced", "exploratory"];
-const MODEL_OPTIONS = ["batiai/gemma4-e2b:q4", "gemma4:e2b", "quant-mmss:latest"];
+const MODEL_OPTIONS = ["mmss-gemma4-q4", "gemma4:e2b", "quant-mmss:latest", "mmss-qwen2.5-3b:latest"];
 const SOURCE_TABLE_OPTIONS = ["tracks", "sessions", "music_blocks", "rag_chunks", "mmss_invariants", "mmss_phase_patterns", "mmss_domain_patterns"];
 const SETTINGS_SCOPE = "mmss_invariants_ui";
 const SNAPSHOT_SCOPE = "mmss_invariants_results";
@@ -162,7 +162,7 @@ export default function MMSSInvariantsPanel() {
     "MMSS operator mappings, ontology terms, rhythm/space/timbre/logic/math relations and reusable invariant structures",
   );
   const [mode, setMode] = useState(MMSS_INVARIANTS_DEFAULT_MODE);
-  const [model, setModel] = useState("batiai/gemma4-e2b:q4");
+  const [model, setModel] = useState("mmss-gemma4-q4");
   const [filterProfile, setFilterProfile] = useState("balanced");
   const [includeRelationLayer, setIncludeRelationLayer] = useState(true);
   const [responseMaxChars, setResponseMaxChars] = useState(40000);

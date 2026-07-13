@@ -434,6 +434,7 @@ export const useTrackStore = create((set, get) => ({
           track.id === trackId ? { ...track, rating } : track;
         
         return {
+          currentTrack: state.currentTrack?.id === trackId ? { ...state.currentTrack, rating } : state.currentTrack,
           tracks: state.tracks.map(updateTrack),
           filteredTracks: state.filteredTracks.map(updateTrack)
         };
@@ -457,6 +458,9 @@ export const useTrackStore = create((set, get) => ({
             : track;
         
         return {
+          currentTrack: state.currentTrack?.id === trackId
+            ? { ...state.currentTrack, playCount: (state.currentTrack.playCount || 0) + 1 }
+            : state.currentTrack,
           tracks: state.tracks.map(updateTrack),
           filteredTracks: state.filteredTracks.map(updateTrack)
         };

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   Brain,
   Database,
@@ -44,7 +44,7 @@ function JsonViewport({ value, emptyText }) {
 export default function MMSSMutatorPanel({ onSaveToLibrary }) {
   const genLayer = usePythonGenerationLayer();
   const [includeLegacy, setIncludeLegacy] = useState(false);
-  const [isLoadingRuntime, setIsLoadingRuntime] = useState(true);
+  const [isLoadingRuntime, setIsLoadingRuntime] = useState(false);
   const [runtimeError, setRuntimeError] = useState("");
   const [runtime, setRuntime] = useState(null);
   const [intent, setIntent] = useState(
@@ -76,10 +76,6 @@ export default function MMSSMutatorPanel({ onSaveToLibrary }) {
       setIsLoadingRuntime(false);
     }
   }, [includeLegacy]);
-
-  useEffect(() => {
-    void loadRuntime();
-  }, [loadRuntime]);
 
   const runtimeStats = useMemo(() => (
     runtime?.stats || {

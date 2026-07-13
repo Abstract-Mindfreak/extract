@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Archive,
   Boxes,
+  Disc3,
   Database,
   ExternalLink,
   FileJson,
@@ -15,6 +16,7 @@ import {
   Workflow,
 } from "lucide-react";
 import { useAppModeWorkspaceStore } from "../hooks/useAppModeWorkspaceStore";
+import PlayerBar from "./PlayerBar";
 import "./PromptIdeWorkspace.css";
 import "./AseIdeWorkspace.css";
 
@@ -24,6 +26,35 @@ const MODE_TAB_IDS = {
   archives: "mode-archives-tab",
   json_genesis: "mode-json-genesis-tab",
 };
+const PLAYER_TAB_ID = "mode-player-tab";
+
+function buildPlayerTabNode() {
+  return {
+    id: PLAYER_TAB_ID,
+    type: "tab",
+    name: "Player",
+    component: "player",
+    enableClose: false,
+    icon: "player",
+  };
+}
+
+function ensurePlayerTabInLayout(layoutJson) {
+  const nextLayout = JSON.parse(JSON.stringify(layoutJson || buildDefaultLayout()));
+  const existingPlayerTab = JSON.stringify(nextLayout).includes(`"${PLAYER_TAB_ID}"`);
+  if (existingPlayerTab) {
+    return nextLayout;
+  }
+  const mainTabset = nextLayout?.layout?.children?.find((node) => node?.id === "app-mode-tabset");
+  if (mainTabset && Array.isArray(mainTabset.children)) {
+    mainTabset.children.push(buildPlayerTabNode());
+  }
+  const bottomBorder = nextLayout?.borders?.find((node) => node?.location === "bottom");
+  if (bottomBorder?.children) {
+    bottomBorder.children = bottomBorder.children.filter((child) => child?.id !== "app-player-tab");
+  }
+  return nextLayout;
+}
 
 function buildDefaultLayout() {
   return {
@@ -143,6 +174,7 @@ function buildDefaultLayout() {
               enableClose: false,
               icon: "genesis",
             },
+            buildPlayerTabNode(),
           ],
         },
       ],
@@ -153,7 +185,7 @@ function buildDefaultLayout() {
 export default function AppModeWorkspace(props) {
   const workspaceStore = useAppModeWorkspaceStore();
   const [model] = useState(() =>
-    Model.fromJson(workspaceStore.layoutSnapshot || buildDefaultLayout())
+    Model.fromJson(ensurePlayerTabInLayout(workspaceStore.layoutSnapshot || buildDefaultLayout()))
   );
 
   useEffect(() => {
@@ -211,6 +243,9 @@ export default function AppModeWorkspace(props) {
         />
       );
     }
+    if (component === "player") {
+      return <PlayerBar embedded />;
+    }
     if (component === "stream-logs") {
       return <StreamLogsPanel activityLogs={activityLogs} />;
     }
@@ -222,7 +257,6 @@ export default function AppModeWorkspace(props) {
         />
       );
     }
-
     return <div className="ide-panel-shell">Unknown shell panel: {component}</div>;
   };
 
@@ -436,6 +470,8 @@ function resolveTabIcon(icon) {
       return <TerminalSquare {...common} />;
     case "services":
       return <Settings2 {...common} />;
+    case "player":
+      return <Disc3 {...common} />;
     default:
       return <Boxes {...common} />;
   }

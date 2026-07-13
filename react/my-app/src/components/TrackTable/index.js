@@ -4,8 +4,13 @@ import { ACCOUNTS, TABLE_COLUMNS } from '../../constants/app';
 import { formatDate, formatDuration, truncate } from '../../utils/format';
 import './styles.css';
 
-export default function TrackTable({ onSessionClick }) {
-  const [visibleColumns] = useState([
+export default function TrackTable({
+  onSessionClick,
+  showSelection = false,
+  trackGroupMap = {},
+  selectionActions = null,
+}) {
+  const [baseColumns] = useState([
     'cover',
     'title',
     'account',
@@ -37,6 +42,7 @@ export default function TrackTable({ onSessionClick }) {
 
   const paginatedTracks = getPaginatedTracks();
   const totalPages = getTotalPages();
+  const visibleColumns = showSelection ? ['select', ...baseColumns] : baseColumns;
 
   const handlePlay = (track) => {
     setCurrentTrack(track);
@@ -89,7 +95,18 @@ export default function TrackTable({ onSessionClick }) {
       case 'title':
         return (
           <div className="track-title">
-            <span className="title-text">{track.title}</span>
+            <div className="track-title__copy">
+              <span className="title-text">{track.title}</span>
+              {trackGroupMap[String(track.id || '')]?.length ? (
+                <div className="track-title__groups">
+                  {trackGroupMap[String(track.id || '')].slice(0, 3).map((group) => (
+                    <span key={`${track.id}-${group.group_id}`} className="track-group-chip">
+                      {group.title}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
+            </div>
             {currentTrack?.id === track.id ? <span className="now-playing">▶</span> : null}
           </div>
         );
@@ -198,6 +215,55 @@ export default function TrackTable({ onSessionClick }) {
 
   return (
     <div className="track-table-container">
+      {showSelection && selectionActions ? (
+        <div className="selection-action-panel">
+          <div className="selection-action-panel__row">
+            <span className="selection-action-panel__count">Selected: {selectedTracks.size}</span>
+            <label>
+              <span>Existing album</span>
+              <select value={selectionActions.selectedGroupId} onChange={(event) => selectionActions.setSelectedGroupId(event.target.value)}>
+                <option value="">Select album</option>
+                {selectionActions.themeGroups.map((group) => (
+                  <option key={group.group_id} value={group.group_id}>
+                    {group.title}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button onClick={selectionActions.handleAddSelectionToGroup} disabled={!selectedTracks.size || !selectionActions.selectedGroupId}>
+              Add to album
+            </button>
+            <button onClick={selectionActions.handleRemoveSelectionFromGroup} disabled={!selectedTracks.size || !selectionActions.selectedGroupId}>
+              Remove from album
+            </button>
+            <button onClick={deselectAll} disabled={!selectedTracks.size}>
+              Clear selection
+            </button>
+          </div>
+          <div className="selection-action-panel__row">
+            <label>
+              <span>New album title</span>
+              <input
+                value={selectionActions.albumDraft.title}
+                onChange={(event) => selectionActions.handleAlbumDraftChange('title', event.target.value)}
+                placeholder="New album title"
+              />
+            </label>
+            <label>
+              <span>Genre / direction</span>
+              <input
+                value={selectionActions.albumDraft.genre}
+                onChange={(event) => selectionActions.handleAlbumDraftChange('genre', event.target.value)}
+                placeholder="psychedelic trance / metal core / ritual"
+              />
+            </label>
+            <button onClick={selectionActions.handleCreateGroupFromSelection} disabled={!selectedTracks.size || !selectionActions.albumDraft.title.trim()}>
+              Create album from selection
+            </button>
+          </div>
+        </div>
+      ) : null}
+
       {selectedTracks.size > 0 ? (
         <div className="selection-toolbar">
           <span>Selected: {selectedTracks.size}</span>

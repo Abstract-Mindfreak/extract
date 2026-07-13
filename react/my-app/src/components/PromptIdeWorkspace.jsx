@@ -7,15 +7,15 @@ import {
 } from "flexlayout-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Boxes,
-  FileJson,
-  GitCompare,
-  PanelRightOpen,
-  PlaySquare,
-  Settings2,
-  TerminalSquare,
-  Workflow,
-} from "lucide-react";
+  FaCodeBranch,
+  FaDatabase,
+  FaFolderOpen,
+  FaLayerGroup,
+  FaMagnifyingGlass,
+  FaSitemap,
+  FaSliders,
+  FaTerminal,
+} from "react-icons/fa6";
 import JsonBindingsPanel from "./JsonBindingsPanel";
 import JsonBlockEditor from "./JsonBlockEditor";
 import JsonBlockList from "./JsonBlockList";
@@ -744,31 +744,31 @@ function findTabNode(model, predicate) {
 }
 
 function resolveTabIcon(icon) {
-  const common = { size: 14, strokeWidth: 2 };
+  const common = { size: 14 };
   switch (icon) {
     case "library":
-      return <Boxes {...common} />;
+      return <FaFolderOpen {...common} />;
     case "json":
-      return <FileJson {...common} />;
+      return <FaDatabase {...common} />;
     case "sequence":
-      return <PlaySquare {...common} />;
+      return <FaCodeBranch {...common} />;
     case "saved":
-      return <PanelRightOpen {...common} />;
+      return <FaLayerGroup {...common} />;
     case "bindings":
-      return <GitCompare {...common} />;
+      return <FaCodeBranch {...common} />;
     case "blockly":
-      return <Workflow {...common} />;
+      return <FaSitemap {...common} />;
     case "terminal":
-      return <TerminalSquare {...common} />;
+      return <FaTerminal {...common} />;
     case "settings":
-      return <Settings2 {...common} />;
+      return <FaSliders {...common} />;
     case "workspace":
-      return <Boxes {...common} />;
+      return <FaLayerGroup {...common} />;
     case "graph":
-      return <Workflow {...common} />;
+      return <FaMagnifyingGlass {...common} />;
     case "topbar":
-      return <Boxes {...common} />;
+      return <FaLayerGroup {...common} />;
     default:
-      return <Boxes {...common} />;
+      return <FaLayerGroup {...common} />;
   }
 }

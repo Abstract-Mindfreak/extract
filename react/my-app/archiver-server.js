@@ -74,6 +74,41 @@ const {
   syncMmssFiltered,
   syncTrackPrompts,
 } = require('./server/mmssRuntimePersistenceService.js');
+const {
+  deleteSkill,
+  deleteSkillSet,
+  deleteSkillTree,
+  executeSkill,
+  generateSkills,
+  listGenerationResults,
+  listSkillRuns,
+  listSkills,
+  listSkillSets,
+  listSkillTrees,
+  normalizeSkillsDatabase,
+  saveGeneratedSkills,
+  saveSkill,
+  saveSkillSet,
+  saveSkillTree,
+} = require('./server/mmssSkillsService.js');
+const {
+  cancelThemeAlbumGroupPipelineJob,
+  clearThemeAlbumGroupJobs,
+  deleteThemeAlbumGroupJob,
+  deleteThemeAlbumGroup,
+  deleteThemeAlbumGroupTrack,
+  generateThemeAlbumGroupProfile,
+  getThemeAlbumGroupDetails,
+  getThemeAlbumGroupPipelineJobStatus,
+  listThemeAlbumGroupJobs,
+  listThemeAlbumGroupMemberships,
+  listThemeAlbumGroups,
+  saveThemeAlbumGroup,
+  saveThemeAlbumGroupTrack,
+  searchThemeAlbumGroupCandidates,
+  startThemeAlbumGroupPipelineJob,
+  validateThemeAlbumGroupLinks,
+} = require('./server/mmssThemeAlbumGroupsService.js');
 
 const app = express();
 const server = http.createServer(app);
@@ -207,7 +242,7 @@ const PRODUCER_USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 
 const MISTRAL_API_BASE = 'https://api.mistral.ai/v1';
 const MISTRAL_MODEL = process.env.MISTRAL_MODEL || 'mistral-large-latest';
 const OLLAMA_API_BASE = process.env.OLLAMA_API_BASE || 'http://127.0.0.1:11434/api';
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'gemma3:4b';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'mmss-qwen2.5-3b:latest';
 const OLLAMA_REQUEST_TIMEOUT_MS = Number(process.env.OLLAMA_REQUEST_TIMEOUT_MS || 600000);
 const OLLAMA_ALLOW_FALLBACK_HOSTS = process.env.OLLAMA_ALLOW_FALLBACK_HOSTS === '1';
 const FLOWMUSIC_AGENT_API_BASE = process.env.FLOWMUSIC_AGENT_API_BASE || 'http://127.0.0.1:8766';
@@ -875,6 +910,607 @@ app.get('/api/mmss/runtime/health', async (req, res) => {
   }
 });
 
+app.get('/api/mmss/skills', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.query.database);
+    const payload = await listSkills(database, {
+      limit: req.query.limit,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to list skills',
+    });
+  }
+});
+
+app.post('/api/mmss/skills', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await saveSkill(database, req.body || {});
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to save skill',
+    });
+  }
+});
+
+app.put('/api/mmss/skills/:skillId', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await saveSkill(database, {
+      ...req.body,
+      skill_id: req.params.skillId,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to update skill',
+    });
+  }
+});
+
+app.delete('/api/mmss/skills/:skillId', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await deleteSkill(database, req.params.skillId);
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to delete skill',
+    });
+  }
+});
+
+app.get('/api/mmss/skill-sets', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.query.database);
+    const payload = await listSkillSets(database, {
+      limit: req.query.limit,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to list skill sets',
+    });
+  }
+});
+
+app.post('/api/mmss/skill-sets', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await saveSkillSet(database, req.body || {});
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to save skill set',
+    });
+  }
+});
+
+app.put('/api/mmss/skill-sets/:skillSetId', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await saveSkillSet(database, {
+      ...req.body,
+      skill_set_id: req.params.skillSetId,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to update skill set',
+    });
+  }
+});
+
+app.delete('/api/mmss/skill-sets/:skillSetId', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await deleteSkillSet(database, req.params.skillSetId);
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to delete skill set',
+    });
+  }
+});
+
+app.get('/api/mmss/skill-trees', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.query.database);
+    const payload = await listSkillTrees(database, {
+      limit: req.query.limit,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to list skill trees',
+    });
+  }
+});
+
+app.post('/api/mmss/skill-trees', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await saveSkillTree(database, req.body || {});
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to save skill tree',
+    });
+  }
+});
+
+app.put('/api/mmss/skill-trees/:treeId', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await saveSkillTree(database, {
+      ...req.body,
+      tree_id: req.params.treeId,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to update skill tree',
+    });
+  }
+});
+
+app.delete('/api/mmss/skill-trees/:treeId', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await deleteSkillTree(database, req.params.treeId);
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to delete skill tree',
+    });
+  }
+});
+
+app.post('/api/mmss/skills/generate', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await generateSkills(database, req.body || {});
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to generate skills',
+    });
+  }
+});
+
+app.post('/api/mmss/skills/save-generated', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await saveGeneratedSkills(database, req.body || {});
+    res.status(201).json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to save generated skills',
+    });
+  }
+});
+
+app.post('/api/mmss/skills/execute', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await executeSkill(database, req.body || {});
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to execute skill',
+    });
+  }
+});
+
+app.get('/api/mmss/skill-runs', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.query.database);
+    const payload = await listSkillRuns(database, {
+      limit: req.query.limit,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to list skill runs',
+    });
+  }
+});
+
+app.get('/api/mmss/generations', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.query.database);
+    const payload = await listGenerationResults(database, {
+      limit: req.query.limit,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to list generation results',
+    });
+  }
+});
+
+app.get('/api/mmss/theme-album-groups', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.query.database);
+    const payload = await listThemeAlbumGroups(database, {
+      limit: req.query.limit,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to list theme album groups',
+    });
+  }
+});
+
+app.post('/api/mmss/theme-album-groups', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await saveThemeAlbumGroup(database, req.body || {});
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to save theme album group',
+    });
+  }
+});
+
+app.post('/api/mmss/theme-album-groups/generate', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await generateThemeAlbumGroupProfile(database, req.body || {});
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to generate theme album group',
+    });
+  }
+});
+
+app.get('/api/mmss/theme-album-groups/:groupId', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.query.database);
+    const payload = await getThemeAlbumGroupDetails(database, req.params.groupId);
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to load theme album group details',
+    });
+  }
+});
+
+app.put('/api/mmss/theme-album-groups/:groupId', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await saveThemeAlbumGroup(database, {
+      ...req.body,
+      group_id: req.params.groupId,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to update theme album group',
+    });
+  }
+});
+
+app.delete('/api/mmss/theme-album-groups/:groupId', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await deleteThemeAlbumGroup(database, req.params.groupId);
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to delete theme album group',
+    });
+  }
+});
+
+app.post('/api/mmss/theme-album-groups/candidates/search', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await searchThemeAlbumGroupCandidates(database, req.body || {});
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to search theme album group candidates',
+    });
+  }
+});
+
+app.post('/api/mmss/theme-album-groups/memberships', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await listThemeAlbumGroupMemberships(database, req.body?.track_ids || req.body?.trackIds || []);
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to list theme album group memberships',
+    });
+  }
+});
+
+app.post('/api/mmss/theme-album-groups/:groupId/tracks', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await saveThemeAlbumGroupTrack(database, {
+      ...req.body,
+      group_id: req.params.groupId,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to save theme album group track',
+    });
+  }
+});
+
+app.delete('/api/mmss/theme-album-groups/:groupId/tracks/:trackId', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await deleteThemeAlbumGroupTrack(database, req.params.groupId, req.params.trackId);
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to delete theme album group track',
+    });
+  }
+});
+
+app.post('/api/mmss/theme-album-groups/:groupId/validate-links', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await validateThemeAlbumGroupLinks(database, {
+      ...req.body,
+      group_id: req.params.groupId,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to validate theme album group links',
+    });
+  }
+});
+
+app.get('/api/mmss/theme-album-group-jobs', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.query.database);
+    const statuses = String(req.query.statuses || '')
+      .split(',')
+      .map((entry) => entry.trim())
+      .filter(Boolean);
+    const payload = await listThemeAlbumGroupJobs(database, {
+      limit: req.query.limit,
+      statuses,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to list theme album group jobs',
+    });
+  }
+});
+
+app.delete('/api/mmss/theme-album-group-jobs/:jobId', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.query.database);
+    const payload = await deleteThemeAlbumGroupJob(database, req.params.jobId);
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to delete theme album group job',
+    });
+  }
+});
+
+app.post('/api/mmss/theme-album-group-jobs/clear', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const statuses = Array.isArray(req.body?.statuses)
+      ? req.body.statuses
+      : String(req.query.statuses || '')
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+    const payload = await clearThemeAlbumGroupJobs(database, { statuses });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to clear theme album group jobs',
+    });
+  }
+});
+
+app.post('/api/mmss/theme-album-groups/pipeline/start', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await startThemeAlbumGroupPipelineJob({
+      ...(req.body || {}),
+      database,
+    });
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to start theme album group pipeline',
+    });
+  }
+});
+
+app.get('/api/mmss/theme-album-groups/pipeline/job/:jobId', async (req, res) => {
+  try {
+    const payload = await getThemeAlbumGroupPipelineJobStatus(req.params.jobId);
+    if (!payload) {
+      return res.status(404).json({
+        success: false,
+        error: `Theme album group job not found: ${req.params.jobId}`,
+      });
+    }
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to load theme album group job status',
+    });
+  }
+});
+
+app.post('/api/mmss/theme-album-groups/pipeline/job/:jobId/cancel', async (req, res) => {
+  try {
+    const database = normalizeSkillsDatabase(req.body?.database || req.query?.database);
+    const payload = await cancelThemeAlbumGroupPipelineJob(database, req.params.jobId);
+    if (!payload) {
+      return res.status(404).json({
+        success: false,
+        error: `Theme album group job not found: ${req.params.jobId}`,
+      });
+    }
+    res.json({
+      success: true,
+      data: payload,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error?.message || 'Failed to cancel theme album group job',
+    });
+  }
+});
+
 app.get('/api/mmss/custom-instructions', async (req, res) => {
   try {
     const database = normalizeLocalRagDatabase(req.query.database);
@@ -1403,10 +2039,10 @@ app.get('/api/ollama/status', async (_req, res) => {
       available: true,
       source: 'local_ollama',
       defaultModel: OLLAMA_MODEL,
-      recommendedModel: 'gemma3:4b',
+      recommendedModel: 'mmss-qwen2.5-3b:latest',
       models: modelNames,
       hasGemma: modelNames.some((name) => String(name).startsWith('gemma')),
-      note: 'Local Ollama endpoint detected. The current wired Gemma family target is gemma3.',
+      note: 'Local Ollama endpoint detected. Preferred MMSS target is mmss-qwen2.5-3b:latest; mmss-gemma4-q4:latest remains the verified fallback for skill-RAG.',
     });
   } catch (error) {
     res.status(503).json({

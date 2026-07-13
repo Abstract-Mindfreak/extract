@@ -1,13 +1,18 @@
-import { Layout, Model } from "flexlayout-react";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Actions, Layout, Model } from "flexlayout-react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Bot, Database, LoaderCircle, Play, RefreshCcw, Save, Search, ServerCog, Sparkles, Square } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useLocalRagOrchestrator } from "../../services/LocalRagOrchestrator";
 import appPersistenceService from "../../services/AppPersistenceService";
 import { getLocalRagModePreset, LOCAL_RAG_PRESET_MODES } from "../../config/mmssModePresets";
+import { useAseWorkspaceStore } from "../../hooks/useAseWorkspaceStore";
 
 const DATABASE_OPTIONS = [
   { value: "abstract-mind-lab", label: "abstract-mind-lab" },
-  { value: "legacy", label: "legacy (abstract_mind_db)" },
+];
+const SEARCH_SCOPE_DATABASE_OPTIONS = [
+  { value: "rag_chunks_db", label: "rag_chunks_db" },
+  { value: "abstract-mind-lab", label: "abstract-mind-lab" },
 ];
 
 const SOURCE_TABLE_OPTIONS = [
@@ -30,6 +35,15 @@ const SOURCE_TABLE_OPTIONS = [
   "mmss_tracks_prompts",
 ];
 const FILTER_PROFILE_OPTIONS = ["strict", "balanced", "exploratory"];
+const LOCAL_RAG_TAB_COLOR_FALLBACKS = {
+  "main-panel-rag": "#3b82f6",
+  "search-results": "#22c55e",
+  "skill-tree-design": "#f59e0b",
+  answer: "#ef4444",
+  "prompt-context": "#d946ef",
+  diagnostics: "#fde047",
+  "runtime-jobs": "#2dd4bf",
+};
 const MODE_OPTIONS = [
   "qa",
   "prompt_mutation",
@@ -62,11 +76,68 @@ const MODE_OPTIONS = [
   "deep_worldbuilding",
   "pattern_recognition",
 ];
-const MODEL_OPTIONS = ["mmss-gemma4-q4", "gemma4:e2b", "quant-mmss:latest", "mmss-qwen2.5-3b:latest"];
-const SETTINGS_SCOPE = "local_rag_ui";
-const SNAPSHOT_SCOPE = "local_rag_results";
-const RESULT_LAYOUT_SETTING_KEY = "resultLayoutSnapshot";
+const MODEL_OPTIONS = [
+  "mmss-qwen2.5-3b:latest",
+  "mmss-gemma4-q4:latest",
+  "mmss-gemma4-q4-creative:latest",
+  "mmss-gemma4-mmss-json:latest",
+];
+const SETTINGS_SCOPE = "local_rag_reference_ui";
+const SNAPSHOT_SCOPE = "local_rag_reference_results";
+const RESULT_LAYOUT_SETTING_KEY = "resultLayoutSnapshotReference";
 const DEFAULT_SKILL_TREE_SCOPE_TABLES = ["mmss_invariants", "mmss_phase_patterns", "mmss_domain_patterns"];
+const SETTINGS_DEBOUNCE_MS = 500;
+const LAYOUT_DEBOUNCE_MS = 800;
+const QUERY_HISTORY_STORAGE_KEY = "local_rag_reference_query_history";
+const MAX_QUERY_HISTORY = 25;
+const ACTION_SHORTCUTS = {
+  refreshStatus: "Ctrl/Cmd+Alt+H",
+  vectorize: "Ctrl/Cmd+Shift+V",
+  applySkillTreePreset: "Ctrl/Cmd+Alt+P",
+  refreshRagChunks: "Ctrl/Cmd+Alt+R",
+  stopRagChunks: "Ctrl/Cmd+Alt+X",
+  syncTracksPrompt: "Ctrl/Cmd+Alt+T",
+  syncFiltered: "Ctrl/Cmd+Alt+F",
+  curateCollection: "Ctrl/Cmd+Alt+C",
+  search: "Ctrl/Cmd+Shift+S",
+  buildContext: "Ctrl/Cmd+Shift+B",
+  answer: "Ctrl/Cmd+Enter",
+  startDesignJob: "Ctrl/Cmd+Alt+D",
+  refreshDesignJob: "Ctrl/Cmd+Alt+J",
+  cancelDesignJob: "Ctrl/Cmd+Alt+K",
+};
+const MODE_DESCRIPTION_RU = {
+  qa: "Точечный вопрос-ответ по MMSS и Flowmusic только на основе подтвержденных фрагментов.",
+  prompt_mutation: "Мутация промпта с сохранением исходного вайба, но с усилением структуры, деталей и операторских подсказок.",
+  session_analysis: "Разбор сложной сессии с акцентом на переходы, операторские следы и повторно используемые фрагменты.",
+  mmss_operator_assist: "Подбор MMSS-операторов, фаз и доменных паттернов под текущую задачу.",
+  mmss_invariants: "Извлечение инвариантов MMSS, онтологических опор и устойчивых операторских структур.",
+  cross_db_reconciliation: "Сопоставление rag_chunks и активных MMSS-источников, поиск дублей, пробелов и конфликтов.",
+  json_prompt_extraction: "Извлечение структурированных JSON-фрагментов промптов и параметров генерации.",
+  source_audit: "Аудит покрытия источников, силы доказательной базы и недостающего контекста.",
+  ase_console_recipe: "Сборка пошагового рецепта для ASE Console с операторами, таблицами и переиспользуемыми промптами.",
+  contextual_summarization: "Умное резюме без потери терминологии, намерения и технических деталей.",
+  knowledge_synthesis: "Синтез ответа из нескольких фрагментов с устранением дублей и сохранением только сильных выводов.",
+  skill_tree_pathfinding: "Поиск лучшего маршрута по дереву навыков MMSS под текущую задачу.",
+  skill_chain_orchestration: "Оркестрация практической цепочки навыков MMSS с минимальной избыточностью.",
+  skill_gap_analysis: "Поиск недостающих навыков и слабых мест runtime-графа навыков.",
+  track_variation: "Создание вариаций трека с сохранением идентичности и изменением энергии, мрака или движения.",
+  style_fusion: "Слияние нескольких стилевых источников в один согласованный Flowmusic-ready гибрид.",
+  prompt_evolution: "Итеративная эволюция промпта: диагностика, расширение, заострение и оптимизация.",
+  parameter_shift: "Сдвиг BPM, тональности, метра или интенсивности без потери исходной концепции.",
+  session_digest: "Короткий, но плотный технический дайджест длинной сессии.",
+  vibe_extraction: "Извлечение эстетики, эмоций, визуальных и звуковых вайбов для повторного использования.",
+  pattern_mining: "Поиск повторяющихся удачных паттернов в промптах, сессиях, треках и MMSS-фрагментах.",
+  tag_enrichment: "Нормализация тегов и операторских меток для последующей фильтрации и поиска.",
+  similarity_audit: "Проверка идеи на дубли, циклы, слишком близкие соседи и потенциал новизны.",
+  concept_ideation: "Генерация новой концепции трека: история, визуал, звуковая палитра и направление промпта.",
+  album_synthesis: "Синтез нового альбома из отобранных MMSS-фрагментов, инструкций и подтвержденных источников.",
+  arrangement_blueprint: "Построение структурной карты трека с ролями секций и эволюцией слоев.",
+  soundscape_design: "Проектирование пространственной, атмосферной и текстурной звуковой среды.",
+  album_concept: "Построение альбомной концепции с нарративной аркой и логикой треклиста.",
+  deep_worldbuilding: "Создание музыкального мира с lore, символами, правилами и звуково-визуальными связями.",
+  pattern_recognition: "Распознавание скрытых MMSS- и Flowmusic-паттернов в архивах и runtime-материалах.",
+};
 
 function StatusCard({ label, value }) {
   return (
@@ -110,7 +181,11 @@ function applySkillTreePresetToScopes(currentScopes = {}) {
 }
 
 function getAvailableTablesByDb(statusMap = {}) {
-  return DATABASE_OPTIONS.reduce((acc, option) => {
+  return SEARCH_SCOPE_DATABASE_OPTIONS.reduce((acc, option) => {
+    if (option.value === "rag_chunks_db") {
+      acc[option.value] = ["rag_chunks"];
+      return acc;
+    }
     const dynamicTables = Array.isArray(statusMap?.[option.value]?.availableTables)
       ? statusMap[option.value].availableTables
       : [];
@@ -159,10 +234,10 @@ function buildResultLayout() {
           weight: 38,
           selected: 0,
           children: [
-            { id: "local-rag-main-panel-tab", type: "tab", name: "Main panel RAG", component: "main-panel-rag", enableClose: false, className: "ase-rag-tab ase-rag-tab--main-panel-rag", contentClassName: "ase-rag-content ase-rag-content--main-panel-rag" },
-            { id: "local-rag-diagnostics-tab", type: "tab", name: "Diagnostics", component: "diagnostics", enableClose: false, className: "ase-rag-tab ase-rag-tab--diagnostics", contentClassName: "ase-rag-content ase-rag-content--diagnostics" },
-            { id: "local-rag-search-tab", type: "tab", name: "Search Results", component: "search-results", enableClose: false, className: "ase-rag-tab ase-rag-tab--search-results", contentClassName: "ase-rag-content ase-rag-content--search-results" },
-            { id: "local-rag-context-tab", type: "tab", name: "Prompt Context", component: "prompt-context", enableClose: false, className: "ase-rag-tab ase-rag-tab--prompt-context", contentClassName: "ase-rag-content ase-rag-content--prompt-context" },
+            { id: "local-rag-main-panel-tab", type: "tab", name: "Main panel RAG", component: "main-panel-rag", enableClose: false, className: "ase-rag-tab ase-rag-tab--main-panel-rag", contentClassName: "ase-rag-content ase-rag-content--main-panel-rag", config: { tabColor: LOCAL_RAG_TAB_COLOR_FALLBACKS["main-panel-rag"] } },
+            { id: "local-rag-diagnostics-tab", type: "tab", name: "Diagnostics", component: "diagnostics", enableClose: false, className: "ase-rag-tab ase-rag-tab--diagnostics", contentClassName: "ase-rag-content ase-rag-content--diagnostics", config: { tabColor: LOCAL_RAG_TAB_COLOR_FALLBACKS.diagnostics } },
+            { id: "local-rag-search-tab", type: "tab", name: "Search Results", component: "search-results", enableClose: false, className: "ase-rag-tab ase-rag-tab--search-results", contentClassName: "ase-rag-content ase-rag-content--search-results", config: { tabColor: LOCAL_RAG_TAB_COLOR_FALLBACKS["search-results"] } },
+            { id: "local-rag-context-tab", type: "tab", name: "Prompt Context", component: "prompt-context", enableClose: false, className: "ase-rag-tab ase-rag-tab--prompt-context", contentClassName: "ase-rag-content ase-rag-content--prompt-context", config: { tabColor: LOCAL_RAG_TAB_COLOR_FALLBACKS["prompt-context"] } },
           ],
         },
         {
@@ -171,9 +246,9 @@ function buildResultLayout() {
           weight: 62,
           selected: 0,
           children: [
-            { id: "local-rag-answer-tab", type: "tab", name: "Answer", component: "answer", enableClose: false, className: "ase-rag-tab ase-rag-tab--answer", contentClassName: "ase-rag-content ase-rag-content--answer" },
-            { id: "local-rag-skill-tree-tab", type: "tab", name: "Skill Tree Design", component: "skill-tree-design", enableClose: false, className: "ase-rag-tab ase-rag-tab--skill-tree-design", contentClassName: "ase-rag-content ase-rag-content--skill-tree-design" },
-            { id: "local-rag-jobs-tab", type: "tab", name: "Runtime Jobs", component: "runtime-jobs", enableClose: false, className: "ase-rag-tab ase-rag-tab--runtime-jobs", contentClassName: "ase-rag-content ase-rag-content--runtime-jobs" },
+            { id: "local-rag-answer-tab", type: "tab", name: "Answer", component: "answer", enableClose: false, className: "ase-rag-tab ase-rag-tab--answer", contentClassName: "ase-rag-content ase-rag-content--answer", config: { tabColor: LOCAL_RAG_TAB_COLOR_FALLBACKS.answer } },
+            { id: "local-rag-skill-tree-tab", type: "tab", name: "Skill Tree Design", component: "skill-tree-design", enableClose: false, className: "ase-rag-tab ase-rag-tab--skill-tree-design", contentClassName: "ase-rag-content ase-rag-content--skill-tree-design", config: { tabColor: LOCAL_RAG_TAB_COLOR_FALLBACKS["skill-tree-design"] } },
+            { id: "local-rag-jobs-tab", type: "tab", name: "Runtime Jobs", component: "runtime-jobs", enableClose: false, className: "ase-rag-tab ase-rag-tab--runtime-jobs", contentClassName: "ase-rag-content ase-rag-content--runtime-jobs", config: { tabColor: LOCAL_RAG_TAB_COLOR_FALLBACKS["runtime-jobs"] } },
           ],
         },
       ],
@@ -218,8 +293,58 @@ function ensureResultLayoutIntegrity(layoutJson) {
   return nextLayout;
 }
 
+function patchTabColorInLayoutJson(layoutJson, component, color) {
+  const nextLayout = JSON.parse(JSON.stringify(layoutJson));
+
+  const visitNode = (node) => {
+    if (!node || typeof node !== "object") return;
+    if (node.type === "tab" && node.component === component) {
+      node.config = {
+        ...(node.config || {}),
+        tabColor: color,
+      };
+    }
+    if (Array.isArray(node.children)) {
+      node.children.forEach(visitNode);
+    }
+  };
+
+  if (nextLayout?.layout) {
+    visitNode(nextLayout.layout);
+  }
+  if (Array.isArray(nextLayout?.borders)) {
+    nextLayout.borders.forEach(visitNode);
+  }
+
+  return nextLayout;
+}
+
 function ResultJsonPanel({ title, subtitle, value, emptyText = "No data yet.", actions = null, footer = null }) {
+  const [filterText, setFilterText] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const hasValue = !(value == null || value === "");
+  const serializedValue = useMemo(() => (hasValue ? JSON.stringify(value, null, 2) : emptyText), [emptyText, hasValue, value]);
+  const jsonLines = useMemo(() => serializedValue.split("\n"), [serializedValue]);
+  const shouldCollapse = jsonLines.length > 80;
+  const visibleLines = useMemo(() => {
+    const source = expanded || !shouldCollapse ? jsonLines : jsonLines.slice(0, 80);
+    const needle = filterText.trim().toLowerCase();
+    if (!needle) return source;
+    return source.filter((line) => line.toLowerCase().includes(needle));
+  }, [expanded, filterText, jsonLines, shouldCollapse]);
+
+  const handleCopy = useCallback(async () => {
+    if (!hasValue) return;
+    try {
+      await navigator.clipboard.writeText(serializedValue);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1500);
+    } catch (_error) {
+      // Ignore clipboard failures and leave the panel usable.
+    }
+  }, [hasValue, serializedValue]);
+
   return (
     <div className="ide-panel-shell ase-flex-panel ase-json-panel">
       <div className="ide-panel-header is-compact">
@@ -229,9 +354,33 @@ function ResultJsonPanel({ title, subtitle, value, emptyText = "No data yet.", a
         </div>
       </div>
       {actions ? <div className="ide-workspace-action-row mmss-action-strip" style={{ padding: "0 16px 12px" }}>{actions}</div> : null}
+      {hasValue ? (
+        <div className="ide-workspace-action-row mmss-action-strip" style={{ padding: "0 16px 12px" }}>
+          <input
+            type="text"
+            value={filterText}
+            onChange={(event) => setFilterText(event.target.value)}
+            placeholder="Filter JSON lines..."
+            style={{ minWidth: 220, flex: "1 1 240px" }}
+          />
+          <button className="mmss-action-button mmss-action-button--secondary is-compact" onClick={handleCopy}>
+            {copied ? "Copied" : "Copy JSON"}
+          </button>
+          {shouldCollapse ? (
+            <button className="mmss-action-button mmss-action-button--secondary is-compact" onClick={() => setExpanded((current) => !current)}>
+              {expanded ? "Collapse" : "Expand"}
+            </button>
+          ) : null}
+        </div>
+      ) : null}
       <pre className="ase-stream-preview local-rag-stream-preview">
-        {hasValue ? JSON.stringify(value, null, 2) : emptyText}
+        {visibleLines.join("\n")}
       </pre>
+      {hasValue && shouldCollapse && !expanded ? (
+        <div style={{ padding: "8px 16px 0" }}>
+          <small>Showing first 80 of {jsonLines.length} lines.</small>
+        </div>
+      ) : null}
       {footer ? <div style={{ padding: "12px 16px 0" }}>{footer}</div> : null}
     </div>
   );
@@ -241,26 +390,30 @@ function FieldHint({ children }) {
   return <small className="mmss-field-hint">{children}</small>;
 }
 
-function PresetModeCard({ mode, activeMode, onApply }) {
+function PresetModeCard({ mode, activeMode, onApply, t }) {
   const quick = getLocalRagModePreset(mode, "quick");
   const active = mode === activeMode;
   return (
     <div className={`ase-config-card mmss-preset-card ${active ? "is-active" : ""}`}>
-      <strong>{quick.label}</strong>
+      <strong>{t(`localRagRef.mode.${mode}.title`, { defaultValue: quick.label })}</strong>
       <span>{mode}</span>
+      <small>{t(`localRagRef.mode.${mode}.description`, { defaultValue: MODE_DESCRIPTION_RU[mode] || quick.query })}</small>
       <div className="ide-workspace-action-row mmss-preset-actions">
         <button type="button" className="mmss-action-button mmss-action-button--secondary is-compact" onClick={() => onApply(mode, "quick")}>
-          Quick
+          {t("localRagRef.common.quick", { defaultValue: "Быстрый / Quick" })}
         </button>
         <button type="button" className="mmss-action-button mmss-action-button--accent is-compact" onClick={() => onApply(mode, "deep")}>
-          Deep
+          {t("localRagRef.common.deep", { defaultValue: "Глубокий / Deep" })}
         </button>
       </div>
     </div>
   );
 }
 
-export default function LocalRagPanel() {
+export default function LocalRagReferencePanel() {
+  const { t } = useTranslation();
+  const ragTabColors = useAseWorkspaceStore((state) => state.ragTabColors);
+  const setRagTabColor = useAseWorkspaceStore((state) => state.setRagTabColor);
   const {
     answerWithLocalRag,
     buildRagContext,
@@ -293,11 +446,11 @@ export default function LocalRagPanel() {
   const [selectedTables, setSelectedTables] = useState(["mmss_collection", "mmss_filtered", "mmss_custom_instructions", "mmss_tracks_prompts", "mmss_albums", "mmss_invariants", "mmss_phase_patterns", "mmss_domain_patterns", "mmss_skills", "mmss_skill_trees", "mmss_skill_sets"]);
   const [scopeSelections, setScopeSelections] = useState({
     rag_chunks_db: ["rag_chunks"],
-    "abstract-mind-lab": ["mmss_custom_instructions", "mmss_albums"],
+    "abstract-mind-lab": [],
   });
   const [filterProfile, setFilterProfile] = useState("balanced");
   const [mode, setMode] = useState("qa");
-  const [model, setModel] = useState("mmss-gemma4-q4");
+  const [model, setModel] = useState("mmss-qwen2.5-3b:latest");
   const [includeRelationLayer, setIncludeRelationLayer] = useState(true);
   const [responseMaxChars, setResponseMaxChars] = useState(40000);
   const [status, setStatus] = useState(null);
@@ -329,6 +482,7 @@ export default function LocalRagPanel() {
   const [instructionSourceLabel, setInstructionSourceLabel] = useState("manual_ui");
   const [instructionText, setInstructionText] = useState("");
   const [customInstructions, setCustomInstructions] = useState([]);
+  const [queryHistory, setQueryHistory] = useState([]);
   const [savingInstruction, setSavingInstruction] = useState(false);
   const [savingAlbumDraft, setSavingAlbumDraft] = useState(false);
   const [buildingAlbumPayload, setBuildingAlbumPayload] = useState(false);
@@ -340,8 +494,31 @@ export default function LocalRagPanel() {
   const [resultLayoutModel, setResultLayoutModel] = useState(() =>
     Model.fromJson(ensureResultLayoutIntegrity(buildResultLayout())),
   );
+  const settingsWriteTimerRef = useRef(null);
+  const layoutWriteTimerRef = useRef(null);
+  const answerShortcutRef = useRef(null);
+  const searchShortcutRef = useRef(null);
+  const contextShortcutRef = useRef(null);
+  const vectorizeShortcutRef = useRef(null);
+  const refreshStatusShortcutRef = useRef(null);
+  const applySkillTreePresetShortcutRef = useRef(null);
+  const refreshRagChunksShortcutRef = useRef(null);
+  const stopRagChunksShortcutRef = useRef(null);
+  const syncTracksPromptShortcutRef = useRef(null);
+  const syncFilteredShortcutRef = useRef(null);
+  const curateCollectionShortcutRef = useRef(null);
+  const startDesignShortcutRef = useRef(null);
+  const refreshDesignShortcutRef = useRef(null);
+  const cancelDesignShortcutRef = useRef(null);
 
   const activeSourceScopes = useMemo(() => buildSourceScopes(scopeSelections), [scopeSelections]);
+  const resolvedRagTabColors = useMemo(
+    () => ({
+      ...LOCAL_RAG_TAB_COLOR_FALLBACKS,
+      ...(ragTabColors || {}),
+    }),
+    [ragTabColors],
+  );
   const availableTablesByDb = useMemo(() => getAvailableTablesByDb(statusByDb), [statusByDb]);
   const diagnosticsPayload = useMemo(() => ({
     error: error || null,
@@ -358,6 +535,131 @@ export default function LocalRagPanel() {
     skillTreeDesignJob: designJob || null,
     ragChunksRefreshJob: ragChunksRefreshJob || null,
   }), [designJob, job, ragChunksRefreshJob]);
+  const actionGuideRows = useMemo(() => ([
+    {
+      id: "refreshStatus",
+      label: t("localRagRef.actions.refreshStatus.label", { defaultValue: "Обновить статус" }),
+      description: t("localRagRef.actions.refreshStatus.description", { defaultValue: "Перечитывает состояние runtime, таблиц и health-показателей для текущей базы. / Reloads runtime state, table counters, and health metrics for the current database." }),
+      shortcut: ACTION_SHORTCUTS.refreshStatus,
+    },
+    {
+      id: "vectorize",
+      label: t("localRagRef.actions.vectorize.label", { defaultValue: "Векторизовать базу" }),
+      description: t("localRagRef.actions.vectorize.description", { defaultValue: "Запускает векторизацию выбранных таблиц в embedding-индекс для последующего RAG-поиска. / Starts vectorization of the selected tables into the embedding index for later RAG retrieval." }),
+      shortcut: ACTION_SHORTCUTS.vectorize,
+    },
+    {
+      id: "applySkillTreePreset",
+      label: t("localRagRef.actions.applySkillTreePreset.label", { defaultValue: "Применить пресет Skill Tree" }),
+      description: t("localRagRef.actions.applySkillTreePreset.description", { defaultValue: "Переключает ref-режим в операторский профиль MMSS: подставляет безопасные retrieval-параметры, goal для runtime и актуальные scope. / Switches the ref mode to the MMSS operator profile with safe retrieval settings, runtime goal, and current scopes." }),
+      shortcut: ACTION_SHORTCUTS.applySkillTreePreset,
+    },
+    {
+      id: "refreshRagChunks",
+      label: t("localRagRef.actions.refreshRagChunks.label", { defaultValue: "Обновить rag_chunks" }),
+      description: t("localRagRef.actions.refreshRagChunks.description", { defaultValue: "Запускает фоновое обновление основной таблицы rag_chunks из текущего runtime-потока. / Starts a background refresh of the main rag_chunks table from the current runtime pipeline." }),
+      shortcut: ACTION_SHORTCUTS.refreshRagChunks,
+    },
+    {
+      id: "stopRagChunks",
+      label: t("localRagRef.actions.stopRagChunks.label", { defaultValue: "Остановить rag_chunks" }),
+      description: t("localRagRef.actions.stopRagChunks.description", { defaultValue: "Останавливает активную задачу обновления rag_chunks, если она еще выполняется. / Stops the active rag_chunks refresh job if it is still running." }),
+      shortcut: ACTION_SHORTCUTS.stopRagChunks,
+    },
+    {
+      id: "syncTracksPrompt",
+      label: t("localRagRef.actions.syncTracksPrompt.label", { defaultValue: "Синхронизировать tracks.prompt" }),
+      description: t("localRagRef.actions.syncTracksPrompt.description", { defaultValue: "Переносит prompt-поля треков в отдельный MMSS-слой для поиска и повторного использования. / Copies track prompt fields into a dedicated MMSS layer for retrieval and reuse." }),
+      shortcut: ACTION_SHORTCUTS.syncTracksPrompt,
+    },
+    {
+      id: "syncFiltered",
+      label: t("localRagRef.actions.syncFiltered.label", { defaultValue: "Синхронизировать mmss_filtered" }),
+      description: t("localRagRef.actions.syncFiltered.description", { defaultValue: "Пересобирает очищенный слой mmss_filtered из треков и сессий по правилам runtime. / Rebuilds the cleaned mmss_filtered layer from tracks and sessions using runtime rules." }),
+      shortcut: ACTION_SHORTCUTS.syncFiltered,
+    },
+    {
+      id: "curateCollection",
+      label: t("localRagRef.actions.curateCollection.label", { defaultValue: "Собрать mmss_collection" }),
+      description: t("localRagRef.actions.curateCollection.description", { defaultValue: "Курирует витрину mmss_collection на основе filtered-слоя и score-ограничений. / Curates the mmss_collection showcase from the filtered layer using score thresholds." }),
+      shortcut: ACTION_SHORTCUTS.curateCollection,
+    },
+    {
+      id: "skillTreeRuntime",
+      label: t("localRagRef.actions.skillTreeRuntime.label", { defaultValue: "MMSS Skill Tree Runtime" }),
+      description: t("localRagRef.actions.skillTreeRuntime.description", { defaultValue: "Раздел для проектирования и сопровождения skill-tree runtime поверх Local RAG. / Section for designing and maintaining the skill-tree runtime on top of Local RAG." }),
+      shortcut: "—",
+    },
+    {
+      id: "startDesignJob",
+      label: t("localRagRef.actions.startDesignJob.label", { defaultValue: "Запустить Skill Tree Design Job" }),
+      description: t("localRagRef.actions.startDesignJob.description", { defaultValue: "Стартует асинхронный job, который строит skill tree и сохраняет runtime-результат. / Starts an async job that designs the skill tree and stores the runtime result." }),
+      shortcut: ACTION_SHORTCUTS.startDesignJob,
+    },
+    {
+      id: "refreshDesignJob",
+      label: t("localRagRef.actions.refreshDesignJob.label", { defaultValue: "Обновить Design Job" }),
+      description: t("localRagRef.actions.refreshDesignJob.description", { defaultValue: "Принудительно перечитывает текущее состояние job без ожидания следующего poll-цикла. / Force-refreshes the current job state without waiting for the next polling cycle." }),
+      shortcut: ACTION_SHORTCUTS.refreshDesignJob,
+    },
+    {
+      id: "cancelDesignJob",
+      label: t("localRagRef.actions.cancelDesignJob.label", { defaultValue: "Отменить Design Job" }),
+      description: t("localRagRef.actions.cancelDesignJob.description", { defaultValue: "Отменяет активный job проектирования skill tree и снимает runtime-блокировку панели. / Cancels the active skill-tree design job and releases the runtime lock in the panel." }),
+      shortcut: ACTION_SHORTCUTS.cancelDesignJob,
+    },
+  ]), [t]);
+
+  const pushQueryHistory = useCallback((entry) => {
+    if (!entry?.query?.trim()) return;
+    setQueryHistory((current) => {
+      const nextEntry = {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        ranAt: new Date().toISOString(),
+        database: entry.database || database,
+        mode: entry.mode || mode,
+        action: entry.action || "search",
+        query: entry.query.trim(),
+        resultCount: Number.isFinite(Number(entry.resultCount)) ? Number(entry.resultCount) : null,
+      };
+      const deduped = current.filter((item) => !(item.query === nextEntry.query && item.database === nextEntry.database && item.mode === nextEntry.mode && item.action === nextEntry.action));
+      const nextHistory = [nextEntry, ...deduped].slice(0, MAX_QUERY_HISTORY);
+      try {
+        window.localStorage.setItem(QUERY_HISTORY_STORAGE_KEY, JSON.stringify(nextHistory));
+      } catch (_error) {
+        // Ignore storage failures and keep the panel usable.
+      }
+      return nextHistory;
+    });
+  }, [database, mode]);
+
+  const restoreHistoryEntry = useCallback((entry) => {
+    if (!entry) return;
+    if (typeof entry.query === "string") setQuery(entry.query);
+    if (typeof entry.database === "string") setDatabase(entry.database);
+    if (typeof entry.mode === "string") setMode(entry.mode);
+  }, []);
+
+  const clearQueryHistory = useCallback(() => {
+    setQueryHistory([]);
+    try {
+      window.localStorage.removeItem(QUERY_HISTORY_STORAGE_KEY);
+    } catch (_error) {
+      // Ignore storage failures and keep the panel usable.
+    }
+  }, []);
+
+  const removeQueryHistoryEntry = useCallback((entryId) => {
+    setQueryHistory((current) => {
+      const nextHistory = current.filter((entry) => entry.id !== entryId);
+      try {
+        window.localStorage.setItem(QUERY_HISTORY_STORAGE_KEY, JSON.stringify(nextHistory));
+      } catch (_error) {
+        // Ignore storage failures and keep the panel usable.
+      }
+      return nextHistory;
+    });
+  }, []);
 
   const loadStatus = useCallback(async (targetDatabase = database) => {
     setLoadingStatus(true);
@@ -400,6 +702,19 @@ export default function LocalRagPanel() {
   }, [database, loadCustomInstructions]);
 
   useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(QUERY_HISTORY_STORAGE_KEY);
+      if (!saved) return;
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        setQueryHistory(parsed.slice(0, MAX_QUERY_HISTORY));
+      }
+    } catch (_error) {
+      // Ignore invalid local history snapshots.
+    }
+  }, []);
+
+  useEffect(() => {
     let active = true;
     void (async () => {
       try {
@@ -434,6 +749,36 @@ export default function LocalRagPanel() {
   }, []);
 
   useEffect(() => {
+    const currentJson = resultLayoutModel.toJson();
+    let nextJson = currentJson;
+    let changed = false;
+
+    Object.entries(resolvedRagTabColors).forEach(([component, color]) => {
+      const lookup = {
+        "main-panel-rag": "local-rag-main-panel-tab",
+        diagnostics: "local-rag-diagnostics-tab",
+        "search-results": "local-rag-search-tab",
+        "prompt-context": "local-rag-context-tab",
+        answer: "local-rag-answer-tab",
+        "skill-tree-design": "local-rag-skill-tree-tab",
+        "runtime-jobs": "local-rag-jobs-tab",
+      };
+      const nodeId = lookup[component];
+      const node = nodeId ? resultLayoutModel.getNodeById(nodeId) : null;
+      if ((node?.getConfig?.()?.tabColor || null) !== color) {
+        nextJson = patchTabColorInLayoutJson(nextJson, component, color);
+        changed = true;
+      }
+    });
+
+    if (!changed) return;
+
+    const nextModel = Model.fromJson(nextJson);
+    setResultLayoutModel(nextModel);
+    void appPersistenceService.setSetting(SETTINGS_SCOPE, RESULT_LAYOUT_SETTING_KEY, nextJson);
+  }, [resolvedRagTabColors, resultLayoutModel]);
+
+  useEffect(() => {
     let active = true;
     void (async () => {
       try {
@@ -452,27 +797,40 @@ export default function LocalRagPanel() {
   }, []);
 
   useEffect(() => {
-    void appPersistenceService.setScope(SETTINGS_SCOPE, {
-      database,
-      batchSize,
-      topK,
-      queryBudget,
-      query,
-      selectedTables,
-      scopeSelections,
-      filterProfile,
-      mode,
-      model,
-      includeRelationLayer,
-      responseMaxChars,
-      skillTreeGoal,
-      skillTreeOwnerScope,
-      skillTreeContextHint,
-      instructionTitle,
-      instructionCategory,
-      instructionSourceLabel,
-      instructionText,
-    });
+    if (settingsWriteTimerRef.current) {
+      window.clearTimeout(settingsWriteTimerRef.current);
+    }
+
+    settingsWriteTimerRef.current = window.setTimeout(() => {
+      void appPersistenceService.setScope(SETTINGS_SCOPE, {
+        database,
+        batchSize,
+        topK,
+        queryBudget,
+        query,
+        selectedTables,
+        scopeSelections,
+        filterProfile,
+        mode,
+        model,
+        includeRelationLayer,
+        responseMaxChars,
+        skillTreeGoal,
+        skillTreeOwnerScope,
+        skillTreeContextHint,
+        instructionTitle,
+        instructionCategory,
+        instructionSourceLabel,
+        instructionText,
+      });
+    }, SETTINGS_DEBOUNCE_MS);
+
+    return () => {
+      if (settingsWriteTimerRef.current) {
+        window.clearTimeout(settingsWriteTimerRef.current);
+        settingsWriteTimerRef.current = null;
+      }
+    };
   }, [
     batchSize,
     database,
@@ -495,9 +853,19 @@ export default function LocalRagPanel() {
     topK,
   ]);
 
+  useEffect(() => () => {
+    if (settingsWriteTimerRef.current) {
+      window.clearTimeout(settingsWriteTimerRef.current);
+    }
+    if (layoutWriteTimerRef.current) {
+      window.clearTimeout(layoutWriteTimerRef.current);
+    }
+  }, []);
+
   useEffect(() => {
     if (!job?.jobId || job.status !== "running") return undefined;
     const timer = window.setInterval(async () => {
+      if (document.visibilityState === "hidden") return;
       try {
         const nextJob = await getRagJob(job.jobId);
         setJob(nextJob);
@@ -519,6 +887,7 @@ export default function LocalRagPanel() {
   useEffect(() => {
     if (!designJob?.jobId || designJob.status !== "running") return undefined;
     const timer = window.setInterval(async () => {
+      if (document.visibilityState === "hidden") return;
       try {
         const nextJob = await getMmssSkillTreeDesignJob(designJob.jobId);
         setDesignJob(nextJob);
@@ -541,6 +910,7 @@ export default function LocalRagPanel() {
   useEffect(() => {
     if (!ragChunksRefreshJob?.jobId || ragChunksRefreshJob.status !== "running") return undefined;
     const timer = window.setInterval(async () => {
+      if (document.visibilityState === "hidden") return;
       try {
         const nextJob = await getRagChunksRefreshJob(ragChunksRefreshJob.jobId);
         setRagChunksRefreshJob(nextJob);
@@ -570,6 +940,7 @@ export default function LocalRagPanel() {
     { label: "Skills", value: String(runtimeHealth?.tables?.mmss_skills || 0) },
     { label: "Skill sets", value: String(runtimeHealth?.tables?.mmss_skill_sets || 0) },
     { label: "Skill trees", value: String(runtimeHealth?.tables?.mmss_skill_trees || 0) },
+    { label: "Skill-RAG vectors", value: runtimeHealth?.skill_rag_vectorization?.summary || "0/3 ready" },
     { label: "Skill runs", value: String(runtimeHealth?.tables?.mmss_skill_runs || 0) },
     { label: "MMSS collection", value: String(runtimeHealth?.tables?.mmss_collection || 0) },
     { label: "MMSS albums", value: String(runtimeHealth?.tables?.mmss_albums || 0) },
@@ -662,6 +1033,13 @@ export default function LocalRagPanel() {
           sourceScopes: payload?.sourceScopes || [],
         },
       });
+      pushQueryHistory({
+        action: "search",
+        database,
+        mode,
+        query,
+        resultCount: Array.isArray(payload?.results) ? payload.results.length : 0,
+      });
     } catch (nextError) {
       setError(nextError.message);
       setResult(null);
@@ -716,6 +1094,13 @@ export default function LocalRagPanel() {
           promptChars: payload?.promptContextText?.length || 0,
           retrievalDebug: payload?.retrievalDebug || {},
         },
+      });
+      pushQueryHistory({
+        action: "build_context",
+        database,
+        mode,
+        query,
+        resultCount: Array.isArray(payload?.contextBlocks) ? payload.contextBlocks.length : 0,
       });
     } catch (nextError) {
       setError(nextError.message);
@@ -788,6 +1173,13 @@ export default function LocalRagPanel() {
           requestedAnswerMaxChars: payload?.debug?.requestedAnswerMaxChars || responseMaxChars,
         },
       });
+      pushQueryHistory({
+        action: "answer",
+        database,
+        mode,
+        query,
+        resultCount: payload?.answer?.length || 0,
+      });
     } catch (nextError) {
       setError(nextError.message);
       setAnswerResult(null);
@@ -801,6 +1193,92 @@ export default function LocalRagPanel() {
       setRunningAnswer(false);
     }
   };
+
+  useEffect(() => {
+    answerShortcutRef.current = handleGenerateAnswer;
+    searchShortcutRef.current = handleSearch;
+    contextShortcutRef.current = handleBuildContext;
+    vectorizeShortcutRef.current = handleVectorize;
+    refreshStatusShortcutRef.current = () => void loadStatus(database);
+    applySkillTreePresetShortcutRef.current = applySkillTreePreset;
+    refreshRagChunksShortcutRef.current = handleStartRagChunksRefresh;
+    stopRagChunksShortcutRef.current = handleCancelRagChunksRefresh;
+    syncTracksPromptShortcutRef.current = handleSyncTrackPrompts;
+    syncFilteredShortcutRef.current = handleSyncFiltered;
+    curateCollectionShortcutRef.current = handleSyncCollectionFromFiltered;
+    startDesignShortcutRef.current = handleStartDesignJob;
+    refreshDesignShortcutRef.current = handleRefreshDesignJob;
+    cancelDesignShortcutRef.current = handleCancelDesignJob;
+  });
+
+  useEffect(() => {
+    const onKeyDown = (event) => {
+      const target = event.target;
+      const tagName = target?.tagName?.toLowerCase?.() || "";
+      const isTypingTarget = tagName === "textarea" || tagName === "input" || target?.isContentEditable;
+      const withCommand = event.metaKey || event.ctrlKey;
+      if (!withCommand) return;
+
+      if (event.key === "Enter") {
+        event.preventDefault();
+        answerShortcutRef.current?.();
+        return;
+      }
+
+      if (event.altKey && !event.shiftKey) {
+        const key = event.key.toLowerCase();
+        if (key === "h") {
+          event.preventDefault();
+          refreshStatusShortcutRef.current?.();
+        } else if (key === "p") {
+          event.preventDefault();
+          applySkillTreePresetShortcutRef.current?.();
+        } else if (key === "r") {
+          event.preventDefault();
+          refreshRagChunksShortcutRef.current?.();
+        } else if (key === "x") {
+          event.preventDefault();
+          stopRagChunksShortcutRef.current?.();
+        } else if (key === "t") {
+          event.preventDefault();
+          syncTracksPromptShortcutRef.current?.();
+        } else if (key === "f") {
+          event.preventDefault();
+          syncFilteredShortcutRef.current?.();
+        } else if (key === "c") {
+          event.preventDefault();
+          curateCollectionShortcutRef.current?.();
+        } else if (key === "d") {
+          event.preventDefault();
+          startDesignShortcutRef.current?.();
+        } else if (key === "j") {
+          event.preventDefault();
+          refreshDesignShortcutRef.current?.();
+        } else if (key === "k") {
+          event.preventDefault();
+          cancelDesignShortcutRef.current?.();
+        }
+        return;
+      }
+
+      if (!event.shiftKey) return;
+      const key = event.key.toLowerCase();
+
+      if (key === "s") {
+        event.preventDefault();
+        searchShortcutRef.current?.();
+      } else if (key === "b") {
+        event.preventDefault();
+        contextShortcutRef.current?.();
+      } else if (key === "v" && !isTypingTarget) {
+        event.preventDefault();
+        vectorizeShortcutRef.current?.();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   const handleSaveAlbumDraft = async () => {
     if (!answerResult) return;
@@ -1164,7 +1642,15 @@ export default function LocalRagPanel() {
           <div className="ase-feedback-card">
             <Database size={14} />
             <p>
-              Runtime DB: <strong>{database}</strong>. Active RAG scopes: <strong>{summarizeScopes(scopeSelections) || "none"}</strong>.
+              Reference workspace mode. Runtime DB: <strong>{database}</strong>. Active RAG scopes: <strong>{summarizeScopes(scopeSelections) || "none"}</strong>.
+            </p>
+          </div>
+
+          <div className="ase-feedback-card">
+            <Bot size={14} />
+            <p>
+              Verified skill-RAG modes: <strong>mmss-qwen2.5-3b:latest</strong> (priority) and <strong>mmss-gemma4-q4:latest</strong> (fallback).
+              Skill vectorization coverage: <strong>{runtimeHealth?.skill_rag_vectorization?.summary || "0/3 ready"}</strong>.
             </p>
           </div>
 
@@ -1197,15 +1683,15 @@ export default function LocalRagPanel() {
             </summary>
             <div className="ide-workspace-action-row mmss-preset-actions" style={{ marginTop: 12 }}>
               <button type="button" className="mmss-action-button mmss-action-button--secondary is-compact" onClick={() => applyModePreset(mode, "quick")}>
-                Current Quick
+                {t("localRagRef.common.currentQuick", { defaultValue: "Текущий быстрый / Current Quick" })}
               </button>
               <button type="button" className="mmss-action-button mmss-action-button--accent is-compact" onClick={() => applyModePreset(mode, "deep")}>
-                Current Deep
+                {t("localRagRef.common.currentDeep", { defaultValue: "Текущий глубокий / Current Deep" })}
               </button>
             </div>
             <div className="mmss-preset-grid">
               {LOCAL_RAG_PRESET_MODES.map((presetMode) => (
-                <PresetModeCard key={presetMode} mode={presetMode} activeMode={mode} onApply={applyModePreset} />
+                <PresetModeCard key={presetMode} mode={presetMode} activeMode={mode} onApply={applyModePreset} t={t} />
               ))}
             </div>
           </details>
@@ -1269,9 +1755,11 @@ export default function LocalRagPanel() {
             </div>
           </div>
 
-          <div className="ase-config-card mmss-section-card mmss-section-card--selection">
-            <strong>Vectorization Table Selection</strong>
-            <span>Controls which tables are sent to the embedding pipeline for the currently selected database.</span>
+          <details className="ase-config-card mmss-section-card mmss-section-card--selection" open={false}>
+            <summary className="mmss-accordion-summary">
+              <strong>{t("localRagRef.vectorization.title", { defaultValue: "Vectorization Table Selection / Таблицы векторизации" })}</strong>
+              <span>{t("localRagRef.vectorization.summary", { defaultValue: `Выбрано ${selectedTables.length} таблиц для ${database}. / ${selectedTables.length} tables selected for ${database}.` })}</span>
+            </summary>
             <div className="mmss-checkbox-grid" style={{ marginTop: 12 }}>
               {(availableTablesByDb[database] || SOURCE_TABLE_OPTIONS).map((tableName) => (
                 <label key={tableName} className="mmss-checkbox-chip">
@@ -1284,13 +1772,26 @@ export default function LocalRagPanel() {
                 </label>
               ))}
             </div>
+          </details>
+
+          <div className="ide-workspace-action-row mmss-action-strip" style={{ display: "none" }}>
+            <button className="mmss-action-button mmss-action-button--secondary" onClick={() => void loadStatus(database)} disabled={loadingStatus} title={ACTION_SHORTCUTS.refreshStatus}>
+              {loadingStatus ? <LoaderCircle size={14} className="spin" /> : <RefreshCcw size={14} />}
+              {t("localRagRef.actions.refreshStatus.label", { defaultValue: "Обновить статус" })}
+            </button>
+            <button className="mmss-action-button mmss-action-button--primary" onClick={handleVectorize} disabled={runningVectorization || !selectedTables.length} title={ACTION_SHORTCUTS.vectorize}>
+              {runningVectorization ? <LoaderCircle size={14} className="spin" /> : <Sparkles size={14} />}
+              {t("localRagRef.actions.vectorize.label", { defaultValue: "Векторизовать базу" })}
+            </button>
           </div>
 
           <div className="ase-config-list mmss-scope-list">
-            {DATABASE_OPTIONS.map((dbOption) => (
-              <div key={dbOption.value} className="ase-config-card mmss-section-card mmss-section-card--scope">
-                <strong>Search Scope: {dbOption.label}</strong>
-                <span>Choose which tables from this database participate in semantic retrieval.</span>
+            {SEARCH_SCOPE_DATABASE_OPTIONS.map((dbOption) => (
+              <details key={dbOption.value} className="ase-config-card mmss-section-card mmss-section-card--scope" open={dbOption.value === "rag_chunks_db"}>
+                <summary className="mmss-accordion-summary">
+                  <strong>{t("localRagRef.scope.title", { defaultValue: "Search Scope" })}: {dbOption.label}</strong>
+                  <span>{t("localRagRef.scope.summary", { defaultValue: `Выбрано ${(scopeSelections[dbOption.value] || []).length} таблиц. / ${(scopeSelections[dbOption.value] || []).length} tables selected.` })}</span>
+                </summary>
                 <div className="mmss-checkbox-grid" style={{ marginTop: 12 }}>
                   {(availableTablesByDb[dbOption.value] || SOURCE_TABLE_OPTIONS).map((tableName) => (
                     <label key={`${dbOption.value}-${tableName}`} className="mmss-checkbox-chip">
@@ -1308,7 +1809,7 @@ export default function LocalRagPanel() {
                     </label>
                   ))}
                 </div>
-              </div>
+              </details>
             ))}
           </div>
 
@@ -1317,7 +1818,7 @@ export default function LocalRagPanel() {
               {loadingStatus ? <LoaderCircle size={14} className="spin" /> : <RefreshCcw size={14} />}
               Refresh Status
             </button>
-            <button className="mmss-action-button mmss-action-button--primary" onClick={handleVectorize} disabled={runningVectorization || !selectedTables.length}>
+            <button className="mmss-action-button mmss-action-button--primary" onClick={handleVectorize} disabled={runningVectorization || !selectedTables.length} title="Ctrl/Cmd+Shift+V">
               {runningVectorization ? <LoaderCircle size={14} className="spin" /> : <Sparkles size={14} />}
               Векторизовать базу данных
             </button>
@@ -1363,43 +1864,98 @@ export default function LocalRagPanel() {
             <label className="mmss-field mmss-field--wide mmss-field--query">
               <span>Smart Search Query</span>
               <textarea value={query} onChange={(event) => setQuery(event.target.value)} rows={4} />
-              <FieldHint>Use it for search, context assembly, answer generation, and as the anchor for preset workflows.</FieldHint>
+              <FieldHint>Use it for search, context assembly, answer generation, and as the anchor for preset workflows. Shortcuts: Ctrl/Cmd+Enter, Ctrl/Cmd+Shift+S, Ctrl/Cmd+Shift+B.</FieldHint>
             </label>
             </div>
           </div>
 
+          <div className="ase-config-card mmss-section-card">
+            <div className="ide-panel-header is-compact">
+              <div>
+                <strong>Query History</strong>
+                <span>Recent runs saved only for this reference panel.</span>
+              </div>
+              <button className="mmss-action-button mmss-action-button--secondary is-compact" onClick={clearQueryHistory} disabled={!queryHistory.length}>
+                Clear All
+              </button>
+            </div>
+            <div className="mmss-hint-stack">
+              {queryHistory.length ? queryHistory.slice(0, 8).map((entry) => (
+                <div key={entry.id} className="ase-feedback-card" style={{ justifyContent: "space-between", gap: 12 }}>
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <strong>{entry.action}</strong>
+                    <p style={{ marginTop: 4 }}>{entry.query}</p>
+                    <small>{entry.database} · {entry.mode} · {new Date(entry.ranAt).toLocaleString()}</small>
+                  </div>
+                  <div className="ide-workspace-action-row">
+                    <button className="mmss-action-button mmss-action-button--secondary is-compact" onClick={() => restoreHistoryEntry(entry)}>
+                      Restore
+                    </button>
+                    <button className="mmss-action-button mmss-action-button--danger is-compact" onClick={() => removeQueryHistoryEntry(entry.id)}>
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              )) : <p>No query history yet.</p>}
+            </div>
+          </div>
+
           <div className="ide-workspace-action-row mmss-action-strip">
-            <button className="mmss-action-button mmss-action-button--secondary" onClick={applySkillTreePreset}>
+            <button className="mmss-action-button mmss-action-button--secondary" onClick={applySkillTreePreset} title={ACTION_SHORTCUTS.applySkillTreePreset}>
               <Sparkles size={14} />
-              Apply Skill Tree Preset
+              {t("localRagRef.actions.applySkillTreePreset.label", { defaultValue: "Применить пресет Skill Tree" })}
             </button>
-            <button className="mmss-action-button mmss-action-button--secondary" onClick={handleStartRagChunksRefresh} disabled={runningRagChunksRefresh}>
+            <button className="mmss-action-button mmss-action-button--secondary" onClick={handleStartRagChunksRefresh} disabled={runningRagChunksRefresh} title={ACTION_SHORTCUTS.refreshRagChunks}>
               {runningRagChunksRefresh ? <LoaderCircle size={14} className="spin" /> : <RefreshCcw size={14} />}
-              Refresh `rag_chunks`
+              {t("localRagRef.actions.refreshRagChunks.label", { defaultValue: "Обновить rag_chunks" })}
             </button>
-            <button className="mmss-action-button mmss-action-button--danger" onClick={handleCancelRagChunksRefresh} disabled={!ragChunksRefreshJob?.jobId || ragChunksRefreshJob?.status !== "running"}>
+            <button className="mmss-action-button mmss-action-button--danger" onClick={handleCancelRagChunksRefresh} disabled={!ragChunksRefreshJob?.jobId || ragChunksRefreshJob?.status !== "running"} title={ACTION_SHORTCUTS.stopRagChunks}>
               <Square size={14} />
-              Stop `rag_chunks`
+              {t("localRagRef.actions.stopRagChunks.label", { defaultValue: "Остановить rag_chunks" })}
             </button>
-            <button className="mmss-action-button mmss-action-button--primary" onClick={handleSyncTrackPrompts} disabled={syncingTrackPrompts}>
+            <button className="mmss-action-button mmss-action-button--primary" onClick={handleSyncTrackPrompts} disabled={syncingTrackPrompts} title={ACTION_SHORTCUTS.syncTracksPrompt}>
               {syncingTrackPrompts ? <LoaderCircle size={14} className="spin" /> : <RefreshCcw size={14} />}
-              Sync `tracks.prompt`
+              {t("localRagRef.actions.syncTracksPrompt.label", { defaultValue: "Синхронизировать tracks.prompt" })}
             </button>
-            <button className="mmss-action-button mmss-action-button--primary" onClick={handleSyncFiltered} disabled={syncingFiltered}>
+            <button className="mmss-action-button mmss-action-button--primary" onClick={handleSyncFiltered} disabled={syncingFiltered} title={ACTION_SHORTCUTS.syncFiltered}>
               {syncingFiltered ? <LoaderCircle size={14} className="spin" /> : <RefreshCcw size={14} />}
-              Sync `mmss_filtered`
+              {t("localRagRef.actions.syncFiltered.label", { defaultValue: "Синхронизировать mmss_filtered" })}
             </button>
-            <button className="mmss-action-button mmss-action-button--accent" onClick={handleSyncCollectionFromFiltered} disabled={syncingCollection}>
+            <button className="mmss-action-button mmss-action-button--accent" onClick={handleSyncCollectionFromFiltered} disabled={syncingCollection} title={ACTION_SHORTCUTS.curateCollection}>
               {syncingCollection ? <LoaderCircle size={14} className="spin" /> : <RefreshCcw size={14} />}
-              Curate `mmss_collection`
+              {t("localRagRef.actions.curateCollection.label", { defaultValue: "Собрать mmss_collection" })}
             </button>
           </div>
 
           <div className="ase-config-card mmss-section-card mmss-section-card--skilltree">
-            <strong>MMSS Skill Tree Runtime</strong>
+            <strong>{t("localRagRef.actions.skillTreeRuntime.label", { defaultValue: "MMSS Skill Tree Runtime" })}</strong>
             <p style={{ marginTop: 8 }}>
-              Async designer поверх текущего Local RAG. Heavy design-run уходит в background job и не держит HTTP sync request открытым.
+              {t("localRagRef.actions.skillTreeRuntime.description", { defaultValue: "Раздел для проектирования и сопровождения skill-tree runtime поверх Local RAG. / Section for designing and maintaining the skill-tree runtime on top of Local RAG." })}
             </p>
+          </div>
+
+          <div className="ase-config-card mmss-section-card">
+            <strong>{t("localRagRef.actionsGuide.title", { defaultValue: "Справка по действиям / Action Guide" })}</strong>
+            <div style={{ overflowX: "auto", marginTop: 12 }}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: "left", padding: "8px 10px" }}>{t("localRagRef.actionsGuide.button", { defaultValue: "Кнопка / Button" })}</th>
+                    <th style={{ textAlign: "left", padding: "8px 10px" }}>{t("localRagRef.actionsGuide.description", { defaultValue: "Описание / Description" })}</th>
+                    <th style={{ textAlign: "left", padding: "8px 10px", whiteSpace: "nowrap" }}>{t("localRagRef.actionsGuide.shortcut", { defaultValue: "Горячая клавиша / Shortcut" })}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {actionGuideRows.map((row) => (
+                    <tr key={row.id}>
+                      <td style={{ padding: "8px 10px", verticalAlign: "top" }}><strong>{row.label}</strong></td>
+                      <td style={{ padding: "8px 10px", verticalAlign: "top" }}>{row.description}</td>
+                      <td style={{ padding: "8px 10px", verticalAlign: "top", whiteSpace: "nowrap" }}>{row.shortcut}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className="ase-config-card mmss-section-card mmss-section-card--skilltree">
@@ -1425,17 +1981,17 @@ export default function LocalRagPanel() {
           </div>
 
           <div className="ide-workspace-action-row mmss-action-strip">
-            <button className="mmss-action-button mmss-action-button--accent" onClick={handleStartDesignJob} disabled={runningDesignJob || !skillTreeGoal.trim() || !activeSourceScopes.length}>
+            <button className="mmss-action-button mmss-action-button--accent" onClick={handleStartDesignJob} disabled={runningDesignJob || !skillTreeGoal.trim() || !activeSourceScopes.length} title={ACTION_SHORTCUTS.startDesignJob}>
               {runningDesignJob ? <LoaderCircle size={14} className="spin" /> : <Play size={14} />}
-              Start Skill Tree Design Job
+              {t("localRagRef.actions.startDesignJob.label", { defaultValue: "Запустить Skill Tree Design Job" })}
             </button>
-            <button className="mmss-action-button mmss-action-button--secondary" onClick={handleRefreshDesignJob} disabled={!designJob?.jobId}>
+            <button className="mmss-action-button mmss-action-button--secondary" onClick={handleRefreshDesignJob} disabled={!designJob?.jobId} title={ACTION_SHORTCUTS.refreshDesignJob}>
               <RefreshCcw size={14} />
-              Refresh Design Job
+              {t("localRagRef.actions.refreshDesignJob.label", { defaultValue: "Обновить Design Job" })}
             </button>
-            <button className="mmss-action-button mmss-action-button--danger" onClick={handleCancelDesignJob} disabled={!designJob?.jobId || designJob?.status !== "running"}>
+            <button className="mmss-action-button mmss-action-button--danger" onClick={handleCancelDesignJob} disabled={!designJob?.jobId || designJob?.status !== "running"} title={ACTION_SHORTCUTS.cancelDesignJob}>
               <Square size={14} />
-              Cancel Design Job
+              {t("localRagRef.actions.cancelDesignJob.label", { defaultValue: "Отменить Design Job" })}
             </button>
           </div>
 
@@ -1502,14 +2058,17 @@ export default function LocalRagPanel() {
             </button>
           </div>
 
-          <div className="ase-config-card">
-            <strong>Recent Custom Instructions</strong>
+          <details className="ase-config-card" open={false}>
+            <summary className="mmss-accordion-summary">
+              <strong>{t("localRagRef.instructions.recentTitle", { defaultValue: "Recent Custom Instructions / Последние инструкции" })}</strong>
+              <span>{t("localRagRef.instructions.recentSummary", { defaultValue: `Показать ${Math.min(customInstructions.length, 8)} последних записей. / Show the latest ${Math.min(customInstructions.length, 8)} items.` })}</span>
+            </summary>
             <pre className="ase-stream-preview">
               {customInstructions.length
                 ? JSON.stringify(customInstructions.slice(0, 8), null, 2)
-                : "No custom instructions saved yet."}
+                : t("localRagRef.instructions.empty", { defaultValue: "Пока нет сохраненных инструкций. / No custom instructions saved yet." })}
             </pre>
-          </div>
+          </details>
 
           <div className="ase-config-card mmss-section-card mmss-section-card--generation">
             <strong>Answer and Retrieval Mode</strong>
@@ -1522,7 +2081,7 @@ export default function LocalRagPanel() {
                   <option key={entry} value={entry}>{entry}</option>
                 ))}
               </select>
-              <FieldHint>Local model used for context-to-answer synthesis.</FieldHint>
+              <FieldHint>{t("localRagRef.model.hint", { defaultValue: "Для JSON-модели backend принудительно включает think=false и format=json. / For the JSON model, the backend forces think=false and format=json." })}</FieldHint>
             </label>
             <label className="mmss-field mmss-field--generation">
               <span>Mode</span>
@@ -1546,15 +2105,15 @@ export default function LocalRagPanel() {
           </div>
 
           <div className="ide-workspace-action-row mmss-action-strip">
-            <button className="mmss-action-button mmss-action-button--primary" onClick={handleSearch} disabled={runningSearch || !query.trim() || !activeSourceScopes.length}>
+            <button className="mmss-action-button mmss-action-button--primary" onClick={handleSearch} disabled={runningSearch || !query.trim() || !activeSourceScopes.length} title="Ctrl/Cmd+Shift+S">
               {runningSearch ? <LoaderCircle size={14} className="spin" /> : <Search size={14} />}
               Smart Search
             </button>
-            <button className="mmss-action-button mmss-action-button--secondary" onClick={handleBuildContext} disabled={runningContext || !query.trim() || !activeSourceScopes.length}>
+            <button className="mmss-action-button mmss-action-button--secondary" onClick={handleBuildContext} disabled={runningContext || !query.trim() || !activeSourceScopes.length} title="Ctrl/Cmd+Shift+B">
               {runningContext ? <LoaderCircle size={14} className="spin" /> : <Database size={14} />}
               Build Context
             </button>
-            <button className="mmss-action-button mmss-action-button--accent" onClick={handleGenerateAnswer} disabled={runningAnswer || !query.trim() || !activeSourceScopes.length}>
+            <button className="mmss-action-button mmss-action-button--accent" onClick={handleGenerateAnswer} disabled={runningAnswer || !query.trim() || !activeSourceScopes.length} title="Ctrl/Cmd+Enter">
               {runningAnswer ? <LoaderCircle size={14} className="spin" /> : <Bot size={14} />}
               Generate Answer
             </button>
@@ -1692,15 +2251,66 @@ export default function LocalRagPanel() {
     return <div className="ide-panel-shell ase-flex-panel">Unknown result panel: {component}</div>;
   };
 
+  const updateResultTabColor = useCallback((tabNode, color) => {
+    const component = tabNode.getComponent?.();
+    if (!component) return;
+
+    setRagTabColor(component, color);
+    resultLayoutModel.doAction(
+      Actions.updateNodeAttributes(tabNode.getId(), {
+        config: {
+          ...(tabNode.getConfig?.() || {}),
+          tabColor: color,
+        },
+      }),
+    );
+    setResultLayoutModel(Model.fromJson(resultLayoutModel.toJson()));
+  }, [resultLayoutModel, setRagTabColor]);
+
   return (
     <div className="ide-panel-shell ase-flex-panel local-rag-panel-shell">
       <div className="local-rag-results-workspace local-rag-results-workspace--full">
         <Layout
           factory={resultLayoutFactory}
           model={resultLayoutModel}
+          onRenderTab={(node, renderValues) => {
+            const tabColor = node.getConfig?.()?.tabColor
+              || resolvedRagTabColors[node.getComponent?.()]
+              || "#4aa0d9";
+            const originalContent = renderValues.content || node.getName();
+
+            renderValues.content = (
+              <div
+                className="ase-rag-tab-chip"
+                style={{ "--ase-rag-inline-color": tabColor }}
+              >
+                {originalContent}
+              </div>
+            );
+
+            renderValues.buttons.push(
+              <input
+                key={`${node.getId()}-color`}
+                aria-label={`Color for ${node.getName()}`}
+                className="ase-rag-tab-color-input"
+                type="color"
+                value={tabColor}
+                onClick={(event) => event.stopPropagation()}
+                onChange={(event) => {
+                  event.stopPropagation();
+                  updateResultTabColor(node, event.target.value);
+                }}
+              />,
+            );
+          }}
           onModelChange={(nextModel) => {
             setResultLayoutModel(nextModel);
-            void appPersistenceService.setSetting(SETTINGS_SCOPE, RESULT_LAYOUT_SETTING_KEY, nextModel.toJson());
+            if (layoutWriteTimerRef.current) {
+              window.clearTimeout(layoutWriteTimerRef.current);
+            }
+            layoutWriteTimerRef.current = window.setTimeout(() => {
+              void appPersistenceService.setSetting(SETTINGS_SCOPE, RESULT_LAYOUT_SETTING_KEY, nextModel.toJson());
+            }, LAYOUT_DEBOUNCE_MS);
           }}
         />
       </div>

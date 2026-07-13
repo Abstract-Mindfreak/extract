@@ -40,6 +40,9 @@ sync-server/.data/
 *.tmp
 *.temp
 *.bak
+/.tmp-build/
+*.tmp-build/
+/.tmp-build/**
 
 # Keep these folders/files in git (do not ignore):
 # - src/**

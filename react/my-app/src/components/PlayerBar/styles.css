@@ -1,17 +1,33 @@
+.player-bar-shell {
+  container-type: inline-size;
+  height: 100%;
+}
+
 .player-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 80px;
+  min-height: 88px;
   background: #1f2937;
   color: #fff;
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 0 20px;
+  padding: 12px 20px;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 100;
+}
+
+.player-bar--embedded {
+  height: 100%;
+  min-height: 0;
+  box-shadow: none;
+  border-radius: 14px;
+}
+
+.player-bar--empty,
+.player-bar--collapsed {
+  justify-content: center;
+}
+
+.player-bar--collapsed {
+  gap: 10px;
 }
 
 /* Track Info */
@@ -34,12 +50,50 @@
   overflow: hidden;
 }
 
+.player-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.player-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(155, 224, 255, 0.14);
+  border: 1px solid rgba(155, 224, 255, 0.2);
+  color: #bde8ff;
+  font-size: 11px;
+}
+
+.player-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #9be0ff;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.player-link:hover {
+  color: #d4f0ff;
+}
+
 .player-title {
   font-weight: 500;
   font-size: 14px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .player-account {
@@ -73,6 +127,11 @@
   background: rgba(255, 255, 255, 0.1);
 }
 
+.control-btn--active {
+  background: rgba(59, 130, 246, 0.2);
+  color: #9be0ff;
+}
+
 .control-btn.play {
   width: 44px;
   height: 44px;
@@ -90,6 +149,44 @@
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.player-sidecar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.player-rating,
+.player-album-assign {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.player-rating select,
+.player-album-assign select {
+  min-height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f5fbff;
+  padding: 0 10px;
+}
+
+.player-album-button {
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #f5fbff;
+  cursor: pointer;
+}
+
+.player-album-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .time {
@@ -136,6 +233,13 @@
   flex-shrink: 0;
 }
 
+.player-volume-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
 .volume-slider {
   flex: 1;
   height: 4px;
@@ -162,4 +266,81 @@
   border-radius: 50%;
   cursor: pointer;
   border: none;
+}
+
+@container (max-width: 980px) {
+  .player-bar {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .player-track-info,
+  .player-progress,
+  .player-sidecar {
+    width: 100%;
+  }
+
+  .player-progress {
+    order: 4;
+  }
+
+  .player-sidecar {
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+}
+
+@container (max-width: 520px) {
+  .player-bar {
+    position: relative;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+  }
+
+  .player-track-info {
+    width: 100%;
+    position: relative;
+    min-height: 180px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.24);
+  }
+
+  .player-cover {
+    width: 100%;
+    height: 180px;
+    border-radius: 16px;
+  }
+
+  .player-meta {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 12px;
+    background: linear-gradient(180deg, transparent, rgba(4, 8, 14, 0.9));
+  }
+
+  .player-controls {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    background: rgba(4, 8, 14, 0.7);
+    padding: 6px;
+    border-radius: 14px;
+  }
+
+  .player-progress,
+  .player-sidecar,
+  .player-volume {
+    width: 100%;
+  }
+
+  .player-sidecar,
+  .player-rating,
+  .player-album-assign {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

@@ -22,7 +22,7 @@ export default function GenerationEnginePanel({ onSaveToLibrary }) {
   const [graph, setGraph] = useState(null);
   const [embeddings, setEmbeddings] = useState(null);
   const [libraryStats, setLibraryStats] = useState({ blockCount: 0, domains: [], layers: [] });
-  const [librarySyncState, setLibrarySyncState] = useState("loading");
+  const [librarySyncState, setLibrarySyncState] = useState("idle");
   
   // Results
   const [generationResult, setGenerationResult] = useState(null);
@@ -58,10 +58,6 @@ export default function GenerationEnginePanel({ onSaveToLibrary }) {
       setLibrarySyncState("error");
     }
   }, [buildGenerationRuntimeFromPromptLibrary]);
-
-  useEffect(() => {
-    void syncPromptLibrary();
-  }, [syncPromptLibrary]);
 
   const handleBuild = async (version = "v1") => {
     if (!blockIndex) return;

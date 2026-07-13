@@ -141,7 +141,7 @@ export default function FlowmusicAgentPanel({ onSaveToLibrary }) {
         <label>
           <span>Model</span>
           <select value={model} onChange={(event) => setModel(event.target.value)}>
-            {(availableModels.length ? availableModels : ["gemma3:4b"]).map((entry) => (
+            {(availableModels.length ? availableModels : ["mmss-gemma4-q4"]).map((entry) => (
               <option key={entry} value={entry}>{entry}</option>
             ))}
           </select>

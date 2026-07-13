@@ -4,29 +4,41 @@ const { logGenerationResult } = require('./mmssRuntimePersistenceService');
 
 const OLLAMA_API_BASE = process.env.OLLAMA_API_BASE || 'http://127.0.0.1:11434/api';
 const EMBEDDING_MODEL = process.env.RAG_EMBEDDING_MODEL || 'embeddinggemma:300m';
-const ANSWER_MODEL = process.env.RAG_ANSWER_MODEL || 'batiai/gemma4-e2b:q4';
+const ANSWER_MODEL = process.env.RAG_ANSWER_MODEL || 'mmss-qwen2.5-3b:latest';
 const OLLAMA_EMBED_TIMEOUT_MS = Number(process.env.OLLAMA_EMBED_TIMEOUT_MS || 300000);
 const OLLAMA_GENERATE_TIMEOUT_MS = Number(process.env.OLLAMA_GENERATE_TIMEOUT_MS || 600000);
 const PRIMARY_DATABASE = process.env.PG_DATABASE || 'abstract-mind-lab';
 const LEGACY_DATABASE = process.env.DB_NAME_V1 || 'abstract_mind_db';
 const RAG_CHUNKS_DATABASE = process.env.RAG_CHUNKS_DB_NAME || 'rag_chunks_db';
 const RAG_TABLE = 'rag_document_embeddings';
-const JOB_TTL_MS = 1000 * 60 * 60 * 6;
-const JSON_TEXT_LIMIT = 5000;
-const MAX_JSON_FRAGMENTS = 80;
+const JOB_TTL_MS = 2000 * 60 * 60 * 6;
+const JSON_TEXT_LIMIT = 15000;
+const MAX_JSON_FRAGMENTS = 100;
 const jobs = new Map();
 let embeddingDimensionPromise = null;
 
 const SOURCE_DATABASE_TABLES = {
   [PRIMARY_DATABASE]: new Set([
+    'sessions',
+    'music_blocks',
     'tracks',
+    'mmss_filtered',
     'mmss_collection',
     'mmss_albums',
+    'mmss_invariants',
+    'mmss_phase_patterns',
     'mmss_domain_patterns',
     'mmss_custom_instructions',
+    'mmss_tracks_prompts',
+    'mmss_skills',
+    'mmss_skill_trees',
+    'mmss_skill_sets',
   ]),
   [LEGACY_DATABASE]: new Set([
     'music_blocks',
+  ]),
+  [RAG_CHUNKS_DATABASE]: new Set([
+    'rag_chunks',
   ]),
 };
 
@@ -88,6 +100,10 @@ function estimateNumPredictForChars(maxChars) {
 
 function shouldEnforceResponseMaxChars(options = {}) {
   return options.enforceResponseMaxChars === true;
+}
+
+function shouldForceJsonResponse(options = {}) {
+  return options.forceJsonResponse === true;
 }
 
 function isAlbumMode(mode) {
@@ -452,6 +468,7 @@ async function generateWithLocalModel({
   numCtx = 8192,
   numPredict,
   format,
+  think = false,
 }) {
   const numericPredict = Number(numPredict);
   const options = {
@@ -480,6 +497,7 @@ async function generateWithLocalModel({
         system: systemPrompt,
         stream: true,
         format: format || undefined,
+        think,
         options,
       }),
     });
@@ -915,6 +933,125 @@ function buildRagChunkDocument(row) {
   };
 }
 
+function buildMmssSkillDocument(row) {
+  const sourceId = String(row.skill_id || row.id);
+  const sourceTitle = row.name || sourceId;
+  const snapshot = {
+    skill_id: row.skill_id,
+    name: row.name,
+    description: row.description,
+    inputs: row.inputs,
+    outputs: row.outputs,
+    prerequisites: row.prerequisites,
+    failure_modes: row.failure_modes,
+    metrics: row.metrics,
+    metadata: row.metadata,
+  };
+  const chunkText = truncateText([
+    `Skill ID: ${sourceId}`,
+    `Name: ${sourceTitle}`,
+    row.description ? `Description: ${row.description}` : null,
+    Array.isArray(row.inputs) && row.inputs.length ? `Inputs: ${row.inputs.join(', ')}` : null,
+    Array.isArray(row.outputs) && row.outputs.length ? `Outputs: ${row.outputs.join(', ')}` : null,
+    Array.isArray(row.prerequisites) && row.prerequisites.length ? `Prerequisites: ${row.prerequisites.join(', ')}` : null,
+    Array.isArray(row.failure_modes) && row.failure_modes.length ? `Failure Modes: ${row.failure_modes.join(', ')}` : null,
+    row.metrics ? `Metrics: ${stableStringify(row.metrics)}` : null,
+    row.metadata ? `Metadata: ${stableStringify(row.metadata)}` : null,
+  ].filter(Boolean).join('\n\n'), JSON_TEXT_LIMIT);
+
+  return {
+    sourceTable: 'mmss_skills',
+    sourceId,
+    sourceTitle,
+    chunkText,
+    sourcePayload: snapshot,
+    metadata: {
+      skill_id: row.skill_id || null,
+      domain: row.metadata?.domain || null,
+      supports_album_creation: row.metadata?.supports_album_creation === true,
+      supports_skill_creation: row.metadata?.supports_skill_creation === true,
+    },
+  };
+}
+
+function buildMmssSkillSetDocument(row) {
+  const sourceId = String(row.skill_set_id || row.id);
+  const sourceTitle = row.name || sourceId;
+  const snapshot = {
+    skill_set_id: row.skill_set_id,
+    name: row.name,
+    purpose: row.purpose,
+    skills: row.skills,
+    internal_flow: row.internal_flow,
+    shared_entities: row.shared_entities,
+    entry_points: row.entry_points,
+    exit_artifacts: row.exit_artifacts,
+    metadata: row.metadata,
+  };
+  const chunkText = truncateText([
+    `Skill Set ID: ${sourceId}`,
+    `Name: ${sourceTitle}`,
+    row.purpose ? `Purpose: ${row.purpose}` : null,
+    Array.isArray(row.skills) && row.skills.length ? `Skills: ${row.skills.join(', ')}` : null,
+    Array.isArray(row.internal_flow) && row.internal_flow.length ? `Internal Flow: ${stableStringify(row.internal_flow)}` : null,
+    Array.isArray(row.shared_entities) && row.shared_entities.length ? `Shared Entities: ${row.shared_entities.join(', ')}` : null,
+    Array.isArray(row.entry_points) && row.entry_points.length ? `Entry Points: ${row.entry_points.join(', ')}` : null,
+    Array.isArray(row.exit_artifacts) && row.exit_artifacts.length ? `Exit Artifacts: ${row.exit_artifacts.join(', ')}` : null,
+    row.metadata ? `Metadata: ${stableStringify(row.metadata)}` : null,
+  ].filter(Boolean).join('\n\n'), JSON_TEXT_LIMIT);
+
+  return {
+    sourceTable: 'mmss_skill_sets',
+    sourceId,
+    sourceTitle,
+    chunkText,
+    sourcePayload: snapshot,
+    metadata: {
+      skill_set_id: row.skill_set_id || null,
+      skill_count: Array.isArray(row.skills) ? row.skills.length : 0,
+    },
+  };
+}
+
+function buildMmssSkillTreeDocument(row) {
+  const sourceId = String(row.tree_id || row.id);
+  const sourceTitle = row.root_goal || row.tree_id || String(row.id);
+  const snapshot = {
+    tree_id: row.tree_id,
+    root_goal: row.root_goal,
+    version: row.version,
+    skill_sets: row.skill_sets,
+    global_entities: row.global_entities,
+    cross_links: row.cross_links,
+    owner_scope: row.owner_scope,
+    metadata: row.metadata,
+  };
+  const chunkText = truncateText([
+    `Skill Tree ID: ${sourceId}`,
+    `Root Goal: ${row.root_goal || sourceId}`,
+    row.owner_scope ? `Owner Scope: ${row.owner_scope}` : null,
+    row.version != null ? `Version: ${row.version}` : null,
+    Array.isArray(row.skill_sets) && row.skill_sets.length ? `Skill Sets: ${row.skill_sets.join(', ')}` : null,
+    Array.isArray(row.global_entities) && row.global_entities.length ? `Global Entities: ${stableStringify(row.global_entities)}` : null,
+    Array.isArray(row.cross_links) && row.cross_links.length ? `Cross Links: ${stableStringify(row.cross_links)}` : null,
+    row.metadata ? `Metadata: ${stableStringify(row.metadata)}` : null,
+  ].filter(Boolean).join('\n\n'), JSON_TEXT_LIMIT);
+
+  return {
+    sourceTable: 'mmss_skill_trees',
+    sourceId,
+    sourceTitle,
+    chunkText,
+    sourcePayload: snapshot,
+    metadata: {
+      tree_id: row.tree_id || null,
+      owner_scope: row.owner_scope || null,
+      version: row.version ?? null,
+      skill_set_count: Array.isArray(row.skill_sets) ? row.skill_sets.length : 0,
+    },
+  };
+}
+
 function getGenericSourceId(row, tableName) {
   const candidates = [row.id, row.invariant_key, row.uuid, row.key, row.slug, row.name, row.title];
   const found = candidates.find((value) => value != null && String(value).trim());
@@ -981,6 +1118,33 @@ async function loadGenericTableDocuments(databaseName, tableName) {
   return rows
     .map((row) => buildGenericTableDocument(tableName, row, columns))
     .filter((doc) => doc.chunkText);
+}
+
+async function loadMmssSkillDocuments(databaseName) {
+  const result = await getPool(databaseName).query(`
+    SELECT id, skill_id, name, description, inputs, outputs, prerequisites, failure_modes, metrics, metadata
+    FROM mmss_skills
+    ORDER BY updated_at DESC NULLS LAST, id DESC
+  `);
+  return result.rows.map(buildMmssSkillDocument).filter((doc) => doc.chunkText);
+}
+
+async function loadMmssSkillSetDocuments(databaseName) {
+  const result = await getPool(databaseName).query(`
+    SELECT id, skill_set_id, name, purpose, skills, internal_flow, shared_entities, entry_points, exit_artifacts, metadata
+    FROM mmss_skill_sets
+    ORDER BY updated_at DESC NULLS LAST, id DESC
+  `);
+  return result.rows.map(buildMmssSkillSetDocument).filter((doc) => doc.chunkText);
+}
+
+async function loadMmssSkillTreeDocuments(databaseName) {
+  const result = await getPool(databaseName).query(`
+    SELECT id, tree_id, root_goal, version, skill_sets, global_entities, cross_links, owner_scope, metadata
+    FROM mmss_skill_trees
+    ORDER BY updated_at DESC NULLS LAST, id DESC
+  `);
+  return result.rows.map(buildMmssSkillTreeDocument).filter((doc) => doc.chunkText);
 }
 
 async function loadTrackRelatedContext(databaseName, trackIds = []) {
@@ -1052,6 +1216,21 @@ async function loadSourceDocuments(databaseName, requestedTables = []) {
       ORDER BY layer ASC, slug ASC
     `);
     docs.push(...result.rows.map(buildMusicBlockDocument).filter((doc) => doc.chunkText));
+  }
+
+  if (canUse('mmss_skills') && await tableExists(databaseName, 'mmss_skills')) {
+    handledTables.add('mmss_skills');
+    docs.push(...await loadMmssSkillDocuments(databaseName));
+  }
+
+  if (canUse('mmss_skill_sets') && await tableExists(databaseName, 'mmss_skill_sets')) {
+    handledTables.add('mmss_skill_sets');
+    docs.push(...await loadMmssSkillSetDocuments(databaseName));
+  }
+
+  if (canUse('mmss_skill_trees') && await tableExists(databaseName, 'mmss_skill_trees')) {
+    handledTables.add('mmss_skill_trees');
+    docs.push(...await loadMmssSkillTreeDocuments(databaseName));
   }
 
   const genericCandidates = selected.size
@@ -1850,6 +2029,9 @@ async function answerWithRag(options = {}) {
   const contextBundle = await buildPromptContext(options);
   const startedAt = Date.now();
   const albumMode = isAlbumMode(contextBundle.mode);
+  const requestedModel = String(options.model || ANSWER_MODEL || '').trim();
+  const jsonModel = /json/i.test(requestedModel);
+  const forceJsonResponse = shouldForceJsonResponse(options);
   const enforceResponseMaxChars = shouldEnforceResponseMaxChars(options) || albumMode;
   const responseMaxChars = clampResponseMaxChars(options.responseMaxChars);
   const systemPrompt = String(options.systemPrompt || '').trim() || [
@@ -1862,7 +2044,7 @@ async function answerWithRag(options = {}) {
     'Start directly with the synthesized answer.',
     'Do not spend output budget on preamble, politeness, or reformulating the request.',
     'Prioritize synthesis, cross-source reconciliation, extracted facts, and actionable structure.',
-    ...(albumMode ? [
+    ...((albumMode || forceJsonResponse) ? [
       'For album-oriented modes, return strict JSON only.',
       'Do not add markdown fences, commentary, or explanatory text outside JSON.',
       'The JSON must be immediately parseable.',
@@ -1870,20 +2052,25 @@ async function answerWithRag(options = {}) {
     ...(enforceResponseMaxChars ? [`Keep the final answer within ${responseMaxChars} characters.`] : []),
   ].join(' ');
 
-  const promptInstructions = albumMode
+  const promptInstructions = albumMode || jsonModel || forceJsonResponse
     ? [
       '- Return strict JSON only.',
       '- Do not repeat the request.',
       '- Do not output markdown fences.',
-      '- Create a new album draft instead of copying any retrieved album record.',
-      '- Never reuse an existing retrieved album title verbatim unless the user explicitly asked for a remake or continuation.',
-      '- Never reuse a retrieved track list verbatim.',
-      '- Treat retrieved albums as style references, not as templates to duplicate.',
-      '- Use this schema exactly:',
-      '{"album":{"title":"string","description":"string","domain":"string","tracks":[{"index":1,"title":"string","prompt":"string","operator_notes":"string","json_prompt":{"prompt":"string","negative_prompt":"string","style_tags":["string"],"tools":["string"],"notes":"string"}}]}}',
-      '- Keep each track prompt specific, generation-ready, and distinct.',
-      '- Prefer 8-10 tracks unless the context clearly supports a smaller form.',
-      '- Use retrieved evidence to ground style, operators, tags, and tools.',
+      ...(albumMode ? [
+        '- Create a new album draft instead of copying any retrieved album record.',
+        '- Never reuse an existing retrieved album title verbatim unless the user explicitly asked for a remake or continuation.',
+        '- Never reuse a retrieved track list verbatim.',
+        '- Treat retrieved albums as style references, not as templates to duplicate.',
+        '- Use this schema exactly:',
+        '{"album":{"title":"string","description":"string","domain":"string","tracks":[{"index":1,"title":"string","prompt":"string","operator_notes":"string","json_prompt":{"prompt":"string","negative_prompt":"string","style_tags":["string"],"tools":["string"],"notes":"string"}}]}}',
+        '- Keep each track prompt specific, generation-ready, and distinct.',
+        '- Prefer 8-10 tracks unless the context clearly supports a smaller form.',
+        '- Use retrieved evidence to ground style, operators, tags, and tools.',
+      ] : [
+        '- Use a compact object structure with fields like answer, evidence, actions, and warnings when applicable.',
+        '- Keep values factual and grounded in the retrieved context.',
+      ]),
       ...(enforceResponseMaxChars ? [`- Keep the final JSON within ${responseMaxChars} characters.`] : []),
     ]
     : [
@@ -1911,13 +2098,14 @@ async function answerWithRag(options = {}) {
     : (enforceResponseMaxChars ? estimateNumPredictForChars(responseMaxChars) : 8192);
 
   const generation = await generateWithLocalModel({
-    model: options.model || ANSWER_MODEL,
+    model: requestedModel || ANSWER_MODEL,
     prompt,
     systemPrompt,
     temperature: Number.isFinite(Number(options.temperature)) ? Number(options.temperature) : 0,
     numCtx: Number.isFinite(Number(options.numCtx)) ? Number(options.numCtx) : 8192,
     numPredict: effectiveNumPredict,
-    format: albumMode ? 'json' : undefined,
+    format: albumMode || jsonModel || forceJsonResponse ? 'json' : undefined,
+    think: false,
   });
   const answer = enforceResponseMaxChars
     ? truncateText(generation.response, responseMaxChars)
@@ -2044,6 +2232,7 @@ module.exports = {
   buildPromptContext,
   cancelJob,
   gatherStats,
+  generateWithLocalModel,
   getEmbeddingDimension,
   getJobStatus,
   normalizeDatabaseIdentifier,

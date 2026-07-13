@@ -4,29 +4,59 @@ import {
 } from "flexlayout-react";
 import { useMemo, useRef, useState } from "react";
 import {
-  Activity,
-  Boxes,
-  Database,
   Download,
   ExternalLink,
   FileJson,
   FolderPlus,
   Rocket,
-  Settings2,
   Sparkles,
-  TerminalSquare,
-  Workflow,
 } from "lucide-react";
+import {
+  FaBoxArchive,
+  FaBrain,
+  FaChartLine,
+  FaDatabase,
+  FaFolderOpen,
+  FaMusic,
+  FaPython,
+  FaRobot,
+  FaSitemap,
+  FaSliders,
+  FaTerminal,
+  FaWandMagicSparkles,
+} from "react-icons/fa6";
 import ASEMasterConsole from "./ASEMasterConsole";
 import FlowmusicAgentPanel from "./ase-variations/flowmusic-agent-panel";
 import GenerationEnginePanel from "./ase-variations/generation-engine-panel";
 import LocalRagPanel from "./ase-variations/local-rag-panel";
+import LocalRagReferencePanel from "./ase-variations/local-rag-reference-panel";
 import MMSSInvariantsPanel from "./ase-variations/mmss-invariants-panel";
+import MMSSSkillsPanel from "./ase-variations/mmss-skills-panel";
+import MMSSThemeAlbumGroupsPanel from "./ase-variations/mmss-theme-album-groups-panel";
 import MMSSMutatorPanel from "./ase-variations/mmss-mutator-panel";
 import OmegaBreathPanel from "./ase-variations/omega-breath-panel";
 import { useAseWorkspaceStore } from "../hooks/useAseWorkspaceStore";
 import "./PromptIdeWorkspace.css";
 import "./AseIdeWorkspace.css";
+
+const ASE_THEME_COLOR_FIELDS = [
+  { id: "accent", label: "Primary accent" },
+  { id: "background", label: "Background dark" },
+  { id: "surface", label: "Content surface" },
+  { id: "tab", label: "Tab background" },
+  { id: "text", label: "Text color" },
+  { id: "scrollbar", label: "Scrollbar color" },
+];
+
+const ASE_RAG_TAB_COLOR_FIELDS = [
+  { id: "main-panel-rag", label: "Main panel RAG" },
+  { id: "search-results", label: "Search Results" },
+  { id: "skill-tree-design", label: "Skill Tree Design" },
+  { id: "answer", label: "Answer" },
+  { id: "prompt-context", label: "Prompt Context" },
+  { id: "diagnostics", label: "Diagnostics" },
+  { id: "runtime-jobs", label: "Runtime Jobs" },
+];
 
 function buildDefaultLayout() {
   return {
@@ -217,6 +247,22 @@ function ensureWorkspaceTab(layoutJson, tabConfig) {
   return nextLayout;
 }
 
+function hexToRgb(hex) {
+  const raw = (hex || "").replace("#", "").trim();
+  const normalized = raw.length === 3
+    ? raw.split("").map((char) => `${char}${char}`).join("")
+    : raw;
+
+  if (!/^[0-9a-fA-F]{6}$/.test(normalized)) {
+    return "74, 160, 217";
+  }
+
+  const red = Number.parseInt(normalized.slice(0, 2), 16);
+  const green = Number.parseInt(normalized.slice(2, 4), 16);
+  const blue = Number.parseInt(normalized.slice(4, 6), 16);
+  return `${red}, ${green}, ${blue}`;
+}
+
 export default function AseIdeWorkspace(props) {
   const workspaceStore = useAseWorkspaceStore();
   const layoutRef = useRef(null);
@@ -240,12 +286,36 @@ export default function AseIdeWorkspace(props) {
           icon: "local-rag",
         },
         {
+          id: "ase-local-rag-reference-tab",
+          type: "tab",
+          name: "Local LLM RAG Ref",
+          component: "local-rag-reference",
+          enableClose: false,
+          icon: "local-rag-reference",
+        },
+        {
           id: "ase-mmss-invariants-tab",
           type: "tab",
           name: "MMSS Invariants",
           component: "mmss-invariants",
           enableClose: false,
           icon: "mmss-invariants",
+        },
+        {
+          id: "ase-mmss-skills-tab",
+          type: "tab",
+          name: "MMSS Skills",
+          component: "mmss-skills",
+          enableClose: false,
+          icon: "mmss-skills",
+        },
+        {
+          id: "ase-theme-album-groups-tab",
+          type: "tab",
+          name: "Theme Album Groups",
+          component: "theme-album-groups",
+          enableClose: false,
+          icon: "theme-album-groups",
         },
         {
           id: "ase-omega-breath-tab",
@@ -326,8 +396,20 @@ export default function AseIdeWorkspace(props) {
       return <LocalRagPanel />;
     }
 
+    if (component === "local-rag-reference") {
+      return <LocalRagReferencePanel />;
+    }
+
     if (component === "mmss-invariants") {
       return <MMSSInvariantsPanel />;
+    }
+
+    if (component === "mmss-skills") {
+      return <MMSSSkillsPanel />;
+    }
+
+    if (component === "theme-album-groups") {
+      return <MMSSThemeAlbumGroupsPanel />;
     }
 
     if (component === "omega-breath") {
@@ -378,17 +460,53 @@ export default function AseIdeWorkspace(props) {
         <AseSettingsPanel
           fontScale={workspaceStore.fontScale}
           onChangeFontScale={workspaceStore.setFontScale}
+          onSetRagTabColor={workspaceStore.setRagTabColor}
+          onSetThemeColor={workspaceStore.setThemeColor}
           onChangeTheme={workspaceStore.setUiTheme}
+          ragTabColors={workspaceStore.ragTabColors}
+          themeColors={workspaceStore.themeColors}
           uiTheme={workspaceStore.uiTheme}
         />
       );
     }
 
-    return <div className="ide-panel-shell">Unknown ASE panel: {component}</div>;
+      return <div className="ide-panel-shell">Unknown ASE panel: {component}</div>;
   };
 
+  const aseThemeStyle = useMemo(() => {
+    const themeColors = workspaceStore.themeColors || {};
+    const ragTabColors = workspaceStore.ragTabColors || {};
+    const accent = themeColors.accent || "#4aa0d9";
+    const background = themeColors.background || "#08111f";
+    const surface = themeColors.surface || "#101826";
+    const tab = themeColors.tab || "#182235";
+    const text = themeColors.text || "#e7edf7";
+    const scrollbar = themeColors.scrollbar || accent;
+
+    return {
+      "--ase-theme-accent": accent,
+      "--ase-theme-accent-rgb": hexToRgb(accent),
+      "--ase-theme-background": background,
+      "--ase-theme-surface": surface,
+      "--ase-theme-tab": tab,
+      "--ase-theme-text": text,
+      "--ase-theme-scrollbar": scrollbar,
+      "--ase-theme-scrollbar-rgb": hexToRgb(scrollbar),
+      "--ase-rag-main-panel-rag": ragTabColors["main-panel-rag"] || "#3b82f6",
+      "--ase-rag-search-results": ragTabColors["search-results"] || "#22c55e",
+      "--ase-rag-skill-tree-design": ragTabColors["skill-tree-design"] || "#f59e0b",
+      "--ase-rag-answer": ragTabColors.answer || "#ef4444",
+      "--ase-rag-prompt-context": ragTabColors["prompt-context"] || "#d946ef",
+      "--ase-rag-diagnostics": ragTabColors.diagnostics || "#fde047",
+      "--ase-rag-runtime-jobs": ragTabColors["runtime-jobs"] || "#2dd4bf",
+    };
+  }, [workspaceStore.ragTabColors, workspaceStore.themeColors]);
+
   return (
-    <div className={`prompt-ide-shell ase-ide-shell ${normalizeTheme(workspaceStore.uiTheme)} ide-font-${workspaceStore.fontScale}`}>
+    <div
+      className={`prompt-ide-shell ase-ide-shell ${normalizeTheme(workspaceStore.uiTheme)} ide-font-${workspaceStore.fontScale}`}
+      style={aseThemeStyle}
+    >
       <Layout
         factory={factory}
         model={model}
@@ -673,7 +791,16 @@ function AseStreamActionsPanel({
   );
 }
 
-function AseSettingsPanel({ fontScale, onChangeFontScale, onChangeTheme, uiTheme }) {
+function AseSettingsPanel({
+  fontScale,
+  onChangeFontScale,
+  onChangeTheme,
+  onSetRagTabColor,
+  onSetThemeColor,
+  ragTabColors,
+  themeColors,
+  uiTheme,
+}) {
   return (
     <div className="ide-panel-shell ase-flex-panel">
       <div className="ide-panel-header">
@@ -700,6 +827,52 @@ function AseSettingsPanel({ fontScale, onChangeFontScale, onChangeTheme, uiTheme
           </select>
         </label>
       </div>
+      <div className="ide-workspace-appearance">
+        <div className="ide-panel-header is-compact">
+          <div>
+            <strong>Panel Appearance</strong>
+            <span>Theme variables and per-tab colors for the Local LLM RAG Ref flex workspace.</span>
+          </div>
+        </div>
+        <div className="ide-appearance-grid">
+          {ASE_RAG_TAB_COLOR_FIELDS.map((tab) => (
+            <div key={tab.id} className="ide-appearance-card">
+              <strong>{tab.label}</strong>
+              <label>
+                Color
+                <input
+                  type="color"
+                  value={ragTabColors?.[tab.id] || "#243447"}
+                  onChange={(event) => onSetRagTabColor(tab.id, event.target.value)}
+                />
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="ide-workspace-appearance">
+        <div className="ide-panel-header is-compact">
+          <div>
+            <strong>Theme Colors</strong>
+            <span>CSS variables that recolor the flexlayout surface and the shared scrollbar styling.</span>
+          </div>
+        </div>
+        <div className="ide-appearance-grid">
+          {ASE_THEME_COLOR_FIELDS.map((field) => (
+            <div key={field.id} className="ide-appearance-card">
+              <strong>{field.label}</strong>
+              <label>
+                Color
+                <input
+                  type="color"
+                  value={themeColors?.[field.id] || "#243447"}
+                  onChange={(event) => onSetThemeColor(field.id, event.target.value)}
+                />
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -724,41 +897,47 @@ function FocusCard({ title, value, meta }) {
 }
 
 function resolveTabIcon(icon) {
-  const common = { size: 14, strokeWidth: 2 };
+  const common = { size: 14 };
   switch (icon) {
     case "overview":
-      return <Boxes {...common} />;
+      return <FaBrain {...common} />;
     case "handoff":
-      return <Workflow {...common} />;
+      return <FaFolderOpen {...common} />;
     case "console":
-      return <Workflow {...common} />;
+      return <FaTerminal {...common} />;
     case "json":
-      return <FileJson {...common} />;
+      return <FaDatabase {...common} />;
     case "feedback":
-      return <Sparkles {...common} />;
+      return <FaWandMagicSparkles {...common} />;
     case "python-generation":
-      return <Database {...common} />;
+      return <FaPython {...common} />;
     case "mmss-mutator":
-      return <Database {...common} />;
+      return <FaWandMagicSparkles {...common} />;
     case "local-rag":
-      return <Database {...common} />;
+      return <FaRobot {...common} />;
+    case "local-rag-reference":
+      return <FaDatabase {...common} />;
     case "mmss-invariants":
-      return <Database {...common} />;
+      return <FaSitemap {...common} />;
+    case "mmss-skills":
+      return <FaRobot {...common} />;
+    case "theme-album-groups":
+      return <FaFolderOpen {...common} />;
     case "omega-breath":
-      return <Sparkles {...common} />;
+      return <FaBrain {...common} />;
     case "flowmusic-agents":
-      return <Sparkles {...common} />;
+      return <FaMusic {...common} />;
     case "database":
-      return <Database {...common} />;
+      return <FaBoxArchive {...common} />;
     case "metrics":
-      return <Activity {...common} />;
+      return <FaChartLine {...common} />;
     case "services":
-      return <Activity {...common} />;
+      return <FaSliders {...common} />;
     case "activity":
-      return <TerminalSquare {...common} />;
+      return <FaChartLine {...common} />;
     case "settings":
-      return <Settings2 {...common} />;
+      return <FaSliders {...common} />;
     default:
-      return <Boxes {...common} />;
+      return <FaBrain {...common} />;
   }
 }
